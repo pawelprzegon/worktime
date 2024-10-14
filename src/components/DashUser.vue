@@ -82,8 +82,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <p @click="loginUser"
-      class="label">{{props.user.first_name}} {{props.user.last_name}}</p>
+  <p class="label">{{props.user.first_name}} {{props.user.last_name}}</p>
   <div
       v-if="props.user.activeShift"
       class="status">

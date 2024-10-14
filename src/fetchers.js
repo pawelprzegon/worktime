@@ -127,3 +127,19 @@ export const getUserShifts = async () => {
 
     return await response.json()
 }
+
+export const registerUser = async (formData) => {
+    const body = JSON.stringify(formData)
+    const data = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+    }
+   const response = await fetch(url + '/auth/register', data)
+
+    if (!response.ok) {
+      throw new Error('Register failed')
+    }
+
+    return await response.json()
+}

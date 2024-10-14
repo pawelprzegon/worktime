@@ -1,19 +1,14 @@
 <script setup>
-import {useRouter} from "vue-router";
 
-const router = useRouter()
+import {logout} from "@/auth.js"
 
-const removeToken = () => {
-  localStorage.removeItem('token')
-  router.push('/login')
-}
 </script>
 
 <template>
 
   <button
       class="logout-button"
-      @click="removeToken"
+      @click="logout"
   >Logout</button>
 
 </template>

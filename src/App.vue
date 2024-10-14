@@ -1,22 +1,41 @@
 <script setup>
   import { useRouter } from "vue-router";
-  import {ref } from 'vue'
-  import Logout from "@/components/Logout.vue";
+  import { isAuthenticated, isAdmin, logout } from '@/auth.js';
 
-  const token = ref(localStorage.getItem('token') !== null)
   const router = useRouter()
 
-  const userPanel = () => {
-    router.push('/user')
+  const gotoRegister = () => {
+    router.push('/register')
   }
+
+  const gotoLogin = () => {
+    router.push('/login')
+  }
+
+  const gotoLogout = () => {
+    logout()
+    router.push('/')
+  }
+
+  const gotoDash = () => {
+    router.push('/')
+  }
+
+  const gotoManagement = () => {
+    router.push('/management')
+  }
+
 
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="90" height="90" />
-    <p class="link" v-if="token" @click="userPanel"> My panel </p>
-    <Logout />
+    <button class="link" @click="gotoDash">Dashboard</button>
+    <button class="link" v-if="!isAuthenticated" @click="gotoRegister">Register</button>
+    <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
+    <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
+    <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
   </header>
 
   <main>

@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {loginFetch} from '@/fetchers.js'
+import { login } from '@/auth.js'
 
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
+
 const router = useRouter()
 
 const handleLogin = async () => {
@@ -19,15 +21,18 @@ const handleLogin = async () => {
   try {
 
     const data = await loginFetch(formData)
-    localStorage.setItem('token', data.access_token)
+    login(data.access_token)
 
-    router.push('/')
+    router.push('/user')
+
   } catch (error) {
     errorMessage.value = error.message
   } finally {
     loading.value = false
   }
 }
+
+
 </script>
 
 <template>

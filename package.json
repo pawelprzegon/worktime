@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "jwt-decode": "^4.0.0",
     "vue": "^3.5.11",
+    "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
