@@ -15,14 +15,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-for="user in users">
+  <div class="dash-user-list">
+
     <DashUser
-       :user="user"
+        v-for="user in users"
+        :user="user"
     />
+
   </div>
+
 
 </template>
 
 <style scoped>
+
+.dash-user-list {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 16px;
+  margin: 1rem;
+}
 
 </style>

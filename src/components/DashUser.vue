@@ -82,27 +82,61 @@ onMounted(async () => {
 </script>
 
 <template>
-  <p class="label">{{props.user.first_name}} {{props.user.last_name}}</p>
-  <div
-      v-if="props.user.activeShift"
-      class="status">
-    <p class="shift" v-if="props.user.activeShift">{{ props.user.shiftDuration }}</p>
-    <button
-        class="stop-button"
-        @click="stopShift"
-    >stop</button>
+  <div class="dash-user">
+
+    <img class="avatar" src="@/assets/avatar/PawelPrzegonEntry.png" alt="pp">
+
+    <p class="label">{{props.user.first_name}} {{props.user.last_name}}</p>
+    <div
+        v-if="props.user.activeShift"
+        class="status">
+      <p class="shift" v-if="props.user.activeShift">{{ props.user.shiftDuration }}</p>
+      <button
+          class="stop-button"
+          @click="stopShift"
+      >stop</button>
+    </div>
+
+    <div class="no-status" v-else>
+      <button
+          class="start-button"
+          @click="runShift"
+      >start</button>
+    </div>
+
   </div>
 
-  <div v-else>
-    <button
-        class="start-button"
-        @click="runShift"
-    >start</button>
-  </div>
 
 
 </template>
 
 <style scoped>
+
+.dash-user {
+  display: grid;
+  grid-template-rows: 2fr auto 50px;
+  gap: 15px;
+  justify-items: center;
+}
+
+.avatar {
+  width: 150px;
+  height: auto;
+  margin: auto;
+  border-radius: 5px;
+  border: solid 1px white;
+}
+
+.status,
+.no-status {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.shift {
+  margin: auto;
+}
 
 </style>
