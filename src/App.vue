@@ -30,14 +30,17 @@
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="90" height="90" />
-    <button class="link" @click="gotoDash">Dashboard</button>
-    <button class="link" v-if="!isAuthenticated" @click="gotoRegister">Register</button>
-    <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
-    <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
-    <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
+    <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" width="90" height="70" />
+    <div class="nav-buttons">
+      <button class="link" @click="gotoDash">Dashboard</button>
+      <button class="link" v-if="!isAuthenticated" @click="gotoRegister">Register</button>
+      <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
+      <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
+      <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
+    </div>
   </header>
 
+  <hr />
   <main>
     <RouterView />
   </main>
@@ -45,29 +48,52 @@
 
 <style scoped>
 header {
-  line-height: 1.5;
+  display: flex;
+  place-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
 }
 
 .logo {
   display: block;
-  margin: 0 auto 2rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.nav-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 0.5rem;
 }
+
+.link {
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid #DFDFDF;
+  border-radius: 16px;
+  box-sizing: border-box;
+  color: #9f9f9f;
+  cursor: pointer;
+  display: flex;
+  font-size: 18px;
+  justify-content: center;
+  line-height: 28px;
+  padding: 8px;
+  text-decoration: none;
+  transition: all .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+}
+
+  .link:active,
+  .link:hover {
+    outline: 0;
+  }
+
+  .link:hover {
+    background-color: #FFFFFF;
+    color: black;
+    border-color: rgba(0, 0, 0, 0.19);
+  }
+
 </style>
