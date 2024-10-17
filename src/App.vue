@@ -67,7 +67,7 @@ header {
 .link {
   align-items: center;
   background-color: transparent;
-  border: 1px solid #DFDFDF;
+  border: 1px solid transparent;
   border-radius: 16px;
   box-sizing: border-box;
   color: #9f9f9f;

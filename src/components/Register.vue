@@ -49,6 +49,11 @@ const handleSubmit = async () => {
       <input v-model="form.password" type="password" id="password" required />
     </div>
 
+    <div>
+      <label for="avatar">Avatar</label>
+      <input v-model="form.avatar" type="text" id="avatar" value="default.png"/>
+    </div>
+
     <button type="submit">Create User</button>
   </form>
 </template>

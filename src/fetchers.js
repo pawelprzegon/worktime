@@ -62,10 +62,8 @@ export const getActiveShift = async (user_id) => {
 
 
 export const startShift = async (userId, note) => {
-    const startTime = new Date().toISOString();
 
     const body = JSON.stringify({
-        'start': `${startTime}`,
         'user_id': `${userId}`,
         'note': note
     });
