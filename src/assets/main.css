@@ -5,6 +5,23 @@
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  height: 100vb;
+}
+
+#header {
+  height: 8%;
+}
+
+#main {
+  height: 88%;
+  overflow: auto;
+}
+
+#footer {
+  height: 4%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .separation-line {

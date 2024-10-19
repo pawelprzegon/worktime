@@ -25,32 +25,42 @@
     router.push('/management')
   }
 
+  const gotoPanel = () => {
+    router.push('/user-panel')
+  }
+
 
 </script>
 
 <template>
-  <header>
+  <header id="header">
     <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" width="90" height="70" />
     <div class="nav-buttons">
       <button class="link" @click="gotoDash">Dashboard</button>
-      <button class="link" v-if="!isAuthenticated" @click="gotoRegister">Register</button>
       <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
+
       <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
+      <button class="link" v-if="isAuthenticated" @click="gotoPanel">Shifts</button>
       <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
     </div>
   </header>
 
   <hr />
-  <main>
+  <main id="main">
     <RouterView />
   </main>
+
+  <hr />
+  <footer id="footer">
+    <button class="link" v-if="!isAuthenticated" @click="gotoRegister">SignIn</button>
+  </footer>
 </template>
 
 <style scoped>
+
 header {
-  display: flex;
-  place-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 100px auto;
   margin-bottom: 3rem;
 }
 
@@ -59,9 +69,10 @@ header {
 }
 
 .nav-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .link {
@@ -76,13 +87,14 @@ header {
   font-size: 18px;
   justify-content: center;
   line-height: 28px;
-  padding: 8px;
+  padding: 4px;
+  margin: 4px;
   text-decoration: none;
   transition: all .2s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: 100%;
+  width: 120px;
 }
 
   .link:active,

@@ -1,7 +1,7 @@
 <script setup>
 import {getUsers} from "@/fetchers.js";
 import {onMounted, ref} from "vue";
-import DashUser from "@/components/DashUser.vue";
+import User from "@/components/user/User.vue";
 
 const users = ref([])
 
@@ -17,7 +17,7 @@ onMounted(async () => {
 <template>
   <div class="dash-user-list">
 
-    <DashUser
+    <User
         v-for="user in users"
         :user="user"
     />
@@ -31,7 +31,7 @@ onMounted(async () => {
 
 .dash-user-list {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
   margin: 1rem;
 }

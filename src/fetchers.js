@@ -141,3 +141,24 @@ export const registerUser = async (formData) => {
 
     return await response.json()
 }
+
+export const saveShiftNote = async (user_id, shift_id, note) => {
+
+    const body = JSON.stringify({
+        'user_id': user_id,
+        'shift_id': shift_id,
+        'note': note
+    })
+    const data = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+    }
+   const response = await fetch(url + '/shift/note', data)
+
+    if (!response.ok) {
+      throw new Error('Register failed')
+    }
+
+    return await response.json()
+}

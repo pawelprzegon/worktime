@@ -1,7 +1,10 @@
 <script setup>
 
-import {onMounted, defineProps, computed} from "vue";
-import {startShift, endShift, getActiveShift} from "@/fetchers.js";
+import {onMounted, defineProps} from "vue";
+import {startShift, endShift, getActiveShift, saveShiftNote} from "@/fetchers.js";
+import Avatar from "@/components/user/Avatar.vue";
+import UserName from "@/components/user/UserName.vue";
+import ShiftTime from "@/components/user/ShiftTime.vue";
 
 
 const props = defineProps({
@@ -15,7 +18,6 @@ const checkActiveShift = async () => {
   } catch (error) {
     console.error("Error fetching getActiveSift:", error);
   }
-
 
 }
 
@@ -47,12 +49,10 @@ const shiftToggle = async () => {
 
     if (props.user.activeShift) {
       const shiftId = props.user.activeShift._id
-      const endResponse = await endShift(shiftId, userId)
-      console.log(endResponse)
+      await endShift(shiftId, userId)
       props.user.activeShift = null
     } else {
-      const endResponse = await startShift(userId, note)
-      console.log(endResponse)
+      await startShift(userId, note)
       await checkActiveShift()
     }
 
@@ -61,15 +61,24 @@ const shiftToggle = async () => {
   }
 }
 
-const avatarSrc = computed(() => {
-  return new URL(`../assets/avatar/${props.user.avatar}`, import.meta.url).href;
-});
+
+const saveNote = async (note) => {
+  console.log(note + ' to save')
+  try{
+    const response = await saveShiftNote(props.user._id, props.user.activeShift._id, note)
+    console.log(response)
+  } catch (error) {
+    console.error("Error fetching saveShiftNote:", error);
+  }
+
+}
+
+
 onMounted(async () => {
   try {
     await checkActiveShift()
     updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
-    console.log(props.user.avatar)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -77,25 +86,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="dash-user">
+  <div :class="{'user': true, 'active': props.user.activeShift}">
 
-    <img
-        :class="{'avatar': true, 'off': !props.user.activeShift}"
-        :src="avatarSrc"
-        alt="avatar"
-        @click="shiftToggle"
-    >
+    <Avatar
+        :avatar="props.user.avatar"
+        :active-shift="props.user.activeShift"
+        @toggle="shiftToggle"
+    />
 
-    <section
-        :class="{'user-section': true, 'active': props.user.activeShift}"
-    >
-      <p class="label">{{props.user.first_name}}</p>
-      <p class="label">{{props.user.last_name}}</p>
-    </section>
+    <UserName
+        :first-name="props.user.first_name"
+        :last-name="props.user.last_name"
+    />
 
-    <section>
-      <p class="shift" id="shift" v-if="props.user.activeShift">{{ props.user.shiftDuration }}</p>
-    </section>
+    <ShiftTime
+        :active-shift="props.user.activeShift"
+        :shift-duration="props.user.shiftDuration"
+        @pass-note="saveNote"
+    />
+
 
   </div>
 
@@ -105,46 +114,20 @@ onMounted(async () => {
 
 <style scoped>
 
-.dash-user {
+.user {
   display: grid;
   grid-template-rows: 2fr auto 50px;
-  gap: 15px;
+  gap: 10px;
   justify-items: center;
+  padding: 3px;
 }
 
-.avatar {
-  width: 150px;
-  height: auto;
-  margin: auto;
-}
-
-.avatar:hover {
-  cursor: pointer;
-  filter: grayscale(50%);
-}
-
-.off {
-  filter: grayscale(100%);
-}
-
-.user-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.label {
-  font-size: 1.5rem;
-}
-
-.active {
+.active,
+.user:hover {
   color: white;
+  background: #212121;
+  border-radius: 10px;
 }
 
-.shift {
-  font-size: 1rem;
-
-}
 
 </style>

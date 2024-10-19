@@ -23,7 +23,7 @@ const handleLogin = async () => {
     const data = await loginFetch(formData)
     login(data.access_token)
 
-    router.push('/user')
+    router.push('/user-panel')
 
   } catch (error) {
     errorMessage.value = error.message
