@@ -2,6 +2,7 @@
 
 import {getUserShifts} from "@/fetchers.js";
 import {ref, onMounted} from "vue";
+import ShiftDetail from "@/components/panel/ShiftDetail.vue";
 
 const shifts = ref([])
 
@@ -18,15 +19,23 @@ onMounted(async () => {
 
 <template>
 
-  <p
-      v-for="shift in shifts"
-      class="shifts"
-  >
-   {{shift}}
-  </p>
+  <div class="shifts">
+   <ShiftDetail
+       v-for="shift in shifts"
+       :shift="shift"
+   />
+  </div>
 
 </template>
 
 <style scoped>
+
+.shifts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 1rem;
+
+}
 
 </style>

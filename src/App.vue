@@ -1,8 +1,11 @@
 <script setup>
   import { useRouter } from "vue-router";
+  import {onMounted, ref} from 'vue'
   import { isAuthenticated, isAdmin, logout } from '@/auth.js';
+  import {getMe} from "@/fetchers.js";
 
   const router = useRouter()
+  const userName = ref('');
 
   const gotoRegister = () => {
     router.push('/register')
@@ -29,20 +32,41 @@
     router.push('/user-panel')
   }
 
+  const getMeData = async () => {
+    try{
+      const response =  await getMe()
+      console.log(`${response.first_name} ${response.last_name}`)
+      userName.value = `${response.first_name} ${response.last_name}`
+    } catch (error) {
+      console.log("Error while getting Me data")
+    }
+  }
+
+  onMounted(() => {
+  if (isAuthenticated) {
+    getMeData();
+  }
+});
+
 
 </script>
 
 <template>
   <header id="header">
     <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" width="90" height="70" />
-    <div class="nav-buttons">
-      <button class="link" @click="gotoDash">Dashboard</button>
-      <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
+    <div class="nav">
+      <small class="nav-user" v-if="isAuthenticated">logged: {{userName}}</small>
+      <div class="nav-buttons">
+        <button class="link" @click="gotoDash">Dashboard</button>
+        <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
+        <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
+        <button class="link" v-if="isAuthenticated" @click="gotoPanel">Shifts</button>
+        <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
+      </div>
 
-      <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
-      <button class="link" v-if="isAuthenticated" @click="gotoPanel">Shifts</button>
-      <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
     </div>
+
+
   </header>
 
   <hr />
@@ -61,18 +85,25 @@
 header {
   display: grid;
   grid-template-columns: 100px auto;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .logo {
   display: block;
 }
 
+.nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .nav-buttons {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .link {
@@ -87,7 +118,6 @@ header {
   font-size: 18px;
   justify-content: center;
   line-height: 28px;
-  padding: 4px;
   margin: 4px;
   text-decoration: none;
   transition: all .2s;

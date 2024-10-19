@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
-import UserPanel from "@/components/UserPanel.vue";
+import Panel from "@/components/panel/Panel.vue";
 import Register from "@/components/Register.vue";
 
 const routes = [
@@ -24,7 +24,7 @@ const routes = [
     {
         path: '/user-panel',
         name: 'UserPanel',
-        component: UserPanel,
+        component: Panel,
         meta: { requiresAuth: true },
     },
 

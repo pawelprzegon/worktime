@@ -9,12 +9,13 @@
 }
 
 #header {
-  height: 8%;
+  height: 6%;
 }
 
 #main {
   height: 88%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #footer {
@@ -22,8 +23,4 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-}
-
-.separation-line {
-
 }

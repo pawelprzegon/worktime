@@ -162,3 +162,21 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
 
     return await response.json()
 }
+
+export const getMe = async () => {
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + `/user/me`, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
+}
