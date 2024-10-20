@@ -79,6 +79,7 @@ onMounted(async () => {
     await checkActiveShift()
     updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
+    console.log(props.user.avatar)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -89,7 +90,7 @@ onMounted(async () => {
   <div :class="{'user': true, 'active': props.user.activeShift}">
 
     <Avatar
-        :avatar="props.user.avatar"
+        :avatar_url="props.user.avatar"
         :active-shift="props.user.activeShift"
         @toggle="shiftToggle"
     />

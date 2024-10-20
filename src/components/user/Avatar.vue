@@ -1,17 +1,15 @@
 <script setup>
 
-import {computed, defineProps, defineEmits} from "vue";
+import { defineProps, defineEmits, ref} from "vue";
 
 const props = defineProps({
-  avatar: String,
+  avatar_url: String,
   activeShift: Object
 })
 
-const emit = defineEmits(['toggle'])
+const apiURL = import.meta.env.VITE_APP_API_URL
 
-const avatarSrc = computed(() => {
-  return new URL(`../../assets/avatar/${props.avatar}`, import.meta.url).href;
-});
+const emit = defineEmits(['toggle'])
 
 const shiftToggle = () => {
   emit("toggle")
@@ -23,7 +21,7 @@ const shiftToggle = () => {
 
   <img
     :class="{'avatar': true, 'off': !props.activeShift}"
-    :src="avatarSrc"
+    :src="`${apiURL}/${props.avatar_url}`"
     alt="avatar"
     @click="shiftToggle"
   >

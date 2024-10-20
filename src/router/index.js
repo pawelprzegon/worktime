@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
-import Register from "@/components/Register.vue";
+import SignIn from "@/components/SignIn.vue";
 
 const routes = [
     {
@@ -12,9 +12,9 @@ const routes = [
         component: Login,
     },
     {
-        path: '/register',
-        name: 'Register',
-        component: Register,
+        path: '/signin',
+        name: 'SignIn',
+        component: SignIn,
     },
     {
         path: '/',

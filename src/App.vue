@@ -7,8 +7,8 @@
   const router = useRouter()
   const userName = ref('');
 
-  const gotoRegister = () => {
-    router.push('/register')
+  const gotoSignIn = () => {
+    router.push('/signin')
   }
 
   const gotoLogin = () => {
@@ -76,7 +76,7 @@
 
   <hr />
   <footer id="footer">
-    <button class="link" v-if="!isAuthenticated" @click="gotoRegister">SignIn</button>
+    <button class="link" v-if="!isAuthenticated" @click="gotoSignIn">SignIn</button>
   </footer>
 </template>
 

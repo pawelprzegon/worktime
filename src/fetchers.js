@@ -127,13 +127,30 @@ export const getUserShifts = async () => {
 }
 
 export const registerUser = async (formData) => {
+
     const body = JSON.stringify(formData)
     const data = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: body,
     }
-   const response = await fetch(url + '/auth/register', data)
+   const response = await fetch(url + '/user/register', data)
+
+    if (!response.ok) {
+      throw new Error('Register failed')
+    }
+
+    return await response.json()
+}
+
+export const saveAvatar = async (user_id, avatar) => {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+    const data = {
+        method: 'POST',
+        body: formData,
+    }
+   const response = await fetch(url + `/user/${user_id}/avatar`, data)
 
     if (!response.ok) {
       throw new Error('Register failed')

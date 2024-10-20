@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { registerUser } from "@/fetchers.js";
+import {registerUser, saveAvatar} from "@/fetchers.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter()
@@ -9,13 +9,28 @@ const form = ref({
   last_name: '',
   email: '',
   username: '',
-  password: ''
+  password: '',
+  avatar: 'default.png'
 });
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file && file.type === 'image/png') {
+    form.value.avatar = file;
+  } else {
+    alert('Please upload a PNG file');
+  }
+};
 
 const handleSubmit = async () => {
   console.log('Form data:', form.value);
+
+  const avatar_file = form.value.avatar
+  form.value.avatar = avatar_file.name
   const response = await registerUser(form.value)
   console.log(response)
+  const avatarSaveResponse = saveAvatar(response.id, avatar_file)
+  console.log(avatarSaveResponse)
 
   router.push('/')
 
@@ -41,18 +56,19 @@ const handleSubmit = async () => {
 
     <div>
       <label for="username">Username</label>
-      <input v-model="form.username" type="text" id="username" required />
+      <input v-model="form.username" type="text" id="username" autocomplete="current-username" required />
     </div>
 
     <div>
       <label for="password">Password</label>
-      <input v-model="form.password" type="password" id="password" required />
+      <input v-model="form.password" type="password" autocomplete="current-password" id="password" required />
     </div>
 
     <div>
       <label for="avatar">Avatar</label>
-      <input v-model="form.avatar" type="text" id="avatar" value="default.png"/>
+      <input type="file" id="avatar" @change="handleFileChange" accept=".png" />
     </div>
+
 
     <button type="submit">Create User</button>
   </form>
@@ -62,8 +78,10 @@ const handleSubmit = async () => {
 form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 300px;
-  margin: 0 auto;
+  height: 100%;
+  margin: auto;
 }
 
 div {
