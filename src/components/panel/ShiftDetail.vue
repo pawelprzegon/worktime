@@ -1,10 +1,16 @@
 <script setup>
 
-import {defineProps} from 'vue'
+import {defineProps, ref, onMounted} from 'vue'
+
+const start = ref('')
+const stop = ref('')
+const work = ref('')
+const note = ref('')
 
 const props = defineProps({
   shift: Object
 })
+
 
 const calculateWork = () => {
   const seconds = props.shift.work
@@ -18,32 +24,37 @@ const calculateWork = () => {
       String(secs).padStart(2, '0')
   ].join(':');
 }
+
+const calculateData = () => {
+  const split_start = props.shift.start.split(' ')
+  start.value = split_start[1]
+  stop.value = props.shift.stop.split(' ')[1]
+  work.value = calculateWork()
+  note.value = props.shift.note
+}
+
+onMounted(async () => {
+  calculateData()
+});
+
 </script>
 
 <template>
   <div class="shift-details">
 
-    <h3>Shift</h3>
-
-    <div class="shift-detail">
-      <p class="label">start:</p>
-      <p class="shift-data">{{props.shift.start}}</p>
+    <div class="timestamps">
+      <p class="shift-data start">
+        <img class="arrow" src="@/assets/shift/arrow/green_arrow.png" alt="green_arrow">
+        {{start}}</p>
+      <p class="shift-data stop">
+        <img class="arrow turned" src="@/assets/shift/arrow/red_arrow.png" alt="green_arrow">
+        {{stop}}</p>
     </div>
 
-    <div class="shift-detail">
-      <p class="label">end:</p>
-      <p class="shift-data">{{props.shift.stop}}</p>
-    </div>
+    <hr class="black-line">
 
-    <div class="shift-detail">
-      <p class="label">work:</p>
-      <p class="shift-data">{{calculateWork()}}</p>
-    </div>
-
-    <div class="shift-detail">
-      <p class="label">note:</p>
-      <p class="shift-data">{{props.shift.note}}</p>
-    </div>
+    <p class="work">{{work}}</p>
+    <p class="shift-data">job: {{note}}</p>
 
   </div>
 
@@ -53,27 +64,45 @@ const calculateWork = () => {
 
 <style scoped>
 
+.arrow {
+  width: 10px;
+}
+
+.turned {
+  rotate: 180deg;
+}
+
+.black-line {
+  height: 2px;
+  background-color: #181818;
+  border: none;
+}
+
 .shift-details {
   display: flex;
   flex-direction: column;
-  background: #212121;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 3px;
+  border: solid 2px #181818;
+  padding: 6px;
+  margin: 3px;
 }
 
-.shift-detail {
+.timestamps {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 2px;
-  border-bottom: solid #3a3a3a 1px;
-
+  justify-content: space-between
 }
 
-.label,
-.shift-data {
-  font-size: 14px;
+.start {
+  color: forestgreen;
+}
+
+.stop {
+  color: indianred;
+}
+
+.work {
+  margin-left: auto;
 }
 
 </style>
