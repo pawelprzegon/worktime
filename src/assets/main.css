@@ -16,10 +16,6 @@
   height: 88%;
   overflow-x: hidden;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #footer {
@@ -27,4 +23,13 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.login-section,
+.signup-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }

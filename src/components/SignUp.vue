@@ -39,28 +39,34 @@ const handleSubmit = async () => {
 
 <template>
 
-  <form @submit.prevent="handleSubmit">
-    <h1 class="form-label">Sign up</h1>
-    <div>
-      <input v-model="form.first_name" type="text" placeholder="first name" id="first_name" required />
-      <input v-model="form.last_name" type="text" placeholder="last name" id="last_name" required />
-      <input v-model="form.email" type="email" placeholder="email" id="email" required />
-      <input v-model="form.username" type="text" placeholder="username" id="username" autocomplete="current-username" required />
-      <input v-model="form.password" type="password" placeholder="password" autocomplete="current-password" id="password" required />
-      <input type="file" id="avatar" @change="handleFileChange" accept=".png" />
-    </div>
+  <section class="signup-section">
+
+    <form @submit.prevent="handleSubmit">
+      <h1 class="form-label">Sign up</h1>
+      <div>
+        <input v-model="form.first_name" type="text" placeholder="first name" id="first_name" required />
+        <input v-model="form.last_name" type="text" placeholder="last name" id="last_name" required />
+        <input v-model="form.email" type="email" placeholder="email" id="email" required />
+        <input v-model="form.username" type="text" placeholder="username" id="username" autocomplete="current-username" required />
+        <input v-model="form.password" type="password" placeholder="password" autocomplete="current-password" id="password" required />
+        <input type="file" id="avatar" @change="handleFileChange" accept=".png" />
+      </div>
 
 
-    <button type="submit">SIGN UP</button>
-  </form>
+      <button type="submit">SIGN UP</button>
+    </form>
+
+  </section>
+
 </template>
 
 <style scoped>
 form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   width: 300px;
+  min-height: 450px;
   padding: 1rem;
   background: #212121;
   box-shadow: -4px 13px 27px 9px black;
@@ -69,7 +75,7 @@ form {
 
 .form-label {
   font-weight: bolder;
-  margin: auto;
+  margin: 1rem auto;
   color: lightgray;
 }
 
@@ -94,7 +100,7 @@ input {
 }
 
 input:focus {
-  border-bottom: 1px solid gray; /* Podczas focusu, kreska również biała */
+  border-bottom: 1px solid gray;
 }
 
 button {

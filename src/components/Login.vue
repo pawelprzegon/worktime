@@ -36,75 +36,96 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="login-form">
-    <h2>Login</h2>
+
+  <section class="login-section">
+
     <form @submit.prevent="handleLogin">
+      <h1 class="login-label">Login</h1>
       <div>
-        <label for="username">Username:</label>
         <input
           v-model="username"
           type="text"
           id="username"
-          placeholder="Enter your username"
+          placeholder="username"
           required
         />
-      </div>
-      <div>
-        <label for="password">Password:</label>
+
         <input
           v-model="password"
           type="password"
           id="password"
-          placeholder="Enter your password"
+          placeholder="password"
           required
         />
       </div>
       <button type="submit" :disabled="loading">
-        {{ loading ? 'Logging in...' : 'Login' }}
+        {{ loading ? 'Logging in...' : 'LOGIN' }}
       </button>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </form>
-  </div>
+
+  </section>
+
 </template>
 
 <style scoped>
-.login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 300px;
+  min-height: 450px;
+  padding: 1rem;
+  background: #212121;
+  box-shadow: -4px 13px 27px 9px black;
+  border-radius: 10px;
 }
 
-.login-form h2 {
+h1 {
+  font-weight: bolder;
+  margin: 1rem auto;
+  color: lightgray;
   text-align: center;
-  margin-bottom: 1rem;
 }
 
-.login-form label {
+label {
   display: block;
   margin-bottom: 0.5rem;
 }
 
-.login-form input {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.login-form button {
-  width: 100%;
-  padding: 0.5rem;
-  background-color: #42b983;
-  color: white;
+input {
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-bottom: 1px solid black;
+  outline: none;
+  color: gray;
+  padding: 10px;
+  margin: 5px;
+  width: 100%;
 }
 
-.login-form button:disabled {
+input:focus {
+  border-bottom: 1px solid gray;
+}
+
+button {
+  padding: 10px;
+  background-color: #212121;
+  color: gray;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 3px;
+  border: solid 1px #181818;
+  margin-top: auto;
+}
+
+button:hover {
+  background-color: #181818;
+  color: lightgray;
+}
+
+button:disabled {
   background-color: #ccc;
 }
 
