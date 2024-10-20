@@ -38,39 +38,20 @@ const handleSubmit = async () => {
 </script>
 
 <template>
+
   <form @submit.prevent="handleSubmit">
+    <h1 class="form-label">Sign up</h1>
     <div>
-      <label for="first_name">First Name</label>
-      <input v-model="form.first_name" type="text" id="first_name" required />
-    </div>
-
-    <div>
-      <label for="last_name">Last Name</label>
-      <input v-model="form.last_name" type="text" id="last_name" required />
-    </div>
-
-    <div>
-      <label for="email">Email</label>
-      <input v-model="form.email" type="email" id="email" required />
-    </div>
-
-    <div>
-      <label for="username">Username</label>
-      <input v-model="form.username" type="text" id="username" autocomplete="current-username" required />
-    </div>
-
-    <div>
-      <label for="password">Password</label>
-      <input v-model="form.password" type="password" autocomplete="current-password" id="password" required />
-    </div>
-
-    <div>
-      <label for="avatar">Avatar</label>
+      <input v-model="form.first_name" type="text" placeholder="first name" id="first_name" required />
+      <input v-model="form.last_name" type="text" placeholder="last name" id="last_name" required />
+      <input v-model="form.email" type="email" placeholder="email" id="email" required />
+      <input v-model="form.username" type="text" placeholder="username" id="username" autocomplete="current-username" required />
+      <input v-model="form.password" type="password" placeholder="password" autocomplete="current-password" id="password" required />
       <input type="file" id="avatar" @change="handleFileChange" accept=".png" />
     </div>
 
 
-    <button type="submit">Create User</button>
+    <button type="submit">SIGN UP</button>
   </form>
 </template>
 
@@ -80,8 +61,16 @@ form {
   flex-direction: column;
   justify-content: center;
   width: 300px;
-  height: 100%;
+  padding: 1rem;
+  background: #212121;
+  box-shadow: -4px 13px 27px 9px black;
+  border-radius: 10px;
+}
+
+.form-label {
+  font-weight: bolder;
   margin: auto;
+  color: lightgray;
 }
 
 div {
@@ -89,26 +78,37 @@ div {
 }
 
 label {
+
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
 input {
-  padding: 5px;
-  font-size: 14px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid black;
+  outline: none;
+  color: gray;
+  padding: 10px;
+  margin: 5px;
   width: 100%;
+}
+
+input:focus {
+  border-bottom: 1px solid gray; /* Podczas focusu, kreska również biała */
 }
 
 button {
   padding: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
+  background-color: #212121;
+  color: gray;
   cursor: pointer;
   font-size: 16px;
+  border-radius: 3px;
+  border: solid 1px #181818;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #181818;
+  color: lightgray;
 }
 </style>

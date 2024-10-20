@@ -7,8 +7,8 @@
   const router = useRouter()
   const userName = ref('');
 
-  const gotoSignIn = () => {
-    router.push('/signin')
+  const gotoSignUp = () => {
+    router.push('/signup')
   }
 
   const gotoLogin = () => {
@@ -38,7 +38,7 @@
       console.log(`${response.first_name} ${response.last_name}`)
       userName.value = `${response.first_name} ${response.last_name}`
     } catch (error) {
-      console.log("Error while getting Me data")
+      console.log(error)
     }
   }
 
@@ -76,7 +76,7 @@
 
   <hr />
   <footer id="footer">
-    <button class="link" v-if="!isAuthenticated" @click="gotoSignIn">SignIn</button>
+    <button class="link" v-if="!isAuthenticated" @click="gotoSignUp">SignUp</button>
   </footer>
 </template>
 

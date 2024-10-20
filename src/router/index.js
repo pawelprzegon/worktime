@@ -1,9 +1,8 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
-import SignIn from "@/components/SignIn.vue";
+import SignUp from "@/components/SignUp.vue";
 
 const routes = [
     {
@@ -12,9 +11,9 @@ const routes = [
         component: Login,
     },
     {
-        path: '/signin',
-        name: 'SignIn',
-        component: SignIn,
+        path: '/signup',
+        name: 'SignUp',
+        component: SignUp,
     },
     {
         path: '/',

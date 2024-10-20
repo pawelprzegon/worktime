@@ -1,5 +1,5 @@
 import {url} from "@/utils.js";
-
+import {logout} from "@/auth.js"
 
 const addAuthorization = () => {
     const token = localStorage.getItem('token')
@@ -192,7 +192,9 @@ export const getMe = async () => {
     const response = await fetch(url + `/user/me`, data)
 
     if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
+        logout()
+        throw new Error(`user Me response error: ${response.statusText}`)
+
     }
 
     return await response.json()
