@@ -74,7 +74,7 @@ onMounted(async () => {
 
 .black-line {
   height: 2px;
-  background-color: #181818;
+  background-color: var(--vt-c-black);
   border: none;
 }
 
@@ -82,7 +82,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   border-radius: 3px;
-  border: solid 2px #181818;
+  border: solid 2px var(--vt-c-black);
   padding: 6px;
   margin: 3px;
 }

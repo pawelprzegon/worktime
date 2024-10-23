@@ -68,7 +68,7 @@ form {
   width: 300px;
   min-height: 450px;
   padding: 1rem;
-  background: #212121;
+  background: var(--vt-c-black-mute);
   box-shadow: -4px 13px 27px 9px black;
   border-radius: 10px;
 }
@@ -105,16 +105,16 @@ input:focus {
 
 button {
   padding: 10px;
-  background-color: #212121;
+  background-color: var(--vt-c-black-mute);
   color: gray;
   cursor: pointer;
   font-size: 16px;
   border-radius: 3px;
-  border: solid 1px #181818;
+  border: solid 1px var(--vt-c-black);
 }
 
 button:hover {
-  background-color: #181818;
+  background-color: var(--vt-c-black);
   color: lightgray;
 }
 </style>

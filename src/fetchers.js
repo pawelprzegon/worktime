@@ -85,7 +85,6 @@ export const startShift = async (userId, note) => {
 }
 
 export const endShift = async (shiftId, userId ) => {
-
     const body = JSON.stringify({
         'shift_id': `${shiftId}`,
         'user_id': `${userId}`
@@ -107,7 +106,7 @@ export const endShift = async (shiftId, userId ) => {
     return await response.json()
 }
 
-export const getUserShifts = async () => {
+export const getUserShifts = async (month) => {
 
     const data = {
       method: 'GET',
@@ -117,7 +116,7 @@ export const getUserShifts = async () => {
         }
     }
 
-    const response = await fetch(url + `/shift/user`, data)
+    const response = await fetch(url + `/shift/user?month=${month}`, data)
 
     if (!response.ok) {
       throw new Error('Fetch active shift failed.')

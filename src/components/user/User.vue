@@ -48,7 +48,7 @@ const shiftToggle = async () => {
   try{
 
     if (props.user.activeShift) {
-      const shiftId = props.user.activeShift._id
+      const shiftId = props.user.activeShift.id
       await endShift(shiftId, userId)
       props.user.activeShift = null
     } else {
@@ -79,7 +79,6 @@ onMounted(async () => {
     await checkActiveShift()
     updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
-    console.log(props.user.avatar)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -126,7 +125,7 @@ onMounted(async () => {
 .active,
 .user:hover {
   color: white;
-  background: #212121;
+  background: var(--vt-c-black-mute);
   border-radius: 10px;
 }
 

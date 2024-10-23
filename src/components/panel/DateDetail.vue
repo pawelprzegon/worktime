@@ -32,7 +32,7 @@ const props = defineProps({
 .date-details {
   display: flex;
   flex-direction: column;
-  background: #212121;
+  background: var(--vt-c-black-mute);
   border-radius: 10px;
   padding: 10px;
   height: fit-content;
