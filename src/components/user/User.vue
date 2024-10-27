@@ -89,7 +89,7 @@ onMounted(async () => {
   <div :class="{'user': true, 'active': props.user.activeShift}">
 
     <Avatar
-        :avatar_url="props.user.avatar"
+        :avatar="props.user.avatar"
         :active-shift="props.user.activeShift"
         @toggle="shiftToggle"
     />

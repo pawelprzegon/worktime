@@ -1,5 +1,17 @@
 import {url} from "@/utils.js";
 import {logout} from "@/auth.js"
+import {useRouter} from 'vue-router'
+
+const router = useRouter()
+
+const checkIsAuthorized = () => {
+    const token = localStorage.getItem('token')
+    if (token !== null) {
+        return token
+    }
+
+    router.push('/login')
+}
 
 const addAuthorization = () => {
     const token = localStorage.getItem('token')
@@ -33,7 +45,6 @@ export const getUsers = async () => {
     }
 
     const response = await fetch(url + '/dash/users', data)
-
     if (!response.ok) {
       throw new Error('Login failed. Please check your credentials.')
     }

@@ -1,9 +1,9 @@
 <script setup>
 
-import { defineProps, defineEmits, ref} from "vue";
+import { defineProps, defineEmits} from "vue";
 
 const props = defineProps({
-  avatar_url: String,
+  avatar: String,
   activeShift: Object
 })
 
@@ -21,7 +21,7 @@ const shiftToggle = () => {
 
   <img
     :class="{'avatar': true, 'off': !props.activeShift}"
-    :src="`${apiURL}/${props.avatar_url}`"
+    :src="`${apiURL}/${props.avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >

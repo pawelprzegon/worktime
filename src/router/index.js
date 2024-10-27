@@ -3,7 +3,6 @@ import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
-import Calendar from "@/components/panel/Calendar.vue";
 
 const routes = [
     {
@@ -23,14 +22,8 @@ const routes = [
     },
     {
         path: '/user-panel',
-        name: 'UserPanel',
+        name: 'Panel',
         component: Panel,
-        meta: { requiresAuth: true },
-    },
-    {
-        path: '/calendar',
-        name: 'Calendar',
-        component: Calendar,
         meta: { requiresAuth: true },
     },
 

@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onMounted, defineProps} from 'vue';
-import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth, getMonth } from 'date-fns';
+import { ref, onMounted } from 'vue';
+import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {getUserShifts} from "@/fetchers.js";
+import CustomButton from "@/components/utils/CustomButton.vue";
+import ShiftDetailsTooltip from "@/components/panel/ShiftDetailsTooltip.vue";
 
 
 const currentMonth = ref(new Date());
@@ -14,7 +16,8 @@ const daysInMonth = ref(
   }).map(date => ({
     date,
     hours: 0,
-    note: ''
+    note: '',
+    shifts: []
   }))
 );
 
@@ -25,7 +28,8 @@ const updateDaysInMonth = () => {
   }).map(date => ({
     date,
     hours: 0,
-    note: ''
+    note: '',
+    shifts: []
   }));
 };
 
@@ -44,7 +48,7 @@ const nextMonth = () => {
 
 const getDates = async () => {
   try {
-    const shifts = await getUserShifts(format(currentMonth.value, 'YYYY-MM'))
+    const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'))
 
     const getDate = (dateTimeStr) => dateTimeStr.split(' ')[0];
 
@@ -57,51 +61,95 @@ const getDates = async () => {
       return acc;
     }, {});
 
-    const shiftsByDate = Object.keys(groupedShifts).map(date => ({
-      date: date,
-      shifts: groupedShifts[date]
-    }));
+    // const shiftsByDate = Object.keys(groupedShifts).map(date => ({
+    //   date: date,
+    //   shifts: groupedShifts[date]
+    // }));
+    //
+    // shiftsByDate.sort((a, b) => new Date(a.data) - new Date(b.data));
+    //
+    // dates.value = shiftsByDate
 
-    shiftsByDate.sort((a, b) => new Date(a.data) - new Date(b.data));
+    daysInMonth.value = daysInMonth.value.map(day => {
+      const formattedDate = format(day.date, 'yyyy-MM-dd');
+      return {
+        ...day,
+        shifts: groupedShifts[formattedDate] || []
+      };
+    });
 
-    dates.value = shiftsByDate
 
   } catch (error) {
     console.error("Error fetching users:", error);
   }
 }
 
+function formatTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = (seconds % 60).toFixed(0);
+
+  return [
+    hours.toString().padStart(2, '0'),
+    minutes.toString().padStart(2, '0'),
+    secs.toString().padStart(2, '0')
+  ].join(':');
+}
+
 onMounted(() => {
-  updateDaysInMonth();
   getDates()
+  updateDaysInMonth();
 })
 
 </script>
 
 <template>
-  <div class="calendar-navigation">
-    <button @click="prevMonth">Preview month</button>
-    <span>{{ format(currentMonth, 'MMMM yyyy') }}</span>
-    <button @click="nextMonth">Next month</button>
-  </div>
-
   <div class="calendar">
+
+    <div class="calendar-navigation">
+      <CustomButton
+          label="preview"
+          :margin="10"
+          :padding="1"
+          :width="100"
+          @click="prevMonth"
+
+      ></CustomButton>
+
+      <span class="nav-label">{{ format(currentMonth, 'MMMM yyyy') }}</span>
+
+      <CustomButton
+          label="next"
+          :margin="10"
+          :padding="1"
+          :width="100"
+          @click="nextMonth"
+      ></CustomButton>
+    </div>
 
     <div class="calendar-grid">
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
-        class="calendar-day"
+        :class="['calendar-day', { 'present-shift': day.shifts.length > 0 }]"
       >
         <div class="day-header">
           <span>{{ day.date.getDate() }}</span>
-          <input
-            type="number"
-            v-model="day.hours"
-            placeholder="Godziny"
-            min="0"
-            max="24"
-          />
+
+          <small
+              class="shift"
+              v-if="day.shifts.length > 0"
+              v-for="shift in day.shifts"
+          >
+            {{ formatTime(shift.work) }}
+
+            <ShiftDetailsTooltip
+              :shift="shift"
+            />
+
+          </small>
+
+
         </div>
       </div>
     </div>
@@ -109,10 +157,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
+
 .calendar {
-  display: flex;
-  justify-content: center;
+  display: block;
   padding: 20px;
+}
+
+.calendar-navigation {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .calendar-grid {
@@ -124,7 +178,7 @@ onMounted(() => {
 .calendar-day {
   background-color: var(--vt-c-black-mute);
   border: 1px solid var(--vt-c-black-mute);
-  padding: 10px;
+  padding: 6px;
   border-radius: 8px;
   width: 100px;
   height: 100px;
@@ -132,8 +186,10 @@ onMounted(() => {
 
 .day-header {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+
 }
 
 input[type="number"] {
@@ -144,4 +200,16 @@ textarea {
   width: 100%;
   margin-top: 10px;
 }
+
+.nav-label {
+  width: 120px;
+  display: block;
+  text-align: center;
+}
+
+.present-shift {
+  background: #002f00;
+}
+
+
 </style>

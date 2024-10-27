@@ -3,6 +3,7 @@
   import {onMounted, ref} from 'vue'
   import { isAuthenticated, isAdmin, logout } from '@/auth.js';
   import {getMe} from "@/fetchers.js";
+  import CustomButton from "@/components/utils/CustomButton.vue";
 
   const router = useRouter()
   const userName = ref('');
@@ -57,11 +58,45 @@
     <div class="nav">
       <small class="nav-user" v-if="isAuthenticated">logged: {{userName}}</small>
       <div class="nav-buttons">
-        <button class="link" @click="gotoDash">Dashboard</button>
-        <button class="link" v-if="!isAuthenticated" @click="gotoLogin">Login</button>
-        <button class="link" v-if="isAuthenticated && isAdmin" @click="gotoManagement">Management</button>
-        <button class="link" v-if="isAuthenticated" @click="gotoPanel">Shifts</button>
-        <button class="link" v-if="isAuthenticated" @click="gotoLogout">Logout</button>
+        <CustomButton
+            label="Dashboard"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoDash"
+        ></CustomButton>
+        <CustomButton
+            v-if="!isAuthenticated"
+            label="Login"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoLogin"
+        ></CustomButton>
+        <CustomButton
+            v-if="isAuthenticated && isAdmin"
+            label="Management"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoManagement"
+        ></CustomButton>
+        <CustomButton
+            v-if="isAuthenticated"
+            label="Shifts"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoPanel"
+        ></CustomButton>
+        <CustomButton
+            v-if="isAuthenticated"
+            label="Logout"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoLogout"
+        ></CustomButton>
       </div>
 
     </div>
@@ -76,7 +111,15 @@
 
   <hr />
   <footer id="footer">
-    <button class="link" v-if="!isAuthenticated" @click="gotoSignUp">SignUp</button>
+    <CustomButton
+        class="link"
+        v-if="!isAuthenticated"
+        label="SignUp"
+        :margin="10"
+        :padding="3"
+        :width="120"
+        @click="gotoSignUp"
+    >SignUp</CustomButton>
   </footer>
 </template>
 
@@ -105,37 +148,5 @@ header {
   justify-content: flex-end;
   align-items: flex-end;
 }
-
-.link {
-  align-items: center;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 16px;
-  box-sizing: border-box;
-  color: #9f9f9f;
-  cursor: pointer;
-  display: flex;
-  font-size: 18px;
-  justify-content: center;
-  line-height: 28px;
-  margin: 4px;
-  text-decoration: none;
-  transition: all .2s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 120px;
-}
-
-  .link:active,
-  .link:hover {
-    outline: 0;
-  }
-
-  .link:hover {
-    background-color: #FFFFFF;
-    color: black;
-    border-color: rgba(0, 0, 0, 0.19);
-  }
 
 </style>
