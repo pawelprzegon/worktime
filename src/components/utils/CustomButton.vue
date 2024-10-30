@@ -6,7 +6,11 @@ const props = defineProps({
   label: String,
   padding: Number,
   margin: Number,
-  width: Number
+  width: Number,
+  fontSize: {
+    type: Number,
+    default: 13
+  }
 })
 
 </script>
@@ -16,7 +20,7 @@ const props = defineProps({
   <button
       class="button"
       type="button"
-      :style="{ width: props.width + 'px', padding: props.padding + 'px', margin: props.margin + 'px' }"
+      :style="{ width: props.width + 'px', padding: props.padding + 'px', margin: props.margin + 'px' , fontSize: props.fontSize + 'px'}"
   >{{props.label}}</button>
 
 </template>
@@ -51,6 +55,16 @@ const props = defineProps({
   background-color: #FFFFFF;
   color: black;
   border-color: rgba(0, 0, 0, 0.19);
+}
+
+@media (max-width: 700px) {
+  .button {
+    font-size: 10px;
+    border-radius: 3px;
+    width: 70px !important;
+    margin: 5px !important;
+    padding: 1px !important;
+  }
 }
 
 </style>

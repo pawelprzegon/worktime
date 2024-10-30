@@ -3,6 +3,7 @@ import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
+import {checkIsAuthorized} from "@/fetchers.js";
 
 const routes = [
     {
@@ -35,14 +36,20 @@ const router = createRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
+router.beforeEach(async (to, from, next) => {
 
-  if (to.meta.requiresAuth && !token) {
-    next('/login');
-  } else {
+    if (to.path === '/login') {
+        return next();
+    }
+
+    const token = localStorage.getItem('token');
+    const authorized = await checkIsAuthorized(token)
+
+    if ((to.meta.requiresAuth && !token) || !authorized) {
+        return next('/login')
+    }
+
     next();
-  }
 });
 
 

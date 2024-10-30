@@ -1,23 +1,37 @@
 import {url} from "@/utils.js";
 import {logout} from "@/auth.js"
-import {useRouter} from 'vue-router'
 
-const router = useRouter()
-
-const checkIsAuthorized = () => {
-    const token = localStorage.getItem('token')
-    if (token !== null) {
-        return token
-    }
-
-    router.push('/login')
-}
 
 const addAuthorization = () => {
     const token = localStorage.getItem('token')
     return `Bearer ${token}`
 
 }
+
+export const checkIsAuthorized = async () => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + '/user/me', data)
+
+    if (response.status === 401) {
+        return false
+    }
+
+    else if (!response.ok) {
+      throw new Error('Checking authorization failed.')
+    }
+
+    return await response.json()
+}
+
+
 
 export const loginFetch = async (formData) => {
     const body = formData.toString()

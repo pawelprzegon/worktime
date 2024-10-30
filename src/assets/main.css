@@ -1,11 +1,11 @@
 @import './base.css';
 
 #app {
-  max-width: 90%;
+  width: 100%; /* Ustaw szerokość na 100% */
+  height: 100vh; /* Ustaw wysokość na 100% widoku */
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
-  height: 100vb;
 }
 
 #header {

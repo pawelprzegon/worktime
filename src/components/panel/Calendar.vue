@@ -1,13 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, defineEmits, onBeforeUnmount} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
-import ShiftDetailsTooltip from "@/components/panel/ShiftDetailsTooltip.vue";
+import ShiftDetailsTooltip from "@/components/panel/shift/ShiftDetailsTooltip.vue";
 
 
 const currentMonth = ref(new Date());
-const dates = ref([])
+const calculatedTime = ref(0)
+const emit = defineEmits(['calculatedTime'])
 
 const daysInMonth = ref(
   eachDayOfInterval({
@@ -53,6 +54,7 @@ const getDates = async () => {
     const getDate = (dateTimeStr) => dateTimeStr.split(' ')[0];
 
     const groupedShifts = shifts.reduce((acc, shift) => {
+      calculatedTime.value += shift.work
       const date = getDate(shift.start);
       if (!acc[date]) {
         acc[date] = [];
@@ -61,15 +63,6 @@ const getDates = async () => {
       return acc;
     }, {});
 
-    // const shiftsByDate = Object.keys(groupedShifts).map(date => ({
-    //   date: date,
-    //   shifts: groupedShifts[date]
-    // }));
-    //
-    // shiftsByDate.sort((a, b) => new Date(a.data) - new Date(b.data));
-    //
-    // dates.value = shiftsByDate
-
     daysInMonth.value = daysInMonth.value.map(day => {
       const formattedDate = format(day.date, 'yyyy-MM-dd');
       return {
@@ -77,8 +70,7 @@ const getDates = async () => {
         shifts: groupedShifts[formattedDate] || []
       };
     });
-
-
+    emit('calculatedTime', formatTime(calculatedTime.value))
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -96,10 +88,36 @@ function formatTime(seconds) {
   ].join(':');
 }
 
+const calculateCurrentShiftTime = (shiftStart) => {
+  const now = new Date();
+  const shiftStartDate = new Date(shiftStart);
+  const diffSeconds = Math.floor((now - shiftStartDate) / 1000);
+  return formatTime(diffSeconds);
+};
+
+const updateCurrentShiftTime = () => {
+  daysInMonth.value.forEach(day => {
+    day.shifts.forEach(shift => {
+      if (!shift.stop) {
+        shift.currentShiftTime = calculateCurrentShiftTime(shift.start);
+      }
+    });
+  });
+};
+
 onMounted(() => {
   getDates()
   updateDaysInMonth();
+
+  const interval = setInterval(() => {
+    updateCurrentShiftTime();
+  }, 1000);
+
+  onBeforeUnmount(() => clearInterval(interval));
+
 })
+
+
 
 </script>
 
@@ -131,27 +149,41 @@ onMounted(() => {
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
-        :class="['calendar-day', { 'present-shift': day.shifts.length > 0 }]"
+        :class="['calendar-day', { 'finished-shift': day.shifts.length > 0}]"
       >
-        <div class="day-header">
-          <span>{{ day.date.getDate() }}</span>
 
-          <small
-              class="shift"
-              v-if="day.shifts.length > 0"
+        <span class="day-header">{{ day.date.getDate() }}</span>
+
+        <div class="shifts-list">
+
+          <div
+              v-if="day.shifts"
               v-for="shift in day.shifts"
           >
-            {{ formatTime(shift.work) }}
+            <small
+                v-if="shift.stop"
+                class="shift finished-shift">
+              {{ formatTime(shift.work) }}
+            </small>
 
-            <ShiftDetailsTooltip
-              :shift="shift"
-            />
+            <small
+              v-else
+              :class="['shift', {'started-shift': !shift.stop}]"
+            >
+              {{ shift.currentShiftTime || '00:00:00' }}
+            </small>
 
-          </small>
-
+          </div>
 
         </div>
+
+        <ShiftDetailsTooltip
+          :shifts="day.shifts"
+          :formatTime="formatTime"
+        />
+
       </div>
+
     </div>
   </div>
 </template>
@@ -161,6 +193,7 @@ onMounted(() => {
 .calendar {
   display: block;
   padding: 20px;
+  max-width: 800px;
 }
 
 .calendar-navigation {
@@ -171,7 +204,7 @@ onMounted(() => {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 10px;
 }
 
@@ -180,16 +213,22 @@ onMounted(() => {
   border: 1px solid var(--vt-c-black-mute);
   padding: 6px;
   border-radius: 8px;
-  width: 100px;
+  min-width: 100px;
+  width: 100%;
   height: 100px;
 }
 
 .day-header {
+  display: block;
+  border-bottom: 1px solid #595959;
+
+}
+
+.shifts-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-
+  justify-content: right;
+  align-items: flex-end;
 }
 
 input[type="number"] {
@@ -207,9 +246,14 @@ textarea {
   text-align: center;
 }
 
-.present-shift {
+.finished-shift {
   background: #002f00;
 }
+
+.started-shift {
+  color: #bd7d00;
+}
+
 
 
 </style>
