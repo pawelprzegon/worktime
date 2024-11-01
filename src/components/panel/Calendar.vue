@@ -3,12 +3,23 @@ import {ref, onMounted, defineEmits, onBeforeUnmount} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
-import ShiftDetailsTooltip from "@/components/panel/shift/ShiftDetailsTooltip.vue";
 import {formatTime} from "@/utils.js";
+import DayShiftsModal from "@/components/user/DayShiftsModal.vue";
 
 
 const currentMonth = ref(new Date());
 const calculatedTime = ref(0)
+const isModalOpen = ref(false);
+const selectedDay = ref(null);
+
+const openModal = (day) => {
+  selectedDay.value = day;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
 const emit = defineEmits(['calculatedTime'])
 
 const daysInMonth = ref(
@@ -146,6 +157,7 @@ onMounted(() => {
         v-for="(day, index) in daysInMonth"
         :key="index"
         :class="['calendar-day', { 'finished-shift': day.shifts.list.length > 0}]"
+        @click="openModal(day)"
       >
 
         <span class="day-header">{{ day.date.getDate() }}</span>
@@ -153,7 +165,7 @@ onMounted(() => {
         <div class="shifts-list">
 
           <div
-              v-if="day.shifts.list"
+              v-if="day.shifts.list.length > 0"
           >
             <small class="shift">
               {{ formatTime(day.shifts.summary) }}
@@ -163,14 +175,18 @@ onMounted(() => {
 
         </div>
 
-        <ShiftDetailsTooltip
-          :shifts="day.shifts.list"
-          :formatTime="formatTime"
-        />
-
       </div>
 
     </div>
+
+    <DayShiftsModal
+      v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
+      :title="selectedDay?.date.toString()"
+      :shifts="selectedDay?.shifts.list"
+      :format-time="formatTime"
+      @close="closeModal"
+    />
+
   </div>
 </template>
 
