@@ -1,6 +1,6 @@
 <script setup>
 
-import {defineProps, defineEmits} from "vue";
+import {defineEmits, defineProps} from "vue";
 import Note from "@/components/user/Note.vue";
 
 const props = defineProps({
@@ -15,21 +15,12 @@ const passNote = (note) => {
 }
 
 const formatDuration = () => {
-  const date = new Date(props.activeShift.start)
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Warsaw',
-  };
+  const utcDate = new Date(props.activeShift.start);
 
-  const tz = new Intl.DateTimeFormat('pl-PL', options).format(date);
-  return tz
-}
+  return utcDate.toLocaleString("pl-PL", {
+    timeZone: "Europe/Warsaw"
+  });
+};
 
 
 

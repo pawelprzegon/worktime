@@ -4,6 +4,7 @@ import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
+import {logout} from "@/auth.js";
 
 const routes = [
     {
@@ -38,16 +39,17 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
 
-    if (to.path === '/login') {
-        return next();
-    }
-
     const token = localStorage.getItem('token');
     const authorized = await checkIsAuthorized(token)
 
-    if ((to.meta.requiresAuth && !token) || !authorized) {
-        return next('/login')
+    if (!authorized) {
+        logout()
+        if (to.path === '/user-panel') {
+            return next('/login')
+        }
     }
+
+
 
     next();
 });

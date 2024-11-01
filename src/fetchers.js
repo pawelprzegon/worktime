@@ -21,6 +21,7 @@ export const checkIsAuthorized = async () => {
     const response = await fetch(url + '/user/me', data)
 
     if (response.status === 401) {
+        logout()
         return false
     }
 

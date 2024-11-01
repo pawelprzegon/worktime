@@ -17,7 +17,6 @@ const calculatedTime = ref(0)
 const getMeData = async () => {
     try{
       const response =  await getMe()
-      console.log(response)
       firstName.value = response.first_name
       lastName.value = response.last_name
       email.value = response.email
@@ -53,35 +52,41 @@ const getMeData = async () => {
           :active-shift="{}"
           :avatar="avatar"
       />
-      <DetailsContainer
-          :label="'firstname'"
-          :data="firstName"
-          :background="'#282828'"
-      />
 
-      <DetailsContainer
-          :label="'lastname'"
-          :data="lastName"
-          :background="'#282828'"
-      />
+      <section class="details">
 
-      <DetailsContainer
-          :label="'email'"
-          :data="email"
-          :background="'#282828'"
-      />
+        <DetailsContainer
+            :label="'firstname'"
+            :data="firstName"
+            :background="'#282828'"
+        />
 
-      <DetailsContainer
-          :label="'role'"
-          :data="role"
-          :background="'#282828'"
-      />
+        <DetailsContainer
+            :label="'lastname'"
+            :data="lastName"
+            :background="'#282828'"
+        />
 
-      <DetailsContainer
-          :label="'monthly shift time sum'"
-          :data="calculatedTime.toString()"
-          :background="'#282828'"
-      />
+        <DetailsContainer
+            :label="'email'"
+            :data="email"
+            :background="'#282828'"
+        />
+
+        <DetailsContainer
+            :label="'role'"
+            :data="role"
+            :background="'#282828'"
+        />
+
+        <DetailsContainer
+            :label="'monthly work time'"
+            :data="calculatedTime.toString()"
+            :background="'#282828'"
+        />
+
+      </section>
+
 
     </div>
 
@@ -99,9 +104,12 @@ const getMeData = async () => {
   grid-template-columns: 75% 25%;
   grid-template-areas: "calendar user-details";
 }
-
-.user-details {
-  grid-area: user-details;
+.details {
+  background: rgb(40, 40, 40);
+  padding: 1rem;
+  border-radius: 10px;
+  min-width: 250px;
+  max-width: 80%;
 }
 
 .calendar {
@@ -114,7 +122,7 @@ const getMeData = async () => {
   justify-content: flex-start;
   align-items: center;
   padding: 5px;
-  width: 200px;
+  width: 100%
 }
 
 .avatar {
@@ -122,10 +130,15 @@ const getMeData = async () => {
   padding: 0;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
   .user-section {
     grid-template-columns: 1fr;
     grid-template-areas: "user-details" "calendar";
+  }
+
+  .details {
+    min-width: 250px;
+    max-width: 40%;
   }
 }
 

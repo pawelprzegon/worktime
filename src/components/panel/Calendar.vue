@@ -4,6 +4,7 @@ import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from '
 import {getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import ShiftDetailsTooltip from "@/components/panel/shift/ShiftDetailsTooltip.vue";
+import {formatTime} from "@/utils.js";
 
 
 const currentMonth = ref(new Date());
@@ -18,7 +19,7 @@ const daysInMonth = ref(
     date,
     hours: 0,
     note: '',
-    shifts: []
+    shifts: { list: [], summary: 0 }
   }))
 );
 
@@ -30,7 +31,7 @@ const updateDaysInMonth = () => {
     date,
     hours: 0,
     note: '',
-    shifts: []
+    shifts: { list: [], summary: 0 }
   }));
 };
 
@@ -49,17 +50,21 @@ const nextMonth = () => {
 
 const getDates = async () => {
   try {
-    const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'))
+    const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
 
-    const getDate = (dateTimeStr) => dateTimeStr.split(' ')[0];
+    const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
 
     const groupedShifts = shifts.reduce((acc, shift) => {
-      calculatedTime.value += shift.work
+      calculatedTime.value += shift.work;
       const date = getDate(shift.start);
       if (!acc[date]) {
-        acc[date] = [];
+        acc[date] = {
+          'list': [],
+          'summary': 0
+        };
       }
-      acc[date].push(shift);
+      acc[date].list.push(shift);
+      acc[date].summary += shift.work
       return acc;
     }, {});
 
@@ -67,26 +72,17 @@ const getDates = async () => {
       const formattedDate = format(day.date, 'yyyy-MM-dd');
       return {
         ...day,
-        shifts: groupedShifts[formattedDate] || []
+        shifts: groupedShifts[formattedDate] || { list: [], summary: 0 }
       };
     });
-    emit('calculatedTime', formatTime(calculatedTime.value))
+    console.log(formatTime(calculatedTime.value))
+    emit('calculatedTime', formatTime(calculatedTime.value));
   } catch (error) {
     console.error("Error fetching users:", error);
   }
-}
+};
 
-function formatTime(seconds) {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = (seconds % 60).toFixed(0);
 
-  return [
-    hours.toString().padStart(2, '0'),
-    minutes.toString().padStart(2, '0'),
-    secs.toString().padStart(2, '0')
-  ].join(':');
-}
 
 const calculateCurrentShiftTime = (shiftStart) => {
   const now = new Date();
@@ -97,7 +93,7 @@ const calculateCurrentShiftTime = (shiftStart) => {
 
 const updateCurrentShiftTime = () => {
   daysInMonth.value.forEach(day => {
-    day.shifts.forEach(shift => {
+    day.shifts.list.forEach(shift => {
       if (!shift.stop) {
         shift.currentShiftTime = calculateCurrentShiftTime(shift.start);
       }
@@ -149,7 +145,7 @@ onMounted(() => {
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
-        :class="['calendar-day', { 'finished-shift': day.shifts.length > 0}]"
+        :class="['calendar-day', { 'finished-shift': day.shifts.list.length > 0}]"
       >
 
         <span class="day-header">{{ day.date.getDate() }}</span>
@@ -157,20 +153,10 @@ onMounted(() => {
         <div class="shifts-list">
 
           <div
-              v-if="day.shifts"
-              v-for="shift in day.shifts"
+              v-if="day.shifts.list"
           >
-            <small
-                v-if="shift.stop"
-                class="shift finished-shift">
-              {{ formatTime(shift.work) }}
-            </small>
-
-            <small
-              v-else
-              :class="['shift', {'started-shift': !shift.stop}]"
-            >
-              {{ shift.currentShiftTime || '00:00:00' }}
+            <small class="shift">
+              {{ formatTime(day.shifts.summary) }}
             </small>
 
           </div>
@@ -178,7 +164,7 @@ onMounted(() => {
         </div>
 
         <ShiftDetailsTooltip
-          :shifts="day.shifts"
+          :shifts="day.shifts.list"
           :formatTime="formatTime"
         />
 
@@ -254,6 +240,8 @@ textarea {
   color: #bd7d00;
 }
 
-
+.shift {
+  font-size: 15px;
+}
 
 </style>

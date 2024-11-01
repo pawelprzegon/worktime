@@ -13,8 +13,7 @@ const props = defineProps({
 
 const checkActiveShift = async () => {
   try{
-    const active = await getActiveShift(props.user._id)
-    props.user.activeShift = active
+    props.user.activeShift = await getActiveShift(props.user._id)
   } catch (error) {
     console.error("Error fetching getActiveSift:", error);
   }
@@ -44,7 +43,7 @@ const updateShiftTimes = () => {
 const shiftToggle = async () => {
 
   const userId = props.user._id
-  const note = 'test Note'
+  const note = ''
   try{
 
     if (props.user.activeShift) {

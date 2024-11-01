@@ -16,7 +16,7 @@ const props = defineProps({
 
 const date = computed(() => {
   if (props.shifts.length > 0) {
-    return props.shifts[0].start.split(" ")[0];
+    return props.shifts[0].start.split("T")[0];
   }
   return '';
 });

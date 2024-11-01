@@ -36,7 +36,6 @@
   const getMeData = async () => {
     try{
       const response =  await getMe()
-      console.log(`${response.first_name} ${response.last_name}`)
       userName.value = `${response.first_name} ${response.last_name}`
     } catch (error) {
       console.log(error)
@@ -44,7 +43,7 @@
   }
 
   onMounted(() => {
-  if (isAuthenticated) {
+  if (isAuthenticated.value) {
     getMeData();
   }
 });

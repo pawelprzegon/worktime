@@ -8,7 +8,6 @@ const users = ref([])
 onMounted(async () => {
   try {
     users.value = await getUsers();
-    console.log(users)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
