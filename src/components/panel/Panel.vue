@@ -42,7 +42,6 @@ const getMeData = async () => {
 
   <section class="user-section">
     <Calendar
-        class="calendar"
         @calculatedTime="handleCalculatedTime"
     />
 
@@ -112,9 +111,6 @@ const getMeData = async () => {
   max-width: 80%;
 }
 
-.calendar {
-  grid-area: calendar;
-}
 
 .user-details {
   display: flex;
@@ -132,8 +128,9 @@ const getMeData = async () => {
 
 @media (max-width: 1300px) {
   .user-section {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100% 1fr;
     grid-template-areas: "user-details" "calendar";
+    justify-items: center;
   }
 
   .details {

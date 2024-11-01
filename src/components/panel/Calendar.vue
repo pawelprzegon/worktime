@@ -177,21 +177,24 @@ onMounted(() => {
 <style scoped>
 
 .calendar {
-  display: block;
+  grid-area: calendar;
   padding: 20px;
-  max-width: 800px;
+  width:100%;
 }
 
 .calendar-navigation {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 10px;
+  max-width: 800px;
+  margin: 0 auto
 }
 
 .calendar-day {
