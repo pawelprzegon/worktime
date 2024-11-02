@@ -1,16 +1,17 @@
 <script setup>
-import {ref, defineEmits, computed} from 'vue'
-import DetailsContainer from "@/components/panel/DetailsContainer.vue";
+import {defineEmits, computed, ref} from 'vue';
+import {formatTime, getTime} from "@/utils.js";
+import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
+import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
+import CustomButton from "@/components/utils/CustomButton.vue";
+import {saveShiftNote} from "@/fetchers.js";
+import {loggedUserId} from "@/auth.js";
 
 const props = defineProps({
 
   shifts: {
     type: Array,
     default: () => []
-  },
-  formatTime: {
-    type: Function,
-    required: true
   }
 })
 
@@ -21,59 +22,71 @@ const date = computed(() => {
   return '';
 });
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'refreshShifts'])
 
 const closeModal = () => {
   emit('close')
-
 }
+
+const showNoteEditor = (shift) => {
+  shift.isEditingNote = true;
+  shift.noteContent = shift.note || '';
+};
+
+const addNote = (shift) => {
+  saveShiftNote(loggedUserId.value, shift.id, shift.noteContent)
+  shift.isEditingNote = false;
+  emit('refreshShifts')
+  emit('close')
+};
 
 </script>
 
 <template>
   <div class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop>
-      <p class="modal-label">Day details</p>
+      <div v-if="props.shifts.length > 0" class="shifts-container">
+        <p>{{ date }}</p>
 
-      <div
-          v-if="props.shifts.length > 0"
-          class="shifts-container"
-      >
-        <p>{{date}}</p>
+        <div v-for="shift in props.shifts" :key="shift.id" class="shift-details-container">
+          <div class="shift-details">
+            <ShiftDetailContainer :label="'started'" :data="getTime(shift.start)" />
+            <ShiftDetailContainer :label="'stopped'" :data="getTime(shift.stop)" />
+            <ShiftDetailContainer :label="'work'" :data="formatTime(shift.work)" />
+          </div>
 
-        <div
-            v-for="shift in props.shifts"
-            :key="shift.id"
-            class="shift-details"
-        >
+          <div class="shift-note">
+            <ShiftNoteContainer v-if="shift.note" :label="'note'" :note="shift.note" />
 
-          <DetailsContainer
-            :label="'started'"
-            :data="shift.start"
-          />
+            <CustomButton
+              v-else
+              v-show="!shift.isEditingNote"
+              label="add note"
+              @click="showNoteEditor(shift)"
+            />
 
-          <DetailsContainer
-            :label="'stopped'"
-            :data="shift.stop"
-          />
+            <form
+                v-if="shift.isEditingNote"
+                @submit.prevent="addNote(shift)"
+                style="width: 90%"
+            >
+              <textarea
+                v-model="shift.noteContent"
+                id="noteEditor"
+                name="noteEditor"
+                rows="5"
+              />
+              <CustomButton
+                label="save"
+                :width="60"
+                :padding="2"
+                :margin="2"
+                type="submit"
+                style="margin-left: auto"
+              />
+            </form>
 
-          <DetailsContainer
-            v-if="shift.note"
-            :label="'note'"
-            :data="shift.note"
-          />
-
-          <DetailsContainer
-            v-else
-            :label="'note'"
-            :data="''"
-          />
-
-          <DetailsContainer
-            :label="'work'"
-            :data="props.formatTime(shift.work)"
-          />
-
+          </div>
         </div>
       </div>
     </div>
@@ -88,7 +101,7 @@ const closeModal = () => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(30, 30, 30, 0.06);
+  background-color: rgba(0, 0, 0, 0.54);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,10 +110,10 @@ const closeModal = () => {
 
 .modal-content {
   background-color: #3d3d3d;
-  padding: 2rem;
   border-radius: 8px;
   text-align: center;
-  width: 70%;
+  min-width: 500px;
+  max-width: 600px;
 }
 
 .modal-label {
@@ -117,11 +130,45 @@ const closeModal = () => {
   border-radius: 5px;
 }
 
-.shift-details {
+.shift-details-container {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-column-gap: 10px;
   background: #454545;
-  padding: 10px;
+  padding: 5px;
   margin: 0 0 5px 0;
   font-size: 13px;
   border-radius: 5px;
+}
+
+.shift-details {
+  display: grid;
+  grid-auto-rows: auto;
+  height: fit-content;
+}
+
+.shift-note {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+#noteEditor {
+  width: 100%;
+  max-width: 500px;
+}
+
+@media (max-width: 1300px) {
+  .modal-content {
+    min-width: 300px;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  #noteEditor {
+    max-width: 300px;
+  }
 }
 </style>

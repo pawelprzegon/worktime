@@ -19,6 +19,7 @@ onMounted(async () => {
 
     <User
         v-for="user in users"
+        :key="user.id"
         :user="user"
     />
 

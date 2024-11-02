@@ -41,8 +41,8 @@ const props = defineProps({
   flex-direction: row;
   justify-content: space-between;
   border-radius: 5px;
-  padding: 5px;
-  margin: 0 0 3px 0;
+  padding: 1px;
+  margin: 0 0 1px 0;
   width: 100%;
 }
 

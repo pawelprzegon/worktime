@@ -5,8 +5,9 @@ import {getMe} from "@/fetchers.js";
 import {onMounted, ref} from "vue";
 import Avatar from "@/components/user/Avatar.vue";
 import DetailsContainer from "@/components/panel/DetailsContainer.vue";
+import Spinner from "@/components/panel/Spinner.vue";
 
-
+const isLoading = ref(true);
 const firstName = ref('');
 const lastName = ref('');
 const email = ref('');
@@ -34,17 +35,19 @@ const getMeData = async () => {
 
   onMounted(() => {
     getMeData();
+    isLoading.value = false;
   })
 </script>
 
 
 <template>
 
-  <section class="user-section">
-    <Calendar
-        @calculatedTime="handleCalculatedTime"
-    />
+  <div v-if="isLoading" class="loading-spinner">
+    <Spinner />
+  </div>
 
+  <section v-else class="user-section">
+    <Calendar @calculatedTime="handleCalculatedTime"/>
     <div class="user-details">
 
       <Avatar
@@ -85,12 +88,7 @@ const getMeData = async () => {
         />
 
       </section>
-
-
     </div>
-
-
-
   </section>
 
 

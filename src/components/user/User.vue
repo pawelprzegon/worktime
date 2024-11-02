@@ -62,7 +62,6 @@ const shiftToggle = async () => {
 
 
 const saveNote = async (note) => {
-  console.log(note + ' to save')
   try{
     const response = await saveShiftNote(props.user._id, props.user.activeShift._id, note)
     console.log(response)
@@ -101,10 +100,8 @@ onMounted(async () => {
     <ShiftTime
         :active-shift="props.user.activeShift"
         :shift-duration="props.user.shiftDuration"
-        @pass-note="saveNote"
     />
-
-
+    
   </div>
 
 

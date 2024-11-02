@@ -3,10 +3,22 @@
 import {defineProps} from 'vue'
 
 const props = defineProps({
-  label: String,
-  padding: Number,
-  margin: Number,
-  width: Number,
+  label: {
+    type: String,
+    required: true
+  },
+  padding: {
+    type: Number,
+    default: 5
+  },
+  margin: {
+    type: Number,
+    default: 5
+  },
+  width: {
+    type: Number,
+    default: 100
+  },
   fontSize: {
     type: Number,
     default: 13

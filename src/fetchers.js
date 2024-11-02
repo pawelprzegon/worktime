@@ -32,8 +32,6 @@ export const checkIsAuthorized = async () => {
     return await response.json()
 }
 
-
-
 export const loginFetch = async (formData) => {
     const body = formData.toString()
     const data = {
@@ -67,7 +65,6 @@ export const getUsers = async () => {
     return await response.json()
 }
 
-
 export const getActiveShift = async (user_id) => {
 
     const data = {
@@ -85,7 +82,6 @@ export const getActiveShift = async (user_id) => {
 
     return await response.json()
 }
-
 
 export const startShift = async (userId, note) => {
 

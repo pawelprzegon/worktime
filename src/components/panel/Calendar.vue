@@ -46,6 +46,10 @@ const updateDaysInMonth = () => {
   }));
 };
 
+const refreshShifts = () => {
+  updateDaysInMonth();
+  getDates()
+}
 
 const prevMonth = () => {
   currentMonth.value = sub(currentMonth.value, { months: 1 });
@@ -60,6 +64,7 @@ const nextMonth = () => {
 };
 
 const getDates = async () => {
+  calculatedTime.value = 0
   try {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
 
@@ -86,42 +91,16 @@ const getDates = async () => {
         shifts: groupedShifts[formattedDate] || { list: [], summary: 0 }
       };
     });
-    console.log(formatTime(calculatedTime.value))
+
     emit('calculatedTime', formatTime(calculatedTime.value));
   } catch (error) {
     console.error("Error fetching users:", error);
   }
 };
 
-
-
-const calculateCurrentShiftTime = (shiftStart) => {
-  const now = new Date();
-  const shiftStartDate = new Date(shiftStart);
-  const diffSeconds = Math.floor((now - shiftStartDate) / 1000);
-  return formatTime(diffSeconds);
-};
-
-const updateCurrentShiftTime = () => {
-  daysInMonth.value.forEach(day => {
-    day.shifts.list.forEach(shift => {
-      if (!shift.stop) {
-        shift.currentShiftTime = calculateCurrentShiftTime(shift.start);
-      }
-    });
-  });
-};
-
 onMounted(() => {
-  getDates()
   updateDaysInMonth();
-
-  const interval = setInterval(() => {
-    updateCurrentShiftTime();
-  }, 1000);
-
-  onBeforeUnmount(() => clearInterval(interval));
-
+  getDates()
 })
 
 
@@ -156,35 +135,27 @@ onMounted(() => {
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
-        :class="['calendar-day', { 'finished-shift': day.shifts.list.length > 0}]"
+        :class="['calendar-day',
+        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': day.shifts.summary >= 28800}]"
         @click="openModal(day)"
       >
-
         <span class="day-header">{{ day.date.getDate() }}</span>
-
         <div class="shifts-list">
-
-          <div
-              v-if="day.shifts.list.length > 0"
-          >
+          <div v-if="day.shifts.list.length > 0">
             <small class="shift">
               {{ formatTime(day.shifts.summary) }}
             </small>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
 
     <DayShiftsModal
       v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
       :title="selectedDay?.date.toString()"
       :shifts="selectedDay?.shifts.list"
-      :format-time="formatTime"
       @close="closeModal"
+      @refreshShifts="refreshShifts"
     />
 
   </div>
@@ -221,6 +192,12 @@ onMounted(() => {
   min-width: 100px;
   width: 100%;
   height: 100px;
+  transition: transform 0.2s ease;
+}
+
+.calendar-day:hover {
+  cursor: pointer;
+  transform: scale(1.02);
 }
 
 .day-header {
@@ -251,8 +228,12 @@ textarea {
   text-align: center;
 }
 
+.unfinished-shift {
+  background: #2c3e50;
+}
+
 .finished-shift {
-  background: #002f00;
+  background: #2c5032;
 }
 
 .started-shift {
