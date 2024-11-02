@@ -57,7 +57,15 @@ const addNote = (shift) => {
 
           <div class="shift-note">
             <ShiftNoteContainer v-if="shift.note" :label="'note'" :note="shift.note" />
-
+            <CustomButton
+                v-if="shift.note && !shift.isEditingNote"
+                label="edit"
+                :width="60"
+                :padding="2"
+                :margin="2"
+                @click="showNoteEditor(shift)"
+                style="margin-left: auto; margin-right: 15px"
+              />
             <CustomButton
               v-else
               v-show="!shift.isEditingNote"
