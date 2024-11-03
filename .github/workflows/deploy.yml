@@ -31,7 +31,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.BEBTIMER_EC2_SSH_KEY }}
           port: 22
-          source: "dist/*"
+          source: "/*"  # Skopiuj wszystkie pliki z repozytorium
           target: "/home/ubuntu/bebTimerFront"
 
       - name: Install Node.js on EC2
@@ -39,41 +39,47 @@ jobs:
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            # Instalacja Node.js na EC2
             curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
             sudo apt-get install -y nodejs
           EOF
 
-      - name: Install dependencies on EC2
+      - name: Install dependencies and build application on EC2
         run: |
+          echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
             cd /home/ubuntu/bebTimerFront
             npm install
+            npm run build
           EOF
 
       - name: Create systemd service
         run: |
+          echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
-          
-          sudo bash -c 'cat <<EOL > /etc/systemd/system/bebtimer.service
-          [Unit]
-          Description=BebTimer Application
-          After=network.target
+            # Utwórz plik systemd dla usługi
+            sudo bash -c 'cat <<EOL > /etc/systemd/system/bebtimer.service
+            [Unit]
+            Description=BebTimer Application
+            After=network.target
 
-          [Service]
-          User=ubuntu
-          Group=ubuntu
-          WorkingDirectory=/home/ubuntu/bebTimerFront/dist
-          ExecStart=/usr/bin/node /home/ubuntu/bebTimerFront/dist/server.js
-          Restart=always
+            [Service]
+            User=ubuntu
+            Group=ubuntu
+            WorkingDirectory=/home/ubuntu/bebTimerFront/dist
+            ExecStart=/usr/bin/node /home/ubuntu/bebTimerFront/dist/server.js
+            Restart=always
 
-          [Install]
-          WantedBy=multi-user.target
-          EOL'
+            [Install]
+            WantedBy=multi-user.target
+            EOL'
 
-          # Włącz i uruchom usługę
-          sudo systemctl enable bebtimer.service
-          sudo systemctl start bebtimer.service
-          
-          # Opcjonalnie, sprawdź status usługi
-          sudo systemctl status bebtimer.service
+            # Włącz i uruchom usługę
+            sudo systemctl enable bebtimer.service
+            sudo systemctl start bebtimer.service
+            
+            # Opcjonalnie, sprawdź status usługi
+            sudo systemctl status bebtimer.service
           EOF
