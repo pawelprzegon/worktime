@@ -28,7 +28,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.BEBTIMER_EC2_SSH_KEY }}
           port: 22
-          source: "/*"  # Skopiuj wszystkie pliki z repozytorium
+          source: "."
           target: "/home/ubuntu/bebTimerFront"
 
       - name: Install Node.js on EC2
