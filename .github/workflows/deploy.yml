@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build application
-        run: npm run build
-
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
@@ -44,14 +41,22 @@ jobs:
             sudo apt-get install -y nodejs
           EOF
 
-      - name: Install dependencies and build application on EC2
+      - name: Install dependencies on EC2
         run: |
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
             cd /home/ubuntu/bebTimerFront
-            npm install
-            npm run build
+            npm install  # Zainstaluj zależności
+          EOF
+
+      - name: Build application on EC2
+        run: |
+          echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/bebTimerFront
+            npm run build  # Zbuduj aplikację
           EOF
 
       - name: Create systemd service
