@@ -125,5 +125,12 @@ onMounted(async () => {
   border-radius: 10px;
 }
 
+@media (max-width: 1300px) {
+  .user {
+    grid-template-rows: 100px 30px 50px;
+    gap: 3px;
+  }
+}
+
 
 </style>

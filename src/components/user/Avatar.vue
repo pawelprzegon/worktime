@@ -45,4 +45,10 @@ const shiftToggle = () => {
   filter: grayscale(100%);
 }
 
+@media (max-width: 1300px) {
+  .avatar {
+    width: 100px;
+  }
+}
+
 </style>

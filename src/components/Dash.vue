@@ -34,7 +34,14 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
-  margin: 1rem;
+  margin: 15px;
+}
+
+@media (max-width: 1300px) {
+  .dash-user-list {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    margin: 5px;
+  }
 }
 
 </style>
