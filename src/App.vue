@@ -53,7 +53,7 @@
 
 <template>
   <header id="header">
-    <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" width="90" height="70" />
+    <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" />
     <div class="nav">
       <small class="nav-user" v-if="isAuthenticated">logged: {{userName}}</small>
       <div class="nav-buttons">
@@ -132,6 +132,8 @@ header {
 
 .logo {
   display: block;
+  width:90px;
+  height:70px
 }
 
 .nav {
@@ -146,6 +148,13 @@ header {
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
+}
+
+@media (max-width: 1300px) {
+  .logo {
+    width:65px;
+    height:50px
+  }
 }
 
 </style>
