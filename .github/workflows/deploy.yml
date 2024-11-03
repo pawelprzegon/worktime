@@ -48,7 +48,7 @@ jobs:
           Restart=always
 
           [Install]
-          WantedBy=multi-user.target" | sudo tee /etc/systemd/system/bebtimer.service
+          WantedBy=multi-user.target"
 
       - name: Reload systemd
         run: sudo systemctl daemon-reload
