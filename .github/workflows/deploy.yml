@@ -64,3 +64,4 @@ jobs:
           # Opcjonalnie, sprawdź status usługi
           sudo systemctl status bebtimer.service
           EOF
+
