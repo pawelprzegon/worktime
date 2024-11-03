@@ -79,7 +79,7 @@ jobs:
 
             [Install]
             WantedBy=multi-user.target
-            EOL
+            EOL'
 
             # Włącz i uruchom usługę
             sudo systemctl enable bebtimer.service
