@@ -50,7 +50,6 @@ jobs:
             cd /home/ubuntu/bebTimerFront
             cat <<EOL > .env
             VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
-            EOL
           EOF
 
       - name: Check environment variable
