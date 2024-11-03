@@ -1,4 +1,4 @@
-name: Deploy Vue App to EC2
+name: Deploy bebTimer Front to AWS
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ secrets.NODE_VERSION }}
+          node-version: 'lts'
 
       - name: Install dependencies
         run: npm install
@@ -27,9 +27,38 @@ jobs:
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.BEBTIMER_EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.BEBTIMERAPI_EC2_SSH_KEY }}
           port: 22
           source: "dist/*"
-          target: "/home/bebTimerFront"
+          target: "/home/ubuntu/bebTimerFront"
+
+      - name: Create systemd service
+        run: |
+          echo "[Unit]
+          Description=BebTimer Application
+          After=network.target
+
+          [Service]
+          ExecStart=/usr/bin/node /home/ubuntu/bebTimerFront/dist/server.js
+          WorkingDirectory=/home/ubuntu/bebTimerFront/dist
+          Restart=always
+          User=ubuntu
+          Environment=PATH=/usr/bin:/usr/local/bin
+          Environment=NODE_ENV=production
+
+          [Install]
+          WantedBy=multi-user.target" | sudo tee /etc/systemd/system/bebtimer.service
+
+      - name: Reload systemd
+        run: sudo systemctl daemon-reload
+
+      - name: Start service
+        run: sudo systemctl start bebtimer.service
+
+      - name: Enable service
+        run: sudo systemctl enable bebtimer.service
+
+      - name: Enable service
+        run: sudo systemctl status bebtimer.service

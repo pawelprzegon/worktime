@@ -7,8 +7,6 @@ const props = defineProps({
   activeShift: Object
 })
 
-const apiURL = import.meta.env.VITE_APP_API_URL
-
 const emit = defineEmits(['toggle'])
 
 const shiftToggle = () => {
@@ -21,8 +19,9 @@ const shiftToggle = () => {
 
   <img
     :class="{'avatar': true, 'off': !props.activeShift}"
-    :src="`${apiURL}/${props.avatar}`"
+    :src="`/${props.avatar}`"
     alt="avatar"
+
     @click="shiftToggle"
   >
 
