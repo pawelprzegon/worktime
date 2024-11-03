@@ -29,7 +29,7 @@ jobs:
         with:
           host: ${{ secrets.BEBTIMER_EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.BEBTIMERAPI_EC2_SSH_KEY }}
+          key: ${{ secrets.BEBTIMER_EC2_SSH_KEY }}
           port: 22
           source: "dist/*"
           target: "/home/ubuntu/bebTimerFront"
