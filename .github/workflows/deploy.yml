@@ -59,6 +59,14 @@ jobs:
             npm run build  # Zbuduj aplikację
           EOF
 
+      - name: Install serve globally on EC2
+        run: |
+          echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            sudo npm install -g serve  # Zainstaluj serve globalnie
+          EOF
+
       - name: Create systemd service
         run: |
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
@@ -74,7 +82,7 @@ jobs:
             User=ubuntu
             Group=ubuntu
             WorkingDirectory=/home/ubuntu/bebTimerFront/dist
-            ExecStart=/usr/bin/node /home/ubuntu/bebTimerFront/dist/server.js
+            ExecStart=/usr/bin/serve -s /home/ubuntu/bebTimerFront/dist
             Restart=always
 
             [Install]
