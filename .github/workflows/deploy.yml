@@ -37,18 +37,25 @@ jobs:
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
           
-          # Instalacja Node.js na EC2
-          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-          sudo apt-get install -y nodejs
+            # Instalacja Node.js na EC2
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
           EOF
 
       - name: ENV creating
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            
+            # Tworzenie pliku .env
+            cd /home/ubuntu/bebTimerFront
+            cat <<EOL > .env
+            VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
+            EOL
+          EOF
 
-          cat <<EOL > .env
-          VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
-          EOL
+      - name: Check environment variable
+        run: |
+          echo "API URL: ${{ secrets.VITE_APP_API_URL }}"
 
       - name: Install dependencies on EC2
         run: |
