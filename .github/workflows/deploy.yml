@@ -41,8 +41,11 @@ jobs:
           curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
           sudo apt-get install -y nodejs
           EOF
-          
-          # Tworzenie pliku .env
+
+      - name: ENV creating
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+
           cat <<EOL > .env
           VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
           EOL
