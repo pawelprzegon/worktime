@@ -41,12 +41,11 @@ jobs:
           After=network.target
 
           [Service]
-          ExecStart=/usr/bin/node /home/ubuntu/bebTimerFront/dist/server.js
-          WorkingDirectory=/home/ubuntu/bebTimerFront/dist
-          Restart=always
           User=ubuntu
-          Environment=PATH=/usr/bin:/usr/local/bin
-          Environment=NODE_ENV=production
+          Group=ubuntu
+          WorkingDirectory=/home/ubuntu/bebTimerFront/dist
+          ExecStart=/usr/local/bin/serve -s /home/ubuntu/bebTimerFront/dist
+          Restart=always
 
           [Install]
           WantedBy=multi-user.target" | sudo tee /etc/systemd/system/bebtimer.service
