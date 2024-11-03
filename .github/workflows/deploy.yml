@@ -34,10 +34,24 @@ jobs:
           source: "dist/*"
           target: "/home/ubuntu/bebTimerFront"
 
-      - name: Create systemd service
+      - name: Install Node.js on EC2
         run: |
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          EOF
+
+      - name: Install dependencies on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/bebTimerFront
+            npm install
+          EOF
+
+      - name: Create systemd service
+        run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
           
           sudo bash -c 'cat <<EOL > /etc/systemd/system/bebtimer.service
