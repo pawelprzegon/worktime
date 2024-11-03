@@ -36,10 +36,16 @@ jobs:
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
-            # Instalacja Node.js na EC2
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-            sudo apt-get install -y nodejs
+          
+          # Instalacja Node.js na EC2
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          sudo apt-get install -y nodejs
           EOF
+          
+          # Tworzenie pliku .env
+          cat <<EOL > .env
+          VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
+          EOL
 
       - name: Install dependencies on EC2
         run: |
@@ -72,9 +78,6 @@ jobs:
           echo "${{ secrets.BEBTIMER_EC2_SSH_KEY }}" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
-          
-          cat <<EOL > .env
-          VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
         
           # Utwórz plik systemd dla usługi
           sudo bash -c 'cat <<EOL > /etc/systemd/system/bebtimer.service
