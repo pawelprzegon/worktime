@@ -76,9 +76,14 @@ body {
   justify-content: center;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
   body {
     font-size: 13px;
   }
+}
 
+@media (max-width: 1000px) {
+  body {
+    font-size: 12px;
+  }
 }

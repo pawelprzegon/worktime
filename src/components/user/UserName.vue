@@ -28,8 +28,14 @@ const props = defineProps({
 }
 
 .label {
-  font-size: 1rem;
+  font-size: 15px;
   margin: 3px;
+}
+
+@media (max-width: 1300px) {
+  .label {
+    font-size: 13px;
+  }
 }
 
 </style>

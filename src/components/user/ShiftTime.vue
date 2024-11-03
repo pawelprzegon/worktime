@@ -30,7 +30,7 @@ const formatDuration = () => {
 <style scoped>
 
 .shift {
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 .shift-section {
@@ -38,6 +38,12 @@ const formatDuration = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1300px) {
+  .shift {
+    font-size: 13px;
+  }
 }
 
 </style>
