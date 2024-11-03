@@ -40,9 +40,11 @@ jobs:
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@${{ secrets.BEBTIMER_EC2_HOST }} << 'EOF'
           
-          echo "[Unit]
+          cat <<EOL | sudo tee /etc/systemd/system/bebtimer.service
+               
+          [Unit]
           Description=BebTimer Application
-          After=network.target
+#          After=network.target
 
           [Service]
           User=ubuntu
@@ -52,20 +54,13 @@ jobs:
           Restart=always
 
           [Install]
-          WantedBy=multi-user.target" | sudo tee /etc/systemd/system/bebtimer.service
+          WantedBy=multi-user.target"
+          EOL
 
-      - name: Reload systemd
-        run: |
-          sudo systemctl daemon-reload
-
-      - name: Start service
-        run: |
-          sudo systemctl start bebtimer.service
-
-      - name: Enable service
-        run: |
+          # Włącz i uruchom usługę
           sudo systemctl enable bebtimer.service
-
-      - name: Check service status
-        run: |
+          sudo systemctl start bebtimer.service
+          
+          # Opcjonalnie, sprawdź status usługi
           sudo systemctl status bebtimer.service
+          EOF
