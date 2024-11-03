@@ -1,5 +1,5 @@
-
-export const url = 'http://localhost:8000'
+const apiURL = import.meta.env.VITE_APP_API_URL
+export const url = apiURL
 
 export function formatTime(seconds) {
   const hours = Math.floor(seconds / 3600);
