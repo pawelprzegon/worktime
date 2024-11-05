@@ -15,15 +15,13 @@ export function formatTime(seconds) {
 }
 
 export function getTime(timestamp) {
-
   const date = new Date(timestamp);
-  date.toLocaleString("pl-PL", {
-    timeZone: "Europe/Warsaw"
+
+  return date.toLocaleTimeString("pl-PL", {
+    timeZone: "Europe/Warsaw",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
   });
-
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-  const seconds = date.getUTCSeconds().toString().padStart(2, '0');
-
-  return `${hours}:${minutes}:${seconds}`;
 }
+
