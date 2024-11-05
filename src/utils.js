@@ -17,6 +17,9 @@ export function formatTime(seconds) {
 export function getTime(timestamp) {
 
   const date = new Date(timestamp);
+  date.toLocaleString("pl-PL", {
+    timeZone: "Europe/Warsaw"
+  });
 
   const hours = date.getUTCHours().toString().padStart(2, '0');
   const minutes = date.getUTCMinutes().toString().padStart(2, '0');
