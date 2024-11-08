@@ -7,6 +7,7 @@
 
   const router = useRouter()
   const userName = ref('');
+  const today = ref(new Date)
 
   const gotoSignUp = () => {
     router.push('/signup')
@@ -96,39 +97,32 @@
             :width="120"
             @click="gotoLogout"
         ></CustomButton>
+
+        <CustomButton
+            class="link"
+            v-if="!isAuthenticated"
+            label="SignUp"
+            :margin="10"
+            :padding="3"
+            :width="120"
+            @click="gotoSignUp"
+        >SignUp</CustomButton>
       </div>
 
     </div>
 
-
   </header>
 
-  <hr />
+
   <main id="main">
     <RouterView />
   </main>
 
-  <hr />
-  <footer id="footer">
-    <CustomButton
-        class="link"
-        v-if="!isAuthenticated"
-        label="SignUp"
-        :margin="10"
-        :padding="3"
-        :width="120"
-        @click="gotoSignUp"
-    >SignUp</CustomButton>
-  </footer>
+
+  <footer id="footer">{{today}}</footer>
 </template>
 
 <style scoped>
-
-header {
-  display: grid;
-  grid-template-columns: 100px auto;
-  margin-bottom: 1rem;
-}
 
 .logo {
   display: block;
@@ -150,10 +144,86 @@ header {
   align-items: flex-end;
 }
 
-@media (max-width: 1300px) {
-  .logo {
-    width:65px;
-    height:50px
+#header {
+  margin-bottom: 1rem;
+  display: inline-flex;
+  justify-content: space-between;
+  border-bottom: 1px solid white;
+}
+
+#main {
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#footer {
+  height: 80px;
+  width: 100%;
+  border-top: 1px solid white;
+  text-align: right;
+}
+
+
+@media (orientation: portrait) {
+  @media (max-width: 1300px) {
+
+    .logo {
+      width:65px;
+      height:50px
+    }
+    #header {
+      height: 60px;
+    }
+    #footer {
+      height: 50px;
+    }
+  }
+
+  @media (max-width: 800px) {
+
+    .logo {
+      width: 65px;
+      height: 50px
+    }
+    #header {
+      height: 60px;
+    }
+    #footer {
+      height: 50px;
+    }
+  }
+}
+
+@media (orientation: landscape) {
+
+  @media (max-width: 1300px) {
+
+    .logo {
+      width:65px;
+      height:50px
+    }
+    #header {
+      height: 60px;
+    }
+    #footer {
+      height: 50px;
+    }
+  }
+
+  @media (max-width: 800px) {
+
+    .logo {
+      width:65px;
+      height:50px
+    }
+    #header {
+      height: 50px;
+    }
+    #footer {
+      height: 50px;
+    }
+
   }
 }
 

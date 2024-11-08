@@ -69,13 +69,45 @@ const props = defineProps({
   border-color: rgba(0, 0, 0, 0.19);
 }
 
-@media (max-width: 700px) {
-  .button {
-    font-size: 10px;
-    border-radius: 3px;
-    width: 70px !important;
-    margin: 5px !important;
-    padding: 1px !important;
+@media (orientation: landscape) {
+  @media (max-width: 1300px) {
+    .button {
+      font-size: 10px;
+      border-radius: 3px;
+      width: 70px !important;
+      margin: 5px !important;
+      padding: 1px !important;
+    }
+  }
+  @media (max-width: 800px) {
+    .button {
+      font-size: 10px;
+      border-radius: 3px;
+      width: 70px !important;
+      margin: 5px !important;
+      padding: 1px !important;
+    }
+  }
+}
+
+@media (orientation: portrait) {
+  @media (max-width: 1300px) {
+    .button {
+      font-size: 10px;
+      border-radius: 3px;
+      width: 70px !important;
+      margin: 5px !important;
+      padding: 1px !important;
+    }
+  }
+  @media (max-width: 800px) {
+    .button {
+      font-size: 10px;
+      border-radius: 3px;
+      width: 70px !important;
+      margin: 5px !important;
+      padding: 1px !important;
+    }
   }
 }
 

@@ -70,12 +70,6 @@ html, body {
   overflow: auto;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 @media (max-width: 1300px) {
   body {
     font-size: 13px;
