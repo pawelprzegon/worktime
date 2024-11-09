@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import {inject, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {loginFetch} from '@/fetchers.js'
-import { login } from '@/auth.js'
+import VueJwtDecode from 'vue-jwt-decode'
+
+const isAuthenticated = inject('isAuthenticated')
 
 const username = ref('')
 const password = ref('')
@@ -31,6 +33,19 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+const login = (token) => {
+  if (isAuthenticated) {
+    localStorage.setItem('token', token);
+    const decodedToken = VueJwtDecode.decode(token);
+
+    isAuthenticated.admin = decodedToken.role === 'admin';
+    isAuthenticated.status = true;
+    localStorage.setItem('userId', decodedToken.id);
+  } else {
+    console.error('isAuthenticated is not available');
+  }
+};
 
 
 </script>

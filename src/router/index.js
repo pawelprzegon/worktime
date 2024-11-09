@@ -5,12 +5,18 @@ import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
 import {logout} from "@/auth.js";
+import Logout from "@/components/Logout.vue";
 
 const routes = [
     {
         path: '/login',
         name: 'Login',
         component: Login,
+    },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: Logout,
     },
     {
         path: '/signup',

@@ -1,20 +1,26 @@
-import { ref } from 'vue';
+import {inject, ref} from 'vue';
 import VueJwtDecode from 'vue-jwt-decode'
 
-export const isAuthenticated = ref(localStorage.getItem('token') !== null);
-export const isAdmin = ref()
-export const loggedUserId = ref(localStorage.getItem('userId'))
+ const isAuthenticated = inject('isAuthenticated')
 
 export const login = (token) => {
-  localStorage.setItem('token', token);
-  isAuthenticated.value = true;
-  const decodedToken = VueJwtDecode.decode(token);
-  console.log(decodedToken.id)
-  isAdmin.value = decodedToken.role === 'admin';
-  localStorage.setItem('userId', decodedToken.id);
+  if (isAuthenticated) {
+    localStorage.setItem('token', token);
+    const decodedToken = VueJwtDecode.decode(token);
+
+    isAdmin.value = decodedToken.role === 'admin';
+    localStorage.setItem('userId', decodedToken.id);
+    isAuthenticated.status = true;
+  } else {
+    console.error('isAuthenticated is not available');
+  }
 };
 
 export const logout = () => {
-  localStorage.removeItem('token');
-  isAuthenticated.value = false;
+  if (isAuthenticated) {
+    localStorage.removeItem('token');
+    isAuthenticated.status = false;
+  } else {
+    console.error('isAuthenticated is not available');
+  }
 };

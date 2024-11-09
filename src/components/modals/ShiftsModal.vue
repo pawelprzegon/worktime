@@ -5,7 +5,6 @@ import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import {saveShiftNote} from "@/fetchers.js";
-import {loggedUserId} from "@/auth.js";
 import Alert from "@/components/Alert.vue";
 
 
@@ -40,7 +39,8 @@ const hideNoteEditor = (shift) => {
 }
 
 const addNote = async (shift) => {
-  const response = await saveShiftNote(loggedUserId.value, shift.id, shift.noteContent)
+  const loggedUserId = localStorage.getItem('userId')
+  const response = await saveShiftNote(loggedUserId, shift.id, shift.noteContent)
 
   if (response) {
     shift.isEditingNote = false;

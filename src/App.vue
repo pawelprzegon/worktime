@@ -1,9 +1,11 @@
 <script setup>
   import { useRouter } from "vue-router";
-  import {onMounted, ref} from 'vue'
-  import { isAuthenticated, isAdmin, logout } from '@/auth.js';
+  import {onMounted, ref, inject} from 'vue'
   import {getMe} from "@/fetchers.js";
   import CustomButton from "@/components/utils/CustomButton.vue";
+
+  const isAuthenticated = inject('isAuthenticated')
+
 
   const router = useRouter()
   const userName = ref('');
@@ -43,8 +45,17 @@
     }
   }
 
+  const logout = () => {
+  if (isAuthenticated) {
+    localStorage.removeItem('token');
+    isAuthenticated.status = false;
+  } else {
+    console.error('isAuthenticated is not available');
+  }
+};
+
   onMounted(() => {
-  if (isAuthenticated.value) {
+  if (isAuthenticated.status) {
     getMeData();
   }
 
@@ -70,7 +81,7 @@
   <header id="header">
     <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" />
     <div class="nav">
-      <small class="nav-user" v-if="isAuthenticated">logged: {{userName}}</small>
+      <small class="nav-user" v-if="isAuthenticated.status">logged: {{userName}}</small>
       <div class="nav-buttons">
         <CustomButton
             label="Dashboard"
@@ -80,7 +91,7 @@
             @click="gotoDash"
         ></CustomButton>
         <CustomButton
-            v-if="!isAuthenticated"
+            v-if="!isAuthenticated.status"
             label="Login"
             :margin="10"
             :padding="3"
@@ -88,7 +99,7 @@
             @click="gotoLogin"
         ></CustomButton>
         <CustomButton
-            v-if="isAuthenticated && isAdmin"
+            v-if="isAuthenticated.status && isAuthenticated.admin"
             label="Management"
             :margin="10"
             :padding="3"
@@ -96,7 +107,7 @@
             @click="gotoManagement"
         ></CustomButton>
         <CustomButton
-            v-if="isAuthenticated"
+            v-if="isAuthenticated.status"
             label="Shifts"
             :margin="10"
             :padding="3"
@@ -104,7 +115,7 @@
             @click="gotoPanel"
         ></CustomButton>
         <CustomButton
-            v-if="isAuthenticated"
+            v-if="isAuthenticated.status"
             label="Logout"
             :margin="10"
             :padding="3"
@@ -114,7 +125,7 @@
 
         <CustomButton
             class="link"
-            v-if="!isAuthenticated"
+            v-if="!isAuthenticated.status"
             label="SignUp"
             :margin="10"
             :padding="3"

@@ -15,6 +15,12 @@ const alert = reactive({
   }
 });
 
+const isAuthenticated = reactive({
+  status: localStorage.getItem('token') !== null,
+  admin: false
+})
+
 app.provide('alert', alert);
+app.provide('isAuthenticated', isAuthenticated)
 app.use(router)
 app.mount('#app')
