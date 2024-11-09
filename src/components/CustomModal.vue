@@ -12,8 +12,6 @@ const props = defineProps({
   },
 })
 
-console.log("modalProps" + props.modalProps)
-
 const emit = defineEmits(['closeModal', 'toggleShift'])
 
 const closeModal = () => {
@@ -34,6 +32,7 @@ const toggleShift = () => {
           :defaultProp="props.modalProps"
           @closeModal="closeModal"
           @toggleShift="toggleShift"
+          @refreshShifts="toggleShift"
       />
     </div>
   </div>

@@ -13,8 +13,6 @@ const emit = defineEmits(['closeModal', 'toggleShift'])
 
 const label = ref('')
 
-console.log(props.defaultProp)
-
 onMounted(() => {
   label.value = props.defaultProp.activeShift ? 'Stop shift?' : 'Start shift?';
 })

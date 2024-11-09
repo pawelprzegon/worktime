@@ -4,7 +4,8 @@ import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from '
 import {getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import {formatTime} from "@/utils.js";
-import DayShiftsModal from "@/components/user/DayShiftsModal.vue";
+import ShiftsModal from "@/components/modals/ShiftsModal.vue";
+import CustomModal from "@/components/CustomModal.vue";
 
 
 const currentMonth = ref(new Date());
@@ -150,12 +151,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <DayShiftsModal
-      v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
-      :title="selectedDay?.date.toString()"
-      :shifts="selectedDay?.shifts.list"
-      @close="closeModal"
-      @refreshShifts="refreshShifts"
+    <CustomModal
+        v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
+        :modalComponent="ShiftsModal"
+        :modalProps="selectedDay?.shifts.list"
+        @closeModal="closeModal"
+        @toggleShift="refreshShifts"
     />
 
   </div>

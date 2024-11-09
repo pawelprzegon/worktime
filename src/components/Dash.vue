@@ -11,6 +11,7 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error fetching users:", error);
   }
+
 });
 </script>
 

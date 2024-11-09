@@ -75,9 +75,14 @@ onMounted(async () => {
     await checkActiveShift()
     updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
+    setInterval(async () => {
+      console.log('refreshing')
+      await checkActiveShift()
+    }, 5000)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
+
 });
 
 const closeModal = () => {

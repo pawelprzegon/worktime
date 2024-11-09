@@ -12,7 +12,7 @@ const props = defineProps({
 <template>
 
   <div class="shift-note">
-    <label style="border-bottom: 1px solid #696969">{{props.label}}:</label>
+    <label>{{props.label}}:</label>
     <span>
       {{props.note}}
     </span>
@@ -27,6 +27,15 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   padding: 0 15px;
+}
+
+.shift-note label {
+  border-bottom: 1px solid #696969;
+}
+
+.shift-note > span {
+
+  word-break: break-all;
 }
 
 </style>
