@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
 
           <div class="shift-note">
             <ShiftNoteContainer
-                v-if="shift.note"
+                v-if="shift.note && !shift.isEditingNote"
                 :label="'note'"
                 :note="shift.note"
             />
