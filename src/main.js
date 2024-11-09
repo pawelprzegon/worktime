@@ -22,7 +22,7 @@ const isAuthenticated = reactive({
   role: token ? VueJwtDecode.decode(token).role : null
 });
 
-if (VueJwtDecode.decode(token)) {
+if (token) {
   localStorage.setItem('userId', VueJwtDecode.decode(token).id);
 }
 
