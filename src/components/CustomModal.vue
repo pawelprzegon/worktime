@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['closeModal', 'toggleShift'])
+const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift'])
 
 const closeModal = () => {
   emit('closeModal')
@@ -20,6 +20,10 @@ const closeModal = () => {
 
 const toggleShift = () => {
   emit('toggleShift')
+}
+
+const removeShift = (shiftId) => {
+  emit('removeShift', shiftId)
 }
 
 </script>
@@ -33,6 +37,7 @@ const toggleShift = () => {
           @closeModal="closeModal"
           @toggleShift="toggleShift"
           @refreshShifts="toggleShift"
+          @removeShift="removeShift"
       />
     </div>
   </div>

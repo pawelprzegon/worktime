@@ -201,6 +201,25 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
     return await response.json()
 }
 
+export const deleteShiftFetch = async (shift_id) => {
+
+    const body = JSON.stringify({
+        'shift_id': shift_id,
+    })
+    const data = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+    }
+   const response = await fetch(url + '/shift/delete', data)
+
+    if (!response.ok) {
+      throw new Error('Register failed')
+    }
+
+    return await response.json()
+}
+
 export const getMe = async () => {
     const data = {
       method: 'GET',

@@ -22,6 +22,10 @@ const props = defineProps({
   fontSize: {
     type: Number,
     default: 13
+  },
+  color: {
+    type: String,
+    default: null
   }
 })
 
@@ -32,7 +36,13 @@ const props = defineProps({
   <button
       class="button"
       type="button"
-      :style="{ width: props.width + 'px', padding: props.padding + 'px', margin: props.margin + 'px' , fontSize: props.fontSize + 'px'}"
+      :style="{
+    width: props.width + 'px',
+    padding: props.padding + 'px',
+    margin: props.margin + 'px' ,
+    fontSize: props.fontSize + 'px',
+    color: props.color
+  }"
   >{{props.label}}</button>
 
 </template>

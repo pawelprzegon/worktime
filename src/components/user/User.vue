@@ -1,7 +1,7 @@
 <script setup>
 
 import {onMounted, defineProps, ref} from "vue";
-import {startShift, endShift, getActiveShift, saveShiftNote} from "@/fetchers.js";
+import {startShift, endShift, getActiveShift, saveShiftNote, deleteShiftFetch} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
@@ -70,13 +70,14 @@ const toggleShift = async () => {
   }
 }
 
+
+
 onMounted(async () => {
   try {
     await checkActiveShift()
     updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
     setInterval(async () => {
-      console.log('refreshing')
       await checkActiveShift()
     }, 5000)
   } catch (error) {
@@ -119,8 +120,6 @@ const closeModal = () => {
     />
     
   </div>
-
-
 
 </template>
 

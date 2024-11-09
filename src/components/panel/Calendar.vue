@@ -1,7 +1,7 @@
 <script setup>
-import {ref, onMounted, defineEmits, onBeforeUnmount} from 'vue';
+import {ref, onMounted, defineEmits} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
-import {getUserShifts} from "@/fetchers.js";
+import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
@@ -99,6 +99,12 @@ const getDates = async () => {
   }
 };
 
+const removeShift = (shiftId) => {
+  selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
+  deleteShiftFetch(shiftId)
+  refreshShifts()
+}
+
 onMounted(() => {
   updateDaysInMonth();
   getDates()
@@ -157,6 +163,7 @@ onMounted(() => {
         :modalProps="selectedDay?.shifts.list"
         @closeModal="closeModal"
         @toggleShift="refreshShifts"
+        @removeShift="removeShift"
     />
 
   </div>
