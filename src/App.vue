@@ -176,6 +176,7 @@
   display: inline-flex;
   justify-content: space-between;
   border-bottom: 1px solid white;
+  width: 100%;
 }
 
 #main {
