@@ -22,19 +22,25 @@ const props = defineProps({
 
 .name-section {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0;
 }
 
 .label {
   font-size: 15px;
-  margin: 3px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
 }
 
 @media (max-width: 1300px) {
   .label {
     font-size: 13px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
   }
 }
 

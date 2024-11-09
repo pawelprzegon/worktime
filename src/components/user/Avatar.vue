@@ -4,7 +4,11 @@ import { defineProps, defineEmits} from "vue";
 
 const props = defineProps({
   avatar: String,
-  activeShift: Object
+  activeShift: Object,
+  static: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const apiURL = import.meta.env.VITE_APP_API_URL
@@ -18,14 +22,16 @@ const shiftToggle = () => {
 </script>
 
 <template>
-
   <img
-    :class="{'avatar': true, 'off': !props.activeShift}"
+    :class="{
+      'avatar': true,
+      'off': !props.activeShift,
+      'no-click': props.static
+    }"
     :src="`${apiURL}/${props.avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >
-
 </template>
 
 <style scoped>
@@ -45,9 +51,13 @@ const shiftToggle = () => {
   filter: grayscale(100%);
 }
 
+.no-click {
+  pointer-events: none;
+}
+
 @media (max-width: 1300px) {
   .avatar {
-    width: 100px;
+    width: 90px;
   }
 }
 

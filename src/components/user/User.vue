@@ -1,15 +1,23 @@
 <script setup>
 
-import {onMounted, defineProps} from "vue";
+import {onMounted, defineProps, ref} from "vue";
 import {startShift, endShift, getActiveShift, saveShiftNote} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
+import CustomModal from "@/components/CustomModal.vue";
+import ToggleModal from "@/components/modals/ToggleModal.vue";
 
 
 const props = defineProps({
   user: Object,
 })
+
+const modalVisibility = ref(false)
+
+const toggleModalVisibility = () => {
+  modalVisibility.value = !modalVisibility.value
+}
 
 const checkActiveShift = async () => {
   try{
@@ -40,7 +48,7 @@ const updateShiftTimes = () => {
 
 };
 
-const shiftToggle = async () => {
+const toggleShift = async () => {
 
   const userId = props.user._id
   const note = ''
@@ -57,20 +65,10 @@ const shiftToggle = async () => {
 
   } catch (error) {
     console.error("Error fetching stopShift:", error);
+  } finally {
+    toggleModalVisibility()
   }
 }
-
-
-const saveNote = async (note) => {
-  try{
-    const response = await saveShiftNote(props.user._id, props.user.activeShift._id, note)
-    console.log(response)
-  } catch (error) {
-    console.error("Error fetching saveShiftNote:", error);
-  }
-
-}
-
 
 onMounted(async () => {
   try {
@@ -81,6 +79,11 @@ onMounted(async () => {
     console.error("Error fetching users:", error);
   }
 });
+
+const closeModal = () => {
+  modalVisibility.value = false;
+};
+
 </script>
 
 <template>
@@ -89,7 +92,7 @@ onMounted(async () => {
     <Avatar
         :avatar="props.user.avatar"
         :active-shift="props.user.activeShift"
-        @toggle="shiftToggle"
+        @toggle="toggleModalVisibility"
     />
 
     <UserName
@@ -100,6 +103,14 @@ onMounted(async () => {
     <ShiftTime
         :active-shift="props.user.activeShift"
         :shift-duration="props.user.shiftDuration"
+    />
+
+    <CustomModal
+        v-if="modalVisibility"
+        :modalComponent="ToggleModal"
+        :modalProps="props.user"
+        @closeModal="closeModal"
+        @toggleShift="toggleShift"
     />
     
   </div>
