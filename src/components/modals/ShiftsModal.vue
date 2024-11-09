@@ -1,14 +1,17 @@
 <script setup>
-import {defineEmits, computed, ref, onBeforeUnmount} from 'vue';
+import {defineEmits, computed, ref, onBeforeUnmount, inject} from 'vue';
 import {formatTime, getTime} from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import {saveShiftNote} from "@/fetchers.js";
 import {loggedUserId} from "@/auth.js";
+import Alert from "@/components/Alert.vue";
+
+
+const alert = inject('alert');
 
 const props = defineProps({
-
   defaultProp: {
     type: Object,
     default: () => []
@@ -24,7 +27,7 @@ const date = computed(() => {
   return '';
 });
 
-const emit = defineEmits(['closeModal', 'refreshShifts', 'removeShift'])
+const emit = defineEmits(['closeModal', 'refreshShifts', 'removeShift', 'toggleShift'])
 
 const showNoteEditor = (shift) => {
   shift.isEditingNote = true;
@@ -36,11 +39,15 @@ const hideNoteEditor = (shift) => {
   shift.noteContent = '';
 }
 
-const addNote = (shift) => {
-  saveShiftNote(loggedUserId.value, shift.id, shift.noteContent)
-  shift.isEditingNote = false;
-  emit('refreshShifts')
-  emit('closeModal')
+const addNote = async (shift) => {
+  const response = await saveShiftNote(loggedUserId.value, shift.id, shift.noteContent)
+
+  if (response) {
+    shift.isEditingNote = false;
+    emit('refreshShifts')
+    alert.show(response.status, response.message)
+  }
+
 };
 
 const deleteConfirmationVisibleToggle = (shiftId) => {
@@ -60,6 +67,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <Alert />
   <div
       v-if="props.defaultProp.length > 0"
       class="shifts-container"

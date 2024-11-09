@@ -192,13 +192,21 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
         headers: { 'Content-Type': 'application/json' },
         body: body,
     }
-   const response = await fetch(url + '/shift/note', data)
+    try {
+        const response = await fetch(url + '/shift/note', data)
 
-    if (!response.ok) {
-      throw new Error('Register failed')
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Couldn't add note");
+        }
+
+        return result
+
+    } catch (error) {
+         console.error('Error:', error.message);
+        throw error;
     }
-
-    return await response.json()
 }
 
 export const deleteShiftFetch = async (shift_id) => {
@@ -211,13 +219,21 @@ export const deleteShiftFetch = async (shift_id) => {
         headers: { 'Content-Type': 'application/json' },
         body: body,
     }
-   const response = await fetch(url + '/shift/delete', data)
+    try {
+        const response = await fetch(url + '/shift/delete', data)
 
-    if (!response.ok) {
-      throw new Error('Register failed')
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Couldn't add note");
+        }
+
+        return result
+
+    } catch (error) {
+         console.error('Error:', error.message);
+        throw error;
     }
-
-    return await response.json()
 }
 
 export const getMe = async () => {

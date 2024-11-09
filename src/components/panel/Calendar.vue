@@ -1,12 +1,14 @@
 <script setup>
-import {ref, onMounted, defineEmits} from 'vue';
+import {ref, onMounted, defineEmits, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
 import CustomButton from "@/components/utils/CustomButton.vue";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
 import CustomModal from "@/components/CustomModal.vue";
+import Alert from "@/components/Alert.vue";
 
+const alert = inject('alert');
 
 const currentMonth = ref(new Date());
 const calculatedTime = ref(0)
@@ -99,10 +101,11 @@ const getDates = async () => {
   }
 };
 
-const removeShift = (shiftId) => {
+const removeShift = async(shiftId) => {
   selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
-  deleteShiftFetch(shiftId)
+  const response = await deleteShiftFetch(shiftId)
   refreshShifts()
+  alert.show(response.status, response.message)
 }
 
 onMounted(() => {
@@ -115,6 +118,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Alert />
   <div class="calendar">
 
     <div class="calendar-navigation">
