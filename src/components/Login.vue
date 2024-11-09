@@ -37,11 +37,8 @@ const handleLogin = async () => {
 const login = (token) => {
   if (isAuthenticated) {
     localStorage.setItem('token', token);
-    const decodedToken = VueJwtDecode.decode(token);
-
-    isAuthenticated.admin = decodedToken.role === 'admin';
     isAuthenticated.status = true;
-    localStorage.setItem('userId', decodedToken.id);
+    isAuthenticated.role = VueJwtDecode.decode(token).role
   } else {
     console.error('isAuthenticated is not available');
   }

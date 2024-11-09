@@ -4,19 +4,12 @@ import Login from "@/components/Login.vue";
 import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
-import {logout} from "@/auth.js";
-import Logout from "@/components/Logout.vue";
 
 const routes = [
     {
         path: '/login',
         name: 'Login',
         component: Login,
-    },
-    {
-        path: '/logout',
-        name: 'logout',
-        component: Logout,
     },
     {
         path: '/signup',
@@ -49,12 +42,12 @@ router.beforeEach(async (to, from, next) => {
     const authorized = await checkIsAuthorized(token)
 
     if (!authorized) {
-        logout()
+        localStorage.removeItem('token')
+        localStorage.removeItem('')
         if (to.path === '/user-panel') {
             return next('/login')
         }
     }
-
 
 
     next();

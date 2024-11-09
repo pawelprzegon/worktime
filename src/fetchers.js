@@ -1,5 +1,4 @@
 import {url} from "@/utils.js";
-import {logout} from "@/auth.js"
 
 
 const addAuthorization = () => {
@@ -21,7 +20,7 @@ export const checkIsAuthorized = async () => {
     const response = await fetch(url + '/user/me', data)
 
     if (response.status === 401) {
-        logout()
+        localStorage.removeItem('token')
         return false
     }
 
@@ -248,7 +247,7 @@ export const getMe = async () => {
     const response = await fetch(url + `/user/me`, data)
 
     if (!response.ok) {
-        logout()
+        localStorage.removeItem('token')
         throw new Error(`user Me response error: ${response.statusText}`)
 
     }

@@ -49,6 +49,8 @@
   if (isAuthenticated) {
     localStorage.removeItem('token');
     isAuthenticated.status = false;
+    isAuthenticated.role = null;
+
   } else {
     console.error('isAuthenticated is not available');
   }
@@ -99,8 +101,8 @@
             @click="gotoLogin"
         ></CustomButton>
         <CustomButton
-            v-if="isAuthenticated.status && isAuthenticated.admin"
-            label="Management"
+            v-if="isAuthenticated.status && isAuthenticated.role"
+            label="Privileged"
             :margin="10"
             :padding="3"
             :width="120"

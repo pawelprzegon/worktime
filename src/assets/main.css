@@ -21,3 +21,21 @@
 }
 
 
+@media (orientation: portrait) {
+  @media (max-width: 450px) {
+
+    #app {
+      display: block;
+    }
+  }
+}
+
+@media (orientation: landscape) {
+  @media (max-width: 450px) {
+
+    #app {
+      display: block;
+    }
+  }
+}
+

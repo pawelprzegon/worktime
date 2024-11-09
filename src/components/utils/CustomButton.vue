@@ -119,6 +119,15 @@ const props = defineProps({
       padding: 1px !important;
     }
   }
+  @media (max-width: 450px) {
+    .button {
+      font-size: 8px;
+      border-radius: 3px;
+      width: 60px !important;
+      margin: 3px !important;
+      padding: 1px !important;
+    }
+  }
 }
 
 </style>
