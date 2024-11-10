@@ -192,7 +192,6 @@
 }
 
 #footer {
-  height: 80px;
   width: 100%;
   border-top: 1px solid white;
   text-align: right;
