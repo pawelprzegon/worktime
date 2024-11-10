@@ -1,6 +1,6 @@
 <script setup>
   import { useRouter } from "vue-router";
-  import {onMounted, ref, inject} from 'vue'
+  import {onMounted, ref, inject, watch} from 'vue'
   import {getMe} from "@/fetchers.js";
   import CustomButton from "@/components/utils/CustomButton.vue";
 
@@ -46,15 +46,21 @@
   }
 
   const logout = () => {
-  if (isAuthenticated) {
-    localStorage.removeItem('token');
-    isAuthenticated.status = false;
-    isAuthenticated.role = null;
+    if (isAuthenticated) {
+      localStorage.removeItem('token');
+      isAuthenticated.status = false;
+      isAuthenticated.role = null;
 
-  } else {
-    console.error('isAuthenticated is not available');
-  }
-};
+    } else {
+      console.error('isAuthenticated is not available');
+    }
+  };
+
+  watch(() => isAuthenticated.status, (newStatus) => {
+    if (newStatus) {
+      getMeData();
+    }
+  });
 
   onMounted(() => {
   if (isAuthenticated.status) {

@@ -49,7 +49,8 @@ const handleSubmit = async () => {
         <input v-model="form.email" type="email" placeholder="email" id="email" required />
         <input v-model="form.username" type="text" placeholder="username" id="username" autocomplete="current-username" required />
         <input v-model="form.password" type="password" placeholder="password" autocomplete="current-password" id="password" required />
-        <input type="file" id="avatar" @change="handleFileChange" accept=".png" />
+        <label for="avatar">Upload avatar:</label>
+        <input type="file" id="avatar" @change="handleFileChange" accept=".png, .jpg, .jpeg, .gif, .svg"/>
       </div>
 
 

@@ -5,6 +5,7 @@ import Panel from "@/components/panel/Panel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
 
+
 const routes = [
     {
         path: '/login',
@@ -42,13 +43,14 @@ router.beforeEach(async (to, from, next) => {
     const authorized = await checkIsAuthorized(token)
 
     if (!authorized) {
+        router.isAuthenticated.status = false
+        router.isAuthenticated.role = null
+
         localStorage.removeItem('token')
-        localStorage.removeItem('')
         if (to.path === '/user-panel') {
             return next('/login')
         }
     }
-
 
     next();
 });

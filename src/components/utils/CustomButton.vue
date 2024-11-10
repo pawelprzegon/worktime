@@ -121,8 +121,8 @@ const props = defineProps({
   }
   @media (max-width: 450px) {
     .button {
-      font-size: 8px;
-      border-radius: 3px;
+      font-size: 11px !important;
+      border-radius: 3px !important;
       width: 60px !important;
       margin: 3px !important;
       padding: 1px !important;

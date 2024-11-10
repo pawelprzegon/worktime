@@ -1,5 +1,4 @@
 import './assets/main.css'
-import VueJwtDecode from 'vue-jwt-decode'
 import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router';
@@ -15,18 +14,13 @@ const alert = reactive({
   }
 });
 
-const token = localStorage.getItem('token');
-
 const isAuthenticated = reactive({
-  status: token !== null,
-  role: token ? VueJwtDecode.decode(token).role : null
+  status: false,
+  role: null
 });
-
-if (token) {
-  localStorage.setItem('userId', VueJwtDecode.decode(token).id);
-}
 
 app.provide('alert', alert);
 app.provide('isAuthenticated', isAuthenticated)
 app.use(router)
+router.isAuthenticated = isAuthenticated;
 app.mount('#app')
