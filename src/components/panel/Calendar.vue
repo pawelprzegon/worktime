@@ -72,6 +72,7 @@ const getDates = async () => {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
 
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
+    const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
     const groupedShifts = shifts.reduce((acc, shift) => {
       calculatedTime.value += shift.work;
@@ -113,7 +114,7 @@ onMounted(() => {
   getDates()
 })
 
-
+const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 </script>
 
@@ -143,6 +144,18 @@ onMounted(() => {
     </div>
 
     <div class="calendar-grid">
+      <small
+          v-for="(day, index) in daysOfWeek"
+          :key="index"
+          style="text-align: center;"
+      >
+        {{day}}
+      </small>
+      <div
+          v-for="(day, index) in daysOfWeek"
+      >
+
+      </div>
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
