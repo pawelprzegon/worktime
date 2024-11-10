@@ -270,9 +270,17 @@ textarea {
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   #noteEditor {
     max-width: 300px;
+  }
+
+  .shifts-container {
+    padding: 15px;
+  }
+
+  .shift-delete {
+    height: 20px;
   }
 }
 </style>

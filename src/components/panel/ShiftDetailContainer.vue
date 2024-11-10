@@ -44,4 +44,14 @@ const props = defineProps({
   border-radius: 3px;
 }
 
+@media (max-width: 800px) {
+  .shift-detail p {
+    font-size: 10px;
+  }
+
+  .shift-detail h3 {
+    font-size: 12px;
+  }
+}
+
 </style>

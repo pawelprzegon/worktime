@@ -73,8 +73,22 @@ const refreshModal = () => {
 
 @media (max-width: 1300px) {
   .modal-content {
-    min-width: 50%;
-    max-width: 55%;
+    min-width: 60%;
+    max-width: 65%;
+  }
+}
+
+@media (max-width: 800px) {
+  .modal-content {
+    min-width: 70%;
+    max-width: 75%;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    min-width: 85%;
+    max-width: 90%;
   }
 }
 

@@ -31,8 +31,14 @@ const props = defineProps({
   color: gray
 }
 
-.shift-note > h3 {
+.shift-note h3 {
   word-break: break-all;
+}
+
+@media (max-width: 800px) {
+  .shift-note {
+    font-size: 11px;
+  }
 }
 
 </style>
