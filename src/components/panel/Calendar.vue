@@ -427,7 +427,7 @@ textarea {
 
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-    gap: 7px;
+    gap: 6px;
   }
 
   .calendar-day,
@@ -440,6 +440,29 @@ textarea {
   .day-header,
   .calendar-grid small {
     font-size: 8px;
+  }
+}
+
+@media(max-width: 430px) {
+  .calendar {
+    padding: 10px;
+  }
+
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 5px;
+  }
+
+  .calendar-day,
+  .preview-month-day {
+    width: 40px;
+    height: 40px;
+  }
+
+  .shift,
+  .day-header,
+  .calendar-grid small {
+    font-size: 7px;
   }
 }
 
