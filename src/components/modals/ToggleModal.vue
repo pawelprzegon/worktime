@@ -50,6 +50,16 @@ onMounted(() => {
 
 <style scoped>
 
+.shift-toggle-modal {
+  background-color: #222222;
+  color: #fff;
+  text-align: center;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 16px 20px 50px 10px #222222;
+  margin: auto;
+}
+
 .shift-answer {
   display: flex;
   flex-direction: row;

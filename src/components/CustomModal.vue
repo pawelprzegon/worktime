@@ -64,11 +64,11 @@ const refreshModal = () => {
 }
 
 .modal-content {
-  background-color: #3d3d3d;
   border-radius: 8px;
   text-align: center;
   min-width: 60%;
   max-width: 65%;
+  margin: auto;
 }
 
 @media (max-width: 1300px) {
