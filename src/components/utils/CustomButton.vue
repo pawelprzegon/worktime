@@ -7,6 +7,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  isActive: {
+    type: Boolean,
+    default: false
+  },
   padding: {
     type: Number,
     default: 5
@@ -34,7 +38,7 @@ const props = defineProps({
 <template>
 
   <button
-      class="button"
+      :class="['button', { 'active-button': props.isActive }]"
       type="button"
       :style="{
     width: props.width + 'px',
@@ -77,6 +81,11 @@ const props = defineProps({
   background-color: #FFFFFF;
   color: black;
   border-color: rgba(0, 0, 0, 0.19);
+}
+
+.active-button {
+  background-color: #007bff;
+  color: #fff;
 }
 
 @media (orientation: landscape) {

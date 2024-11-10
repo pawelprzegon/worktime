@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
               />
               <CustomButton
                 label="save note"
-                :width="60"
+                :width="80"
                 :padding="2"
                 :margin="2"
                 type="submit"

@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
-import Panel from "@/components/panel/Panel.vue";
+import UserPanel from "@/components/panel/UserPanel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
+import Privileged from "@/components/Privileged.vue";
 
 
 const routes = [
@@ -24,8 +25,14 @@ const routes = [
     },
     {
         path: '/user-panel',
-        name: 'Panel',
-        component: Panel,
+        name: 'User-Panel',
+        component: UserPanel,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/privileged',
+        name: 'Privileged',
+        component: Privileged,
         meta: { requiresAuth: true },
     },
 
