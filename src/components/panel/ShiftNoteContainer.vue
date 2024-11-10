@@ -12,10 +12,8 @@ const props = defineProps({
 <template>
 
   <div class="shift-note">
-    <label>{{props.label}}:</label>
-    <span>
-      {{props.note}}
-    </span>
+    <p>{{props.label}}:</p>
+    <h3>{{props.note}}</h3>
 
   </div>
 
@@ -24,17 +22,16 @@ const props = defineProps({
 <style scoped>
 
 .shift-note {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  text-align: left;
   padding: 0 15px;
 }
 
-.shift-note label {
-  border-bottom: 1px solid #696969;
+.shift-note p {
+  color: gray
 }
 
-.shift-note > span {
-
+.shift-note > h3 {
   word-break: break-all;
 }
 

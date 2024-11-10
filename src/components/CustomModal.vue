@@ -26,6 +26,10 @@ const removeShift = (shiftId) => {
   emit('removeShift', shiftId)
 }
 
+const refreshModal = () => {
+  emit('refreshModal')
+}
+
 </script>
 
 <template>
@@ -38,6 +42,7 @@ const removeShift = (shiftId) => {
           @toggleShift="toggleShift"
           @refreshShifts="toggleShift"
           @removeShift="removeShift"
+          @refreshModal="refreshModal"
       />
     </div>
   </div>
@@ -49,9 +54,9 @@ const removeShift = (shiftId) => {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.54);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(64, 64, 64, 0.84);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,14 +67,14 @@ const removeShift = (shiftId) => {
   background-color: #3d3d3d;
   border-radius: 8px;
   text-align: center;
-  min-width: 500px;
-  max-width: 600px;
+  min-width: 60%;
+  max-width: 65%;
 }
 
 @media (max-width: 1300px) {
   .modal-content {
-    min-width: 300px;
-    max-width: 400px;
+    min-width: 50%;
+    max-width: 55%;
   }
 }
 

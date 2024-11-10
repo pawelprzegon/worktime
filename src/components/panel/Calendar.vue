@@ -2,11 +2,12 @@
 import {ref, onMounted, defineEmits, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
-import CustomButton from "@/components/utils/CustomButton.vue";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
 import CustomModal from "@/components/CustomModal.vue";
 import Alert from "@/components/Alert.vue";
+import {range} from "@/utils.js";
+import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
 
 const alert = inject('alert');
 
@@ -14,6 +15,11 @@ const currentMonth = ref(new Date());
 const calculatedTime = ref(0)
 const isModalOpen = ref(false);
 const selectedDay = ref(null);
+const modalKey = ref(0);
+const startDay = ref(null);
+const daysBeforeRange = ref(null);
+const endDay = ref(null);
+const daysAfterRange = ref(null);
 
 const openModal = (day) => {
   selectedDay.value = day;
@@ -64,16 +70,20 @@ const nextMonth = () => {
   currentMonth.value = add(currentMonth.value, { months: 1 });
   updateDaysInMonth();
   getDates()
+
 };
 
 const getDates = async () => {
   calculatedTime.value = 0
   try {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
+    console.log(new Date(daysInMonth.value[0]['date']).getDay() || 7)
+    startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
+    endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
+    daysBeforeRange.value = range(2, startDay.value)
+    daysAfterRange.value = range(endDay.value, 7)
 
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
-    const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
-
     const groupedShifts = shifts.reduce((acc, shift) => {
       calculatedTime.value += shift.work;
       const date = getDate(shift.start);
@@ -109,6 +119,12 @@ const removeShift = async(shiftId) => {
   alert.show(response.status, response.message)
 }
 
+const refreshModal = () => {
+  updateDaysInMonth();
+  getDates()
+  modalKey.value += 1;
+};
+
 onMounted(() => {
   updateDaysInMonth();
   getDates()
@@ -123,24 +139,9 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   <div class="calendar">
 
     <div class="calendar-navigation">
-      <CustomButton
-          label="preview"
-          :margin="10"
-          :padding="1"
-          :width="100"
-          @click="prevMonth"
-
-      ></CustomButton>
-
+      <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
       <span class="nav-label">{{ format(currentMonth, 'MMMM yyyy') }}</span>
-
-      <CustomButton
-          label="next"
-          :margin="10"
-          :padding="1"
-          :width="100"
-          @click="nextMonth"
-      ></CustomButton>
+      <CustomNaviButton direction="next" size="20" @click="nextMonth"/>
     </div>
 
     <div class="calendar-grid">
@@ -151,11 +152,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
       >
         {{day}}
       </small>
-      <div
-          v-for="(day, index) in daysOfWeek"
-      >
-
-      </div>
+      <div v-for="(index) in daysBeforeRange" :key="index" class="preview-month-day"></div>
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
@@ -172,15 +169,18 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
           </div>
         </div>
       </div>
+      <div v-for="(index) in daysAfterRange" :key="index" class="preview-month-day"></div>
     </div>
 
     <CustomModal
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
+        :key="modalKey"
         :modalComponent="ShiftsModal"
         :modalProps="selectedDay?.shifts.list"
         @closeModal="closeModal"
         @toggleShift="refreshShifts"
         @removeShift="removeShift"
+        @refreshModal="refreshModal"
     />
 
   </div>
@@ -218,6 +218,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   width: 100%;
   height: 100px;
   transition: transform 0.2s ease;
+  box-shadow: var(--vt-box-shadow)
 }
 
 .calendar-day:hover {
@@ -248,9 +249,11 @@ textarea {
 }
 
 .nav-label {
-  width: 120px;
+  width: 200px;
   display: block;
   text-align: center;
+  margin: 5px 10px;
+  font-size: 20px;
 }
 
 .unfinished-shift {
@@ -267,6 +270,11 @@ textarea {
 
 .shift {
   font-size: 15px;
+}
+
+.preview-month-day {
+  background: #1c1c1c;
+  border-radius: 8px;
 }
 
 </style>

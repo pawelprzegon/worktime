@@ -1,6 +1,6 @@
 <script setup>
 
-import CustomButton from "@/components/utils/CustomButton.vue";
+import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 
 const props = defineProps({
   label: String,
@@ -22,7 +22,7 @@ const props = defineProps({
     >
       {{props.data}}
     </span>
-    <CustomButton
+    <CustomTextButton
         v-else
         :width="50"
         :padding="2"

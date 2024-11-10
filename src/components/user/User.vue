@@ -138,6 +138,7 @@ const closeModal = () => {
   color: white;
   background: var(--vt-c-black-mute);
   border-radius: 10px;
+  box-shadow: var(--vt-box-shadow);
 }
 
 @media (max-width: 1300px) {

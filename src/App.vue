@@ -2,7 +2,7 @@
   import { useRouter } from "vue-router";
   import {onMounted, ref, inject, watch, computed} from 'vue'
   import {getMe} from "@/fetchers.js";
-  import CustomButton from "@/components/utils/CustomButton.vue";
+  import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 
   const isAuthenticated = inject('isAuthenticated')
 
@@ -97,15 +97,15 @@
     <div class="nav">
       <small class="nav-user" v-if="isAuthenticated.status">logged: {{userName}}</small>
       <div class="nav-buttons">
-        <CustomButton
+        <CustomTextButton
             label="Dashboard"
             :isActive="isDashActive"
             :margin="10"
             :padding="3"
             :width="120"
             @click="gotoDash"
-        ></CustomButton>
-        <CustomButton
+        ></CustomTextButton>
+        <CustomTextButton
             v-if="!isAuthenticated.status"
             label="Login"
             :isActive="isLoginActive"
@@ -113,8 +113,8 @@
             :padding="3"
             :width="120"
             @click="gotoLogin"
-        ></CustomButton>
-        <CustomButton
+        ></CustomTextButton>
+        <CustomTextButton
             v-if="isAuthenticated.status && isAuthenticated.role"
             label="Privileged"
             :isActive="isPrivilegedActive"
@@ -122,8 +122,8 @@
             :padding="3"
             :width="120"
             @click="gotoPrivileged"
-        ></CustomButton>
-        <CustomButton
+        ></CustomTextButton>
+        <CustomTextButton
             v-if="isAuthenticated.status"
             label="User Panel"
             :isActive="isUserPanelActive"
@@ -131,16 +131,16 @@
             :padding="3"
             :width="120"
             @click="gotoUserPanel"
-        ></CustomButton>
-        <CustomButton
+        ></CustomTextButton>
+        <CustomTextButton
             v-if="isAuthenticated.status"
             label="Logout"
             :margin="10"
             :padding="3"
             :width="120"
             @click="gotoLogout"
-        ></CustomButton>
-        <CustomButton
+        ></CustomTextButton>
+        <CustomTextButton
             class="link"
             v-if="!isAuthenticated.status"
             label="SignUp"
@@ -149,7 +149,7 @@
             :padding="3"
             :width="120"
             @click="gotoSignUp"
-        >SignUp</CustomButton>
+        >SignUp</CustomTextButton>
       </div>
 
     </div>

@@ -87,8 +87,6 @@ const getMeData = async () => {
             :background="'#282828'"
         />
 
-
-
       </section>
     </div>
   </section>
@@ -109,6 +107,7 @@ const getMeData = async () => {
   border-radius: 10px;
   min-width: 250px;
   max-width: 80%;
+  box-shadow: var(--vt-box-shadow);
 }
 
 

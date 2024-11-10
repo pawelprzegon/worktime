@@ -70,6 +70,7 @@ const props = defineProps({
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  box-shadow: var(--vt-box-shadow);
 }
 
 .button:active,

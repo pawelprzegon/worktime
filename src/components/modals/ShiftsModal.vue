@@ -3,7 +3,7 @@ import {defineEmits, computed, ref, onBeforeUnmount, inject} from 'vue';
 import {formatTime, getTime} from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
-import CustomButton from "@/components/utils/CustomButton.vue";
+import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 import {saveShiftNote} from "@/fetchers.js";
 import Alert from "@/components/Alert.vue";
 
@@ -26,7 +26,7 @@ const date = computed(() => {
   return '';
 });
 
-const emit = defineEmits(['closeModal', 'refreshShifts', 'removeShift', 'toggleShift'])
+const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal', 'toggleShift', "refreshShifts"])
 
 const showNoteEditor = (shift) => {
   shift.isEditingNote = true;
@@ -44,10 +44,9 @@ const addNote = async (shift) => {
 
   if (response) {
     shift.isEditingNote = false;
-    emit('refreshShifts')
+    emit('refreshModal');
     alert.show(response.status, response.message)
   }
-
 };
 
 const deleteConfirmationVisibleToggle = (shiftId) => {
@@ -57,6 +56,11 @@ const deleteConfirmationVisibleToggle = (shiftId) => {
 const deleteConfirmed = (shiftId) => {
   emit('removeShift', shiftId)
 }
+
+const submitForm = () => {
+  const form = document.querySelector('form');
+  form.requestSubmit();
+};
 
 onBeforeUnmount(() => {
   props.defaultProp.forEach(shift => {
@@ -73,8 +77,7 @@ onBeforeUnmount(() => {
       class="shifts-container"
   >
     <div class="shifts-label">
-      <h3>Daily shifts:</h3>
-      <h3>{{ date }}</h3>
+      <h2 style="font-weight: 600">{{ date }}</h2>
     </div>
 
     <div
@@ -82,19 +85,20 @@ onBeforeUnmount(() => {
         :key="shift.id"
         class="shift-details-container"
     >
+      <hr style="border: 1px solid #363636"/>
       <div
           v-if="deleteConfirmationVisible === shift.id"
           class="shift-delete-confirm"
       >
         <h3>delete shift?</h3>
         <div class="shift-delete-confirm-buttons">
-          <CustomButton
+          <CustomTextButton
               label="yes"
               color="black"
                @click="deleteConfirmed(shift.id)"
           />
 
-          <CustomButton
+          <CustomTextButton
               label="no"
               color="black"
                @click="deleteConfirmationVisibleToggle(shift.id)"
@@ -115,13 +119,13 @@ onBeforeUnmount(() => {
           <ShiftDetailContainer :label="'work'" :data="formatTime(shift.work)" />
         </div>
 
-          <div class="shift-note">
+          <div :class="['shift-note-container', {'bottom': !shift.isEditingNote && !shift.note}]">
             <ShiftNoteContainer
                 v-if="shift.note && !shift.isEditingNote"
                 :label="'note'"
                 :note="shift.note"
             />
-            <CustomButton
+            <CustomTextButton
                 v-if="shift.note && !shift.isEditingNote"
                 label="edit"
                 :width="60"
@@ -130,9 +134,8 @@ onBeforeUnmount(() => {
                 @click="showNoteEditor(shift)"
                 style="margin-left: auto; margin-right: 15px"
               />
-            <CustomButton
-              v-else
-              v-show="!shift.isEditingNote"
+            <CustomTextButton
+              v-else-if="!shift.isEditingNote"
               label="add note"
               @click="showNoteEditor(shift)"
             />
@@ -140,23 +143,27 @@ onBeforeUnmount(() => {
             <form
                 v-if="shift.isEditingNote"
                 @submit.prevent="addNote(shift)"
+                ref="noteForm"
+
             >
               <textarea
-                style="border-radius: 5px"
+                style="border-radius: 5px; width: 100%"
                 v-model="shift.noteContent"
                 id="noteEditor"
                 name="noteEditor"
                 rows="5"
               />
-              <CustomButton
+            </form>
+
+            <CustomTextButton
+                v-if="shift.isEditingNote"
                 label="save note"
                 :width="80"
                 :padding="2"
                 :margin="2"
-                type="submit"
+                @click="submitForm"
                 style="margin-left: auto"
               />
-            </form>
 
           </div>
 
@@ -177,17 +184,17 @@ onBeforeUnmount(() => {
 <style scoped>
 
 .shifts-container {
-  background-color: gray;
+  background-color: #222222;
   color: #fff;
   text-align: center;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 16px 20px 50px 10px #222222;
 }
 
 .shift-details-container {
   height: 150px;
   margin: 0 0 5px 0;
-  background: #353535;
   padding: 5px;
 }
 
@@ -211,19 +218,15 @@ onBeforeUnmount(() => {
 
 .shift-details {
   display: grid;
-  grid-template-columns: 40% 50% 6%;
-  grid-column-gap: 1%;
-  margin: 0 0 5px 0;
+  grid-template-columns: 40% 54% 6%;
+  margin: 5px;
   font-size: 13px;
-  border-radius: 5px;
   height: 100%;
 }
 
 .shifts-label {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  color: #212121;
+  display: block;
+  text-align: left;
 }
 
 .shift-details-data {
@@ -233,19 +236,31 @@ onBeforeUnmount(() => {
   min-width: 100px;
 }
 
-.shift-note {
+.shift-note-container {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end
+}
+
+.bottom {
+  justify-content: end !important;
+}
+
+form {
+  width: 100%;
+}
+
+textarea {
+  width: 95%;
 }
 
 #noteEditor {
-  width: 95%;
   max-width: 500px;
 }
 
 .shift-delete {
+  height: 25px;
   filter: invert(40%);
 }
 
