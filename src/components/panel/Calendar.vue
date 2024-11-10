@@ -81,7 +81,7 @@ const getDates = async () => {
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value)
-    daysAfterRange.value = range(endDay.value, 7)
+    daysAfterRange.value = range(endDay.value, 6)
 
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
     const groupedShifts = shifts.reduce((acc, shift) => {
