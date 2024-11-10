@@ -277,4 +277,106 @@ textarea {
   border-radius: 8px;
 }
 
+
+
+
+
+
+
+@media(max-width: 875px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+  .calendar-day {
+    min-width: 90px;
+    height: 90px;
+  }
+}
+
+@media(max-width: 800px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+  .calendar-day {
+    min-width: 80px;
+    height: 80px;
+  }
+}
+
+@media(max-width: 750px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+  }
+
+  .calendar-day {
+    min-width: 75px;
+    height: 75px;
+  }
+}
+
+@media(max-width: 690px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+
+  .calendar-day {
+    min-width: 70px;
+    height: 70px;
+  }
+
+  .shift {
+    font-size: 13px;
+  }
+}
+
+@media(max-width: 650px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+  }
+
+  .calendar-day {
+    min-width: 65px;
+    height: 65px;
+  }
+
+  .shift,
+  .day-header {
+    font-size: 11px;
+  }
+
+}
+
+@media(max-width: 620px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+
+  .calendar-day {
+    min-width: 60px;
+    height: 60px;
+  }
+
+  .shift,
+  .day-header {
+    font-size: 11px;
+  }
+}
+
+@media(max-width: 570px) {
+  .calendar-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  }
+
+  .calendar-day {
+    min-width: 50px;
+    height: 50px;
+  }
+
+  .shift,
+  .day-header {
+    font-size: 9px;
+  }
+}
+
+
 </style>
