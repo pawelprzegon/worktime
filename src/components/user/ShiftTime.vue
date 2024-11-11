@@ -40,9 +40,31 @@ const formatDuration = () => {
   align-items: center;
 }
 
+.shift-section small{
+  text-align: center;
+}
+
 @media (max-width: 1300px) {
   .shift {
     font-size: 13px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .shift {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 800px) {
+  .shift {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .shift {
+    font-size: 9px;
   }
 }
 

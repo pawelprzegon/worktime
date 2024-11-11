@@ -44,4 +44,31 @@ const props = defineProps({
   }
 }
 
+@media (max-width: 1000px) {
+  .label {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 800px) {
+  .label {
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 600px) {
+  .label {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+  }
+}
+
 </style>

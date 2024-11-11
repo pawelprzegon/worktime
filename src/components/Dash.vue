@@ -45,4 +45,25 @@ onMounted(async () => {
   }
 }
 
+@media (max-width: 1000px) {
+  .dash-user-list {
+      grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+      margin: 5px;
+    }
+}
+
+@media (max-width: 800px) {
+  .dash-user-list {
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    margin: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dash-user-list {
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+    margin: 5px;
+  }
+}
+
 </style>
