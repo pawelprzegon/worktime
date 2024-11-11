@@ -1,8 +1,8 @@
-import {url} from "@/utils.js";
+import {clearCache, url} from "@/utils.js";
 
 
 const addAuthorization = () => {
-    const token = localStorage.getItem('token')
+    const token = sessionStorage.getItem('token')
     return `Bearer ${token}`
 
 }
@@ -246,7 +246,7 @@ export const getMe = async () => {
     const response = await fetch(url + `/user/me`, data)
 
     if (!response.ok) {
-        localStorage.removeItem('token')
+        clearCache()
         throw new Error(`user Me response error: ${response.statusText}`)
 
     }

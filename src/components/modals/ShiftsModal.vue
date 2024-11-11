@@ -39,7 +39,7 @@ const hideNoteEditor = (shift) => {
 }
 
 const addNote = async (shift) => {
-  const loggedUserId = localStorage.getItem('userId')
+  const loggedUserId = sessionStorage.getItem('userId')
   const response = await saveShiftNote(loggedUserId, shift.id, shift.noteContent)
 
   if (response) {

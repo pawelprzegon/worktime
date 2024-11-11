@@ -3,6 +3,7 @@
   import {onMounted, ref, inject, watch, computed} from 'vue'
   import {getMe} from "@/fetchers.js";
   import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+  import {clearCache} from "@/utils.js";
 
   const isAuthenticated = inject('isAuthenticated')
 
@@ -53,7 +54,7 @@
 
   const logout = () => {
     if (isAuthenticated) {
-      localStorage.removeItem('token');
+      clearCache()
       isAuthenticated.status = false;
       isAuthenticated.role = null;
 

@@ -23,11 +23,11 @@ const handleLogin = async () => {
   try {
 
     const data = await loginFetch(formData)
-    localStorage.setItem('token', data.access_token);
+    sessionStorage.setItem('token', data.access_token);
     isAuthenticated.status = true;
     isAuthenticated.role = VueJwtDecode.decode(data.access_token).role
     if (isAuthenticated.status) {
-      localStorage.setItem('userId', VueJwtDecode.decode(data.access_token).id);
+      sessionStorage.setItem('userId', VueJwtDecode.decode(data.access_token).id);
     }
 
     router.push('/user-panel')

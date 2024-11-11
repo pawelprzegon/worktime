@@ -5,6 +5,7 @@ import UserPanel from "@/components/panel/UserPanel.vue";
 import SignUp from "@/components/SignUp.vue";
 import {checkIsAuthorized} from "@/fetchers.js";
 import Privileged from "@/components/Privileged.vue";
+import {clearCache} from "@/utils.js";
 
 
 const routes = [
@@ -44,18 +45,19 @@ const router = createRouter({
     routes,
 });
 
+const protectedRoutes = ['/user-panel', '/privileged'];
+
 router.beforeEach(async (to, from, next) => {
 
-    const token = localStorage.getItem('token');
-    const authorized = await checkIsAuthorized(token)
+    if (protectedRoutes.includes(to.path)) {
+        const token = sessionStorage.getItem('token');
+        const authorized = await checkIsAuthorized(token);
 
-    if (!authorized) {
-        router.isAuthenticated.status = false
-        router.isAuthenticated.role = null
-
-        localStorage.removeItem('token')
-        if (to.path === '/user-panel') {
-            return next('/login')
+        if (!authorized) {
+            router.isAuthenticated.status = false;
+            router.isAuthenticated.role = null;
+            clearCache()
+            return next('/login');
         }
     }
 
