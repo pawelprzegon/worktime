@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift'])
+const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift', 'refreshModal'])
 
 const closeModal = () => {
   emit('closeModal')

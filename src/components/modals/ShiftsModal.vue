@@ -85,7 +85,6 @@ onBeforeUnmount(() => {
         :key="shift.id"
         class="shift-details-container"
     >
-      <hr style="border: 1px solid #363636"/>
       <div
           v-if="deleteConfirmationVisible === shift.id"
           class="shift-delete-confirm"
@@ -94,16 +93,17 @@ onBeforeUnmount(() => {
         <div class="shift-delete-confirm-buttons">
           <CustomTextButton
               label="yes"
-              color="black"
-               @click="deleteConfirmed(shift.id)"
+              color="white"
+              background="darkred"
+              @click="deleteConfirmed(shift.id)"
           />
 
           <CustomTextButton
               label="no"
-              color="black"
-               @click="deleteConfirmationVisibleToggle(shift.id)"
+              color="white"
+              background=""
+              @click="deleteConfirmationVisibleToggle(shift.id)"
           />
-
         </div>
       </div>
 
@@ -125,20 +125,7 @@ onBeforeUnmount(() => {
                 :label="'note'"
                 :note="shift.note"
             />
-            <CustomTextButton
-                v-if="shift.note && !shift.isEditingNote"
-                label="edit"
-                :width="60"
-                :padding="2"
-                :margin="2"
-                @click="showNoteEditor(shift)"
-                style="margin-left: auto; margin-right: 15px"
-              />
-            <CustomTextButton
-              v-else-if="!shift.isEditingNote"
-              label="add note"
-              @click="showNoteEditor(shift)"
-            />
+
 
             <form
                 v-if="shift.isEditingNote"
@@ -147,7 +134,7 @@ onBeforeUnmount(() => {
 
             >
               <textarea
-                style="border-radius: 5px; width: 100%"
+                style="border-radius: 5px; width: 95%"
                 v-model="shift.noteContent"
                 id="noteEditor"
                 name="noteEditor"
@@ -155,24 +142,44 @@ onBeforeUnmount(() => {
               />
             </form>
 
-            <CustomTextButton
-                v-if="shift.isEditingNote"
-                label="save note"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="submitForm"
-                style="margin-left: auto"
-              />
-
           </div>
 
-          <img
-              class="shift-delete"
-              src="@/assets/img/delete.png"
-              alt="delete"
-              @click="deleteConfirmationVisibleToggle(shift.id)"
-          >
+      </div>
+      <div class="shift-details-footer">
+
+        <CustomTextButton
+          v-if="shift.note && !shift.isEditingNote"
+          label="edit note"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="showNoteEditor(shift)"
+        />
+        <CustomTextButton
+          v-else-if="!shift.isEditingNote"
+          label="add note"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="showNoteEditor(shift)"
+        />
+
+        <CustomTextButton
+          v-if="shift.isEditingNote"
+          label="save note"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="submitForm"
+          style="margin-left: auto"
+        />
+
+        <img
+          class="shift-delete"
+          src="@/assets/img/delete.png"
+          alt="delete"
+          @click="deleteConfirmationVisibleToggle(shift.id)"
+        >
 
       </div>
 
@@ -184,7 +191,7 @@ onBeforeUnmount(() => {
 <style scoped>
 
 .shifts-container {
-  background-color: #222222;
+  background-color: var(--color-background-soft);
   color: #fff;
   text-align: center;
   padding: 30px;
@@ -193,20 +200,25 @@ onBeforeUnmount(() => {
 }
 
 .shift-details-container {
-  height: 150px;
-  margin: 0 0 5px 0;
+  display: grid;
+  grid-template-rows: 70% 30%;
+  margin: 0 0 10px 0;
   padding: 5px;
 }
 
 .shift-delete-confirm {
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 50%;
+  height: 150px;
   z-index: 1001;
-  background-color: rgba(168, 75, 75, 0.8);
+  background-color: #797979;
   color: white;
   padding: 10px;
   border-radius: 5px;
   text-align: center;
+  margin: auto;
 }
 
 .shift-delete-confirm-buttons {
@@ -218,10 +230,21 @@ onBeforeUnmount(() => {
 
 .shift-details {
   display: grid;
-  grid-template-columns: 40% 54% 6%;
-  margin: 5px;
+  grid-template-columns: 40% 60% ;
+  padding: 5px;
   font-size: 13px;
-  height: 100%;
+  height: 150px;
+  border-radius: 5px;
+  background: var(--color-background-mute);
+}
+
+.shift-details-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  background: var(--color-background-soft);
+  border-radius: 0 0 5px 5px;
 }
 
 .shifts-label {
@@ -252,7 +275,21 @@ form {
 }
 
 textarea {
+  background-color: var(--color-background-mute);
+  color: #fff;
+  border: 1px solid #444;
+  padding: 10px;
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  border-radius: 5px;
   width: 95%;
+  height: 85%;
+  resize: none;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #777;
 }
 
 #noteEditor {
@@ -268,6 +305,7 @@ textarea {
   cursor: pointer;
   filter: invert(100%)
 }
+
 
 
 @media (max-width: 800px) {

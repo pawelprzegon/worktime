@@ -30,6 +30,10 @@ const props = defineProps({
   color: {
     type: String,
     default: null
+  },
+  background: {
+    type: String,
+    default: 'var(--color-background-mute)'
   }
 })
 
@@ -45,7 +49,8 @@ const props = defineProps({
     padding: props.padding + 'px',
     margin: props.margin + 'px' ,
     fontSize: props.fontSize + 'px',
-    color: props.color
+    color: props.color,
+    backgroundColor: props.background
   }"
   >{{props.label}}</button>
 
@@ -55,7 +60,7 @@ const props = defineProps({
 
 .button {
   align-items: center;
-  background-color: transparent;
+  background-color: var(--color-background-mute);
   border: 1px solid gray;
   border-radius: 6px;
   box-sizing: border-box;
@@ -79,8 +84,8 @@ const props = defineProps({
 }
 
 .button:hover {
-  background-color: #FFFFFF;
-  color: black;
+  background-color: #FFFFFF !important;
+  color: black !important;
   border-color: rgba(0, 0, 0, 0.19);
 }
 

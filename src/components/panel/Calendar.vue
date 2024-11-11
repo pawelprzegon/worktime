@@ -243,7 +243,7 @@ input[type="number"] {
 }
 
 textarea {
-  width: 100%;
+  width: 95%;
   margin-top: 10px;
 }
 
