@@ -30,6 +30,10 @@ const refreshModal = () => {
   emit('refreshModal')
 }
 
+const refreshUserPanel = () => {
+  emit('refreshUserPanel')
+}
+
 </script>
 
 <template>
@@ -43,6 +47,7 @@ const refreshModal = () => {
           @refreshShifts="toggleShift"
           @removeShift="removeShift"
           @refreshModal="refreshModal"
+          @refreshUserPanel="refreshUserPanel"
       />
     </div>
   </div>

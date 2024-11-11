@@ -208,7 +208,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         :modalComponent="ShiftsModal"
         :modalProps="selectedDay?.shifts.list"
         @closeModal="closeModal"
-        @toggleShift="refreshShifts"
+        @refresh="refreshShifts"
         @removeShift="removeShift"
         @refreshModal="refreshModal"
     />

@@ -1,29 +1,25 @@
 <script setup>
 import { inject, onMounted, ref, watch } from 'vue';
 
-// Wstrzykujemy alert z globalnych właściwości lub z Vuex
-const alert = inject('alert'); // jeśli używasz provide/inject
-// const alert = useStore().state.alert; // jeśli używasz Vuex
+const alert = inject('alert');
 
 const closeAlert = () => {
-  alert.status = null; // Zamykanie alertu po kliknięciu
+  alert.status = null;
 };
 
-// Automatyczne zamknięcie alertu po 3 sekundach
 onMounted(() => {
   if (alert.status) {
     setTimeout(() => {
-      alert.status = null; // Zniknięcie alertu po 3 sekundach
-    }, 3000);
+      alert.status = null;
+    }, 5000);
   }
 });
 
-// Możesz także używać watch do reagowania na zmiany statusu alertu
 watch(() => alert.status, (newStatus) => {
   if (newStatus) {
     setTimeout(() => {
-      alert.status = null; // Zniknięcie alertu po 3 sekundach
-    }, 3000);
+      alert.status = null;
+    }, 5000);
   }
 });
 </script>
@@ -56,7 +52,7 @@ watch(() => alert.status, (newStatus) => {
 }
 
 .alert.success {
-  background-color: #4a7c4a;
+  background-color: #6f986f;
 }
 
 .alert.error {

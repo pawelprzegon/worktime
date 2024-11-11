@@ -23,15 +23,15 @@ const shiftToggle = () => {
 
 <template>
   <img
-    :class="{
-      'avatar': true,
+    :class="['avatar', {
       'off': !props.activeShift,
       'no-click': props.static
-    }"
+    }]"
     :src="`${apiURL}/${props.avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >
+
 </template>
 
 <style scoped>

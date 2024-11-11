@@ -23,14 +23,10 @@ const handleFileChange = (event) => {
 };
 
 const handleSubmit = async () => {
-  console.log('Form data:', form.value);
-
   const avatar_file = form.value.avatar
   form.value.avatar = avatar_file.name
   const response = await registerUser(form.value)
-  console.log(response)
   const avatarSaveResponse = saveAvatar(response.id, avatar_file)
-  console.log(avatarSaveResponse)
 
   router.push('/')
 

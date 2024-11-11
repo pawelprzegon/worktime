@@ -2,10 +2,14 @@
 
 import Calendar from "@/components/panel/Calendar.vue";
 import {getMe} from "@/fetchers.js";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, inject} from "vue";
 import Avatar from "@/components/user/Avatar.vue";
 import DetailsContainer from "@/components/panel/DetailsContainer.vue";
 import Spinner from "@/components/panel/Spinner.vue";
+import CustomModal from "@/components/modals/CustomModal.vue";
+import ChangeAvatar from "@/components/modals/ChangeAvatar.vue";
+
+const alert = inject('alert');
 
 const isLoading = ref(true);
 const firstName = ref('');
@@ -15,6 +19,7 @@ const role = ref('');
 const avatar = ref('');
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
+const isChangeModalActive = ref(false)
 
 const getMeData = async () => {
     try{
@@ -27,12 +32,21 @@ const getMeData = async () => {
 
     } catch (error) {
       console.log(error)
+      alert.show('error', error)
     }
   }
 
   const handleCalculatedTime = (cT) => {
     calculatedWorkTime.value = cT.work
     calculatedOvertimeTime.value = cT.overtime
+  }
+
+  const changeAvatarModalToggle = () => {
+    isChangeModalActive.value = !isChangeModalActive.value
+  }
+
+  const refreshUserPanel = () => {
+    getMeData();
   }
 
   onMounted(() => {
@@ -54,10 +68,30 @@ const getMeData = async () => {
 
       <div class="user-details">
 
-        <Avatar
-            :active-shift="{}"
-            :avatar="avatar"
-        />
+        <section class="avatar-container">
+
+          <Avatar
+              :active-shift="{}"
+              :avatar="avatar"
+              :static="true"
+          />
+
+          <img
+            class="avatar-overlay"
+            src="@/assets/img/refresh.png"
+            alt="overlay"
+            @click="changeAvatarModalToggle"
+          />
+
+          <CustomModal
+              v-if="isChangeModalActive"
+              :modalComponent="ChangeAvatar"
+              :modalProps="avatar"
+              @closeModal="changeAvatarModalToggle"
+              @refreshUserPanel="refreshUserPanel"
+          />
+
+        </section>
 
         <section class="details">
 
@@ -136,9 +170,32 @@ const getMeData = async () => {
   padding: 5px;
 }
 
-.avatar {
-  margin: 0;
-  padding: 0;
+.avatar-container {
+  position: relative;
+}
+
+.avatar-overlay {
+  position: absolute;
+  filter: invert(50%);
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.avatar-overlay:hover {
+  filter: invert(100%);
+  animation: rotateAnimation 2s linear infinite;
+  cursor: pointer;
+}
+
+@keyframes rotateAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1300px) {
