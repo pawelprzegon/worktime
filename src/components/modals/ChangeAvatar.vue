@@ -35,7 +35,7 @@ const handleFileChange = async (event) => {
       alert.show('error', error.detail)
     }
   } else {
-    alert.show('warning', 'Please upload a PNG file')
+    alert.show('warning', 'None file attached')
   }
 };
 </script>

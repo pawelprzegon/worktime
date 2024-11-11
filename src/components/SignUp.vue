@@ -20,7 +20,7 @@ const handleFileChange = (event) => {
   if (file) {
     form.value.avatar = file;
   } else {
-    alert.show('warning', 'Please upload a PNG file');
+    alert.show('warning', 'None file attached');
   }
 };
 
