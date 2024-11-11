@@ -99,6 +99,7 @@ const handleFileChange = async (event) => {
   display: block;
   margin: auto;
 }
+
 .avatar {
   width: 100px;
   height: 100px;

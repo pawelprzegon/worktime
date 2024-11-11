@@ -38,8 +38,10 @@ const shiftToggle = () => {
 
 .avatar {
   width: 120px;
-  height: auto;
+  height: 120px;
   margin: auto;
+  object-fit: cover;
+  object-position: center;
 }
 
 .avatar:hover {
@@ -58,24 +60,28 @@ const shiftToggle = () => {
 @media (max-width: 1300px) {
   .avatar {
     width: 90px;
+    height: 90px;
   }
 }
 
 @media (max-width: 1000px) {
   .avatar {
     width: 80px;
+    height: 80px;
   }
 }
 
 @media (max-width: 800px) {
   .avatar {
     width: 70px;
+    height: 70px;
   }
 }
 
 @media (max-width: 600px) {
   .avatar {
     width: 60px;
+    height: 60px;
   }
 }
 
