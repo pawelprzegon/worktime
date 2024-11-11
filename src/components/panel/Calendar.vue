@@ -215,7 +215,6 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   padding: 6px;
   border-radius: 8px;
   width: 100px;
-  width: 100%;
   height: 100px;
   transition: transform 0.2s ease;
   box-shadow: var(--vt-box-shadow)
@@ -293,35 +292,41 @@ textarea {
 @media(max-width: 800px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
   }
   .calendar-day,
   .preview-month-day {
     width: 80px;
     height: 80px;
+    border-radius: 5px;
   }
 }
 
 @media(max-width: 750px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: 10px;
   }
 
   .calendar-day,
   .preview-month-day {
     width: 75px;
     height: 75px;
+    border-radius: 5px;
   }
 }
 
 @media(max-width: 690px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
   }
 
   .calendar-day,
   .preview-month-day {
     width: 70px;
     height: 70px;
+    border-radius: 5px;
   }
 
   .shift {
@@ -332,12 +337,14 @@ textarea {
 @media(max-width: 650px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+    gap: 8px;
   }
 
   .calendar-day,
   .preview-month-day {
     width: 65px;
     height: 65px;
+    border-radius: 3px;
   }
 
   .shift,
@@ -354,12 +361,14 @@ textarea {
 
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
   }
 
   .calendar-day,
   .preview-month-day {
     width: 60px;
     height: 60px;
+    border-radius: 3px;
   }
 
   .shift,
@@ -384,6 +393,7 @@ textarea {
   .preview-month-day {
     width: 55px;
     height: 55px;
+    border-radius: 3px;
   }
 
   .shift,
@@ -407,6 +417,7 @@ textarea {
   .preview-month-day {
     width: 50px;
     height: 50px;
+    border-radius: 3px;
   }
 
   .shift,
@@ -430,6 +441,7 @@ textarea {
   .preview-month-day {
     width: 45px;
     height: 45px;
+    border-radius: 2px;
   }
 
   .shift,
@@ -453,6 +465,7 @@ textarea {
   .preview-month-day {
     width: 40px;
     height: 40px;
+    border-radius: 2px;
   }
 
   .shift,

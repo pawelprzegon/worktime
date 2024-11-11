@@ -143,6 +143,7 @@ const getMeData = async () => {
   .details {
     min-width: 250px;
     max-width: 40%;
+    margin: 0;
   }
 
   .dash-details,
@@ -162,6 +163,7 @@ const getMeData = async () => {
   .details {
     min-width: 250px;
     max-width: 40%;
+    margin: 0;
   }
 
   .dash-details,
