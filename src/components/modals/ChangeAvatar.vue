@@ -51,12 +51,13 @@ const handleFileChange = async (event) => {
 
     <div class="change-avatar-input">
 
-      <label for="avatar">Pick avatar:</label>
+      <label for="avatar" class="custom-file-label">Pick avatar:</label>
       <input
           type="file"
           id="avatar"
           @change="handleFileChange"
           accept=".png, .jpg, .jpeg, .gif, .svg"
+          style="display: none;"
       />
 
     </div>
@@ -80,9 +81,24 @@ const handleFileChange = async (event) => {
   border-radius: 15px;
   box-shadow: 16px 20px 50px 10px #222222;
 }
+
+.custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-background);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+.custom-file-label:hover {
+    background-color: white;
+  color: black
+}
+
 .change-avatar-input {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
+  display: block;
+  margin: auto;
 }
 .avatar {
   width: 100px;
@@ -90,4 +106,18 @@ const handleFileChange = async (event) => {
   border-radius: 50%;
   object-fit: cover;
 }
+
+@media (max-width: 1300px) {
+  .change-avatar-container {
+    width: 400px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .change-avatar-container {
+    width: 300px;
+  }
+
+}
+
 </style>
