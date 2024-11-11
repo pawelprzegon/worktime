@@ -26,6 +26,7 @@
   --finished-color: #0c331a;
   --emergency-color: #330c0c;
   --idle-color: rgba(255, 255, 128, .5);
+  --overtime-color: #B97B28FF;
 }
 
 :root {
@@ -38,6 +39,7 @@
 
   --color-text-basic: var(--vt-c-text-dark);
   --color-text-active: var(--vt-c-text-light);
+  --color-text-overtime: var(--overtime-color)
 
 }
 

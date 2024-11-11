@@ -5,7 +5,7 @@ import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
 import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 import {saveShiftNote} from "@/fetchers.js";
-import Alert from "@/components/Alert.vue";
+import Alert from "@/components/utils/Alert.vue";
 
 
 const alert = inject('alert');

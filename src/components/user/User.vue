@@ -5,7 +5,7 @@ import {startShift, endShift, getActiveShift, saveShiftNote, deleteShiftFetch} f
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
-import CustomModal from "@/components/CustomModal.vue";
+import CustomModal from "@/components/modals/CustomModal.vue";
 import ToggleModal from "@/components/modals/ToggleModal.vue";
 
 

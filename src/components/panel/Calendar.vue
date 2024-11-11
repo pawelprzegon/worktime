@@ -4,15 +4,16 @@ import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from '
 import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
-import CustomModal from "@/components/CustomModal.vue";
-import Alert from "@/components/Alert.vue";
+import CustomModal from "@/components/modals/CustomModal.vue";
+import Alert from "@/components/utils/Alert.vue";
 import {range} from "@/utils.js";
 import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
 
 const alert = inject('alert');
 
 const currentMonth = ref(new Date());
-const calculatedTime = ref(0)
+const calculatedWorkTime = ref(0)
+const calculatedOvertimeTime = ref(0)
 const isModalOpen = ref(false);
 const selectedDay = ref(null);
 const modalKey = ref(0);
@@ -74,39 +75,63 @@ const nextMonth = () => {
 };
 
 const getDates = async () => {
-  calculatedTime.value = 0
+  calculatedWorkTime.value = 0;
+  calculatedOvertimeTime.value = 0;
+
   try {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
 
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
-    daysBeforeRange.value = range(2, startDay.value)
-    daysAfterRange.value = range(endDay.value, 6)
+    daysBeforeRange.value = range(2, startDay.value);
+    daysAfterRange.value = range(endDay.value, 6);
 
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
+
+    const splitOverTime = (shiftTime) => {
+      if (shiftTime <= 28800) {
+        return {'work': shiftTime, 'overtime': 0};
+      } else {
+        return {'work': 28800, 'overtime': shiftTime - 28800};
+      }
+    };
+
     const groupedShifts = shifts.reduce((acc, shift) => {
-      calculatedTime.value += shift.work;
       const date = getDate(shift.start);
       if (!acc[date]) {
         acc[date] = {
           'list': [],
-          'summary': 0
+          'totalWork': 0,
         };
       }
       acc[date].list.push(shift);
-      acc[date].summary += shift.work
+      acc[date].totalWork += shift.work;
+
       return acc;
     }, {});
+
+    Object.keys(groupedShifts).forEach(date => {
+      const totalWork = groupedShifts[date].totalWork;
+      const splitOvertime = splitOverTime(totalWork);
+
+      calculatedWorkTime.value += splitOvertime.work;
+      calculatedOvertimeTime.value += splitOvertime.overtime;
+
+      groupedShifts[date].regular = splitOvertime.work;
+      groupedShifts[date].overtime = splitOvertime.overtime;
+    });
 
     daysInMonth.value = daysInMonth.value.map(day => {
       const formattedDate = format(day.date, 'yyyy-MM-dd');
       return {
         ...day,
-        shifts: groupedShifts[formattedDate] || { list: [], summary: 0 }
+        shifts: groupedShifts[formattedDate] || { list: [], regular: 0 }
       };
     });
 
-    emit('calculatedTime', formatTime(calculatedTime.value));
+    emit('calculatedTime',
+        {'work': formatTime(calculatedWorkTime.value), 'overtime': formatTime(calculatedOvertimeTime.value)});
+
   } catch (error) {
     console.error("Error fetching users:", error);
   }
@@ -157,16 +182,21 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-for="(day, index) in daysInMonth"
         :key="index"
         :class="['calendar-day',
-        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': day.shifts.summary >= 28800}]"
+        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': day.shifts.regular >= 28800}]"
         @click="openModal(day)"
       >
         <span class="day-header">{{ day.date.getDate() }}</span>
         <div class="shifts-list">
-          <div v-if="day.shifts.list.length > 0">
-            <small class="shift">
-              {{ formatTime(day.shifts.summary) }}
-            </small>
-          </div>
+
+          <small
+              v-if="day.shifts.list.length > 0"
+              class="shift"
+          >{{ formatTime(day.shifts.regular) }}</small>
+          <small
+              v-if="day.shifts.list.length > 0 && day.shifts.overtime !== 0"
+              class="shift overtime"
+          >{{ formatTime(day.shifts.overtime) }}</small>
+
         </div>
       </div>
       <div v-for="(index) in daysAfterRange" :key="index" class="preview-month-day"></div>
@@ -271,6 +301,10 @@ textarea {
 .shift {
   font-size: 15px;
   color:var(--color-text-active)
+}
+
+.overtime {
+  color: var(--color-text-overtime);
 }
 
 .preview-month-day {

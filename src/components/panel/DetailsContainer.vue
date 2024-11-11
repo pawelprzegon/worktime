@@ -5,7 +5,11 @@ import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 const props = defineProps({
   label: String,
   data: String,
-  background: String
+  background: String,
+  color: {
+    type: String,
+    default: 'none'
+  }
 })
 
 
@@ -19,6 +23,7 @@ const props = defineProps({
     <span
         v-if="props.data !== ''"
         class="wrappable-text"
+        :style="{color: props.color}"
     >
       {{props.data}}
     </span>

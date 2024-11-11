@@ -13,7 +13,8 @@ const lastName = ref('');
 const email = ref('');
 const role = ref('');
 const avatar = ref('');
-const calculatedTime = ref(0)
+const calculatedWorkTime = ref(0)
+const calculatedOvertimeTime = ref(0)
 
 const getMeData = async () => {
     try{
@@ -30,7 +31,8 @@ const getMeData = async () => {
   }
 
   const handleCalculatedTime = (cT) => {
-    calculatedTime.value = cT
+    calculatedWorkTime.value = cT.work
+    calculatedOvertimeTime.value = cT.overtime
   }
 
   onMounted(() => {
@@ -88,9 +90,15 @@ const getMeData = async () => {
       <div class="shifts-details">
         <section class="details">
           <DetailsContainer
-            :label="'monthly work time'"
-            :data="calculatedTime.toString()"
+            :label="'regular'"
+            :data="calculatedWorkTime.toString()"
             :background="'#282828'"
+          />
+          <DetailsContainer
+            :label="'overtime'"
+            :data="calculatedOvertimeTime.toString()"
+            :background="'#282828'"
+            color="var(--color-text-overtime)"
           />
         </section>
       </div>
