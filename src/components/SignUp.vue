@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import {registerUser, saveAvatar} from "@/fetchers.js";
 import { useRouter } from "vue-router";
+
+const alert = inject('alert');
 
 const router = useRouter()
 const form = ref({
@@ -15,10 +17,10 @@ const form = ref({
 
 const handleFileChange = (event) => {
   const file = event.target.files[0];
-  if (file && file.type === 'image/png') {
+  if (file) {
     form.value.avatar = file;
   } else {
-    alert('Please upload a PNG file');
+    alert.show('warning', 'Please upload a PNG file');
   }
 };
 

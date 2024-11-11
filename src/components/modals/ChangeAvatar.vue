@@ -3,7 +3,6 @@ import {inject, ref} from 'vue'
 import { saveAvatar } from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 
-const apiURL = import.meta.env.VITE_APP_API_URL;
 const alert = inject('alert');
 
 const emit = defineEmits(['refreshUserPanel', 'closeModal'])
@@ -24,7 +23,7 @@ const form = ref({
 
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
-  if (file && file.type === 'image/png') {
+  if (file) {
     form.value.avatar = file;
     const userId = sessionStorage.getItem('userId');
     try {
@@ -36,7 +35,7 @@ const handleFileChange = async (event) => {
       alert.show('error', error.detail)
     }
   } else {
-    alert.show('error', 'Please upload a PNG file')
+    alert.show('warning', 'Please upload a PNG file')
   }
 };
 </script>
