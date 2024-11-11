@@ -71,7 +71,7 @@ const handleFileChange = async (event) => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-content: center;
-  width: 50%;
+  width: 450px;
   margin: auto;
   background-color: var(--color-background-soft);
   color: #fff;
