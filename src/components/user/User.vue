@@ -148,5 +148,26 @@ const closeModal = () => {
   }
 }
 
+@media (max-width: 1000px) {
+  .user {
+    grid-template-rows: 85px 30px 50px;
+    gap: 3px;
+  }
+}
+
+@media (max-width: 800px) {
+  .user {
+    grid-template-rows: 75px 30px 50px;
+    gap: 3px;
+  }
+}
+
+@media (max-width: 600px) {
+  .user {
+    grid-template-rows: 65px 30px 50px;
+    gap: 3px;
+  }
+}
+
 
 </style>

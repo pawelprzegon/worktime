@@ -61,4 +61,22 @@ const shiftToggle = () => {
   }
 }
 
+@media (max-width: 1000px) {
+  .avatar {
+    width: 80px;
+  }
+}
+
+@media (max-width: 800px) {
+  .avatar {
+    width: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .avatar {
+    width: 60px;
+  }
+}
+
 </style>
