@@ -313,6 +313,7 @@ textarea {
     width: 75px;
     height: 75px;
     border-radius: 5px;
+    padding: 4px;
   }
 }
 
@@ -327,6 +328,7 @@ textarea {
     width: 70px;
     height: 70px;
     border-radius: 5px;
+    padding: 4px;
   }
 
   .shift {
@@ -345,6 +347,7 @@ textarea {
     width: 65px;
     height: 65px;
     border-radius: 3px;
+    padding: 4px;
   }
 
   .shift,
@@ -369,6 +372,7 @@ textarea {
     width: 60px;
     height: 60px;
     border-radius: 3px;
+    padding: 3px;
   }
 
   .shift,
@@ -394,6 +398,7 @@ textarea {
     width: 55px;
     height: 55px;
     border-radius: 3px;
+    padding: 3px;
   }
 
   .shift,
@@ -418,6 +423,7 @@ textarea {
     width: 50px;
     height: 50px;
     border-radius: 3px;
+    padding: 2px;
   }
 
   .shift,
@@ -442,6 +448,7 @@ textarea {
     width: 45px;
     height: 45px;
     border-radius: 2px;
+    padding: 2px;
   }
 
   .shift,
@@ -466,6 +473,7 @@ textarea {
     width: 40px;
     height: 40px;
     border-radius: 2px;
+    padding: 2px;
   }
 
   .shift,

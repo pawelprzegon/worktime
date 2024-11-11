@@ -23,7 +23,7 @@
   --secondary-color: #1d232c;
   --beb-color: #00adee;
   --chart-text: #c2c2c2;
-  --finished-color: rgba(0, 238, 167, .5);
+  --finished-color: #025129FF;
   --emergency-color: rgba(255, 128, 147, .5);
   --idle-color: rgba(255, 255, 128, .5);
 }
