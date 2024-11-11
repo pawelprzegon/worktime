@@ -52,7 +52,6 @@ router.beforeEach(async (to, from, next) => {
     if (protectedRoutes.includes(to.path)) {
         const token = sessionStorage.getItem('token');
         const authorized = await checkIsAuthorized(token);
-
         if (!authorized) {
             router.isAuthenticated.status = false;
             router.isAuthenticated.role = null;

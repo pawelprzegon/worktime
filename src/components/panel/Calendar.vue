@@ -77,7 +77,7 @@ const getDates = async () => {
   calculatedTime.value = 0
   try {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
-    console.log(new Date(daysInMonth.value[0]['date']).getDay() || 7)
+
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value)

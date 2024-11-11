@@ -7,7 +7,7 @@
 
   const isAuthenticated = inject('isAuthenticated')
 
-
+  console.log(isAuthenticated)
   const router = useRouter()
   const userName = ref('');
   const today = ref(new Date)
@@ -53,6 +53,7 @@
   }
 
   const logout = () => {
+    console.log('logout')
     if (isAuthenticated) {
       clearCache()
       isAuthenticated.status = false;
