@@ -21,21 +21,21 @@
 }
 
 
-@media (orientation: portrait) {
-  @media (max-width: 450px) {
+/*@media (orientation: portrait) {*/
+/*  @media (max-width: 450px) {*/
 
-    #app {
-      display: block;
-    }
-  }
-}
+/*    #app {*/
+/*      display: block;*/
+/*    }*/
+/*  }*/
+/*}*/
 
-@media (orientation: landscape) {
-  @media (max-width: 450px) {
+/*@media (orientation: landscape) {*/
+/*  @media (max-width: 450px) {*/
 
-    #app {
-      display: block;
-    }
-  }
-}
+/*    #app {*/
+/*      display: block;*/
+/*    }*/
+/*  }*/
+/*}*/
 

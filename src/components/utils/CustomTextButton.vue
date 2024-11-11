@@ -70,7 +70,7 @@ const props = defineProps({
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  box-shadow: var(--vt-box-shadow);
+  box-shadow: var(--vt-box-shadow-sm);
 }
 
 .button:active,
@@ -85,7 +85,7 @@ const props = defineProps({
 }
 
 .active-button {
-  background-color: #007bff;
+  background-color: var(--vt-c-indigo);
   color: #fff;
 }
 

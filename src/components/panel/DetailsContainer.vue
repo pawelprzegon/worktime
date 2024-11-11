@@ -51,4 +51,8 @@ const props = defineProps({
   word-wrap: break-word;
 }
 
+span {
+  color: var(--color-text-active)
+}
+
 </style>

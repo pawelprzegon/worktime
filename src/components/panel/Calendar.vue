@@ -254,34 +254,30 @@ textarea {
   text-align: center;
   margin: 5px 10px;
   font-size: 20px;
+  color:var(--color-text-active)
 }
 
 .unfinished-shift {
-  background: #2c3e50;
+  background: var(--vt-c-indigo);
 }
 
 .finished-shift {
-  background: #2c5032;
+  background: var(--finished-color);
 }
 
 .started-shift {
-  color: #bd7d00;
+  color: var(--idle-color);
 }
 
 .shift {
   font-size: 15px;
+  color:var(--color-text-active)
 }
 
 .preview-month-day {
-  background: #1c1c1c;
+  background: var(--vt-c-black-mute);
   border-radius: 8px;
 }
-
-
-
-
-
-
 
 @media(max-width: 875px) {
   .calendar-grid {
@@ -466,5 +462,10 @@ textarea {
   }
 }
 
+@media(max-height: 1000px) {
+  .calendar {
+    padding: 0;
+  }
+}
 
 </style>

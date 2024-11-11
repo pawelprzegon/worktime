@@ -48,46 +48,53 @@ const getMeData = async () => {
 
   <section v-else class="user-section">
     <Calendar @calculatedTime="handleCalculatedTime"/>
-    <div class="user-details">
+    <div class="dash-details">
 
-      <Avatar
-          :active-shift="{}"
-          :avatar="avatar"
-      />
+      <div class="user-details">
 
-      <section class="details">
-
-        <DetailsContainer
-            :label="'firstname'"
-            :data="firstName"
-            :background="'#282828'"
+        <Avatar
+            :active-shift="{}"
+            :avatar="avatar"
         />
 
-        <DetailsContainer
-            :label="'lastname'"
-            :data="lastName"
-            :background="'#282828'"
-        />
+        <section class="details">
 
-        <DetailsContainer
-            :label="'email'"
-            :data="email"
-            :background="'#282828'"
-        />
+          <DetailsContainer
+              :label="'firstname'"
+              :data="firstName"
+              :background="'#282828'"
+          />
 
-        <DetailsContainer
-            :label="'role'"
-            :data="role"
-            :background="'#282828'"
-        />
+          <DetailsContainer
+              :label="'lastname'"
+              :data="lastName"
+              :background="'#282828'"
+          />
 
-        <DetailsContainer
+          <DetailsContainer
+              :label="'email'"
+              :data="email"
+              :background="'#282828'"
+          />
+
+          <DetailsContainer
+              :label="'role'"
+              :data="role"
+              :background="'#282828'"
+          />
+
+        </section>
+      </div>
+      <div class="shifts-details">
+        <section class="details">
+          <DetailsContainer
             :label="'monthly work time'"
             :data="calculatedTime.toString()"
             :background="'#282828'"
-        />
+          />
+        </section>
+      </div>
 
-      </section>
     </div>
   </section>
 
@@ -102,22 +109,23 @@ const getMeData = async () => {
   grid-template-areas: "calendar user-details";
 }
 .details {
-  background: rgb(40, 40, 40);
-  padding: 1rem;
+  background: var(--color-background-mute);
+  padding: 10px;
+  margin: 10px;
   border-radius: 10px;
-  min-width: 250px;
+  min-width: 300px;
   max-width: 80%;
   box-shadow: var(--vt-box-shadow);
 }
 
-
-.user-details {
+.dash-details,
+.user-details,
+.shifts-details {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 5px;
-  width: 100%
 }
 
 .avatar {
@@ -135,6 +143,31 @@ const getMeData = async () => {
   .details {
     min-width: 250px;
     max-width: 40%;
+  }
+
+  .dash-details,
+  .user-details {
+    flex-direction: row;
+    align-items: end;
+  }
+}
+
+@media (max-width: 730px) {
+  .user-section {
+    grid-template-columns: 100% 1fr;
+    grid-template-areas: "user-details" "calendar";
+    justify-items: center;
+  }
+
+  .details {
+    min-width: 250px;
+    max-width: 40%;
+  }
+
+  .dash-details,
+  .user-details {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
