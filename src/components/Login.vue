@@ -3,6 +3,7 @@ import {inject, ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {loginFetch} from '@/fetchers.js'
 import VueJwtDecode from 'vue-jwt-decode'
+import {setToken, decodeToken, setUserId} from "@/auth.js";
 
 const isAuthenticated = inject('isAuthenticated')
 
@@ -21,13 +22,14 @@ const handleLogin = async () => {
   formData.append('username', username.value);
   formData.append('password', password.value);
   try {
-
     const data = await loginFetch(formData)
-    sessionStorage.setItem('token', data.access_token);
+    const decodedToken = decodeToken(data.access_token)
+    setToken(data.access_token)
+
     isAuthenticated.status = true;
-    isAuthenticated.role = VueJwtDecode.decode(data.access_token).role
+    isAuthenticated.role = decodedToken.role
     if (isAuthenticated.status) {
-      sessionStorage.setItem('userId', VueJwtDecode.decode(data.access_token).id);
+      setUserId(decodedToken.id)
     }
 
     router.push('/user-panel')

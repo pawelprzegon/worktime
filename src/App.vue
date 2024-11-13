@@ -117,7 +117,7 @@
             @click="gotoLogin"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="isAuthenticated.status && isAuthenticated.role"
+            v-if="isAuthenticated.status && isAuthenticated.hasRole('admin')"
             label="Privileged"
             :isActive="isPrivilegedActive"
             :margin="10"

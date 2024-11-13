@@ -3,9 +3,8 @@ import Dash from "@/components/Dash.vue";
 import Login from "@/components/Login.vue";
 import UserPanel from "@/components/panel/UserPanel.vue";
 import SignUp from "@/components/SignUp.vue";
-import {checkIsAuthorized} from "@/fetchers.js";
 import Privileged from "@/components/Privileged.vue";
-import {clearCache} from "@/utils.js";
+import {authorizationCheck, hasAccess} from "@/auth.js";
 
 
 const routes = [
@@ -45,18 +44,27 @@ const router = createRouter({
     routes,
 });
 
+const routeRoles = {
+    '/privileged': 'admin',
+    '/user-panel': ['user', 'admin'],
+};
+
 const protectedRoutes = ['/user-panel', '/privileged'];
 
 router.beforeEach(async (to, from, next) => {
 
     if (protectedRoutes.includes(to.path)) {
-        const token = sessionStorage.getItem('token');
-        const authorized = await checkIsAuthorized(token);
-        if (!authorized) {
+        if (!await authorizationCheck()) {
             router.isAuthenticated.status = false;
             router.isAuthenticated.role = null;
-            clearCache()
             return next('/login');
+        }
+
+        else {
+            const requiredRole = routeRoles[to.path];
+            if (requiredRole && !hasAccess(requiredRole)) {
+                return next('/login');
+            }
         }
     }
 

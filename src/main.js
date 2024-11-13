@@ -2,8 +2,7 @@ import './assets/main.css'
 import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router';
-import {checkIsAuthorized} from "@/fetchers.js";
-import {clearCache} from "@/utils.js";
+import {authorizationCheck} from "@/auth.js";
 
 const app = createApp(App)
 
@@ -18,19 +17,23 @@ const alert = reactive({
 
 const isAuthenticated = reactive({
   status: false,
-  role: null
+  role: null,
+  hasRole(requiredRole) {
+    console.log(this.role)
+    if (!this.role) return false;
+    if (Array.isArray(requiredRole)) {
+      return requiredRole.includes(this.role);
+    }
+    return this.role === requiredRole;
+  }
 });
 
 async function initializeAuth() {
-  const token = sessionStorage.getItem('token');
-  if (token) {
-    const authorized = await checkIsAuthorized(token);
-    if (authorized) {
-      isAuthenticated.status = true;
-      isAuthenticated.role = authorized.role;
-    } else {
-      clearCache()
-    }
+  const isAuthorized = await authorizationCheck()
+  if (isAuthorized) {
+    isAuthenticated.status = true;
+    isAuthenticated.role = isAuthorized.role;
+
   }
 }
 

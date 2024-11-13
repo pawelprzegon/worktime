@@ -1,6 +1,6 @@
 <script setup>
 
-import {onMounted, defineProps, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {startShift, endShift, getActiveShift, saveShiftNote, deleteShiftFetch} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
