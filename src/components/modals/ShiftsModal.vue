@@ -24,15 +24,15 @@ const props = defineProps({
   }
 })
 
-props.defaultProp.forEach(shift => {
+props.defaultProp.shiftsList.forEach(shift => {
   shift.isCorrectingTime = false;
   shift.isEditingNote = false;
   shift.noteContent = shift.note || '';
 });
 
 const date = computed(() => {
-  if (props.defaultProp.length > 0) {
-    return props.defaultProp[0].start.split("T")[0];
+  if (props.defaultProp.shiftsList.length > 0) {
+    return props.defaultProp.shiftsList[0].start.split("T")[0];
   }
   return '';
 });
@@ -108,7 +108,7 @@ const getLastStartStop = (shift, type) => {
 }
 
 onBeforeUnmount(() => {
-  props.defaultProp.forEach(shift => {
+  props.defaultProp.shiftsList.forEach(shift => {
     shift.isEditingNote = false
   })
 })
@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
 <template>
   <Alert />
   <div
-      v-if="props.defaultProp.length > 0"
+      v-if="props.defaultProp.shiftsList.length > 0"
       class="shifts-container"
   >
     <div class="shifts-label">
@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
     </div>
 
     <div
-        v-for="shift in props.defaultProp"
+        v-for="shift in props.defaultProp.shiftsList"
         :key="shift.id"
         class="shift-details-container"
     >

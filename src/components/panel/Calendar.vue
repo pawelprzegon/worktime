@@ -149,7 +149,6 @@ const refreshShifts = () => {
 const refreshModal = async () => {
   updateDaysInMonth();
   await getDates()
-  selectedDay.value.shifts.list = [...selectedDay.value.shifts.list];
   modalKey.value += 1;
 };
 
@@ -209,7 +208,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
         :key="modalKey"
         :modalComponent="ShiftsModal"
-        :modalProps="selectedDay?.shifts.list"
+        :modalProps="{'shiftsList': selectedDay?.shifts.list}"
         @closeModal="closeModal"
         @refreshShifts="refreshShifts"
         @removeShift="removeShift"

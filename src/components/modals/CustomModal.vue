@@ -1,5 +1,5 @@
 <script setup>
-import {defineEmits} from 'vue';
+import {defineEmits, watch, ref} from 'vue';
 
 const props = defineProps({
   modalComponent: {
@@ -11,7 +11,7 @@ const props = defineProps({
     default: () => ({}),
   },
 })
-
+const internalProps = ref({...props.modalProps});
 const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift', 'refreshModal', 'refreshShifts'])
 
 const closeModal = () => {
@@ -38,6 +38,13 @@ const refreshUserPanel = () => {
   emit('refreshUserPanel')
 }
 
+watch(
+  () => props.modalProps,
+  (newProps) => {
+    internalProps.value = {...newProps};
+  }
+);
+
 </script>
 
 <template>
@@ -45,7 +52,7 @@ const refreshUserPanel = () => {
     <div class="modal-content" @click.stop>
       <component
           :is="props.modalComponent"
-          :defaultProp="props.modalProps"
+          :defaultProp="internalProps"
           @closeModal="closeModal"
           @toggleShift="toggleShift"
           @refreshShifts="refreshShifts"
