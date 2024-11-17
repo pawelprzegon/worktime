@@ -1,7 +1,7 @@
 <script setup>
 
 import {onMounted, ref} from "vue";
-import {startShift, endShift, getActiveShift, saveShiftNote, deleteShiftFetch} from "@/fetchers.js";
+import {startShift, stopShift, getActiveShift, saveShiftNote, deleteShiftFetch} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
@@ -56,7 +56,7 @@ const toggleShift = async () => {
 
     if (props.user.activeShift) {
       const shiftId = props.user.activeShift.id
-      await endShift(shiftId, userId)
+      await stopShift(shiftId, userId)
       props.user.activeShift = null
     } else {
       await startShift(userId, note)
@@ -83,7 +83,6 @@ onMounted(async () => {
   } catch (error) {
     console.error("Error fetching users:", error);
   }
-
 });
 
 const closeModal = () => {

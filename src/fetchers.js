@@ -104,7 +104,7 @@ export const startShift = async (userId, note) => {
     return await response.json()
 }
 
-export const endShift = async (shiftId, userId ) => {
+export const stopShift = async (shiftId, userId) => {
     const body = JSON.stringify({
         'shift_id': `${shiftId}`,
         'user_id': `${userId}`
@@ -117,7 +117,7 @@ export const endShift = async (shiftId, userId ) => {
         },
         body: body
     }
-    const response = await fetch(url + '/shift/end', data)
+    const response = await fetch(url + '/shift/stop', data)
 
     if (!response.ok) {
       throw new Error('Login failed. Please check your credentials.')
@@ -185,9 +185,13 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
         'shift_id': shift_id,
         'note': note
     })
+    console.log(body)
     const data = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
         body: body,
     }
     try {
@@ -214,7 +218,10 @@ export const deleteShiftFetch = async (shift_id) => {
     })
     const data = {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
         body: body,
     }
     try {
@@ -232,6 +239,33 @@ export const deleteShiftFetch = async (shift_id) => {
          console.error('Error:', error.message);
         throw error;
     }
+}
+
+export const shiftCorrection = async (shiftId, userId, new_date, startOrStop, comment='') => {
+    const body = JSON.stringify({
+        'shift_id': shiftId,
+        'user_id': userId,
+        'new_date': new_date,
+        'start_stop': startOrStop,
+        'comment': comment
+    });
+
+    console.log(body)
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/correction', data)
+
+    if (!response.ok) {
+      throw new Error('Shift stop correction failed')
+    }
+
+    return await response.json()
 }
 
 export const getMe = async () => {

@@ -53,7 +53,6 @@
   }
 
   const logout = () => {
-    console.log('logout')
     if (isAuthenticated) {
       clearCache()
       isAuthenticated.status = false;
@@ -77,7 +76,7 @@
 
   setInterval(() => {
     let now = new Date()
-    today.value = now.toLocaleTimeString("pl-PL", {
+    today.value = now.toLocaleTimeString("en-GB", {
     timeZone: "Europe/Warsaw",
     day: 'numeric',
     month: 'numeric',
@@ -85,7 +84,7 @@
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-      weekday: 'long'
+    weekday: 'long'
   })
   }, 1000)
 });

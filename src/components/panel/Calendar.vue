@@ -56,10 +56,7 @@ const updateDaysInMonth = () => {
   }));
 };
 
-const refreshShifts = () => {
-  updateDaysInMonth();
-  getDates()
-}
+
 
 const prevMonth = () => {
   currentMonth.value = sub(currentMonth.value, { months: 1 });
@@ -128,7 +125,7 @@ const getDates = async () => {
         shifts: groupedShifts[formattedDate] || { list: [], regular: 0 }
       };
     });
-
+    console.log(shifts)
     emit('calculatedTime',
         {'work': formatTime(calculatedWorkTime.value), 'overtime': formatTime(calculatedOvertimeTime.value)});
 
@@ -144,9 +141,15 @@ const removeShift = async(shiftId) => {
   alert.show(response.status, response.message)
 }
 
-const refreshModal = () => {
+const refreshShifts = () => {
   updateDaysInMonth();
   getDates()
+}
+
+const refreshModal = async () => {
+  updateDaysInMonth();
+  await getDates()
+  selectedDay.value.shifts.list = [...selectedDay.value.shifts.list];
   modalKey.value += 1;
 };
 
@@ -208,7 +211,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         :modalComponent="ShiftsModal"
         :modalProps="selectedDay?.shifts.list"
         @closeModal="closeModal"
-        @refresh="refreshShifts"
+        @refreshShifts="refreshShifts"
         @removeShift="removeShift"
         @refreshModal="refreshModal"
     />
@@ -258,8 +261,15 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 .day-header {
   display: block;
   border-bottom: 1px solid #595959;
-
 }
+
+.preview-month-day {
+  background: var(--vt-c-black-mute);
+  border-radius: 8px;
+  width: 100px;
+  height: 100px;
+}
+
 
 .shifts-list {
   display: flex;
@@ -307,10 +317,6 @@ textarea {
   color: var(--color-text-overtime);
 }
 
-.preview-month-day {
-  background: var(--vt-c-black-mute);
-  border-radius: 8px;
-}
 
 @media(max-width: 875px) {
   .calendar-grid {

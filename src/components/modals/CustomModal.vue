@@ -12,7 +12,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift', 'refreshModal'])
+const emit = defineEmits(['closeModal', 'toggleShift', 'removeShift', 'refreshModal', 'refreshShifts'])
 
 const closeModal = () => {
   emit('closeModal')
@@ -20,6 +20,10 @@ const closeModal = () => {
 
 const toggleShift = () => {
   emit('toggleShift')
+}
+
+const refreshShifts = () => {
+  emit('refreshShifts')
 }
 
 const removeShift = (shiftId) => {
@@ -44,7 +48,7 @@ const refreshUserPanel = () => {
           :defaultProp="props.modalProps"
           @closeModal="closeModal"
           @toggleShift="toggleShift"
-          @refreshShifts="toggleShift"
+          @refreshShifts="refreshShifts"
           @removeShift="removeShift"
           @refreshModal="refreshModal"
           @refreshUserPanel="refreshUserPanel"
@@ -71,22 +75,21 @@ const refreshUserPanel = () => {
 .modal-content {
   border-radius: 8px;
   text-align: center;
-  min-width: 60%;
-  max-width: 65%;
+  width: 700px;
   margin: auto;
 }
 
 @media (max-width: 1300px) {
   .modal-content {
     min-width: 60%;
-    max-width: 65%;
+    max-width: 700px;
   }
 }
 
 @media (max-width: 800px) {
   .modal-content {
     min-width: 70%;
-    max-width: 75%;
+    max-width: 550px;
   }
 }
 

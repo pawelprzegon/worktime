@@ -12,7 +12,7 @@ export function setToken(token) {
 }
 
 export function setUserId(userId) {
-
+    sessionStorage.setItem('userId', userId)
 }
 
 export function decodeToken(token) {

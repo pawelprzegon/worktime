@@ -19,7 +19,6 @@ const isAuthenticated = reactive({
   status: false,
   role: null,
   hasRole(requiredRole) {
-    console.log(this.role)
     if (!this.role) return false;
     if (Array.isArray(requiredRole)) {
       return requiredRole.includes(this.role);
