@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 import { getDate, getTime } from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import DatePicker from "@/components/DatePicker.vue";
@@ -27,6 +27,7 @@ const props = defineProps({
 const emit = defineEmits(['newDateTime'])
 
 const pickedStartStop = ref(null);
+const datePickerKey = ref(0)
 
 const select = (selectedToCorrect) => {
   pickedStartStop.value = selectedToCorrect;
@@ -41,6 +42,14 @@ const checkIsLast = (correction) => {
   const lastFiltered = filtered[filtered.length -1]
   return correction === lastFiltered
 };
+
+watch(() => props.isActive, (newValue, oldValue) => {
+  if (newValue) {
+    pickedStartStop.value = { start: props.defaultStart, stop: props.defaultStop };
+  }
+  datePickerKey.value++;
+});
+
 </script>
 
 <template>
@@ -133,6 +142,7 @@ const checkIsLast = (correction) => {
         </div>
         <DatePicker
             @newDatetime="newDateTime"
+            :key="datePickerKey"
         />
       </section>
     </div>

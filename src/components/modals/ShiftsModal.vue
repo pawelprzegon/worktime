@@ -7,7 +7,7 @@ import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 import {saveShiftNote, shiftCorrection} from "@/fetchers.js";
 import Alert from "@/components/utils/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
-import TimeCorrector from "@/components/modals/TimeCorrector.vue";
+import TimeCorrector from "@/components/panel/TimeCorrector.vue";
 import '@/assets/modal.css';
 
 
@@ -48,6 +48,7 @@ const toggleShowTimeCorrector = (shift) => {
 
 const handleButtonClick = (shift) => {
   if (!shift.isCorrectingTime) {
+    selectedNewDateTime.value = ''
     toggleShowTimeCorrector(shift);
   } else {
     saveCorrection(shift);
@@ -226,8 +227,17 @@ onBeforeUnmount(() => {
                 class="shift-details-footer">
 
               <CustomTextButton
-                v-if="!shift.isEditingNote && !shift.isEditingNote"
-                :label="!shift.isCorrectingTime ? 'correct' : 'save'"
+                v-if="!shift.isEditingNote && !shift.isCorrectingTime"
+                :label="'correct'"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="handleButtonClick(shift)"
+              />
+
+              <CustomTextButton
+                v-if="!shift.isEditingNote && shift.isCorrectingTime && selectedNewDateTime"
+                :label="'save'"
                 :width="80"
                 :padding="2"
                 :margin="2"

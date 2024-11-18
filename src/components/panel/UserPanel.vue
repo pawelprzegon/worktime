@@ -5,7 +5,7 @@ import {getMe} from "@/fetchers.js";
 import {onMounted, ref, inject} from "vue";
 import Avatar from "@/components/user/Avatar.vue";
 import DetailsContainer from "@/components/panel/DetailsContainer.vue";
-import Spinner from "@/components/panel/Spinner.vue";
+import Spinner from "@/components/utils/Spinner.vue";
 import ChangeAvatar from "@/components/modals/ChangeAvatar.vue";
 
 const alert = inject('alert');

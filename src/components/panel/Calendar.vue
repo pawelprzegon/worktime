@@ -130,25 +130,32 @@ const getDates = async () => {
   }
 };
 
-const refreshShifts = () => {
-  updateDaysInMonth();
-  getDates()
+const refreshShifts = async () => {
+  await getDates()
 };
 
 const removeShift = async(shiftId) => {
   selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
   const response = await deleteShiftFetch(shiftId)
-  refreshShifts()
+  await refreshShifts()
   alert.show(response.status, response.message)
 };
 
 const refreshModal = async () => {
-  refreshShifts()
-  modalKey.value += 1;
+  const selectedDate = selectedDay.value.date;
+  await refreshShifts();
+
+  selectedDay.value = daysInMonth.value.find(day =>
+    format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
+  );
+  modalKey.value++;
+  console.log(selectedDay);
+  console.log('refreshModal - finished');
 };
 
-onMounted(() => {
-  refreshShifts()
+onMounted(async () => {
+  updateDaysInMonth();
+  await refreshShifts()
 });
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

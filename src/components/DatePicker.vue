@@ -5,6 +5,7 @@ import {ref, watch} from "vue";
 
 const emit = defineEmits(['newDatetime'])
 const selectedDate = ref(null);
+const datepickerKey = ref(0);
 
 const formatDate = (date) => {
   return date ? date.toISOString().split("T")[0] : "";
@@ -13,11 +14,15 @@ const formatDate = (date) => {
 watch(selectedDate, (newValue, oldValue) => {
   emit('newDatetime', newValue)
 });
+
+
 </script>
 
 <template>
   <div class="minimal-datepicker">
     <VueDatePicker
+      ref="datepicker"
+      :key="datepickerKey"
       v-model="selectedDate"
       :format="formatDate"
       :hide-header="true"

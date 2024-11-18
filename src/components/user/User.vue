@@ -5,7 +5,7 @@ import {startShift, stopShift, getActiveShift} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
-import ToggleModal from "@/components/modals/ToggleModal.vue";
+import ShiftToggleModal from "@/components/modals/ShiftToggleModal.vue";
 
 
 const props = defineProps({
@@ -109,7 +109,7 @@ const closeModal = () => {
         :shift-duration="props.user.shiftDuration"
     />
 
-    <ToggleModal
+    <ShiftToggleModal
         v-if="modalVisibility"
         :user="props.user"
         @closeModal="closeModal"
