@@ -2,13 +2,14 @@
 import {inject, ref} from 'vue'
 import { saveAvatar } from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
+import '@/assets/modal.css';
 
 const alert = inject('alert');
 
 const emit = defineEmits(['refreshUserPanel', 'closeModal'])
 
 const props = defineProps({
-  defaultProp: {
+  avatar: {
     type: String,
     default: null
   }
@@ -18,7 +19,6 @@ const form = ref({
   avatar: null,
   filename: null
 });
-
 
 
 const handleFileChange = async (event) => {
@@ -38,31 +38,40 @@ const handleFileChange = async (event) => {
     alert.show('warning', 'None file attached')
   }
 };
+
+const closeModal = () => {
+  emit('closeModal')
+}
+
 </script>
 
 <template>
-  <section class="change-avatar-container">
-    <Avatar
-        :active-shift="{}"
-        :avatar="props.defaultProp"
-        :static="true"
-    />
+  <div class="modal-overlay" @click="closeModal">
+    <div class="modal-content" @click.stop>
+      <section class="change-avatar-container">
+        <Avatar
+            :active-shift="{}"
+            :avatar="props.avatar"
+            :static="true"
+        />
 
-    <div class="change-avatar-input">
+        <div class="change-avatar-input">
 
-      <label for="avatar" class="custom-file-label">Pick avatar:</label>
-      <input
-          type="file"
-          id="avatar"
-          @change="handleFileChange"
-          accept=".png, .jpg, .jpeg, .gif, .svg"
-          style="display: none;"
-      />
+          <label for="avatar" class="custom-file-label">Pick avatar:</label>
+          <input
+              type="file"
+              id="avatar"
+              @change="handleFileChange"
+              accept=".png, .jpg, .jpeg, .gif, .svg"
+              style="display: none;"
+          />
 
+        </div>
+
+
+      </section>
     </div>
-
-
-  </section>
+  </div>
 
 </template>
 

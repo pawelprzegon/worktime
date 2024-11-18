@@ -4,7 +4,6 @@ import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from '
 import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
-import CustomModal from "@/components/modals/CustomModal.vue";
 import Alert from "@/components/utils/Alert.vue";
 import {range} from "@/utils.js";
 import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
@@ -26,11 +25,10 @@ const openModal = (day) => {
   selectedDay.value = day;
   isModalOpen.value = true;
 };
-
 const closeModal = () => {
   isModalOpen.value = false;
 };
-const emit = defineEmits(['calculatedTime'])
+const emit = defineEmits(['calculatedTime']);
 
 const daysInMonth = ref(
   eachDayOfInterval({
@@ -55,8 +53,6 @@ const updateDaysInMonth = () => {
     shifts: { list: [], summary: 0 }
   }));
 };
-
-
 
 const prevMonth = () => {
   currentMonth.value = sub(currentMonth.value, { months: 1 });
@@ -125,7 +121,7 @@ const getDates = async () => {
         shifts: groupedShifts[formattedDate] || { list: [], regular: 0 }
       };
     });
-    console.log(shifts)
+
     emit('calculatedTime',
         {'work': formatTime(calculatedWorkTime.value), 'overtime': formatTime(calculatedOvertimeTime.value)});
 
@@ -134,28 +130,26 @@ const getDates = async () => {
   }
 };
 
+const refreshShifts = () => {
+  updateDaysInMonth();
+  getDates()
+};
+
 const removeShift = async(shiftId) => {
   selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
   const response = await deleteShiftFetch(shiftId)
   refreshShifts()
   alert.show(response.status, response.message)
-}
-
-const refreshShifts = () => {
-  updateDaysInMonth();
-  getDates()
-}
+};
 
 const refreshModal = async () => {
-  updateDaysInMonth();
-  await getDates()
+  refreshShifts()
   modalKey.value += 1;
 };
 
 onMounted(() => {
-  updateDaysInMonth();
-  getDates()
-})
+  refreshShifts()
+});
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -164,7 +158,6 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 <template>
   <Alert />
   <div class="calendar">
-
     <div class="calendar-navigation">
       <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
       <span class="nav-label">{{ format(currentMonth, 'MMMM yyyy') }}</span>
@@ -204,13 +197,11 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
       <div v-for="(index) in daysAfterRange" :key="index" class="preview-month-day"></div>
     </div>
 
-    <CustomModal
+    <ShiftsModal
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
         :key="modalKey"
-        :modalComponent="ShiftsModal"
-        :modalProps="{'shiftsList': selectedDay?.shifts.list}"
+        :shifts="selectedDay?.shifts.list"
         @closeModal="closeModal"
-        @refreshShifts="refreshShifts"
         @removeShift="removeShift"
         @refreshModal="refreshModal"
     />

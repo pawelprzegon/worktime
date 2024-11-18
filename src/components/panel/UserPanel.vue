@@ -6,7 +6,6 @@ import {onMounted, ref, inject} from "vue";
 import Avatar from "@/components/user/Avatar.vue";
 import DetailsContainer from "@/components/panel/DetailsContainer.vue";
 import Spinner from "@/components/panel/Spinner.vue";
-import CustomModal from "@/components/modals/CustomModal.vue";
 import ChangeAvatar from "@/components/modals/ChangeAvatar.vue";
 
 const alert = inject('alert');
@@ -83,10 +82,9 @@ const getMeData = async () => {
             @click="changeAvatarModalToggle"
           />
 
-          <CustomModal
+          <ChangeAvatar
               v-if="isChangeModalActive"
-              :modalComponent="ChangeAvatar"
-              :modalProps="avatar"
+              :avatar="avatar"
               @closeModal="changeAvatarModalToggle"
               @refreshUserPanel="refreshUserPanel"
           />

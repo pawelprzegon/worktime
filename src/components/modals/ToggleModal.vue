@@ -2,9 +2,10 @@
 import {ref, onMounted} from 'vue'
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
+import '@/assets/modal.css';
 
 const props = defineProps({
-  defaultProp: {
+  user: {
     type: Object,
     required: true
   }
@@ -14,37 +15,40 @@ const emit = defineEmits(['closeModal', 'toggleShift'])
 const label = ref('')
 
 onMounted(() => {
-  label.value = props.defaultProp.activeShift ? 'Stop shift?' : 'Start shift?';
+  label.value = props.user.activeShift ? 'Stop shift?' : 'Start shift?';
 })
 
 </script>
 
 <template>
 
-  <div class="shift-toggle-modal">
+  <div class="modal-overlay" @click="emit('closeModal')">
+    <div class="modal-content" @click.stop>
 
-    <Avatar
-        :avatar="props.defaultProp.avatar"
-        :active-shift="props.defaultProp.activeShift"
-        :static="true"
-    />
-    <UserName
-        :first-name="props.defaultProp.first_name"
-        :last-name="props.defaultProp.last_name"
-    />
+      <div class="shift-toggle-modal">
 
-    <h2 class="shift-toggle-label">{{label}}</h2>
+        <Avatar
+            :avatar="props.user.avatar"
+            :active-shift="props.user.activeShift"
+            :static="true"
+        />
+        <UserName
+            :first-name="props.user.first_name"
+            :last-name="props.user.last_name"
+        />
 
-    <div class="shift-answer">
+        <h2 class="shift-toggle-label">{{label}}</h2>
 
-      <p class="answer-button" @click="emit('toggleShift')">Yes</p>
-      <p class="answer-button" @click="emit('closeModal')">No</p>
+        <div class="shift-answer">
 
+          <p class="answer-button" @click="emit('toggleShift')">Yes</p>
+          <p class="answer-button" @click="emit('closeModal')">No</p>
+
+        </div>
+
+      </div>
     </div>
-
   </div>
-
-
 
 </template>
 

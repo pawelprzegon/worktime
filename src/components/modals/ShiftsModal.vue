@@ -8,6 +8,7 @@ import {saveShiftNote, shiftCorrection} from "@/fetchers.js";
 import Alert from "@/components/utils/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
 import TimeCorrector from "@/components/modals/TimeCorrector.vue";
+import '@/assets/modal.css';
 
 
 const alert = inject('alert');
@@ -15,24 +16,24 @@ const deleteConfirmationVisible = ref(false)
 const selectedNewDateTime = ref('')
 const selectedStartOrStop = ref('')
 
-const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal', 'toggleShift', "refreshShifts", "refreshUserPanel"])
+const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
 
 const props = defineProps({
-  defaultProp: {
-    type: Object,
+  shifts: {
+    type: Array,
     default: () => []
   }
 })
 
-props.defaultProp.shiftsList.forEach(shift => {
+props.shifts.forEach(shift => {
   shift.isCorrectingTime = false;
   shift.isEditingNote = false;
   shift.noteContent = shift.note || '';
 });
 
 const date = computed(() => {
-  if (props.defaultProp.shiftsList.length > 0) {
-    return props.defaultProp.shiftsList[0].start.split("T")[0];
+  if (props.shifts.length > 0) {
+    return props.shifts[0].start.split("T")[0];
   }
   return '';
 });
@@ -107,8 +108,12 @@ const getLastStartStop = (shift, type) => {
   }
 }
 
+const closeModal = () => {
+  emit('closeModal')
+}
+
 onBeforeUnmount(() => {
-  props.defaultProp.shiftsList.forEach(shift => {
+  props.shifts.forEach(shift => {
     shift.isEditingNote = false
   })
 })
@@ -119,182 +124,184 @@ onBeforeUnmount(() => {
 
 <template>
   <Alert />
-  <div
-      v-if="props.defaultProp.shiftsList.length > 0"
-      class="shifts-container"
-  >
-    <div class="shifts-label">
-      <h2 style="font-weight: 600">{{ date }}</h2>
-    </div>
-
-    <div
-        v-for="shift in props.defaultProp.shiftsList"
-        :key="shift.id"
-        class="shift-details-container"
-    >
+  <div class="modal-overlay" @click="closeModal">
+    <div class="modal-content" @click.stop>
       <div
-          v-if="deleteConfirmationVisible === shift.id"
-          class="shift-delete-confirm"
+          v-if="props.shifts.length > 0"
+          class="shifts-container"
       >
-        <h3>delete shift?</h3>
-        <div class="shift-delete-confirm-buttons">
-          <CustomTextButton
-              label="yes"
-              color="white"
-              background="darkred"
-              @click="deleteConfirmed(shift.id)"
-          />
-
-          <CustomTextButton
-              label="no"
-              color="white"
-              background=""
-              @click="deleteConfirmationVisibleToggle(shift.id)"
-          />
-        </div>
-      </div>
-
-      <div
-          v-else
-          class="shift-details"
-          @click.self="shift.isEditingNote = false"
-      >
-
-        <div class="shift-details-data">
-          <ShiftDetailContainer
-              :label="'start'"
-              :date="getDate(getLastStartStop(shift, 'start'))"
-              :time="getTime(getLastStartStop(shift, 'start'))"
-              :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'start')}"
-          />
-          <ShiftDetailContainer
-              :label="'stop'"
-              :date="getDate(getLastStartStop(shift, 'stop'))"
-              :time="getTime(getLastStartStop(shift, 'stop'))"
-              :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'stop')}"
-          />
-          <ShiftDetailContainer
-              :label="'work'"
-              :time="formatTime(shift.work)"
-          />
+        <div class="shifts-label">
+          <h2 style="font-weight: 600">{{ date }}</h2>
         </div>
 
-        <div :class="['shift-note-container', {'bottom': !shift.isEditingNote && !shift.note}]">
-          <ShiftNoteContainer
-              v-if="shift.note && !shift.isEditingNote"
-              :label="'note'"
-              :note="shift.note"
-          />
-
-          <form
-              v-if="shift.isEditingNote"
-              @submit.prevent="addNote(shift)"
-              ref="noteForm"
-
-          >
-            <textarea
-              style="border-radius: 5px; width: 95%"
-              v-model="shift.noteContent"
-              id="noteEditor"
-              name="noteEditor"
-              rows="5"
-            />
-          </form>
-
-        </div>
-      </div>
-
-      <TimeCorrector
-       :isActive="shift.isCorrectingTime"
-       :default-start="shift.start"
-       :default-stop="shift.stop"
-       :corrections="shift.time_correction"
-       @newDateTime="rewriteNewDateTime"
-      />
-
-      <div class="shift-details-footer">
-
-        <section
-             v-if="!deleteConfirmationVisible"
-            class="shift-details-footer">
-
-          <CustomTextButton
-            v-if="!shift.isEditingNote && !shift.isEditingNote"
-            :label="!shift.isCorrectingTime ? 'correct' : 'save'"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="handleButtonClick(shift)"
-          />
-
-          <CustomTextButton
-              v-if="shift.isCorrectingTime"
-              label="cancel"
-              :width="80"
-              :padding="2"
-              :margin="2"
-              @click="shift.isCorrectingTime = false"
-          />
-
-        </section>
-
-
-        <section
-            v-if="!deleteConfirmationVisible"
-            class="shift-details-footer">
-
-          <CustomTextButton
-            v-if="shift.note && !shift.isEditingNote && !shift.isCorrectingTime"
-            label="edit"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="toggleShowNoteEditor(shift)"
-          />
-          <CustomTextButton
-            v-else-if="!shift.isEditingNote && !shift.isCorrectingTime"
-            label="add note"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="toggleShowNoteEditor(shift)"
-          />
-
-          <CustomTextButton
-            v-if="shift.isEditingNote"
-            label="save"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="submitForm"
-            style="margin-left: auto"
-          />
-
-          <CustomTextButton
-            v-if="shift.isEditingNote"
-            label="cancel"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="shift.isEditingNote = false"
-          />
-
-        </section>
-
-
-
-        <img
-          v-if="!deleteConfirmationVisible"
-          class="shift-delete"
-          src="@/assets/img/delete.png"
-          alt="delete"
-          @click="deleteConfirmationVisibleToggle(shift.id)"
+        <div
+            v-for="shift in props.shifts"
+            :key="shift.id"
+            class="shift-details-container"
         >
+          <div
+              v-if="deleteConfirmationVisible === shift.id"
+              class="shift-delete-confirm"
+          >
+            <h3>delete shift?</h3>
+            <div class="shift-delete-confirm-buttons">
+              <CustomTextButton
+                  label="yes"
+                  color="white"
+                  background="darkred"
+                  @click="deleteConfirmed(shift.id)"
+              />
 
+              <CustomTextButton
+                  label="no"
+                  color="white"
+                  background=""
+                  @click="deleteConfirmationVisibleToggle(shift.id)"
+              />
+            </div>
+          </div>
+
+          <div
+              v-else
+              class="shift-details"
+              @click.self="shift.isEditingNote = false"
+          >
+
+            <div class="shift-details-data">
+              <ShiftDetailContainer
+                  :label="'start'"
+                  :date="getDate(getLastStartStop(shift, 'start'))"
+                  :time="getTime(getLastStartStop(shift, 'start'))"
+                  :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'start')}"
+              />
+              <ShiftDetailContainer
+                  :label="'stop'"
+                  :date="getDate(getLastStartStop(shift, 'stop'))"
+                  :time="getTime(getLastStartStop(shift, 'stop'))"
+                  :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'stop')}"
+              />
+              <ShiftDetailContainer
+                  :label="'work'"
+                  :time="formatTime(shift.work)"
+              />
+            </div>
+
+            <div :class="['shift-note-container', {'bottom': !shift.isEditingNote && !shift.note}]">
+              <ShiftNoteContainer
+                  v-if="shift.note && !shift.isEditingNote"
+                  :label="'note'"
+                  :note="shift.note"
+              />
+
+              <form
+                  v-if="shift.isEditingNote"
+                  @submit.prevent="addNote(shift)"
+                  ref="noteForm"
+
+              >
+                <textarea
+                  style="border-radius: 5px; width: 95%"
+                  v-model="shift.noteContent"
+                  id="noteEditor"
+                  name="noteEditor"
+                  rows="5"
+                />
+              </form>
+
+            </div>
+          </div>
+
+          <TimeCorrector
+           :isActive="shift.isCorrectingTime"
+           :default-start="shift.start"
+           :default-stop="shift.stop"
+           :corrections="shift.time_correction"
+           @newDateTime="rewriteNewDateTime"
+          />
+
+          <div class="shift-details-footer">
+
+            <section
+                 v-if="!deleteConfirmationVisible"
+                class="shift-details-footer">
+
+              <CustomTextButton
+                v-if="!shift.isEditingNote && !shift.isEditingNote"
+                :label="!shift.isCorrectingTime ? 'correct' : 'save'"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="handleButtonClick(shift)"
+              />
+
+              <CustomTextButton
+                  v-if="shift.isCorrectingTime"
+                  label="cancel"
+                  :width="80"
+                  :padding="2"
+                  :margin="2"
+                  @click="shift.isCorrectingTime = false"
+              />
+
+            </section>
+
+
+            <section
+                v-if="!deleteConfirmationVisible"
+                class="shift-details-footer">
+
+              <CustomTextButton
+                v-if="shift.note && !shift.isEditingNote && !shift.isCorrectingTime"
+                label="edit"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="toggleShowNoteEditor(shift)"
+              />
+              <CustomTextButton
+                v-else-if="!shift.isEditingNote && !shift.isCorrectingTime"
+                label="add note"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="toggleShowNoteEditor(shift)"
+              />
+
+              <CustomTextButton
+                v-if="shift.isEditingNote"
+                label="save"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="submitForm"
+                style="margin-left: auto"
+              />
+
+              <CustomTextButton
+                v-if="shift.isEditingNote"
+                label="cancel"
+                :width="80"
+                :padding="2"
+                :margin="2"
+                @click="shift.isEditingNote = false"
+              />
+
+            </section>
+
+
+
+            <img
+              v-if="!deleteConfirmationVisible"
+              class="shift-delete"
+              src="@/assets/img/delete.png"
+              alt="delete"
+              @click="deleteConfirmationVisibleToggle(shift.id)"
+            >
+
+          </div>
+        </div>
       </div>
-
     </div>
-
   </div>
 </template>
 

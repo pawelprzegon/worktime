@@ -1,11 +1,10 @@
 <script setup>
 
 import {onMounted, ref} from "vue";
-import {startShift, stopShift, getActiveShift, saveShiftNote, deleteShiftFetch} from "@/fetchers.js";
+import {startShift, stopShift, getActiveShift} from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import UserName from "@/components/user/UserName.vue";
 import ShiftTime from "@/components/user/ShiftTime.vue";
-import CustomModal from "@/components/modals/CustomModal.vue";
 import ToggleModal from "@/components/modals/ToggleModal.vue";
 
 
@@ -110,10 +109,9 @@ const closeModal = () => {
         :shift-duration="props.user.shiftDuration"
     />
 
-    <CustomModal
+    <ToggleModal
         v-if="modalVisibility"
-        :modalComponent="ToggleModal"
-        :modalProps="props.user"
+        :user="props.user"
         @closeModal="closeModal"
         @toggleShift="toggleShift"
     />
