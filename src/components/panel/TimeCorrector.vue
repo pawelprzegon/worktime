@@ -73,14 +73,16 @@ watch(() => props.isActive, (newValue, oldValue) => {
                 <ShiftDetailContainer
                   :date="getDate(props.defaultStart)"
                   :time="getTime(props.defaultStart)"
-                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 }]"
+                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 &&
+                   props.corrections.some(correction => correction.corrected === 'start') }]"
                 />
               </td>
               <td>
                 <ShiftDetailContainer
                   :date="getDate(props.defaultStop)"
                   :time="getTime(props.defaultStop)"
-                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 }]"
+                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 &&
+                  props.corrections.some(correction => correction.corrected === 'stop') }]"
                 />
               </td>
             </tr>
@@ -220,6 +222,7 @@ watch(() => props.isActive, (newValue, oldValue) => {
 .picker:hover {
   cursor: pointer;
   background: var(--vt-c-text-light);
+  color: black;
 }
 
 .selected {
