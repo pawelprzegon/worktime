@@ -36,8 +36,21 @@ const props = defineProps({
 }
 
 @media (max-width: 800px) {
-  .shift-note {
+  .shift-note h3 {
     font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .shift-note h3 {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .shift-note h3 {
+    font-size: 9px;
+    font-weight: 100;
   }
 }
 

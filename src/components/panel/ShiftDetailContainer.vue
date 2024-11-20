@@ -66,8 +66,40 @@ const props = defineProps({
     font-size: 10px;
   }
 
+  .shift-detail h4 {
+    font-size: 12px;
+  }
+
+  .shift-detail h3 {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .shift-detail p {
+    font-size: 10px;
+  }
+
+  .shift-detail h4 {
+    font-size: 11px;
+  }
+
   .shift-detail h3 {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .shift-detail p {
+    font-size: 9px;
+  }
+
+  .shift-detail h4 {
+    font-size: 10px;
+  }
+
+  .shift-detail h3 {
+    font-size: 10px;
   }
 }
 

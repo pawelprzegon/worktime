@@ -1,5 +1,5 @@
 <script setup>
-import {defineEmits, computed, ref, onBeforeUnmount, inject} from 'vue';
+import {defineEmits, computed, ref, inject} from 'vue';
 import {formatTime, getDate, getTime} from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
@@ -24,6 +24,13 @@ const props = defineProps({
     default: () => []
   }
 })
+
+const resetModalState = () => {
+  selectedNewDateTime.value = '';
+  selectedStartOrStop.value = '';
+  console.log(selectedStartOrStop.value)
+  console.log(selectedNewDateTime.value)
+};
 
 props.shifts.forEach(shift => {
   shift.isCorrectingTime = false;
@@ -79,17 +86,27 @@ const submitForm = () => {
   form.requestSubmit();
 };
 
-const rewriteNewDateTime = (startOrStop, selectedDateTime) => {
-  selectedStartOrStop.value = startOrStop
+const rewriteNewDateTime = (selectedDateTime) => {
   selectedNewDateTime.value = selectedDateTime
 }
 
+const rewriteNewStartStop = (startOrStop) => {
+  selectedStartOrStop.value = startOrStop
+}
+
 const saveCorrection = async (shift) => {
-  const response = await shiftCorrection(shift.id, shift.user_id, selectedNewDateTime.value, selectedStartOrStop.value)
-  alert.show(response.status, response.message)
-
-  emit('refreshModal')
-
+  if (selectedNewDateTime.value && selectedStartOrStop.value) {
+    const response = await shiftCorrection(shift.id, shift.user_id, selectedNewDateTime.value, selectedStartOrStop.value)
+    alert.show(response.status, response.message)
+    emit('refreshModal')
+    return
+  }
+  if (!selectedStartOrStop.value) {
+    alert.show('error', 'Select start or stop')
+  }
+  else {
+    alert.show('error', 'Select date and hour')
+  }
 }
 
 const getLastStartStop = (shift, type) => {
@@ -110,15 +127,9 @@ const getLastStartStop = (shift, type) => {
 }
 
 const closeModal = () => {
+  resetModalState()
   emit('closeModal')
 }
-
-onBeforeUnmount(() => {
-  props.shifts.forEach(shift => {
-    shift.isEditingNote = false
-  })
-})
-
 
 
 </script>
@@ -217,6 +228,7 @@ onBeforeUnmount(() => {
            :default-start="shift.start"
            :default-stop="shift.stop"
            :corrections="shift.time_correction"
+           @newStartStop="rewriteNewStartStop"
            @newDateTime="rewriteNewDateTime"
           />
 
@@ -459,6 +471,41 @@ textarea:focus {
   .shift-delete {
     height: 20px;
   }
+
+
+  .has-corrections::after {
+    top: 1px;
+    right: 5px;
+    width: 4px;
+    height: 4px;
+  }
+
+}
+
+@media (max-width: 600px) {
+  #noteEditor {
+    max-width: 300px;
+  }
+
+  .shifts-container {
+    padding: 15px;
+  }
+
+  .shift-delete {
+    height: 20px;
+  }
+
+  .shift-details {
+    grid-template-columns: 50% 50%;
+  }
+
+  .has-corrections::after {
+    top: 1px;
+    right: 5px;
+    width: 4px;
+    height: 4px;
+  }
+
 }
 
 

@@ -137,6 +137,9 @@ const refreshShifts = async () => {
 const removeShift = async(shiftId) => {
   selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
   const response = await deleteShiftFetch(shiftId)
+  if (response) {
+    alert.show(response.status, response.message)
+  }
   await refreshShifts()
   alert.show(response.status, response.message)
 };
@@ -149,8 +152,6 @@ const refreshModal = async () => {
     format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
   modalKey.value++;
-  console.log(selectedDay);
-  console.log('refreshModal - finished');
 };
 
 onMounted(async () => {

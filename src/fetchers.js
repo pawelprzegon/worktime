@@ -185,7 +185,7 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
         'shift_id': shift_id,
         'note': note
     })
-    console.log(body)
+
     const data = {
         method: 'POST',
         headers: {
@@ -197,13 +197,7 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
     try {
         const response = await fetch(url + '/shift/note', data)
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || "Couldn't add note");
-        }
-
-        return result
+        return await response.json();
 
     } catch (error) {
          console.error('Error:', error.message);
@@ -227,13 +221,7 @@ export const deleteShiftFetch = async (shift_id) => {
     try {
         const response = await fetch(url + '/shift/delete', data)
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || "Couldn't add note");
-        }
-
-        return result
+        return await response.json();
 
     } catch (error) {
          console.error('Error:', error.message);
@@ -250,7 +238,6 @@ export const shiftCorrection = async (shiftId, userId, new_date, startOrStop, co
         'comment': comment
     });
 
-    console.log(body)
     const data = {
         method: 'POST',
         headers: {
@@ -259,13 +246,16 @@ export const shiftCorrection = async (shiftId, userId, new_date, startOrStop, co
         },
         body: body
     }
-    const response = await fetch(url + '/shift/correction', data)
 
-    if (!response.ok) {
-      throw new Error('Shift stop correction failed')
+    try {
+        const response = await fetch(url + '/shift/correction', data)
+
+        return await response.json();
+
+    } catch (error) {
+         console.error('Error:', error.message);
+        throw error;
     }
-
-    return await response.json()
 }
 
 export const getMe = async () => {

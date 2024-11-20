@@ -24,17 +24,18 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['newDateTime'])
+const emit = defineEmits(['newDateTime', 'newStartStop'])
 
 const pickedStartStop = ref(null);
 const datePickerKey = ref(0)
 
 const select = (selectedToCorrect) => {
   pickedStartStop.value = selectedToCorrect;
+  emit('newStartStop', selectedToCorrect)
 }
 
 const newDateTime = (selectedDateTime) => {
-  emit('newDateTime', pickedStartStop.value, selectedDateTime)
+  emit('newDateTime', selectedDateTime)
 }
 
 const checkIsLast = (correction) => {
@@ -44,9 +45,6 @@ const checkIsLast = (correction) => {
 };
 
 watch(() => props.isActive, (newValue, oldValue) => {
-  if (newValue) {
-    pickedStartStop.value = { start: props.defaultStart, stop: props.defaultStop };
-  }
   datePickerKey.value++;
 });
 
