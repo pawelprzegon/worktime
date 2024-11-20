@@ -118,31 +118,29 @@ watch(() => props.isActive, (newValue, oldValue) => {
     </div>
 
     <div>
-      <section class="add-correction">
-        <h4 style="text-align: left; font-size: 13px">Add new correction:</h4>
-        <div class="picker-group">
-          <p
-            id="start"
-            class="picker"
-            @click="select('start')"
-            :class="{ selected: pickedStartStop === 'start' }"
-          >
-            start time
-          </p>
-          <p
-            id="stop"
-            class="picker"
-            @click="select('stop')"
-            :class="{ selected: pickedStartStop === 'stop' }"
-          >
-            stop time
-          </p>
-        </div>
-        <DatePicker
-            @newDatetime="newDateTime"
-            :key="datePickerKey"
-        />
-      </section>
+      <h4 style="text-align: left;">Add correction:</h4>
+      <div class="picker-group">
+        <p
+          id="start"
+          class="picker"
+          @click="select('start')"
+          :class="{ selected: pickedStartStop === 'start' }"
+        >
+          start time
+        </p>
+        <p
+          id="stop"
+          class="picker"
+          @click="select('stop')"
+          :class="{ selected: pickedStartStop === 'stop' }"
+        >
+          stop time
+        </p>
+      </div>
+      <DatePicker
+          @newDatetime="newDateTime"
+          :key="datePickerKey"
+      />
     </div>
 
   </div>
