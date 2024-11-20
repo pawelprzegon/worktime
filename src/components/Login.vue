@@ -28,7 +28,6 @@ const handleLogin = async () => {
 
     isAuthenticated.status = true;
     isAuthenticated.role = decodedToken.role
-    console.log(isAuthenticated)
     if (isAuthenticated.status) {
       setUserId(decodedToken.id)
     }

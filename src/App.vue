@@ -7,7 +7,6 @@
 
   const isAuthenticated = inject('isAuthenticated')
 
-  console.log(isAuthenticated)
   const router = useRouter()
   const userName = ref('');
   const today = ref(new Date)

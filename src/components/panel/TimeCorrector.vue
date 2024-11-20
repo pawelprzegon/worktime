@@ -219,6 +219,11 @@ watch(() => props.isActive, (newValue, oldValue) => {
   font-size: 10px;
 }
 
+.picker:hover {
+  cursor: pointer;
+  background: var(--vt-c-text-light);
+}
+
 .selected {
   background: var(--vt-c-text-light);
   color: #0f0f0f;

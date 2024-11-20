@@ -30,7 +30,6 @@ const getMeData = async () => {
       avatar.value = response.avatar
 
     } catch (error) {
-      console.log(error)
       alert.show('error', error)
     }
   }

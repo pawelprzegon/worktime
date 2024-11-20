@@ -28,8 +28,6 @@ const props = defineProps({
 const resetModalState = () => {
   selectedNewDateTime.value = '';
   selectedStartOrStop.value = '';
-  console.log(selectedStartOrStop.value)
-  console.log(selectedNewDateTime.value)
 };
 
 props.shifts.forEach(shift => {
