@@ -1,5 +1,5 @@
 <script setup>
-import {defineEmits, computed, ref, onBeforeUnmount, inject} from 'vue';
+import {computed, ref, onBeforeUnmount, inject} from 'vue';
 import {formatTime, getDate, getTime} from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
@@ -9,6 +9,7 @@ import Alert from "@/components/utils/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
 import TimeCorrector from "@/components/panel/TimeCorrector.vue";
 import '@/assets/modal.css';
+import OvertimeConsumer from "@/components/panel/OvertimeConsumer.vue";
 
 
 const alert = inject('alert');
@@ -119,8 +120,6 @@ onBeforeUnmount(() => {
   })
 })
 
-
-
 </script>
 
 <template>
@@ -131,8 +130,13 @@ onBeforeUnmount(() => {
           v-if="props.shifts.length > 0"
           class="shifts-container"
       >
-        <div class="shifts-label">
-          <h2 style="font-weight: 600">{{ date }}</h2>
+        <div class="shifts-header">
+          <div class="shifts-label">
+            <h2 style="font-weight: 600">{{ date }}</h2>
+          </div>
+          <OvertimeConsumer
+              :limit="3"
+          />
         </div>
 
         <div
@@ -371,6 +375,13 @@ onBeforeUnmount(() => {
   align-items: center;
   background: var(--color-background-soft);
   border-radius: 0 0 5px 5px;
+}
+
+.shifts-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
 }
 
 .shifts-label {
