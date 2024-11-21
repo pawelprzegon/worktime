@@ -3,6 +3,7 @@ import {ref, watch} from 'vue'
 import { getDate, getTime } from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
 import DatePicker from "@/components/DatePicker.vue";
+import '@/assets/modal.css'
 
 const props = defineProps({
   isActive: {
@@ -57,7 +58,6 @@ watch(() => props.isActive, (newValue, oldValue) => {
 
     <div>
       <h4 style="text-align: left">Correction history:</h4>
-
       <div class="defaults">
 
         <table class="corrections-table">
@@ -183,17 +183,6 @@ watch(() => props.isActive, (newValue, oldValue) => {
 .collapse-leave-from {
   height: auto;
   overflow: hidden;
-}
-
-.dropdown-content {
-  border: solid 1px var(--vt-c-black-light);
-  padding: 10px;
-  border-radius: 3px;
-  background: var(--color-background-mute);
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 10px;
-  background: var(--vt-c-black-light);
 }
 
 .corrections-section {

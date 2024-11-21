@@ -13,6 +13,11 @@ export function formatTime(seconds) {
   ].join(':');
 }
 
+export function getHoursAsNumber(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  return hours.toString().padStart(2, '0')
+}
+
 export function getTime(timestamp) {
   const date = new Date(timestamp);
 

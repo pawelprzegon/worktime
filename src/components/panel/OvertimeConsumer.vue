@@ -1,41 +1,76 @@
 <script setup>
 import {ref} from 'vue'
+import {getHoursAsNumber} from "@/utils.js";
+import '@/assets/modal.css'
 
 const props = defineProps({
   limit: {
     type: Number,
     required: false,
     default: 0
-  }
+  },
+  shift: Object
 })
+
+const emit = defineEmits(['takenHours'])
+
+const availableHours = ref(getHoursAsNumber(props.limit))
 const counter = ref(0)
 
 const increment = () => {
-  counter.value += 1
+  if (counter.value < getHoursAsNumber(props.limit)){
+    counter.value += 1
+    availableHours.value--;
+    emit('takenHours', counter.value)
+  }
+
 }
 
 const decrement = () => {
   if (counter.value > 0) {
     counter.value -= 1
+    availableHours.value++;
+    emit('takenHours', counter.value)
   }
 }
+
 
 </script>
 
 <template>
-  <div class="counter">
-    <div class="counter-label">
-      <p>Available Overtime to take:</p>
-      <p>{{props.limit}}</p>
+  <div class="dropdown-content">
+    <div>
+      <h4 style="text-align: left">Overtime hours:</h4>
+      <div class="counter">
+        <div class="counter-label">
+          <p>hours:</p>
+          <p>{{availableHours}}</p>
+        </div>
+        <div class="counter-engine">
+          <img src="@/assets/img/decrease.png" alt="decrease" @click="decrement" />
+          <p>{{ counter }}</p>
+          <img src="@/assets/img/increase.png" alt="increase" @click="increment" />
+        </div>
+      </div>
+
+
     </div>
 
-    <img src="@/assets/img/decrease.png" alt="decrease" @click="decrement" />
-    <span>{{ counter }}</span>
-    <img src="@/assets/img/increase.png" alt="increase" @click="increment" />
+
   </div>
+
 </template>
 
 <style scoped>
+
+.counter {
+  display: inline-grid;
+  width: 100%;
+  grid-template-columns: 2fr 2fr 1fr;
+  margin-left: auto;
+  background: var(--vt-c-black-light);
+}
+
 .counter-label {
   display: flex;
   flex-direction: row;
@@ -43,7 +78,8 @@ const decrement = () => {
 }
 
 .counter-label p {
-  margin: 2px
+  margin: 0 2px;
+  padding: 0;
 }
 
 .counter-label p:nth-child(2) {
@@ -52,10 +88,16 @@ const decrement = () => {
   color: var(--color-text-overtime)
 }
 
-.counter {
-  display: flex;
+.counter-engine {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  justify-items: center;
   align-items: center;
-  gap: 10px;
+}
+
+.counter-engine p {
+  font-size: 20px;
+  font-weight: 700;
 }
 
 img {

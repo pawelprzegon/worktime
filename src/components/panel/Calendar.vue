@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, defineEmits, inject} from 'vue';
+import {ref, onMounted, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
@@ -149,8 +149,6 @@ const refreshModal = async () => {
     format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
   modalKey.value++;
-  console.log(selectedDay);
-  console.log('refreshModal - finished');
 };
 
 onMounted(async () => {
@@ -208,6 +206,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
         :key="modalKey"
         :shifts="selectedDay?.shifts.list"
+        :calculatedOvertime="calculatedOvertimeTime"
         @closeModal="closeModal"
         @removeShift="removeShift"
         @refreshModal="refreshModal"

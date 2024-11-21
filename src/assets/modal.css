@@ -18,6 +18,16 @@
   margin: auto;
 }
 
+.dropdown-content {
+  padding: 10px;
+  border-radius: 3px;
+  background: var(--color-background-mute);
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 10px;
+  background: var(--vt-c-black-light);
+}
+
 @media (max-width: 1300px) {
   .modal-content {
     min-width: 60%;
