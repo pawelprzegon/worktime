@@ -1,23 +1,15 @@
 <script setup>
-import {computed, ref, onBeforeUnmount, inject} from 'vue';
-import {formatTime, getDate, getTime} from "@/utils.js";
-import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
-import ShiftNoteContainer from "@/components/panel/ShiftNoteContainer.vue";
+import {computed, ref, onBeforeUnmount} from 'vue';
 import CustomTextButton from "@/components/utils/CustomTextButton.vue";
-import {saveShiftNote, shiftCorrection} from "@/fetchers.js";
 import Alert from "@/components/utils/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
-import TimeCorrector from "@/components/panel/TimeCorrector.vue";
+import CorrectorContainer from "@/components/panel/details/CorrectorContainer.vue";
 import '@/assets/modal.css';
-import OvertimeConsumer from "@/components/panel/OvertimeConsumer.vue";
-import {hoursTaken} from "@/fetchers.js";
+import OvertimeConsumer from "@/components/panel/details/OvertimeContainer.vue";
+import MainContainer from "@/components/panel/details/mainContainer.vue";
 
-
-const alert = inject('alert');
 const deleteConfirmationVisible = ref(false)
-const selectedNewDateTime = ref('')
-const selectedStartOrStop = ref('')
-const takenOverTimeHours = ref(0)
+
 
 const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
 
@@ -36,6 +28,9 @@ props.shifts.forEach(shift => {
   shift.isCorrectingTime = false;
   shift.isEditingNote = false;
   shift.isOverTime = false;
+  shift.isMainSelected = true;
+  shift.isCorrectSelected = false;
+  shift.isOvertimeSelected = false;
   shift.noteContent = shift.note || '';
 });
 
@@ -46,13 +41,25 @@ const date = computed(() => {
   return '';
 });
 
-const toggleShowNoteEditor = (shift) => {
-  shift.isEditingNote = !shift.isEditingNote
+const toggleSelectedCard = (shift, selected) => {
+  shift.isMainSelected = false;
+  shift.isOvertimeSelected = false;
+  shift.isCorrectSelected = false;
+
+  switch (selected) {
+    case 'main':
+      shift.isMainSelected = true;
+      break;
+    case 'correct':
+      shift.isCorrectSelected = true;
+      break;
+    case 'overtime':
+      shift.isOvertimeSelected = true;
+      break;
+  }
 }
 
-const toggleShowTimeCorrector = (shift) => {
-  shift.isCorrectingTime = !shift.isCorrectingTime
-}
+
 
 const handleButtonClick = (shift) => {
   if (!shift.isCorrectingTime) {
@@ -63,78 +70,19 @@ const handleButtonClick = (shift) => {
   }
 };
 
-const takenHours = (hours) => {
-  takenOverTimeHours.value = hours
-}
-
-const saveTakenHours = async (shift) => {
-  const response = await hoursTaken(shift.user_id, shift.id,  takenOverTimeHours.value)
-  if (response) {
-    emit('refreshModal');
-    alert.show(response.status, response.message)
-    if (response.ok){
-      shift.isOverTime = false;
-    }
-  }
-}
-
-const toggleOvertime = (shift) => {
-  shift.isOverTime = !shift.isOverTime
-}
-
-const addNote = async (shift) => {
-  const response = await saveShiftNote(shift.user_id, shift.id, shift.noteContent)
-
-  if (response) {
-    emit('refreshModal');
-    alert.show(response.status, response.message)
-    if (response.ok) {
-      shift.isEditingNote = false;
-    }
-  }
-};
-
 const deleteConfirmationVisibleToggle = (shiftId) => {
   deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? null : shiftId;
+}
+
+const refreshModal = () => {
+  emit('refreshModal')
 }
 
 const deleteConfirmed = (shiftId) => {
   emit('removeShift', shiftId)
 }
 
-const submitForm = () => {
-  const form = document.querySelector('form');
-  form.requestSubmit();
-};
 
-const rewriteNewDateTime = (startOrStop, selectedDateTime) => {
-  selectedStartOrStop.value = startOrStop
-  selectedNewDateTime.value = selectedDateTime
-}
-
-const saveCorrection = async (shift) => {
-  const response = await shiftCorrection(shift.user_id, shift.id, selectedNewDateTime.value, selectedStartOrStop.value)
-  alert.show(response.status, response.message)
-  emit('refreshModal')
-
-}
-
-const getLastStartStop = (shift, type) => {
-  // sprawdzanie czy są jakieś korekty i jeśli tak to nadpisanie nimi start i stop
-  if (shift.time_correction.length > 0) {
-    const filtered = shift.time_correction.filter(c => c.corrected === type);
-    if (filtered.length > 0){
-      return filtered[filtered.length -1]['date']
-    }
-
-  }
-  switch (type) {
-    case 'start':
-      return shift.start
-    case 'stop':
-      return shift.stop
-  }
-}
 
 const closeModal = () => {
   emit('closeModal')
@@ -165,6 +113,10 @@ onBeforeUnmount(() => {
             :key="shift.id"
             class="shift-details-container"
         >
+          <section id="default"></section>
+          <section id="correct-time"></section>
+          <section id="consume-overtime"></section>
+
           <div
               v-if="deleteConfirmationVisible === shift.id"
               class="shift-delete-confirm"
@@ -189,194 +141,44 @@ onBeforeUnmount(() => {
 
           <div
               v-else
-
               @click.self="shift.isEditingNote = false"
           >
-            <div class="shift-details">
 
-              <div class="shift-details-data">
-                <ShiftDetailContainer
-                    :label="'start'"
-                    :date="getDate(getLastStartStop(shift, 'start'))"
-                    :time="getTime(getLastStartStop(shift, 'start'))"
-                    :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'start')}"
-                />
-                <ShiftDetailContainer
-                    :label="'stop'"
-                    :date="getDate(getLastStartStop(shift, 'stop'))"
-                    :time="getTime(getLastStartStop(shift, 'stop'))"
-                    :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'stop')}"
-                />
-                <ShiftDetailContainer
-                    :label="'work'"
-                    :time="formatTime(shift.work)"
-                />
-              </div>
-
-              <div :class="['shift-note-container', {'bottom': !shift.isEditingNote && !shift.note}]">
-                <ShiftNoteContainer
-                    v-if="shift.note && !shift.isEditingNote"
-                    :label="'note'"
-                    :note="shift.note"
-                />
-
-                <form
-                    v-if="shift.isEditingNote"
-                    @submit.prevent="addNote(shift)"
-                    ref="noteForm"
-
-                >
-                  <textarea
-                    style="border-radius: 5px; width: 95%"
-                    v-model="shift.noteContent"
-                    id="noteEditor"
-                    name="noteEditor"
-                    rows="5"
-                  />
-                </form>
-
-              </div>
+            <div class="shift-details-footer">
+              <p :class="['main-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
+              <p :class="['correct-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
+              <p :class="['overtime-button', { selected: shift.isOvertimeSelected }]" @click="toggleSelectedCard(shift, 'overtime')">overtime</p>
             </div>
 
-          </div>
-
-
-          <TimeCorrector
-           :isActive="shift.isCorrectingTime"
-           :default-start="shift.start"
-           :default-stop="shift.stop"
-           :corrections="shift.time_correction"
-           @newDateTime="rewriteNewDateTime"
-          />
-          <OvertimeConsumer
-              v-if="shift.isOverTime"
-              :limit="props.calculatedOvertime"
+            <MainContainer
+              v-if="shift.isMainSelected"
               :shift="shift"
-              @takenHours="takenHours"
+              @refreshModal="refreshModal"
             />
-          <div class="shift-details-footer">
 
-            <section
-                v-if="!deleteConfirmationVisible"
-                class="shift-details-footer"
-                id="over-time"
-            >
-              <CustomTextButton
-                v-if="!shift.isEditingNote && !shift.isCorrectingTime && !shift.isOverTime"
-                :label="'over time'"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="toggleOvertime(shift)"
-              />
-
-              <CustomTextButton
-                  v-if="shift.isOverTime"
-                  label="save"
-                  :width="80"
-                  :padding="2"
-                  :margin="2"
-                  @click="saveTakenHours(shift)"
-              />
-
-              <CustomTextButton
-                  v-if="shift.isOverTime"
-                  label="cancel"
-                  :width="80"
-                  :padding="2"
-                  :margin="2"
-                  @click="shift.isOverTime = false"
-              />
-
-            </section>
-
-            <section
-                v-if="!deleteConfirmationVisible"
-                class="shift-details-footer"
-                id="correct"
-            >
-              <CustomTextButton
-                v-if="!shift.isEditingNote && !shift.isCorrectingTime && !shift.isOverTime"
-                :label="'correct'"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="handleButtonClick(shift)"
-              />
-
-              <CustomTextButton
-                v-if="!shift.isEditingNote && shift.isCorrectingTime && selectedNewDateTime"
-                :label="'save'"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="handleButtonClick(shift)"
-              />
-
-              <CustomTextButton
-                  v-if="shift.isCorrectingTime"
-                  label="cancel"
-                  :width="80"
-                  :padding="2"
-                  :margin="2"
-                  @click="shift.isCorrectingTime = false"
-              />
-
-            </section>
-
-            <section
-                v-if="!deleteConfirmationVisible"
-                class="shift-details-footer"
-                id="note"
-            >
-
-              <CustomTextButton
-                v-if="shift.note && !shift.isEditingNote && !shift.isCorrectingTime && !shift.isOverTime"
-                label="edit"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="toggleShowNoteEditor(shift)"
-              />
-              <CustomTextButton
-                v-else-if="!shift.isEditingNote && !shift.isCorrectingTime && !shift.isOverTime"
-                label="add note"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="toggleShowNoteEditor(shift)"
-              />
-
-              <CustomTextButton
-                v-if="shift.isEditingNote"
-                label="save"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="submitForm"
-                style="margin-left: auto"
-              />
-
-              <CustomTextButton
-                v-if="shift.isEditingNote"
-                label="cancel"
-                :width="80"
-                :padding="2"
-                :margin="2"
-                @click="shift.isEditingNote = false"
-              />
-
-            </section>
-
-            <img
-            v-if="!deleteConfirmationVisible"
-            class="shift-delete"
-            src="@/assets/img/delete.png"
-            alt="delete"
-            @click="deleteConfirmationVisibleToggle(shift.id)"
-          >
+            <CorrectorContainer
+              v-if="shift.isCorrectSelected"
+              :shift="shift"
+              @refreshModal="refreshModal"
+            />
+            <OvertimeConsumer
+                v-if="shift.isOvertimeSelected"
+                :limit="props.calculatedOvertime"
+                :shift="shift"
+                @refreshModal="refreshModal"
+            />
 
           </div>
+
+<!--            <img-->
+<!--            v-if="!deleteConfirmationVisible"-->
+<!--            class="shift-delete"-->
+<!--            src="@/assets/img/delete.png"-->
+<!--            alt="delete"-->
+<!--            @click="deleteConfirmationVisibleToggle(shift.id)"-->
+<!--          >-->
+
+
         </div>
       </div>
     </div>
@@ -422,79 +224,9 @@ onBeforeUnmount(() => {
   align-items: center;
 }
 
-.shift-details {
-  display: grid;
-  grid-template-columns: 40% 60% ;
-  padding: 5px;
-  font-size: 13px;
-  height: fit-content;
-  border-radius: 5px;
-  background: var(--color-background-mute);
-}
-
-.shift-details-footer {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: center;
-  background: var(--color-background-soft);
-  border-radius: 0 0 5px 5px;
-}
-
-.shifts-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-}
-
 .shifts-label {
   display: block;
   text-align: left;
-}
-
-.shift-details-data {
-  display: grid;
-  grid-auto-rows: auto;
-  height: fit-content;
-  min-width: 100px;
-}
-
-.shift-note-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end
-}
-
-.bottom {
-  justify-content: end !important;
-}
-
-form {
-  width: 100%;
-}
-
-textarea {
-  background-color: var(--color-background-mute);
-  color: #fff;
-  border: 1px solid #444;
-  padding: 10px;
-  font-size: 14px;
-  font-family: Poppins, sans-serif;
-  border-radius: 5px;
-  width: 95%;
-  height: 85%;
-  resize: none;
-}
-
-textarea:focus {
-  outline: none;
-  border-color: #777;
-}
-
-#noteEditor {
-  max-width: 500px;
 }
 
 .shift-delete {
@@ -507,25 +239,9 @@ textarea:focus {
   filter: invert(100%)
 }
 
-.has-corrections {
-  position: relative;
-}
 
-.has-corrections::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  right: 10px;
-  width: 5px;
-  height: 5px;
-  background-color: #c41313;
-  border-radius: 50%;
-}
 
 @media (max-width: 800px) {
-  #noteEditor {
-    max-width: 300px;
-  }
 
   .shifts-container {
     padding: 15px;
@@ -536,5 +252,15 @@ textarea:focus {
   }
 }
 
+.main-button,
+.correct-button,
+.overtime-button {
+  padding: 10px;
+}
+
+.selected {
+  background: var(--color-background-light);
+  border-radius: 5px 5px 0 0;
+}
 
 </style>

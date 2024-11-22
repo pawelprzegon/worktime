@@ -1,7 +1,9 @@
 <script setup>
-import {ref} from 'vue'
+import {inject, ref} from 'vue'
 import {getHoursAsNumber} from "@/utils.js";
 import '@/assets/modal.css'
+import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+import {hoursTaken} from "@/fetchers.js";
 
 const props = defineProps({
   limit: {
@@ -12,8 +14,8 @@ const props = defineProps({
   shift: Object
 })
 
-const emit = defineEmits(['takenHours'])
-
+const emit = defineEmits(['takenHours', 'refreshModal'])
+const alert = inject('alert');
 const availableHours = ref(getHoursAsNumber(props.limit))
 const counter = ref(0)
 
@@ -34,6 +36,16 @@ const decrement = () => {
   }
 }
 
+const saveTakenHours = async (shift) => {
+  const response = await hoursTaken(shift.user_id, shift.id,  counter.value)
+  if (response) {
+    emit('refreshModal');
+    alert.show(response.status, response.message)
+    if (response.ok){
+      shift.isOverTime = false;
+    }
+  }
+}
 
 </script>
 
@@ -47,16 +59,37 @@ const decrement = () => {
           <p>{{availableHours}}</p>
         </div>
         <div class="counter-engine">
-          <img src="@/assets/img/decrease.png" alt="decrease" @click="decrement" />
+          <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement" />
           <p>{{ counter }}</p>
-          <img src="@/assets/img/increase.png" alt="increase" @click="increment" />
+          <img src="../../../assets/img/increase.png" alt="increase" @click="increment" />
         </div>
       </div>
 
 
     </div>
 
+    <div
+      class="shift-details-footer"
+      id="over-time"
+    >
 
+      <CustomTextButton
+          label="save"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="saveTakenHours(shift)"
+      />
+
+      <CustomTextButton
+          label="cancel"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="shift.isOverTime = false"
+      />
+
+    </div>
   </div>
 
 </template>

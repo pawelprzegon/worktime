@@ -188,7 +188,7 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
         'shift_id': shift_id,
         'note': note
     })
-    console.log(body)
+
     const data = {
         method: 'POST',
         headers: {

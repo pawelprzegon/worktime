@@ -1,60 +1,52 @@
 <script setup>
-import {ref, watch} from 'vue'
+import {inject, ref, watch} from 'vue'
 import { getDate, getTime } from "@/utils.js";
-import ShiftDetailContainer from "@/components/panel/ShiftDetailContainer.vue";
+import ShiftDetailContainer from "@/components/panel/details/ShiftDetailContainer.vue";
 import DatePicker from "@/components/DatePicker.vue";
 import '@/assets/modal.css'
+import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+import {shiftCorrection} from "@/fetchers.js";
+import Alert from "@/components/utils/Alert.vue";
 
 const props = defineProps({
-  isActive: {
-    type: Boolean,
-    default: false,
-    required: true
-  },
-  defaultStart: {
-    type: String,
-    required: true
-  },
-  defaultStop: {
-    type: String,
-    required: true
-  },
-  corrections: {
-    type: Array,
-    default: () => []
-  }
+  shift: Object,
 })
 
-const emit = defineEmits(['newDateTime'])
-
+const emit = defineEmits(['newDateTime', 'refreshModal'])
+const alert = inject('alert');
 const pickedStartStop = ref(null);
 const datePickerKey = ref(0)
+const selectedNewDateTime = ref('')
 
 const select = (selectedToCorrect) => {
   pickedStartStop.value = selectedToCorrect;
 }
 
 const newDateTime = (selectedDateTime) => {
-  emit('newDateTime', pickedStartStop.value, selectedDateTime)
+  selectedNewDateTime.value = selectedDateTime
 }
 
 const checkIsLast = (correction) => {
-  const filtered = props.corrections.filter(c => c.corrected === correction.corrected);
+  const filtered = props.shift.time_correction.filter(c => c.corrected === correction.corrected);
   const lastFiltered = filtered[filtered.length -1]
   return correction === lastFiltered
 };
 
-watch(() => props.isActive, (newValue, oldValue) => {
-  if (newValue) {
-    pickedStartStop.value = { start: props.defaultStart, stop: props.defaultStop };
-  }
-  datePickerKey.value++;
-});
+const checkIsAny = (corrected) => {
+  const filtered = props.shift.time_correction.filter(c => c.corrected === corrected);
+  return filtered.length > 0;
+}
+
+const saveCorrection = async () => {
+  const response = await shiftCorrection(props.shift.user_id, props.shift.id, selectedNewDateTime.value, pickedStartStop.value)
+  alert.show(response.status, response.message)
+  emit('refreshModal')
+}
 
 </script>
 
 <template>
-  <div v-show="props.isActive" class="dropdown-content">
+  <div class="dropdown-content">
 
     <div>
       <h4 style="text-align: left">Correction history:</h4>
@@ -73,20 +65,23 @@ watch(() => props.isActive, (newValue, oldValue) => {
               <td>default</td>
               <td>
                 <ShiftDetailContainer
-                  :date="getDate(props.defaultStart)"
-                  :time="getTime(props.defaultStart)"
-                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 }]"
+                  :date="getDate(props.shift.start)"
+                  :time="getTime(props.shift.start)"
+                  :class="['corrections-section',
+                  { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('start') }]"
                 />
               </td>
               <td>
                 <ShiftDetailContainer
-                  :date="getDate(props.defaultStop)"
-                  :time="getTime(props.defaultStop)"
-                  :class="['corrections-section', { 'shift-time-inactive': props.corrections.length > 0 }]"
+                  :date="getDate(props.shift.stop)"
+                  :time="getTime(props.shift.stop)"
+                  :class="['corrections-section',
+                  { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('stop')}]"
                 />
               </td>
             </tr>
-            <tr v-for="(correction, index) in props.corrections" :key="index">
+            <tr v-for="(correction, index) in props.shift.time_correction" :key="index">
+
               <td
                   class="correction-index"
               >
@@ -97,7 +92,7 @@ watch(() => props.isActive, (newValue, oldValue) => {
               </td>
               <td>
                 <ShiftDetailContainer
-                  v-show="correction.corrected === 'start'"
+                  v-if="correction.corrected === 'start'"
                   :date="getDate(correction.date)"
                   :time="getTime(correction.date)"
                   :class="['corrections-section', { 'shift-time-inactive': !checkIsLast(correction)}]"
@@ -119,7 +114,7 @@ watch(() => props.isActive, (newValue, oldValue) => {
 
     </div>
 
-    <div>
+    <div class="calendar-section">
       <section class="add-correction">
         <h4 style="text-align: left; font-size: 13px">Add new correction:</h4>
         <div class="picker-group">
@@ -141,12 +136,30 @@ watch(() => props.isActive, (newValue, oldValue) => {
           </p>
         </div>
         <DatePicker
-            @newDatetime="newDateTime"
-            :key="datePickerKey"
+          @newDatetime="newDateTime"
+          :key="datePickerKey"
         />
       </section>
-    </div>
 
+      <section class="shift-details-footer" id="correct">
+        <CustomTextButton
+          :label="'save'"
+          :width="80"
+          :padding="2"
+          :margin="2"
+          @click="saveCorrection"
+        />
+
+        <CustomTextButton
+            label="cancel"
+            :width="80"
+            :padding="2"
+            :margin="2"
+            @click="shift.isCorrectingTime = false"
+        />
+
+      </section>
+    </div>
   </div>
 </template>
 
@@ -210,6 +223,12 @@ watch(() => props.isActive, (newValue, oldValue) => {
   font-size: 10px;
 }
 
+.picker:hover {
+  cursor: pointer;
+  background: var(--vt-c-text-light);
+  color: #0f0f0f;
+}
+
 .selected {
   background: var(--vt-c-text-light);
   color: #0f0f0f;
@@ -239,6 +258,13 @@ watch(() => props.isActive, (newValue, oldValue) => {
 .correction-index:hover .tooltip-container {
   visibility: visible;
   opacity: 1;
+}
+
+.calendar-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 </style>
