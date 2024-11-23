@@ -18,17 +18,7 @@
   margin-top: 150px;
 }
 
-.dropdown-content {
-  padding: 10px;
-  border-radius: 3px;
-  background: var(--color-background-mute);
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 10px;
-  background: var(--vt-c-black-light);
-}
-
-.shift-details-footer {
+.shift-details-header {
   display: flex;
   flex-direction: row;
   justify-content: right;
@@ -54,10 +44,5 @@
   .modal-content {
     min-width: 85%;
     max-width: 90%;
-  }
-
-  .dropdown-content {
-    grid-template-columns: none;
-    grid-template-rows: 1fr 1fr;
   }
 }

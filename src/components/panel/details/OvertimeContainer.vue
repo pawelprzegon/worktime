@@ -50,7 +50,7 @@ const saveTakenHours = async (shift) => {
 </script>
 
 <template>
-  <div class="dropdown-content">
+  <div class="overtime-container">
     <div>
       <h4 style="text-align: left">Overtime hours:</h4>
       <div class="counter">
@@ -68,33 +68,40 @@ const saveTakenHours = async (shift) => {
 
     </div>
 
-    <div
-      class="shift-details-footer"
-      id="over-time"
-    >
+    <div class="buttons-container">
 
-      <CustomTextButton
-          label="save"
-          :width="80"
-          :padding="2"
-          :margin="2"
-          @click="saveTakenHours(shift)"
-      />
+      <div
+        class="shift-details-header"
+        id="over-time"
+      >
 
-      <CustomTextButton
-          label="cancel"
-          :width="80"
-          :padding="2"
-          :margin="2"
-          @click="shift.isOverTime = false"
-      />
+        <CustomTextButton
+            label="save"
+            :width="80"
+            :padding="2"
+            :margin="2"
+            @click="saveTakenHours(shift)"
+        />
+
+      </div>
 
     </div>
+
   </div>
 
 </template>
 
 <style scoped>
+
+.overtime-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  background: var(--vt-c-black-light);
+  height: 200px;
+}
 
 .counter {
   display: inline-grid;
@@ -147,5 +154,18 @@ span {
   font-weight: bold;
   width: 40px;
   text-align: center;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+@media (max-width: 600px) {
+  .overtime-container {
+    grid-template-columns: none;
+    grid-template-rows: 1fr 1fr;
+  }
 }
 </style>

@@ -55,9 +55,9 @@ const addNote = async (shift) => {
 </script>
 
 <template>
-  <div class="shift-details-container">
+  <div class="main-container">
 
-    <div class="shift-details">
+    <section class="shift-details">
 
       <div class="shift-details-data">
         <ShiftDetailContainer
@@ -102,9 +102,9 @@ const addNote = async (shift) => {
 
       </div>
 
-    </div>
+    </section>
 
-    <section class="shift-details-footer">
+    <section class="shift-details-header">
       <CustomTextButton
         v-if="!shift.isEditingNote && props.shift.noteContent !== ''"
         label="edit"
@@ -142,19 +142,22 @@ const addNote = async (shift) => {
       />
 
     </section>
+
   </div>
 
 </template>
 
 <style scoped>
 
-.shift-details-container {
-  display: block;
-  padding: 5px;
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
   font-size: 13px;
-  height: fit-content;
   border-radius: 5px 5px 0 5px;
   background: var(--color-background-light);
+  height: 200px;
 }
 
 .shift-details {
@@ -226,6 +229,11 @@ textarea:focus {
 @media (max-width: 800px) {
   #noteEditor {
     max-width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-container {
   }
 }
 

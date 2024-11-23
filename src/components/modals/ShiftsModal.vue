@@ -144,10 +144,10 @@ onBeforeUnmount(() => {
               @click.self="shift.isEditingNote = false"
           >
 
-            <div class="shift-details-footer">
-              <p :class="['main-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
-              <p :class="['correct-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
-              <p :class="['overtime-button', { selected: shift.isOvertimeSelected }]" @click="toggleSelectedCard(shift, 'overtime')">overtime</p>
+            <div class="shift-details-header">
+              <p :class="['card-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
+              <p :class="['card-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
+              <p :class="['card-button', { selected: shift.isOvertimeSelected }]" @click="toggleSelectedCard(shift, 'overtime')">overtime</p>
             </div>
 
             <MainContainer
@@ -197,7 +197,6 @@ onBeforeUnmount(() => {
 }
 
 .shift-details-container {
-  display: grid;
   margin: 0 0 10px 0;
   padding: 5px;
 }
@@ -239,7 +238,21 @@ onBeforeUnmount(() => {
   filter: invert(100%)
 }
 
+.card-button {
+  padding: 10px;
+  color: var(--color-text-basic);
+}
 
+.card-button:hover {
+  cursor: pointer;
+  color: var(--color-text-active)
+}
+
+.selected {
+  background: var(--color-background-light);
+  border-radius: 5px 5px 0 0;
+  color: var(--color-text-active)
+}
 
 @media (max-width: 800px) {
 
@@ -252,15 +265,5 @@ onBeforeUnmount(() => {
   }
 }
 
-.main-button,
-.correct-button,
-.overtime-button {
-  padding: 10px;
-}
-
-.selected {
-  background: var(--color-background-light);
-  border-radius: 5px 5px 0 0;
-}
 
 </style>

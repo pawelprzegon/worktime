@@ -46,9 +46,9 @@ const saveCorrection = async () => {
 </script>
 
 <template>
-  <div class="dropdown-content">
+  <div class="corrector-container">
 
-    <div>
+    <section>
       <h4 style="text-align: left">Correction history:</h4>
       <div class="defaults">
 
@@ -112,9 +112,9 @@ const saveCorrection = async () => {
 
       </div>
 
-    </div>
+    </section>
 
-    <div class="calendar-section">
+    <section class="calendar-section">
       <section class="add-correction">
         <h4 style="text-align: left; font-size: 13px">Add new correction:</h4>
         <div class="picker-group">
@@ -141,7 +141,7 @@ const saveCorrection = async () => {
         />
       </section>
 
-      <section class="shift-details-footer" id="correct">
+      <section class="shift-details-header" id="correct">
         <CustomTextButton
           :label="'save'"
           :width="80"
@@ -150,20 +150,23 @@ const saveCorrection = async () => {
           @click="saveCorrection"
         />
 
-        <CustomTextButton
-            label="cancel"
-            :width="80"
-            :padding="2"
-            :margin="2"
-            @click="shift.isCorrectingTime = false"
-        />
-
       </section>
-    </div>
+    </section>
+
   </div>
 </template>
 
 <style scoped>
+
+.corrector-container {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  background: var(--vt-c-black-light);
+  height: 200px;
+}
 
 .corrections-table {
   width: 100%;
@@ -264,7 +267,16 @@ const saveCorrection = async () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+}
+
+@media (max-width: 600px) {
+  .corrector-container {
+    grid-template-columns: none;
+    grid-template-rows: 1fr 1fr;
+    height: fit-content;
+  }
+
 }
 
 </style>
