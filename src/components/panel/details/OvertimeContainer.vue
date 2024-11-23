@@ -6,12 +6,13 @@ import CustomTextButton from "@/components/utils/CustomTextButton.vue";
 import {hoursTaken} from "@/fetchers.js";
 
 const props = defineProps({
+  shift: Object,
   limit: {
     type: Number,
     required: false,
     default: 0
   },
-  shift: Object
+
 })
 
 const emit = defineEmits(['takenHours', 'refreshModal'])

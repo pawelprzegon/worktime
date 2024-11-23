@@ -73,7 +73,6 @@ const getDates = async () => {
 
   try {
     const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
-
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -95,30 +94,40 @@ const getDates = async () => {
         acc[date] = {
           'list': [],
           'totalWork': 0,
+          'overTimeTaken': 0,
         };
       }
       acc[date].list.push(shift);
       acc[date].totalWork += shift.work;
+      acc[date].overTimeTaken += shift.overtime_taken.hours ? shift.overtime_taken.hours : 0;
 
       return acc;
     }, {});
 
     Object.keys(groupedShifts).forEach(date => {
+
       const totalWork = groupedShifts[date].totalWork;
       const splitOvertime = splitOverTime(totalWork);
+      const overtimeTaken = groupedShifts[date].overTimeTaken
 
       calculatedWorkTime.value += splitOvertime.work;
       calculatedOvertimeTime.value += splitOvertime.overtime;
 
+      if (overtimeTaken) {
+        calculatedOvertimeTime.value -= overtimeTaken * 3600
+      }
+
       groupedShifts[date].regular = splitOvertime.work;
       groupedShifts[date].overtime = splitOvertime.overtime;
+
     });
 
     daysInMonth.value = daysInMonth.value.map(day => {
       const formattedDate = format(day.date, 'yyyy-MM-dd');
+      const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0};
       return {
         ...day,
-        shifts: groupedShifts[formattedDate] || { list: [], regular: 0 }
+        shifts: groupedShift,
       };
     });
 
@@ -187,15 +196,26 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
       >
         <span class="day-header">{{ day.date.getDate() }}</span>
         <div class="shifts-list">
-
           <small
               v-if="day.shifts.list.length > 0"
               class="shift"
-          >{{ formatTime(day.shifts.regular) }}</small>
+              :class="{'has-corrections': ![0, null].includes(day.shifts.overTimeTaken)}"
+          >
+            {{ formatTime(day.shifts.regular) }}
+          </small>
           <small
               v-if="day.shifts.list.length > 0 && day.shifts.overtime !== 0"
               class="shift overtime"
-          >{{ formatTime(day.shifts.overtime) }}</small>
+          >
+            + {{ formatTime(day.shifts.overtime) }}
+          </small>
+
+          <small
+              v-if="day.shifts.overTimeTaken"
+              class="shift overtime"
+          >
+            - {{ formatTime(day.shifts.overTimeTaken * 3600) }}
+          </small>
 
         </div>
       </div>
@@ -274,6 +294,21 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   align-items: flex-end;
 }
 
+.has-corrections {
+  position: relative;
+}
+
+.has-corrections::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-text-overtime);
+  border-radius: 50%;
+}
+
 input[type="number"] {
   width: 60px;
 }
@@ -323,6 +358,10 @@ textarea {
     width: 90px;
     height: 90px;
   }
+  .has-corrections::after {
+    width: 5px;
+    height: 5px;
+  }
 }
 
 @media(max-width: 800px) {
@@ -350,6 +389,11 @@ textarea {
     height: 75px;
     border-radius: 5px;
     padding: 4px;
+  }
+
+  .has-corrections::after {
+    width: 4px;
+    height: 4px;
   }
 }
 

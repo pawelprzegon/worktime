@@ -165,7 +165,6 @@ const saveCorrection = async () => {
   padding: 10px;
   border-radius: 3px;
   background: var(--vt-c-black-light);
-  height: 200px;
 }
 
 .corrections-table {
