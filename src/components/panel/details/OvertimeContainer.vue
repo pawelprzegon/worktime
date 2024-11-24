@@ -17,13 +17,16 @@ const props = defineProps({
 
 const emit = defineEmits(['takenHours', 'refreshModal'])
 const alert = inject('alert');
-const availableHours = ref(getHoursAsNumber(props.limit))
+const hoursPool = ref(getHoursAsNumber(props.limit))
+const overtimeTaken = props.shift.overtime_taken.hours
+const canTakeHours = ((28800 - props.shift.work) / 3600)
+const available = ref(canTakeHours - overtimeTaken)
 const counter = ref(0)
 
 const increment = () => {
   if (counter.value < getHoursAsNumber(props.limit)){
     counter.value += 1
-    availableHours.value--;
+    hoursPool.value--;
     emit('takenHours', counter.value)
   }
 
@@ -32,7 +35,7 @@ const increment = () => {
 const decrement = () => {
   if (counter.value > 0) {
     counter.value -= 1
-    availableHours.value++;
+    hoursPool.value++;
     emit('takenHours', counter.value)
   }
 }
@@ -52,13 +55,26 @@ const saveTakenHours = async (shift) => {
 
 <template>
   <div class="overtime-container">
-    <div>
-      <h4 style="text-align: left">Overtime hours:</h4>
-      <div class="counter">
-        <div class="counter-label">
-          <p>hours:</p>
-          <p>{{availableHours}}</p>
+    <section class="overtime-status">
+      <h2>{{available}}</h2>
+      <div class="overtime-status-possibilities">
+        <div style="display: inline-flex">
+          <h3>max to pick:</h3>
+          <span class="overtime-color">{{canTakeHours}}</span>
         </div>
+
+        <div style="display: inline-flex">
+          <h3>already taken:</h3>
+          <span class="overtime-color">{{canTakeHours}}</span>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="buttons-container">
+
+      <div class="counter-label-container">
+        <h2 class="overtime-color">{{hoursPool}}</h2>
         <div class="counter-engine">
           <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement" />
           <p>{{ counter }}</p>
@@ -66,16 +82,7 @@ const saveTakenHours = async (shift) => {
         </div>
       </div>
 
-
-    </div>
-
-    <div class="buttons-container">
-
-      <div
-        class="shift-details-header"
-        id="over-time"
-      >
-
+      <div class="shift-details-header">
         <CustomTextButton
             label="save"
             :width="80"
@@ -104,10 +111,37 @@ const saveTakenHours = async (shift) => {
   height: 200px;
 }
 
+.overtime-status {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+.overtime-status h2 {
+  font-size: 50px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 5px;
+  color: var(--color-background-mute);
+  background: var(--color-text-overtime);
+  width: 80%;
+}
+
+.overtime-status-possibilities {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto;
+  padding: 30px;
+}
+
+
 .counter {
-  display: inline-grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  grid-template-columns: 2fr 2fr 1fr;
   margin-left: auto;
   background: var(--vt-c-black-light);
 }
@@ -129,6 +163,10 @@ const saveTakenHours = async (shift) => {
   color: var(--color-text-overtime)
 }
 
+.overtime-color {
+  color: var(--color-text-overtime)
+}
+
 .counter-engine {
   display: grid;
   grid-template-columns: repeat(3, 30px);
@@ -139,6 +177,12 @@ const saveTakenHours = async (shift) => {
 .counter-engine p {
   font-size: 20px;
   font-weight: 700;
+}
+
+.counter-label-container,
+.counter-engine {
+  margin: 5px;
+  padding: 5px;
 }
 
 img {
@@ -160,7 +204,19 @@ span {
 .buttons-container {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: space-between;
+}
+
+.counter-label-container h2 {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.counter-label-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 600px) {
