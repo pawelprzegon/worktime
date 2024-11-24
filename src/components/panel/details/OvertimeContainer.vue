@@ -26,8 +26,8 @@ const emit = defineEmits(['takenHours', 'refreshModal'])
 const alert = inject('alert');
 
 const hoursPool = ref(getHoursAsNumber(props.monthOvertimes))
-maxToTake.value = Math.floor((28800 - maxToTake.value) / 3600)
-const available = ref(maxToTake - taken)
+maxToTake.value = Math.floor((28800 - maxToTake.value) / 3600) + 1
+maxToTake.value = maxToTake.value <= 0 ? 0 : maxToTake.value
 const counter = ref(taken)
 
 const increment = () => {
