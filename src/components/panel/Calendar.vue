@@ -1,7 +1,7 @@
 <script setup>
-import {ref, onMounted, defineEmits, inject} from 'vue';
+import {ref, onMounted, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
-import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
+import {deleteShiftFetch, getOvertime, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
 import Alert from "@/components/utils/Alert.vue";
@@ -72,8 +72,8 @@ const getDates = async () => {
   calculatedOvertimeTime.value = 0;
 
   try {
-    const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
-
+    const shifts = await getUserShifts(currentMonth.value);
+    const overtimes = await getOvertime(currentMonth.value);
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -93,32 +93,41 @@ const getDates = async () => {
       const date = getDate(shift.start);
       if (!acc[date]) {
         acc[date] = {
-          'list': [],
-          'totalWork': 0,
+          list: [],
+          totalWork: 0,
+          overtime: {}
         };
       }
       acc[date].list.push(shift);
       acc[date].totalWork += shift.work;
-
+      acc[date].overtimeTaken = overtimes.filter(overtime => getDate(overtime.date) === date)[0]
       return acc;
     }, {});
 
     Object.keys(groupedShifts).forEach(date => {
+
       const totalWork = groupedShifts[date].totalWork;
       const splitOvertime = splitOverTime(totalWork);
 
       calculatedWorkTime.value += splitOvertime.work;
       calculatedOvertimeTime.value += splitOvertime.overtime;
 
+      if (groupedShifts[date].overtimeTaken){
+        const ovTaken = groupedShifts[date].overtimeTaken.hours * 3600
+        calculatedOvertimeTime.value -= ovTaken
+      }
+
       groupedShifts[date].regular = splitOvertime.work;
       groupedShifts[date].overtime = splitOvertime.overtime;
+
     });
 
     daysInMonth.value = daysInMonth.value.map(day => {
       const formattedDate = format(day.date, 'yyyy-MM-dd');
+      const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0};
       return {
         ...day,
-        shifts: groupedShifts[formattedDate] || { list: [], regular: 0 }
+        shifts: groupedShift,
       };
     });
 
@@ -194,11 +203,24 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
           <small
               v-if="day.shifts.list.length > 0"
               class="shift"
-          >{{ formatTime(day.shifts.regular) }}</small>
+              :class="{'has-corrections': day.shifts.overtimeTaken}"
+          >
+            {{ formatTime(day.shifts.regular) }}
+          </small>
+
           <small
-              v-if="day.shifts.list.length > 0 && day.shifts.overtime !== 0"
+              v-if="day.shifts.list.length > 0 && day.shifts.overtime"
               class="shift overtime"
-          >{{ formatTime(day.shifts.overtime) }}</small>
+          >
+            + {{ formatTime(day.shifts.overtime) }}
+          </small>
+
+          <small
+              v-if="day.shifts.overtimeTaken"
+              class="shift overtime"
+          >
+            - {{ formatTime(day.shifts.overtimeTaken.hours * 3600) }}
+          </small>
 
         </div>
       </div>
@@ -209,6 +231,9 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
         :key="modalKey"
         :shifts="selectedDay?.shifts.list"
+        :overtime="selectedDay?.shifts.overtimeTaken"
+        :calculatedOvertime="calculatedOvertimeTime"
+        :selectedDay="selectedDay.date"
         @closeModal="closeModal"
         @removeShift="removeShift"
         @refreshModal="refreshModal"
@@ -276,6 +301,21 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   align-items: flex-end;
 }
 
+.has-corrections {
+  position: relative;
+}
+
+.has-corrections::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-text-overtime);
+  border-radius: 50%;
+}
+
 input[type="number"] {
   width: 60px;
 }
@@ -325,6 +365,10 @@ textarea {
     width: 90px;
     height: 90px;
   }
+  .has-corrections::after {
+    width: 5px;
+    height: 5px;
+  }
 }
 
 @media(max-width: 800px) {
@@ -352,6 +396,11 @@ textarea {
     height: 75px;
     border-radius: 5px;
     padding: 4px;
+  }
+
+  .has-corrections::after {
+    width: 4px;
+    height: 4px;
   }
 }
 

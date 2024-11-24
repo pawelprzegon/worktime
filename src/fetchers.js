@@ -1,4 +1,5 @@
 import {clearCache, url} from "@/utils.js";
+import {format} from "date-fns";
 
 
 const addAuthorization = () => {
@@ -126,7 +127,9 @@ export const stopShift = async (shiftId, userId) => {
     return await response.json()
 }
 
-export const getUserShifts = async (month) => {
+export const getUserShifts = async (currentMonth) => {
+
+    const month = format(currentMonth, 'yyyy-MM')
 
     const data = {
       method: 'GET',
@@ -153,6 +156,7 @@ export const registerUser = async (formData) => {
         headers: { 'Content-Type': 'application/json' },
         body: body,
     }
+
    const response = await fetch(url + '/user/register', data)
 
     if (!response.ok) {
@@ -169,13 +173,15 @@ export const saveAvatar = async (user_id, avatar) => {
         method: 'POST',
         body: formData,
     }
-   const response = await fetch(url + `/user/${user_id}/avatar`, data)
+    try {
+         const response = await fetch(url + `/user/${user_id}/avatar`, data)
 
-    if (!response.ok) {
-      throw new Error('Register failed')
+        return await response.json();
+
+    } catch (error) {
+         console.error('Error:', error.message);
+        throw error;
     }
-
-    return await response.json()
 }
 
 export const saveShiftNote = async (user_id, shift_id, note) => {
@@ -229,7 +235,7 @@ export const deleteShiftFetch = async (shift_id) => {
     }
 }
 
-export const shiftCorrection = async (shiftId, userId, new_date, startOrStop, comment='') => {
+export const shiftCorrection = async (userId, shiftId, new_date, startOrStop, comment='') => {
     const body = JSON.stringify({
         'shift_id': shiftId,
         'user_id': userId,
@@ -256,6 +262,56 @@ export const shiftCorrection = async (shiftId, userId, new_date, startOrStop, co
          console.error('Error:', error.message);
         throw error;
     }
+}
+
+export const setOvertime = async (userId, overtimeId, counter, date) => {
+
+    const body = JSON.stringify({
+        'user_id': userId,
+        'overtime_id': overtimeId,
+        'hours': counter,
+        'date': date,
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+    try {
+        const response = await fetch(url + '/overtime/set', data)
+
+        return await response.json();
+
+    } catch (error) {
+         console.error('Error:', error.message);
+        throw error;
+    }
+}
+
+export const getOvertime = async (currentMonth) => {
+
+    const year = format(currentMonth, 'yyyy')
+    const month = format(currentMonth, 'MM')
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + `/overtime?year=${year},month=${month}`, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
 }
 
 export const getMe = async () => {

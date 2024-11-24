@@ -32,7 +32,6 @@ async function initializeAuth() {
   if (isAuthorized) {
     isAuthenticated.status = true;
     isAuthenticated.role = isAuthorized.role;
-
   }
 }
 

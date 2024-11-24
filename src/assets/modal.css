@@ -7,7 +7,7 @@
   background-color: rgba(64, 64, 64, 0.84);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 1000;
 }
 
@@ -15,7 +15,15 @@
   border-radius: 8px;
   text-align: center;
   width: 700px;
-  margin: auto;
+  margin-top: 150px;
+}
+
+.shift-details-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  border-radius: 0 0 5px 5px;
 }
 
 @media (max-width: 1300px) {
