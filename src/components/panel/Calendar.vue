@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
-import {deleteShiftFetch, getUserShifts} from "@/fetchers.js";
+import {deleteShiftFetch, getOvertime, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
 import ShiftsModal from "@/components/modals/ShiftsModal.vue";
 import Alert from "@/components/utils/Alert.vue";
@@ -72,7 +72,8 @@ const getDates = async () => {
   calculatedOvertimeTime.value = 0;
 
   try {
-    const shifts = await getUserShifts(format(currentMonth.value, 'yyyy-MM'));
+    const shifts = await getUserShifts(currentMonth.value);
+    const overtimes = await getOvertime(currentMonth.value);
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -92,15 +93,14 @@ const getDates = async () => {
       const date = getDate(shift.start);
       if (!acc[date]) {
         acc[date] = {
-          'list': [],
-          'totalWork': 0,
-          'overTimeTaken': 0,
+          list: [],
+          totalWork: 0,
+          overtime: {}
         };
       }
       acc[date].list.push(shift);
       acc[date].totalWork += shift.work;
-      acc[date].overTimeTaken += shift.overtime_taken.hours ? shift.overtime_taken.hours : 0;
-
+      acc[date].overtimeTaken = overtimes.filter(overtime => getDate(overtime.date) === date)[0]
       return acc;
     }, {});
 
@@ -108,13 +108,13 @@ const getDates = async () => {
 
       const totalWork = groupedShifts[date].totalWork;
       const splitOvertime = splitOverTime(totalWork);
-      const overtimeTaken = groupedShifts[date].overTimeTaken
 
       calculatedWorkTime.value += splitOvertime.work;
       calculatedOvertimeTime.value += splitOvertime.overtime;
 
-      if (overtimeTaken) {
-        calculatedOvertimeTime.value -= overtimeTaken * 3600
+      if (groupedShifts[date].overtimeTaken){
+        const ovTaken = groupedShifts[date].overtimeTaken.hours * 3600
+        calculatedOvertimeTime.value -= ovTaken
       }
 
       groupedShifts[date].regular = splitOvertime.work;
@@ -196,25 +196,27 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
       >
         <span class="day-header">{{ day.date.getDate() }}</span>
         <div class="shifts-list">
+
           <small
               v-if="day.shifts.list.length > 0"
               class="shift"
-              :class="{'has-corrections': ![0, null].includes(day.shifts.overTimeTaken)}"
+              :class="{'has-corrections': day.shifts.overtimeTaken}"
           >
             {{ formatTime(day.shifts.regular) }}
           </small>
+
           <small
-              v-if="day.shifts.list.length > 0 && day.shifts.overtime !== 0"
+              v-if="day.shifts.list.length > 0 && day.shifts.overtime"
               class="shift overtime"
           >
             + {{ formatTime(day.shifts.overtime) }}
           </small>
 
           <small
-              v-if="day.shifts.overTimeTaken"
+              v-if="day.shifts.overtimeTaken"
               class="shift overtime"
           >
-            - {{ formatTime(day.shifts.overTimeTaken * 3600) }}
+            - {{ formatTime(day.shifts.overtimeTaken.hours * 3600) }}
           </small>
 
         </div>
@@ -226,7 +228,9 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
         :key="modalKey"
         :shifts="selectedDay?.shifts.list"
+        :overtime="selectedDay?.shifts.overtimeTaken"
         :calculatedOvertime="calculatedOvertimeTime"
+        :selectedDay="selectedDay.date"
         @closeModal="closeModal"
         @removeShift="removeShift"
         @refreshModal="refreshModal"

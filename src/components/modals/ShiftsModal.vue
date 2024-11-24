@@ -18,10 +18,12 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  overtime: Object,
   calculatedOvertime: {
     type: Number,
     default: 0
-  }
+  },
+  selectedDay: Date,
 })
 
 props.shifts.forEach(shift => {
@@ -35,10 +37,11 @@ props.shifts.forEach(shift => {
 });
 
 const date = computed(() => {
-  if (props.shifts.length > 0) {
-    return props.shifts[0].start.split("T")[0];
-  }
-  return '';
+  const newDate = new Date(props.selectedDay);
+  const year = newDate.getFullYear();
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 });
 
 const toggleSelectedCard = (shift, selected) => {
@@ -59,16 +62,14 @@ const toggleSelectedCard = (shift, selected) => {
   }
 }
 
+const summaryWorkTime = () => {
+  let summaryWork = 0
+  props.shifts.forEach(shift => {
+    summaryWork += shift.work
+  })
+  return summaryWork
+}
 
-
-const handleButtonClick = (shift) => {
-  if (!shift.isCorrectingTime) {
-    selectedNewDateTime.value = ''
-    toggleShowTimeCorrector(shift);
-  } else {
-    saveCorrection(shift);
-  }
-};
 
 const deleteConfirmationVisibleToggle = (shiftId) => {
   deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? null : shiftId;
@@ -81,7 +82,6 @@ const refreshModal = () => {
 const deleteConfirmed = (shiftId) => {
   emit('removeShift', shiftId)
 }
-
 
 
 const closeModal = () => {
@@ -113,9 +113,6 @@ onBeforeUnmount(() => {
             :key="shift.id"
             class="shift-details-container"
         >
-          <section id="default"></section>
-          <section id="correct-time"></section>
-          <section id="consume-overtime"></section>
 
           <div
               v-if="deleteConfirmationVisible === shift.id"
@@ -147,7 +144,6 @@ onBeforeUnmount(() => {
             <div class="shift-details-header">
               <p :class="['card-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
               <p :class="['card-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
-              <p :class="['card-button', { selected: shift.isOvertimeSelected }]" @click="toggleSelectedCard(shift, 'overtime')">overtime</p>
             </div>
 
             <MainContainer
@@ -161,14 +157,11 @@ onBeforeUnmount(() => {
               :shift="shift"
               @refreshModal="refreshModal"
             />
-            <OvertimeConsumer
-                v-if="shift.isOvertimeSelected"
-                :limit="props.calculatedOvertime"
-                :shift="shift"
-                @refreshModal="refreshModal"
-            />
+
 
           </div>
+
+
 
 <!--            <img-->
 <!--            v-if="!deleteConfirmationVisible"-->
@@ -180,6 +173,13 @@ onBeforeUnmount(() => {
 
 
         </div>
+        <OvertimeConsumer
+            :maxToTake="summaryWorkTime()"
+            :overtime="props.overtime"
+            :monthOvertimes="props.calculatedOvertime"
+            :date="date"
+            @refreshModal="refreshModal"
+        />
       </div>
     </div>
   </div>

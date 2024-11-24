@@ -3,28 +3,36 @@ import {inject, ref} from 'vue'
 import {getHoursAsNumber} from "@/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/utils/CustomTextButton.vue";
-import {hoursTaken} from "@/fetchers.js";
+import {setOvertime} from "@/fetchers.js";
 
 const props = defineProps({
-  shift: Object,
-  limit: {
+  maxToTake: Number,
+  overtime: {
+    type: Object,
+    default: {}
+  },
+  monthOvertimes: {
     type: Number,
     required: false,
     default: 0
   },
-
+  date: String
 })
+
+const maxToTake = ref(props.maxToTake)
+const taken = ref(props.overtime?.hours || 0)
 
 const emit = defineEmits(['takenHours', 'refreshModal'])
 const alert = inject('alert');
-const hoursPool = ref(getHoursAsNumber(props.limit))
-const taken = props.shift.overtime_taken.hours ? props.shift.overtime_taken.hours : 0
-const maxToTake = Math.floor((28800 - props.shift.work) / 3600)
+
+const hoursPool = ref(getHoursAsNumber(props.monthOvertimes))
+maxToTake.value = Math.floor((28800 - maxToTake.value) / 3600)
 const available = ref(maxToTake - taken)
 const counter = ref(taken)
 
 const increment = () => {
-  if (counter.value < getHoursAsNumber(props.limit)){
+  if (counter.value < maxToTake.value &&
+      counter.value < getHoursAsNumber(props.monthOvertimes)){
     counter.value += 1
     hoursPool.value--;
     emit('takenHours', counter.value)
@@ -40,18 +48,21 @@ const decrement = () => {
   }
 }
 
-const saveTakenHours = async (shift) => {
-  if (counter.value > maxToTake) {
+const saveTakenHours = async () => {
+
+  if (counter.value > maxToTake.value) {
     alert.show("warning", 'You picked higher amount of hours')
     return
   }
-  const response = await hoursTaken(shift.user_id, shift.id,  counter.value)
+  const userId = sessionStorage.getItem('userId')
+
+  const overtimeId = props.overtime?.id || null;
+
+  const response = await setOvertime(userId, overtimeId, counter.value, props.date)
   if (response) {
     emit('refreshModal');
     alert.show(response.status, response.message)
-    if (response.ok){
-      shift.isOverTime = false;
-    }
+
   }
 }
 
@@ -71,6 +82,7 @@ const saveTakenHours = async (shift) => {
     <div class="buttons-container">
 
       <div class="counter-label-container">
+        <h3>overtime:</h3>
         <h2 class="overtime-color">{{hoursPool}}</h2>
         <div class="counter-engine">
           <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement" />
@@ -85,7 +97,7 @@ const saveTakenHours = async (shift) => {
             :width="80"
             :padding="2"
             :margin="2"
-            @click="saveTakenHours(shift)"
+            @click="saveTakenHours"
         />
 
       </div>
@@ -100,12 +112,12 @@ const saveTakenHours = async (shift) => {
 
 .overtime-container {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: 10px;
-  padding: 10px;
-  border-radius: 3px;
+  padding: 5px;
+  border-radius: 5px;
   background: var(--vt-c-black-light);
-  height: 200px;
+  height: 50px;
 }
 
 .overtime-status {
@@ -114,7 +126,6 @@ const saveTakenHours = async (shift) => {
   justify-content: flex-start;
   align-items: center;
   margin: auto;
-  padding: 30px;
 }
 
 .overtime-status h2 {
@@ -126,8 +137,6 @@ const saveTakenHours = async (shift) => {
   background: var(--color-text-overtime);
   width: 80%;
 }
-
-
 
 .counter {
   display: flex;
@@ -170,12 +179,20 @@ const saveTakenHours = async (shift) => {
 .counter-engine p {
   font-size: 20px;
   font-weight: 700;
+  margin: 0 10px;
 }
 
-.counter-label-container,
-.counter-engine {
-  margin: 5px;
-  padding: 5px;
+.counter-label-container h2 {
+  font-weight: 700;
+  margin: 0 20px;
+}
+
+.counter-label-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
 }
 
 img {
@@ -195,21 +212,8 @@ span {
 }
 
 .buttons-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.counter-label-container h2 {
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.counter-label-container{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: inline-flex;
+  justify-content: flex-end
 }
 
 @media (max-width: 800px) {

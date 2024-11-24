@@ -1,4 +1,5 @@
 import {clearCache, url} from "@/utils.js";
+import {format} from "date-fns";
 
 
 const addAuthorization = () => {
@@ -126,7 +127,9 @@ export const stopShift = async (shiftId, userId) => {
     return await response.json()
 }
 
-export const getUserShifts = async (month) => {
+export const getUserShifts = async (currentMonth) => {
+
+    const month = format(currentMonth, 'yyyy-MM')
 
     const data = {
       method: 'GET',
@@ -261,11 +264,13 @@ export const shiftCorrection = async (userId, shiftId, new_date, startOrStop, co
     }
 }
 
-export const hoursTaken = async (userId, shiftId, hours) => {
+export const setOvertime = async (userId, overtimeId, counter, date) => {
+
     const body = JSON.stringify({
-        'shift_id': shiftId,
         'user_id': userId,
-        'taken': hours,
+        'overtime_id': overtimeId,
+        'hours': counter,
+        'date': date,
     });
 
     const data = {
@@ -277,7 +282,7 @@ export const hoursTaken = async (userId, shiftId, hours) => {
         body: body
     }
     try {
-        const response = await fetch(url + '/shift/overtime-taken', data)
+        const response = await fetch(url + '/overtime/set', data)
 
         return await response.json();
 
@@ -285,6 +290,28 @@ export const hoursTaken = async (userId, shiftId, hours) => {
          console.error('Error:', error.message);
         throw error;
     }
+}
+
+export const getOvertime = async (currentMonth) => {
+
+    const year = format(currentMonth, 'yyyy')
+    const month = format(currentMonth, 'MM')
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + `/overtime?year=${year},month=${month}`, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
 }
 
 export const getMe = async () => {
