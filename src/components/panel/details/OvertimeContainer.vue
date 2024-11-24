@@ -18,10 +18,10 @@ const props = defineProps({
 const emit = defineEmits(['takenHours', 'refreshModal'])
 const alert = inject('alert');
 const hoursPool = ref(getHoursAsNumber(props.limit))
-const overtimeTaken = props.shift.overtime_taken.hours
-const canTakeHours = ((28800 - props.shift.work) / 3600)
-const available = ref(canTakeHours - overtimeTaken)
-const counter = ref(0)
+const taken = props.shift.overtime_taken.hours ? props.shift.overtime_taken.hours : 0
+const maxToTake = Math.floor((28800 - props.shift.work) / 3600)
+const available = ref(maxToTake - taken)
+const counter = ref(taken)
 
 const increment = () => {
   if (counter.value < getHoursAsNumber(props.limit)){
@@ -41,6 +41,10 @@ const decrement = () => {
 }
 
 const saveTakenHours = async (shift) => {
+  if (counter.value > maxToTake) {
+    alert.show("warning", 'You picked higher amount of hours')
+    return
+  }
   const response = await hoursTaken(shift.user_id, shift.id,  counter.value)
   if (response) {
     emit('refreshModal');
@@ -56,18 +60,11 @@ const saveTakenHours = async (shift) => {
 <template>
   <div class="overtime-container">
     <section class="overtime-status">
-      <h2>{{available}}</h2>
-      <div class="overtime-status-possibilities">
-        <div style="display: inline-flex">
-          <h3>max to pick:</h3>
-          <span class="overtime-color">{{canTakeHours}}</span>
-        </div>
 
-        <div style="display: inline-flex">
-          <h3>already taken:</h3>
-          <span class="overtime-color">{{canTakeHours}}</span>
+       <div style="display: inline-flex">
+          <h3>max to pick:</h3>
+          <span class="overtime-color">{{maxToTake}}</span>
         </div>
-      </div>
 
     </section>
 
@@ -112,8 +109,12 @@ const saveTakenHours = async (shift) => {
 }
 
 .overtime-status {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: auto;
+  padding: 30px;
 }
 
 .overtime-status h2 {
@@ -126,14 +127,6 @@ const saveTakenHours = async (shift) => {
   width: 80%;
 }
 
-.overtime-status-possibilities {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  margin: auto;
-  padding: 30px;
-}
 
 
 .counter {
@@ -219,10 +212,15 @@ span {
   align-items: center;
 }
 
+@media (max-width: 800px) {
+  .overtime-status {
+    padding: 5px;
+  }
+}
+
 @media (max-width: 600px) {
-  .overtime-container {
-    grid-template-columns: none;
-    grid-template-rows: 1fr 1fr;
+  .overtime-status {
+    padding: 3px;
   }
 }
 </style>
