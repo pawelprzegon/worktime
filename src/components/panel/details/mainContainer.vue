@@ -230,10 +230,18 @@ textarea:focus {
   #noteEditor {
     max-width: 300px;
   }
+
+  .has-corrections::after {
+    top: 1px;
+    right: 5px;
+
+  }
 }
 
 @media (max-width: 600px) {
-  .main-container {
+  .has-corrections::after {
+    top: 1px;
+    right: 1px;
   }
 }
 

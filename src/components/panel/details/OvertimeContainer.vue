@@ -82,11 +82,14 @@ const saveTakenHours = async () => {
     <div class="buttons-container">
 
       <div class="counter-label-container">
-        <h3>overtime:</h3>
-        <h2 class="overtime-color">{{hoursPool}}</h2>
+        <div class="label-data-container">
+          <h3>overtime:</h3>
+          <span class="overtime-color">{{hoursPool}}</span>
+        </div>
+
         <div class="counter-engine">
           <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement" />
-          <p>{{ counter }}</p>
+          <span>{{ counter }}</span>
           <img src="../../../assets/img/increase.png" alt="increase" @click="increment" />
         </div>
       </div>
@@ -117,7 +120,7 @@ const saveTakenHours = async () => {
   padding: 5px;
   border-radius: 5px;
   background: var(--vt-c-black-light);
-  height: 50px;
+  height: fit-content;
 }
 
 .overtime-status {
@@ -128,30 +131,15 @@ const saveTakenHours = async () => {
   margin: auto;
 }
 
-.overtime-status h2 {
-  font-size: 50px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 5px;
-  color: var(--color-background-mute);
-  background: var(--color-text-overtime);
-  width: 80%;
-}
-
-.counter {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-left: auto;
-  background: var(--vt-c-black-light);
-}
-
-.counter-label {
+.label-data-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   align-items: center;
+}
+
+h3 {
+  margin: auto;
 }
 
 .counter-label p {
@@ -182,10 +170,6 @@ const saveTakenHours = async () => {
   margin: 0 10px;
 }
 
-.counter-label-container h2 {
-  font-weight: 700;
-  margin: 0 20px;
-}
 
 .counter-label-container{
   display: flex;
@@ -220,11 +204,23 @@ span {
   .overtime-status {
     padding: 5px;
   }
+
+  h3 {
+    font-size: 11px;
+  }
+
+  .counter-label-container {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 600px) {
   .overtime-status {
     padding: 3px;
+  }
+
+  h3 {
+    font-size: 10px;
   }
 }
 </style>

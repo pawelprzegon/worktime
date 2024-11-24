@@ -189,12 +189,13 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
       >
         {{day}}
       </small>
+
       <div v-for="(index) in daysBeforeRange" :key="index" class="preview-month-day"></div>
       <div
         v-for="(day, index) in daysInMonth"
         :key="index"
         :class="['calendar-day',
-        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': day.shifts.regular >= 28800}]"
+        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': (day.shifts.regular + (day.shifts.overtimeTaken?.hours || 0) * 3600) >= 28800}]"
         @click="openModal(day)"
       >
         <span class="day-header">{{ day.date.getDate() }}</span>
@@ -212,14 +213,14 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
               v-if="day.shifts.list.length > 0 && day.shifts.overtime"
               class="shift overtime"
           >
-            + {{ formatTime(day.shifts.overtime) }}
+            +{{ formatTime(day.shifts.overtime) }}
           </small>
 
           <small
               v-if="day.shifts.overtimeTaken"
               class="shift overtime"
           >
-            - {{ formatTime(day.shifts.overtimeTaken.hours * 3600) }}
+            -{{ formatTime(day.shifts.overtimeTaken.hours * 3600) }}
           </small>
 
         </div>
@@ -567,6 +568,10 @@ textarea {
   .day-header,
   .calendar-grid small {
     font-size: 7px;
+  }
+
+  .overtime {
+    font-size: 6px;
   }
 }
 
