@@ -47,3 +47,22 @@ export const range = (start, end) => Array.from({ length: end - start + 1 }, (_,
 export const clearCache = () => {
   sessionStorage.clear();
 }
+
+
+export const getLastStartStop = (shift, type) => {
+  // sprawdzanie czy są jakieś korekty i jeśli tak to nadpisanie nimi start i stop
+  if (shift.time_correction.length > 0) {
+    const filtered = shift.time_correction.filter(c => c.corrected === type);
+
+    if (filtered.length > 0){
+      return filtered[filtered.length -1]['date']
+    }
+
+  }
+  switch (type) {
+    case 'start':
+      return shift.start
+    case 'stop':
+      return shift.stop
+  }
+}

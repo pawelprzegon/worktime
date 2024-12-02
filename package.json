@@ -12,6 +12,8 @@
     "@vuepic/vue-datepicker": "^10.0.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "jwt-decode": "^4.0.0",
     "vue": "^3.5.11",
     "vue-jwt-decode": "^0.1.0",

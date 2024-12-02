@@ -1,6 +1,6 @@
 <script setup>
 
-import {formatTime, getDate, getTime} from "@/utils.js";
+import {formatTime, getDate, getLastStartStop, getTime} from "@/utils.js";
 import ShiftDetailContainer from "@/components/panel/details/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/components/panel/details/ShiftNoteContainer.vue";
 import CustomTextButton from "@/components/utils/CustomTextButton.vue";
@@ -19,22 +19,7 @@ const submitForm = () => {
   form.requestSubmit();
 };
 
-const getLastStartStop = (shift, type) => {
-  // sprawdzanie czy są jakieś korekty i jeśli tak to nadpisanie nimi start i stop
-  if (shift.time_correction.length > 0) {
-    const filtered = shift.time_correction.filter(c => c.corrected === type);
-    if (filtered.length > 0){
-      return filtered[filtered.length -1]['date']
-    }
 
-  }
-  switch (type) {
-    case 'start':
-      return shift.start
-    case 'stop':
-      return shift.stop
-  }
-}
 
 const toggleShowNoteEditor = (shift) => {
   props.shift.isEditingNote = !props.shift.isEditingNote

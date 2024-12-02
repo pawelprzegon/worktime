@@ -195,7 +195,10 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         v-for="(day, index) in daysInMonth"
         :key="index"
         :class="['calendar-day',
-        { 'unfinished-shift': day.shifts.list.length > 0, 'finished-shift': (day.shifts.regular + (day.shifts.overtimeTaken?.hours || 0) * 3600) >= 28800}]"
+        {
+          'unfinished-shift': day.shifts.list.length > 0,
+          'finished-shift': (day.shifts.regular + (day.shifts.overtimeTaken?.hours || 0) * 3600) >= 28800
+        }]"
         @click="openModal(day)"
       >
         <span class="day-header">{{ day.date.getDate() }}</span>

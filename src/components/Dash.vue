@@ -1,5 +1,5 @@
 <script setup>
-import {getUsers} from "@/fetchers.js";
+import {getDashUsers} from "@/fetchers.js";
 import {onMounted, ref} from "vue";
 import User from "@/components/user/User.vue";
 
@@ -7,7 +7,7 @@ const users = ref([])
 
 onMounted(async () => {
   try {
-    users.value = await getUsers();
+    users.value = await getDashUsers();
   } catch (error) {
     console.error("Error fetching users:", error);
   }

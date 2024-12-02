@@ -47,7 +47,7 @@ export const loginFetch = async (formData) => {
     return await response.json()
 }
 
-export const getUsers = async () => {
+export const getDashUsers = async () => {
 
     const data = {
       method: 'GET',
@@ -127,7 +127,7 @@ export const stopShift = async (shiftId, userId) => {
     return await response.json()
 }
 
-export const getUserShifts = async (currentMonth) => {
+export const getUserShifts = async (currentMonth, user_id = null) => {
 
     const month = format(currentMonth, 'yyyy-MM')
 
@@ -138,8 +138,12 @@ export const getUserShifts = async (currentMonth) => {
             'Authorization': addAuthorization()
         }
     }
+    let url_string = `/shift/user?month=${month}`
+    if (user_id) {
+        url_string += `&user_id=${user_id}`
+    }
 
-    const response = await fetch(url + `/shift/user?month=${month}`, data)
+    const response = await fetch(url + url_string, data)
 
     if (!response.ok) {
       throw new Error('Fetch active shift failed.')
@@ -329,6 +333,24 @@ export const getMe = async () => {
         clearCache()
         throw new Error(`user Me response error: ${response.statusText}`)
 
+    }
+
+    return await response.json()
+}
+
+export const getUsers = async () => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + '/user/', data)
+    if (!response.ok) {
+      throw new Error('Login failed. Please check your credentials.')
     }
 
     return await response.json()
