@@ -1,11 +1,13 @@
 <script setup>
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {add, eachDayOfInterval, endOfMonth, format, startOfMonth, sub} from "date-fns";
 import {getOvertime, getUserShifts} from "@/fetchers.js";
 import {formatTime, getLastStartStop, range, getTime} from "@/utils.js";
 import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
+import robotoFont from "@/assets/font/Roboto-Light-normal.js"
+import {daysOff, leaveTypes, other} from "@/components/privileged/data.js";
 
 const props = defineProps({
   user: {
@@ -14,6 +16,7 @@ const props = defineProps({
   }
 })
 
+const baseShiftTime = 28800
 const currentMonth = ref(new Date());
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
@@ -66,7 +69,7 @@ const getDates = async () => {
 
   try {
     const shifts = await getUserShifts(currentMonth.value, props.user._id);
-    const overtimes = await getOvertime(currentMonth.value);
+    const overtimes = await getOvertime(currentMonth.value, props.user._id);
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -75,10 +78,10 @@ const getDates = async () => {
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
 
     const splitOverTime = (shiftTime) => {
-      if (shiftTime <= 28800) {
+      if (shiftTime <= baseShiftTime) {
         return {'work': shiftTime, 'overtime': 0};
       } else {
-        return {'work': 28800, 'overtime': shiftTime - 28800};
+        return {'work': baseShiftTime, 'overtime': shiftTime - baseShiftTime};
       }
     };
 
@@ -129,55 +132,45 @@ const getDates = async () => {
   }
 };
 
-getDates()
+watch(
+  () => props.user,
+  (newValue, oldValue) => {
+    console.log('User changed:', newValue, oldValue);
+    getDates();
+  },
+  { deep: true } // Jeśli chcesz reagować na zmiany wewnątrz obiektu user
+);
 
+onMounted(() => {
+  getDates()
+})
 
-// Funkcja generująca PDF
-const generatePDF = () => {
-  const doc = new jsPDF();
-  doc.text(`Harmonogram czasu pracy - ${format(currentMonth.value, 'MMMM yyyy')}`, 10, 10);
+const prepareStartAndStopTimePDF = (day, dayData) => {
+  let start = ''
+  let stop = ''
 
-  // Przygotowanie danych do tabeli
-  const tableBody = daysInMonth.value.map(day => [
-    format(day.date, 'yyyy-MM-dd'),
-    day.shifts.list.length > 0 ? day.shifts.list[0].start || '-' : '-',
-    day.shifts.list.length > 0 ? day.shifts.list[0].end || '-' : '-',
-    formatTime(day.shifts.regular || 0),
-  ]);
+  dayData.forEach(shift => {
 
-  // Dodanie tabeli do PDF
-  doc.autoTable({
-    head: [["Data", "Start time", "Stop time", "Work time"]],
-    body: tableBody,
-  });
+    const startTime = day.shifts.list.length > 0
+      ? shift.startTime : '';
 
-  doc.save("harmonogram-czasu-pracy.pdf");
-};
+    const stopTime = day.shifts.list.length > 0
+      ? shift.stopTime : '';
 
-const getLast = (day) => {
-  let shifts = []
-  day.shifts.list.forEach(shift => {
-    let obj = {
-      startTime: Number,
-      stopTime: Number,
-    }
-    obj.startTime = getTime(getLastStartStop(shift, 'start'))
-    obj.stopTime = getTime(getLastStartStop(shift, 'stop'))
-    shifts.push(obj)
+    start += startTime
+    stop += stopTime
+
   })
-  return shifts
+
+  start = start ? start : ''
+  stop = stop ? stop : ''
+
+  return [start, stop]
 }
 
-
-const calculateTime = (day) => {
-
-  const formattedDate = format(day.date, 'yyyy-MM-dd');
-  const overtimeHours = day.shifts.overtimeTaken?.hours || 0
-  const workTime = day.shifts.list.length > 0 ? formatTime(day.shifts.regular + overtimeHours * 3600 || 0) : '-'
-  let result = `<td>${formattedDate}</td>`
-  let start = ``
-  let stop = ``
-  const dayData = getLast(day)
+const prepareStartAndStopTime = (day, dayData) => {
+  let start = ''
+  let stop = ''
 
   dayData.forEach(shift => {
 
@@ -195,11 +188,284 @@ const calculateTime = (day) => {
   start = start ? start : '-'
   stop = stop ? stop : '-'
 
+  return [start, stop]
+}
+
+const transposeTable = (headers, body) => {
+  // Tworzenie nowej struktury tabeli z transpozycją
+  const transposed = headers.map((header, i) => [
+    header,
+    ...body.map(row => row[i] || ""),
+  ]);
+  return transposed;
+};
+
+const monthMapper = (monthAsNumber) => {
+  switch (monthAsNumber) {
+    case '1':
+      return 'Styczeń';
+    case '2':
+      return 'Luty';
+    case '3':
+      return 'Marzec';
+    case '4':
+      return 'Kwiecień';
+    case '5':
+      return 'Maj';
+    case '6':
+      return 'Czerwiec';
+    case '7':
+      return 'Lipiec';
+    case '8':
+      return 'Sierpień';
+    case '9':
+      return 'Wrzesień';
+    case '10':
+      return 'Październik';
+    case '11':
+      return 'Listopad';
+    case '12':
+      return 'Grudzień';
+    default:
+      return 'Nieprawidłowy miesiąc'; // W przypadku, gdy numer miesiąca nie jest w zakresie od 1 do 12
+  }
+};
+
+const generatePDF = () => {
+  const monthYear = `${monthMapper(format(currentMonth.value, 'MM'))}-${format(currentMonth.value, 'yyyy')}`
+  let totalHours = 0
+  const doc = new jsPDF('landscape');
+  const pageWidth = doc.internal.pageSize.width;
+  const tableWidth = (pageWidth / 3) * 0.8;
+  doc.addFileToVFS("Roboto-Light-normal.ttf", robotoFont);
+  doc.addFont("Roboto-Light-normal.ttf", "Roboto", "normal");
+  doc.setFont("Roboto");
+
+  // Dodanie tytułu i imienia/nazwiska
+  doc.setFontSize(16);
+  doc.text(`Harmonogram czasu pracy: ${monthYear}`, 10, 10);
+  doc.setFontSize(12);
+  doc.text(`${props.user.first_name} ${props.user.last_name}`, 10, 20);
+
+  // Nagłówki tabeli
+  const headers = [
+      "Rozpoczęcie",
+      "Zakończenie",
+      "Czas pracy",
+      "Dni wolne",
+      "Urlopy (rodzaj i wymiar)",
+      "Choroba",
+      "Inne zasiłkowe (rodzaj i wymiar)",
+      "Nieobecności usprawiedliwione (rodzaj i wymiar)",
+      "płatne",
+      "niepłatne",
+      "Nieobecności nieusprawiedliwione (wymiar)",
+  ];
+
+  // Dane tabeli
+  const tableBody = daysInMonth.value.map(day => {
+
+    const regularTime = () => {
+      if (!day.shifts.regular) {
+        return ''
+      }
+      if (day.shifts.overtimeTaken) {
+        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime) {
+          return baseShiftTime
+        }
+        return day.shifts.regular + day.shifts.overtimeTaken.hours * 3600
+      }
+
+      return day.shifts.regular
+    }
+
+    let start = '';
+    let stop = '';
+    const dayData = getLast(day);
+
+    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime) {
+      start = formatTime(baseShiftTime);
+      stop = formatTime(baseShiftTime * 2);
+    } else if (day.shifts.regular < baseShiftTime) {
+      [start, stop] = prepareStartAndStopTimePDF(day, dayData);
+    }
+    let regTime = regularTime()
+    if (typeof(regTime) === "number") {
+      totalHours += regTime
+    }
+
+    regTime = regTime ? formatTime(regTime) : ''
+    return [start.slice(0, -3), stop.slice(0, -3), regTime.slice(0, -3)];
+  });
+
+  const summaryRow = ['', '', formatTime(totalHours).slice(0, -3)];
+  tableBody.push(summaryRow);
+
+  // Transpozycja tabeli
+  const transposedTable = transposeTable(headers, tableBody);
+
+  // Dodanie tabeli
+  doc.autoTable({
+    head: [["", ...daysInMonth.value.map(day => format(day.date, 'dd')), "Razem"]],
+    body: transposedTable,
+    startY: 30,
+    tableWidth: 'auto',
+    columnStyles: {
+      0: {cellWidth: 20},
+      default: {cellWidth: 9},
+    },
+    textAlign: "center",
+    styles: {
+      equalColumnWidth: false,
+      font: "Roboto",
+      fontSize: 5,
+      lineColor: [90, 90, 90],
+      lineWidth: 0.1,
+      halign: 'center',
+    },
+    headStyles: {
+      font: "Roboto",
+      fontSize: 7,
+      fillColor: [200, 200, 200],
+      textColor: [0, 0, 0],
+      halign: 'center',
+    },
+  });
+
+  doc.text("Oznaczenia:", 10, 120);
+
+  doc.autoTable({
+    head: [["Kod", "Opis"]],
+    body: leaveTypes.map(item => [item.code, item.description]),
+    startY: 130,
+    pageBreakBefore: false,
+    tableWidth: tableWidth,
+    columnStyles: {
+      0: { cellWidth: 20 },
+      default: { cellWidth: 9 }
+    },
+    textAlign: "center",
+    styles: {
+      cellHeight: 4,
+      equalColumnWidth: false,
+      font: "Roboto",
+      fontSize: 4,
+      halign: 'center',
+      cellPadding: 1
+    },
+    headStyles: {
+      font: "Roboto",
+      fontSize: 5,
+      fillColor: [200, 200, 200],
+      textColor: [0, 0, 0],
+      halign: 'center'
+    },
+    margin: { left: 25 }  // Przesunięcie drugiej tabeli na prawo
+  });
+
+  // Dodanie trzeciej tabeli (przesunięcie jeszcze bardziej w prawo)
+  doc.autoTable({
+    head: [["Kod", "Opis"]],
+    body: daysOff.map(item => [item.code, item.description]),
+    startY: 130,
+    pageBreakBefore: false,
+    tableWidth: tableWidth,
+    columnStyles: {
+      0: { cellWidth: 20 },
+      default: { cellWidth: 9 }
+    },
+    textAlign: "center",
+    styles: {
+      cellHeight: 4,
+      equalColumnWidth: false,
+      font: "Roboto",
+      fontSize: 4,
+      halign: 'center',
+      cellPadding: 1
+    },
+    headStyles: {
+      font: "Roboto",
+      fontSize: 5,
+      fillColor: [200, 200, 200],
+      textColor: [0, 0, 0],
+      halign: 'center'
+    },
+    margin: { left: tableWidth + 30 }  // Przesunięcie trzeciej tabeli na prawo
+  });
+
+  // Przesuń do pozycji poziomej dla trzeciej tabeli
+  doc.autoTable({
+    head: [["Kod", "Opis"]],
+    body: other.map(item => [item.code, item.description]),
+    startY: 130,
+    pageBreakBefore: false,
+    tableWidth: tableWidth,
+    columnStyles: {
+      0: {cellWidth: 20},
+      default: {cellWidth: 9},
+    },
+    textAlign: "center",
+    styles: {
+      cellHeight: 4,
+      equalColumnWidth: false,
+      font: "Roboto",
+      fontSize: 4,
+      halign: 'center',
+      cellPadding: 1
+    },
+    headStyles: {
+      font: "Roboto",
+      fontSize: 5,
+      fillColor: [200, 200, 200],
+      textColor: [0, 0, 0],
+      halign: 'center',
+    },
+    margin: { left: tableWidth * 2 + 35 }
+  });
+
+  // Zapisanie pliku PDF
+  doc.save(`${props.user.first_name}_${props.user.last_name}-${monthYear}.pdf`);
+};
+
+
+const getLast = (day) => {
+  let shifts = []
+  day.shifts.list.forEach(shift => {
+    let obj = {
+      startTime: Number,
+      stopTime: Number,
+    }
+    obj.startTime = getTime(getLastStartStop(shift, 'start'))
+    obj.stopTime = getTime(getLastStartStop(shift, 'stop'))
+    shifts.push(obj)
+  })
+  return shifts
+}
+
+
+const calculateTime = (day) => {
+  const formattedDate = format(day.date, 'yyyy-MM-dd');
+  const overtime = day.shifts.overtime ? formatTime(day.shifts.overtime) : ''
+  const overtimeHours = day.shifts.overtimeTaken?.hours || 0
+  const regularTime = day.shifts.regular ? formatTime(day.shifts.regular) : ""
+
+  let result = `<td>${formattedDate}</td>`
+  const dayData = getLast(day)
+
+  const [start, stop] = prepareStartAndStopTime(day, dayData)
+
   result += `
     <td class="multiple-data">${start}</td>
     <td class="multiple-data">${stop}</td>
   `
-  result += `<td>${workTime}</td>`
+
+  if ((day.shifts.regular) >= baseShiftTime) {
+    result += `<td class="achieved">${regularTime}</td>`
+  } else {
+    result += `<td class="not-achieved">${regularTime}</td>`
+  }
+  result += `<td>${overtime ? overtime : ''}</td>`
+  result += `<td>${overtimeHours ? overtimeHours : ''}</td>`
   return result;
 };
 
@@ -222,7 +488,9 @@ const calculateTime = (day) => {
           <th>Data</th>
           <th>Start time</th>
           <th>Stop time</th>
-          <th>Work time</th>
+          <th>Regular Work time</th>
+          <th>Over time</th>
+          <th>Overtime taken</th>
         </tr>
       </thead>
       <tbody>
@@ -241,7 +509,7 @@ const calculateTime = (day) => {
 
 /* Styl całej tabeli */
 table {
-  width: 70%;
+  width: 600px;
   border-collapse: collapse; /* Usuwa przerwy między ramkami */
   margin-top: 20px;
 }
@@ -273,6 +541,14 @@ tbody tr:nth-child(even) {
 
 tr {
   text-align: center;
+}
+
+::v-deep(.achieved) {
+  color: #6f986f;
+}
+
+::v-deep(.not-achieved) {
+  color: #9a4242;
 }
 
 

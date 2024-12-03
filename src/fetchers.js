@@ -296,7 +296,7 @@ export const setOvertime = async (userId, overtimeId, counter, date) => {
     }
 }
 
-export const getOvertime = async (currentMonth) => {
+export const getOvertime = async (currentMonth, user_id = null) => {
 
     const year = format(currentMonth, 'yyyy')
     const month = format(currentMonth, 'MM')
@@ -309,7 +309,12 @@ export const getOvertime = async (currentMonth) => {
         }
     }
 
-    const response = await fetch(url + `/overtime?year=${year},month=${month}`, data)
+    let url_string = `/overtime?year=${year},month=${month}`
+    if (user_id) {
+        url_string += `&user_id=${user_id}`
+    }
+
+    const response = await fetch(url + url_string, data)
 
     if (!response.ok) {
       throw new Error('Fetch active shift failed.')
