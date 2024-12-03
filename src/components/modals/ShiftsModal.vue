@@ -144,6 +144,13 @@ onBeforeUnmount(() => {
             <div class="shift-details-header">
               <p :class="['card-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
               <p :class="['card-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
+              <img
+                v-if="!deleteConfirmationVisible"
+                class="shift-delete"
+                src="@/assets/img/delete.png"
+                alt="delete"
+                @click="deleteConfirmationVisibleToggle(shift.id)"
+              >
             </div>
 
             <MainContainer
@@ -158,18 +165,7 @@ onBeforeUnmount(() => {
               @refreshModal="refreshModal"
             />
 
-
           </div>
-
-
-
-<!--            <img-->
-<!--            v-if="!deleteConfirmationVisible"-->
-<!--            class="shift-delete"-->
-<!--            src="@/assets/img/delete.png"-->
-<!--            alt="delete"-->
-<!--            @click="deleteConfirmationVisibleToggle(shift.id)"-->
-<!--          >-->
 
 
         </div>
@@ -205,8 +201,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 50%;
-  height: 150px;
+  width: 100%;
+  height: 200px;
   z-index: 1001;
   background-color: #797979;
   color: white;
