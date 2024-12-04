@@ -17,6 +17,7 @@ const props = defineProps({
 })
 
 const baseShiftTime = 28800
+const baseShiftDelta = 900
 const currentMonth = ref(new Date());
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
@@ -157,8 +158,8 @@ const prepareStartAndStopTimePDF = (day, dayData) => {
     const stopTime = day.shifts.list.length > 0
       ? shift.stopTime : '';
 
-    start += startTime
-    stop += stopTime
+    start += start ? ', ' + startTime.slice(0, -3) : startTime.slice(0, -3)
+    stop += stop ? ', ' + stopTime.slice(0, -3) : stopTime.slice(0, -3)
 
   })
 
@@ -227,7 +228,7 @@ const monthMapper = (monthAsNumber) => {
     case '12':
       return 'Grudzień';
     default:
-      return 'Nieprawidłowy miesiąc'; // W przypadku, gdy numer miesiąca nie jest w zakresie od 1 do 12
+      return 'Nieprawidłowy miesiąc';
   }
 };
 
@@ -269,13 +270,18 @@ const generatePDF = () => {
       if (!day.shifts.regular) {
         return ''
       }
+
       if (day.shifts.overtimeTaken) {
-        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime) {
+        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime - baseShiftDelta &&
+            (day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) <= baseShiftTime + baseShiftDelta) {
           return baseShiftTime
         }
         return day.shifts.regular + day.shifts.overtimeTaken.hours * 3600
       }
-
+      if (day.shifts.regular >= baseShiftTime - baseShiftDelta &&
+            day.shifts.regular <= baseShiftTime + baseShiftDelta) {
+        return baseShiftTime
+      }
       return day.shifts.regular
     }
 
@@ -283,9 +289,10 @@ const generatePDF = () => {
     let stop = '';
     const dayData = getLast(day);
 
-    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime) {
-      start = formatTime(baseShiftTime);
-      stop = formatTime(baseShiftTime * 2);
+    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) <= baseShiftTime + baseShiftDelta &&
+    day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime - baseShiftDelta) {
+      start = formatTime(baseShiftTime).slice(0, -3);
+      stop = formatTime(baseShiftTime * 2).slice(0, -3);
     } else if (day.shifts.regular < baseShiftTime) {
       [start, stop] = prepareStartAndStopTimePDF(day, dayData);
     }
@@ -295,7 +302,7 @@ const generatePDF = () => {
     }
 
     regTime = regTime ? formatTime(regTime) : ''
-    return [start.slice(0, -3), stop.slice(0, -3), regTime.slice(0, -3)];
+    return [start, stop, regTime.slice(0, -3)];
   });
 
   const summaryRow = ['', '', formatTime(totalHours).slice(0, -3)];
@@ -509,7 +516,7 @@ const calculateTime = (day) => {
 
 /* Styl całej tabeli */
 table {
-  width: 600px;
+  width: 800px;
   border-collapse: collapse; /* Usuwa przerwy między ramkami */
   margin-top: 20px;
 }
