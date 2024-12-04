@@ -158,8 +158,8 @@ const prepareStartAndStopTimePDF = (day, dayData) => {
     const stopTime = day.shifts.list.length > 0
       ? shift.stopTime : '';
 
-    start += start ? ', ' + startTime.slice(0, -3) : startTime.slice(0, -3)
-    stop += stop ? ', ' + stopTime.slice(0, -3) : stopTime.slice(0, -3)
+    start += start ? ', ' + getTime(startTime).slice(0, -3) : getTime(startTime).slice(0, -3)
+    stop += stop ? ', ' + getTime(stopTime).slice(0, -3) : getTime(stopTime).slice(0, -3)
 
   })
 
@@ -181,8 +181,8 @@ const prepareStartAndStopTime = (day, dayData) => {
     const stopTime = day.shifts.list.length > 0
       ? shift.stopTime : '-';
 
-    start += `<p>${startTime}</p>`
-    stop += `<p>${stopTime}</p>`
+    start += `<p>${getTime(startTime)}</p>`
+    stop += `<p>${getTime(stopTime)}</p>`
 
   })
 
@@ -266,20 +266,19 @@ const generatePDF = () => {
   // Dane tabeli
   const tableBody = daysInMonth.value.map(day => {
 
-    const regularTime = () => {
+    const calculateWorkTime = () => {
       if (!day.shifts.regular) {
         return ''
       }
 
       if (day.shifts.overtimeTaken) {
-        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime - baseShiftDelta &&
-            (day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) <= baseShiftTime + baseShiftDelta) {
+        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime - baseShiftDelta) {
           return baseShiftTime
         }
         return day.shifts.regular + day.shifts.overtimeTaken.hours * 3600
       }
-      if (day.shifts.regular >= baseShiftTime - baseShiftDelta &&
-            day.shifts.regular <= baseShiftTime + baseShiftDelta) {
+
+      if (day.shifts.regular >= baseShiftTime - baseShiftDelta) {
         return baseShiftTime
       }
       return day.shifts.regular
@@ -288,21 +287,21 @@ const generatePDF = () => {
     let start = '';
     let stop = '';
     const dayData = getLast(day);
-
-    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) <= baseShiftTime + baseShiftDelta &&
-    day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime - baseShiftDelta) {
+    // jeżeli czas pracy z odebranymi nadgodzinami jest dłuższy od 7h 45min to robimy 8-16
+    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime - baseShiftDelta) {
       start = formatTime(baseShiftTime).slice(0, -3);
       stop = formatTime(baseShiftTime * 2).slice(0, -3);
-    } else if (day.shifts.regular < baseShiftTime) {
+    // Jeżeli czas pracy jest mniejszy od 7h 45min to robimy tak jak jest
+    } else if (day.shifts.regular < baseShiftTime - baseShiftDelta) {
       [start, stop] = prepareStartAndStopTimePDF(day, dayData);
     }
-    let regTime = regularTime()
-    if (typeof(regTime) === "number") {
-      totalHours += regTime
+    let workTime = calculateWorkTime()
+    if (typeof(workTime) === "number") {
+      totalHours += workTime
     }
 
-    regTime = regTime ? formatTime(regTime) : ''
-    return [start, stop, regTime.slice(0, -3)];
+    workTime = workTime ? formatTime(workTime) : ''
+    return [start, stop, workTime.slice(0, -3)];
   });
 
   const summaryRow = ['', '', formatTime(totalHours).slice(0, -3)];
@@ -442,8 +441,8 @@ const getLast = (day) => {
       startTime: Number,
       stopTime: Number,
     }
-    obj.startTime = getTime(getLastStartStop(shift, 'start'))
-    obj.stopTime = getTime(getLastStartStop(shift, 'stop'))
+    obj.startTime = getLastStartStop(shift, 'start')
+    obj.stopTime = getLastStartStop(shift, 'stop')
     shifts.push(obj)
   })
   return shifts
