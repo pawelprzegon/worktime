@@ -7,15 +7,12 @@ import Avatar from "@/components/user/Avatar.vue";
 import DetailsContainer from "@/components/panel/DetailsContainer.vue";
 import Spinner from "@/components/utils/Spinner.vue";
 import ChangeAvatar from "@/components/modals/ChangeAvatar.vue";
+import { useAuthStore } from '@/stores/auth.js';
 
+const authStore = useAuthStore();
 const alert = inject('alert');
 
 const isLoading = ref(true);
-const firstName = ref('');
-const lastName = ref('');
-const email = ref('');
-const role = ref('');
-const avatar = ref('');
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
 const isChangeModalActive = ref(false)
@@ -23,11 +20,7 @@ const isChangeModalActive = ref(false)
 const getMeData = async () => {
     try{
       const response =  await getMe()
-      firstName.value = response.first_name
-      lastName.value = response.last_name
-      email.value = response.email
-      role.value = response.role
-      avatar.value = response.avatar
+      authStore.setMe(response)
 
     } catch (error) {
       alert.show('error', error)
@@ -70,7 +63,7 @@ const getMeData = async () => {
 
           <Avatar
               :active-shift="{}"
-              :avatar="avatar"
+              :avatar="authStore.user.avatar"
               :static="true"
           />
 
@@ -83,7 +76,6 @@ const getMeData = async () => {
 
           <ChangeAvatar
               v-if="isChangeModalActive"
-              :avatar="avatar"
               @closeModal="changeAvatarModalToggle"
               @refreshUserPanel="refreshUserPanel"
           />
@@ -94,25 +86,25 @@ const getMeData = async () => {
 
           <DetailsContainer
               :label="'firstname'"
-              :data="firstName"
+              :data="authStore.user.firstName"
               :background="'#282828'"
           />
 
           <DetailsContainer
               :label="'lastname'"
-              :data="lastName"
+              :data="authStore.user.lastNane"
               :background="'#282828'"
           />
 
           <DetailsContainer
               :label="'email'"
-              :data="email"
+              :data="authStore.user.email"
               :background="'#282828'"
           />
 
           <DetailsContainer
               :label="'role'"
-              :data="role"
+              :data="authStore.user.role"
               :background="'#282828'"
           />
 

@@ -2,9 +2,9 @@ import './assets/main.css'
 import { createApp, reactive } from 'vue'
 import App from './App.vue'
 import router from './router';
-import {authorizationCheck} from "@/auth.js";
+import { createPinia } from 'pinia';
 
-const app = createApp(App)
+const app = createApp(App);
 
 const alert = reactive({
   status: null,
@@ -15,32 +15,10 @@ const alert = reactive({
   }
 });
 
-const isAuthenticated = reactive({
-  status: false,
-  role: null,
-  hasRole(requiredRole) {
-    if (!this.role) return false;
-    if (Array.isArray(requiredRole)) {
-      return requiredRole.includes(this.role);
-    }
-    return this.role === requiredRole;
-  }
-});
-
-async function initializeAuth() {
-  const isAuthorized = await authorizationCheck()
-  if (isAuthorized) {
-    isAuthenticated.status = true;
-    isAuthenticated.role = isAuthorized.role;
-  }
-}
+const pinia = createPinia();
 
 app.provide('alert', alert);
-app.provide('isAuthenticated', isAuthenticated)
-app.use(router)
+app.use(pinia);
+app.use(router);
 
-initializeAuth().then(() => {
-  router.isAuthenticated = isAuthenticated;
-})
-
-app.mount('#app')
+app.mount('#app');

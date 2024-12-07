@@ -1,10 +1,12 @@
 import {clearCache, url} from "@/utils.js";
 import {format} from "date-fns";
+import { useAuthStore } from '@/stores/auth.js';
 
 
 const addAuthorization = () => {
-    const token = sessionStorage.getItem('token')
-    return `Bearer ${token}`
+
+    const authStore = useAuthStore();
+    return `Bearer ${authStore.$state.token}`
 
 }
 
@@ -178,7 +180,7 @@ export const saveAvatar = async (user_id, avatar) => {
         body: formData,
     }
     try {
-         const response = await fetch(url + `/user/${user_id}/avatar`, data)
+        const response = await fetch(url + `/user/${user_id}/avatar`, data)
 
         return await response.json();
 

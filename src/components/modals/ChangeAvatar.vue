@@ -3,17 +3,13 @@ import {inject, ref} from 'vue'
 import { saveAvatar } from "@/fetchers.js";
 import Avatar from "@/components/user/Avatar.vue";
 import '@/assets/modal.css';
+import { useAuthStore } from '@/stores/auth.js';
+
+const authStore = useAuthStore();
 
 const alert = inject('alert');
 
 const emit = defineEmits(['refreshUserPanel', 'closeModal'])
-
-const props = defineProps({
-  avatar: {
-    type: String,
-    default: null
-  }
-});
 
 const form = ref({
   avatar: null,
@@ -25,10 +21,9 @@ const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     form.value.avatar = file;
-    const userId = sessionStorage.getItem('userId');
     try {
-      const response = await saveAvatar(userId, form.value.avatar);
-      alert.show('success', response.message)
+      const response = await saveAvatar(authStore.user.id, form.value.avatar);
+      alert.show(response.status, response.message)
       emit('refreshUserPanel')
       emit('closeModal')
     } catch (error) {
@@ -51,7 +46,7 @@ const closeModal = () => {
       <section class="change-avatar-container">
         <Avatar
             :active-shift="{}"
-            :avatar="props.avatar"
+            :avatar="authStore.user.avatar"
             :static="true"
         />
 
@@ -67,7 +62,6 @@ const closeModal = () => {
           />
 
         </div>
-
 
       </section>
     </div>

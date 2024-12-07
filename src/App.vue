@@ -1,12 +1,11 @@
 <script setup>
   import { useRouter } from "vue-router";
-  import {onMounted, ref, inject, watch, computed} from 'vue'
+  import {onMounted, ref, watch, computed} from 'vue'
   import {getMe} from "@/fetchers.js";
   import CustomTextButton from "@/components/utils/CustomTextButton.vue";
-  import {clearCache} from "@/utils.js";
+  import { useAuthStore } from '@/stores/auth.js';
 
-  const isAuthenticated = inject('isAuthenticated')
-
+  const authStore = useAuthStore();
   const router = useRouter()
   const userName = ref('');
   const today = ref(new Date)
@@ -52,24 +51,22 @@
   }
 
   const logout = () => {
-    if (isAuthenticated) {
-      clearCache()
-      isAuthenticated.status = false;
-      isAuthenticated.role = null;
+    if (authStore.isAuthenticated) {
+      authStore.clearToken()
 
     } else {
       console.error('isAuthenticated is not available');
     }
   };
 
-  watch(() => isAuthenticated.status, (newStatus) => {
+  watch(() => authStore.isAuthenticated, (newStatus) => {
     if (newStatus) {
       getMeData();
     }
   });
 
   onMounted(() => {
-  if (isAuthenticated.status) {
+  if (authStore.isAuthenticated) {
     getMeData();
   }
 
@@ -95,7 +92,7 @@
   <header id="header">
     <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" />
     <div class="nav">
-      <small class="nav-user" v-if="isAuthenticated.status">logged: {{userName}}</small>
+      <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
       <div class="nav-buttons">
         <CustomTextButton
             label="Dashboard"
@@ -106,7 +103,7 @@
             @click="gotoDash"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="!isAuthenticated.status"
+            v-if="!authStore.isAuthenticated"
             label="Login"
             :isActive="isLoginActive"
             :margin="10"
@@ -115,7 +112,7 @@
             @click="gotoLogin"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="isAuthenticated.status && isAuthenticated.hasRole('admin')"
+            v-if="authStore.isAuthenticated && authStore.isAdmin"
             label="Privileged"
             :isActive="isPrivilegedActive"
             :margin="10"
@@ -124,7 +121,7 @@
             @click="gotoPrivileged"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="isAuthenticated.status"
+            v-if="authStore.isAuthenticated"
             label="User Panel"
             :isActive="isUserPanelActive"
             :margin="10"
@@ -133,7 +130,7 @@
             @click="gotoUserPanel"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="isAuthenticated.status"
+            v-if="authStore.isAuthenticated"
             label="Logout"
             :margin="10"
             :padding="3"
@@ -142,7 +139,7 @@
         ></CustomTextButton>
         <CustomTextButton
             class="link"
-            v-if="!isAuthenticated.status"
+            v-if="!authStore.isAuthenticated"
             label="SignUp"
             :isActive="isSignUpActive"
             :margin="10"

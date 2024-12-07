@@ -4,8 +4,7 @@ import Login from "@/components/Login.vue";
 import UserPanel from "@/components/panel/UserPanel.vue";
 import SignUp from "@/components/SignUp.vue";
 import Privileged from "@/components/Privileged.vue";
-import {authorizationCheck, hasAccess} from "@/auth.js";
-
+import { useAuthStore } from '@/stores/auth.js';
 
 const routes = [
     {
@@ -44,25 +43,18 @@ const router = createRouter({
     routes,
 });
 
-const routeRoles = {
-    '/privileged': 'admin',
-    '/user-panel': ['user', 'admin'],
-};
-
 const protectedRoutes = ['/user-panel', '/privileged'];
 
 router.beforeEach(async (to, from, next) => {
-
+    const authStore = useAuthStore();
     if (protectedRoutes.includes(to.path)) {
-        if (!await authorizationCheck()) {
-            router.isAuthenticated.status = false;
-            router.isAuthenticated.role = null;
+        if (!await authStore.authorizationCheck()) {
             return next('/login');
         }
 
         else {
-            const requiredRole = routeRoles[to.path];
-            if (requiredRole && !hasAccess(requiredRole)) {
+
+            if (!authStore.hasAccess(to.path)) {
                 return next('/login');
             }
         }

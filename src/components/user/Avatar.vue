@@ -40,6 +40,7 @@ const shiftToggle = () => {
   margin: auto;
   object-fit: cover;
   object-position: center;
+  border-radius: 50%;
 }
 
 .avatar:hover {
