@@ -20,14 +20,10 @@ export const checkIsAuthorized = async () => {
         }
     }
 
-    const response = await fetch(url + '/user/me', data)
+    const response = await fetch(url + '/auth/check', data)
 
-    if (response.status === 401) {
+    if (!response.ok) {
         return false
-    }
-
-    else if (!response.ok) {
-      throw new Error('Checking authorization failed.')
     }
 
     return await response.json()

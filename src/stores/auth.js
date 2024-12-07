@@ -1,7 +1,5 @@
-import {checkIsAuthorized} from "@/fetchers.js";
-import VueJwtDecode from 'vue-jwt-decode';
+import {checkIsAuthorized, getMe} from "@/fetchers.js";
 import {defineStore} from "pinia";
-import {jwtDecode} from "jwt-decode";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -25,19 +23,36 @@ export const useAuthStore = defineStore('auth', {
       this.token = token;
       sessionStorage.setItem('authToken', token);
     },
-    setMe(meData) {
-      this.user.id = meData.id
-      this.user.firstName = meData.firstName
-      this.user.lastName = meData.lastName
-      this.user.email = meData.email
-      this.user.role = meData.role
-      this.user.avatar = meData.avatar
+    async getUserMetadata() {
+      try{
+        const response =  await getMe()
+        this.user.id = response.id
+        this.user.firstName = response.firstName
+        this.user.lastName = response.lastName
+        this.user.email = response.email
+        this.user.role = response.role
+        this.user.avatar = response.avatar
+
+        sessionStorage.setItem('user', JSON.stringify(response))
+
+      } catch (error) {
+        alert.show('error', error)
+      }
+
 
     },
     clearToken() {
       this.token = null;
-      this.userRole = null;
+      this.user = {
+        id: null,
+        firstName: null,
+        lastNane: null,
+        email: null,
+        role: null,
+        avatar: null,
+      }
       sessionStorage.removeItem('authToken');
+      sessionStorage.removeItem('user');
     },
     hasAccess(toPath) {
       const routeRoles = {
@@ -45,19 +60,20 @@ export const useAuthStore = defineStore('auth', {
           '/user-panel': ['user', 'admin'],
       };
       const requiredRole = routeRoles[toPath]
-      if (!this.userRole || !requiredRole) return false;
+
+      if (!this.user.role || !requiredRole) return false;
 
       if (Array.isArray(requiredRole)) {
-        return requiredRole.includes(this.userRole);
+        return requiredRole.includes(this.user.role);
       }
-      return requiredRole === this.userRole;
+      return requiredRole === this.user.role;
     },
+
     async authorizationCheck() {
       if (this.token) {
         try {
-          const authorized = await checkIsAuthorized(this.token);
+          const authorized = await checkIsAuthorized();
           if (authorized) {
-            this.userRole = authorized.role;
             return true;
           }
         } catch (error) {

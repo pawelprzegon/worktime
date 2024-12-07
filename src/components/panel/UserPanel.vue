@@ -17,16 +17,6 @@ const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
 const isChangeModalActive = ref(false)
 
-const getMeData = async () => {
-    try{
-      const response =  await getMe()
-      authStore.setMe(response)
-
-    } catch (error) {
-      alert.show('error', error)
-    }
-  }
-
   const handleCalculatedTime = (cT) => {
     calculatedWorkTime.value = cT.work
     calculatedOvertimeTime.value = cT.overtime
@@ -37,13 +27,13 @@ const getMeData = async () => {
   }
 
   const refreshUserPanel = () => {
-    getMeData();
+    authStore.getUserMetadata()
   }
 
-  onMounted(() => {
-    getMeData();
+onMounted(() => {
     isLoading.value = false;
-  })
+})
+
 </script>
 
 

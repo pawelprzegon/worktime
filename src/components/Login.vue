@@ -23,6 +23,7 @@ const handleLogin = async () => {
   try {
     const data = await loginFetch(formData)
     authStore.setToken(data.access_token)
+    await authStore.getUserMetadata()
 
     await router.push('/user-panel')
 

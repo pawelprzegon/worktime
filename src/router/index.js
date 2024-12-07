@@ -47,16 +47,14 @@ const protectedRoutes = ['/user-panel', '/privileged'];
 
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
+    const aut = await authStore.authorizationCheck()
+    if (aut) {
+        await authStore.getUserMetadata()
+    }
     if (protectedRoutes.includes(to.path)) {
-        if (!await authStore.authorizationCheck()) {
-            return next('/login');
-        }
-
-        else {
-
-            if (!authStore.hasAccess(to.path)) {
-                return next('/login');
-            }
+        if (!aut || !authStore.hasAccess(to.path)) {
+            next('/login');
+            return
         }
     }
 

@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router';
 import { createPinia } from 'pinia';
 
+
 const app = createApp(App);
 
 const alert = reactive({
@@ -18,7 +19,7 @@ const alert = reactive({
 const pinia = createPinia();
 
 app.provide('alert', alert);
-app.use(pinia);
 app.use(router);
+app.use(pinia);
 
 app.mount('#app');
