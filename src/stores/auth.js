@@ -27,9 +27,10 @@ export const useAuthStore = defineStore('auth', {
     async getUserMetadata() {
       try{
         const response =  await getMe()
+        console.log(response)
         this.user.id = response.id
-        this.user.firstName = response.firstName
-        this.user.lastName = response.lastName
+        this.user.firstName = response.first_name
+        this.user.lastName = response.last_name
         this.user.email = response.email
         this.user.role = response.role
         this.user.avatar = response.avatar

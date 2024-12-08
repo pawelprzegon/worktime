@@ -38,7 +38,6 @@
   .details {
     min-width: 250px;
     max-width: 40%;
-    margin: 0;
   }
 }
 
@@ -47,7 +46,7 @@
   .details {
     min-width: 250px;
     max-width: 40%;
-    margin: 0;
+    margin: 5px;
   }
 }
 

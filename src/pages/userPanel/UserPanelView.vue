@@ -6,15 +6,14 @@ import { useAuthStore } from '@/stores/auth.js';
 import {useMonthTimeStore} from "@/stores/overtime.js";
 import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";
 import UserDetails from "@/pages/userPanel/UserDetails.vue";
+import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
 
 
 const authStore = useAuthStore();
 const monthTimeStore = useMonthTimeStore();
 
-// Modal state
 const isChangeModalActive = ref(false);
 
-// Methods
 const toggleChangeAvatarModal = () => {
   isChangeModalActive.value = !isChangeModalActive.value;
 };
@@ -22,6 +21,8 @@ const toggleChangeAvatarModal = () => {
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
 };
+
+console.log(authStore.user)
 
 </script>
 
@@ -32,13 +33,15 @@ const refreshUserPanel = () => {
     <Calendar />
 
     <div class="dash-details">
-      <UserDetails
+      <AvatarChanger
         :avatar="authStore.user.avatar"
+        :is-modal-active="isChangeModalActive"
+      />
+      <UserDetails
         :first-name="authStore.user.firstName"
         :last-name="authStore.user.lastName"
         :email="authStore.user.email"
         :role="authStore.user.role"
-        :is-modal-active="isChangeModalActive"
         @toggleModal="toggleChangeAvatarModal"
         @refresh="refreshUserPanel"
       />
@@ -60,15 +63,7 @@ const refreshUserPanel = () => {
   grid-template-columns: 75% 25%;
   grid-template-areas: "calendar user-details";
 }
-.details {
-  background: var(--color-background-mute);
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-  min-width: 300px;
-  max-width: 80%;
-  box-shadow: var(--vt-box-shadow);
-}
+
 
 .dash-details {
   display: flex;
@@ -89,7 +84,7 @@ const refreshUserPanel = () => {
 
   .dash-details {
     flex-direction: row;
-    align-items: end;
+    align-items: center;
   }
 }
 
