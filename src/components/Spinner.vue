@@ -30,6 +30,9 @@
   border-top-color: #3498db;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  position: relative;
+  top: 50%;
+  left: 50%;
 }
 
 @keyframes spin {

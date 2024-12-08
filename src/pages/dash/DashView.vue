@@ -1,7 +1,7 @@
 <script setup>
 import {getDashUsers} from "@/fetchers.js";
 import {onMounted, ref} from "vue";
-import User from "@/components/user/User.vue";
+import User from "@/pages/dash/User.vue";
 
 const users = ref([])
 

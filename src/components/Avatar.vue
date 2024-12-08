@@ -1,15 +1,18 @@
 <script setup>
 
-const props = defineProps({
+const apiURL = import.meta.env.VITE_APP_API_URL
+
+defineProps({
   avatar: String,
-  activeShift: Object,
+  activeShift: {
+    type: Object,
+    default: {}
+  },
   static: {
     type: Boolean,
     default: false
   }
 })
-
-const apiURL = import.meta.env.VITE_APP_API_URL
 
 const emit = defineEmits(['toggle'])
 
@@ -22,10 +25,10 @@ const shiftToggle = () => {
 <template>
   <img
     :class="['avatar', {
-      'off': !props.activeShift,
-      'no-click': props.static
+      'off': !activeShift,
+      'no-click': static
     }]"
-    :src="`${apiURL}/${props.avatar}`"
+    :src="`${apiURL}/${avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >
@@ -54,6 +57,7 @@ const shiftToggle = () => {
 
 .no-click {
   pointer-events: none;
+  filter: grayscale(0%);
 }
 
 @media (max-width: 1300px) {

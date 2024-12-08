@@ -2,7 +2,7 @@
   import { useRouter } from "vue-router";
   import {onMounted, ref, watch, computed} from 'vue'
   import {getMe} from "@/fetchers.js";
-  import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+  import CustomTextButton from "@/components/CustomTextButton.vue";
   import { useAuthStore } from '@/stores/auth.js';
 
   const authStore = useAuthStore();

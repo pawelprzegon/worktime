@@ -19,7 +19,7 @@ const props = defineProps({
 <template>
 
   <img
-      src="@/assets/img/next.png"
+      src="../assets/img/next.png"
       alt="nav-icon"
       :style="{width: props.size + 'px', height: props.size + 'px'}"
       :class="['nav-icon', {'preview': props.direction === 'preview'}]"

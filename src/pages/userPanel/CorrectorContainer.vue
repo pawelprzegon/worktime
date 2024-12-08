@@ -1,12 +1,12 @@
 <script setup>
 import {inject, ref, watch} from 'vue'
 import { getDate, getTime } from "@/utils.js";
-import ShiftDetailContainer from "@/components/panel/details/ShiftDetailContainer.vue";
-import DatePicker from "@/components/DatePicker.vue";
+import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
+import DatePicker from "@/pages/userPanel/DatePicker.vue";
 import '@/assets/modal.css'
-import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
 import {shiftCorrection} from "@/fetchers.js";
-import Alert from "@/components/utils/Alert.vue";
+import Alert from "@/components/Alert.vue";
 
 const props = defineProps({
   shift: Object,

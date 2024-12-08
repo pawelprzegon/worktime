@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Dash from "@/components/Dash.vue";
-import Login from "@/components/Login.vue";
-import UserPanel from "@/components/panel/UserPanel.vue";
-import SignUp from "@/components/SignUp.vue";
-import Privileged from "@/components/Privileged.vue";
+import Dash from "@/pages/dash/DashView.vue";
+import Login from "@/pages/login/LoginView.vue";
+import UserPanel from "@/pages/userPanel/UserPanelView.vue";
+import SignUp from "@/pages/signup/SignUpView.vue";
+import Privileged from "@/pages/privileged/PrivilegedView.vue";
 import { useAuthStore } from '@/stores/auth.js';
 
 const routes = [

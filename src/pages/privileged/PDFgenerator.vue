@@ -5,14 +5,14 @@ import {onMounted, ref, watch} from "vue";
 import {add, eachDayOfInterval, endOfMonth, format, startOfMonth, sub} from "date-fns";
 import {getOvertime, getUserShifts} from "@/fetchers.js";
 import {formatTime, getLastStartStop, range, getTime} from "@/utils.js";
-import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
+import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js"
-import {daysOff, leaveTypes, other} from "@/components/privileged/data.js";
+import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
 
 const props = defineProps({
   user: {
     type: Object,
-    required: true
+    required: false
   }
 })
 
@@ -143,8 +143,10 @@ watch(
 );
 
 onMounted(() => {
-  getDates()
-})
+  if (props.user) {
+    getDates();
+  }
+});
 
 const prepareStartAndStopTimePDF = (day, dayData) => {
   let start = ''

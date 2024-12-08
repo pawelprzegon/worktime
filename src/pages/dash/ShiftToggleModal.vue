@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted} from 'vue'
-import Avatar from "@/components/user/Avatar.vue";
-import UserName from "@/components/user/UserName.vue";
+import Avatar from "@/components/Avatar.vue";
+import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
 
 const props = defineProps({

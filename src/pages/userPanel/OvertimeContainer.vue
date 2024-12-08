@@ -2,7 +2,7 @@
 import {inject, ref} from 'vue'
 import {getHoursAsNumber} from "@/utils.js";
 import '@/assets/modal.css'
-import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setOvertime} from "@/fetchers.js";
 
 const props = defineProps({
@@ -88,9 +88,9 @@ const saveTakenHours = async () => {
         </div>
 
         <div class="counter-engine">
-          <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement" />
+          <img src="../../assets/img/decrease.png" alt="decrease" @click="decrement" />
           <span>{{ counter }}</span>
-          <img src="../../../assets/img/increase.png" alt="increase" @click="increment" />
+          <img src="../../assets/img/increase.png" alt="increase" @click="increment" />
         </div>
       </div>
 

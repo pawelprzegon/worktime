@@ -1,7 +1,7 @@
 import {clearCache, url} from "@/utils.js";
 import {format} from "date-fns";
 import { useAuthStore } from '@/stores/auth.js';
-
+import {useSelectedMonthStore} from "@/stores/overtime.js";
 
 const addAuthorization = () => {
 
@@ -125,9 +125,9 @@ export const stopShift = async (shiftId, userId) => {
     return await response.json()
 }
 
-export const getUserShifts = async (currentMonth, user_id = null) => {
-
-    const month = format(currentMonth, 'yyyy-MM')
+export const getUserShifts = async (user_id = null) => {
+    const selectedMonth = useSelectedMonthStore();
+    const month = format(selectedMonth.selectedMonth, 'yyyy-MM')
 
     const data = {
       method: 'GET',
@@ -294,10 +294,10 @@ export const setOvertime = async (userId, overtimeId, counter, date) => {
     }
 }
 
-export const getOvertime = async (currentMonth, user_id = null) => {
-
-    const year = format(currentMonth, 'yyyy')
-    const month = format(currentMonth, 'MM')
+export const getOvertime = async (user_id = null) => {
+    const selectedMonthStore = useSelectedMonthStore();
+    const year = format(selectedMonthStore.selectedMonth, 'yyyy')
+    const month = format(selectedMonthStore.selectedMonth, 'MM')
 
     const data = {
       method: 'GET',

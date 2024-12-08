@@ -2,7 +2,7 @@
 
 import {ref} from 'vue'
 import {getUsers} from "@/fetchers.js";
-import PDFgenerator from "@/components/privileged/PDFgenerator.vue";
+import PDFgenerator from "@/pages/privileged/PDFgenerator.vue";
 
 const users = ref([])
 const selectedUser = ref(null)

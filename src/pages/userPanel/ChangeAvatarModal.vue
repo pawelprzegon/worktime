@@ -1,43 +1,36 @@
 <script setup>
-import {inject, ref} from 'vue'
-import { saveAvatar } from "@/fetchers.js";
-import Avatar from "@/components/user/Avatar.vue";
-import '@/assets/modal.css';
-import { useAuthStore } from '@/stores/auth.js';
+import { inject, ref } from "vue";
+import { validateAvatarFile, uploadAvatar, handleSuccess } from "@/composables/avatarHandler.js";
+import { useAuthStore } from "@/stores/auth.js";
+import Avatar from "@/components/Avatar.vue";
+import "@/assets/modal.css";
 
 const authStore = useAuthStore();
-
-const alert = inject('alert');
-
-const emit = defineEmits(['refreshUserPanel', 'closeModal'])
-
-const form = ref({
-  avatar: null,
-  filename: null
-});
-
+const alert = inject("alert");
+const emit = defineEmits(["refresh", "closeModal"]);
 
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
-  if (file) {
-    form.value.avatar = file;
-    try {
-      const response = await saveAvatar(authStore.user.id, form.value.avatar);
-      alert.show(response.status, response.message)
-      emit('refreshUserPanel')
-      emit('closeModal')
-    } catch (error) {
-      alert.show('error', error.detail)
-    }
-  } else {
-    alert.show('warning', 'None file attached')
+  const validationError = validateAvatarFile(file);
+
+  if (validationError) {
+    alert.show(validationError.type, validationError.message);
+    return;
+  }
+
+  try {
+    const response = await uploadAvatar(authStore.user.id, file);
+    handleSuccess(alert, response.status, response.message);
+    emit("refresh");
+    emit("closeModal");
+  } catch (error) {
+    alert.show("error", error.detail || "An unexpected error occurred.");
   }
 };
 
 const closeModal = () => {
-  emit('closeModal')
-}
-
+  emit("closeModal");
+};
 </script>
 
 <template>
@@ -45,13 +38,11 @@ const closeModal = () => {
     <div class="modal-content" @click.stop>
       <section class="change-avatar-container">
         <Avatar
-            :active-shift="{}"
             :avatar="authStore.user.avatar"
             :static="true"
         />
 
         <div class="change-avatar-input">
-
           <label for="avatar" class="custom-file-label">Pick avatar:</label>
           <input
               type="file"
@@ -60,13 +51,10 @@ const closeModal = () => {
               accept=".png, .jpg, .jpeg, .gif, .svg"
               style="display: none;"
           />
-
         </div>
-
       </section>
     </div>
   </div>
-
 </template>
 
 <style scoped>
@@ -85,17 +73,18 @@ const closeModal = () => {
 }
 
 .custom-file-label {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--color-background);
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--color-background);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
 }
+
 .custom-file-label:hover {
-    background-color: white;
-  color: black
+  background-color: white;
+  color: black;
 }
 
 .change-avatar-input {
@@ -116,11 +105,9 @@ const closeModal = () => {
   }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 800px) {
   .change-avatar-container {
     width: 300px;
   }
-
 }
-
 </style>

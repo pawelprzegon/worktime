@@ -1,12 +1,12 @@
 <script setup>
 import {computed, ref, onBeforeUnmount} from 'vue';
-import CustomTextButton from "@/components/utils/CustomTextButton.vue";
-import Alert from "@/components/utils/Alert.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
+import Alert from "@/components/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
-import CorrectorContainer from "@/components/panel/details/CorrectorContainer.vue";
+import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
 import '@/assets/modal.css';
-import OvertimeConsumer from "@/components/panel/details/OvertimeContainer.vue";
-import MainContainer from "@/components/panel/details/mainContainer.vue";
+import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
+import MainContainer from "@/pages/userPanel/mainContainer.vue";
 
 const deleteConfirmationVisible = ref(false)
 
@@ -147,7 +147,7 @@ onBeforeUnmount(() => {
               <img
                 v-if="!deleteConfirmationVisible"
                 class="shift-delete"
-                src="@/assets/img/delete.png"
+                src="../../assets/img/delete.png"
                 alt="delete"
                 @click="deleteConfirmationVisibleToggle(shift.id)"
               >

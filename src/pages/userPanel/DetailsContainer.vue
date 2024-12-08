@@ -1,6 +1,6 @@
 <script setup>
 
-import CustomTextButton from "@/components/utils/CustomTextButton.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
 
 const props = defineProps({
   label: String,

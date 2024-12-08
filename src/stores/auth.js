@@ -1,5 +1,6 @@
-import {checkIsAuthorized, getMe} from "@/fetchers.js";
+import {checkIsAuthorized, getMe, getOvertime} from "@/fetchers.js";
 import {defineStore} from "pinia";
+import { ref } from "vue";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -46,7 +47,7 @@ export const useAuthStore = defineStore('auth', {
       this.user = {
         id: null,
         firstName: null,
-        lastNane: null,
+        lastName: null,
         email: null,
         role: null,
         avatar: null,
@@ -85,3 +86,4 @@ export const useAuthStore = defineStore('auth', {
     },
   },
 });
+

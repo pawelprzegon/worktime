@@ -2,10 +2,10 @@
 
 import {onMounted, ref} from "vue";
 import {startShift, stopShift, getActiveShift} from "@/fetchers.js";
-import Avatar from "@/components/user/Avatar.vue";
-import UserName from "@/components/user/UserName.vue";
-import ShiftTime from "@/components/user/ShiftTime.vue";
-import ShiftToggleModal from "@/components/modals/ShiftToggleModal.vue";
+import Avatar from "@/components/Avatar.vue";
+import UserName from "@/components/UserName.vue";
+import ShiftTime from "@/pages/dash/ShiftTime.vue";
+import ShiftToggleModal from "@/pages/dash/ShiftToggleModal.vue";
 
 
 const props = defineProps({

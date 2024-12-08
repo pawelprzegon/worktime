@@ -3,14 +3,19 @@ import {ref, onMounted, inject} from 'vue';
 import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
 import {deleteShiftFetch, getOvertime, getUserShifts} from "@/fetchers.js";
 import {formatTime} from "@/utils.js";
-import ShiftsModal from "@/components/modals/ShiftsModal.vue";
-import Alert from "@/components/utils/Alert.vue";
+import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
+import Alert from "@/components/Alert.vue";
 import {range} from "@/utils.js";
-import CustomNaviButton from "@/components/utils/CustomNaviButton.vue";
+import CustomNaviButton from "@/components/CustomNaviButton.vue";
+import Spinner from "@/components/Spinner.vue";
+import {useMonthTimeStore, useSelectedMonthStore} from "@/stores/overtime.js";
+
+const selectedMonthStore = useSelectedMonthStore();
+const monthTimeStore = useMonthTimeStore();
 
 const alert = inject('alert');
 
-const currentMonth = ref(new Date());
+
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
 const isModalOpen = ref(false);
@@ -28,12 +33,12 @@ const openModal = (day) => {
 const closeModal = () => {
   isModalOpen.value = false;
 };
-const emit = defineEmits(['calculatedTime']);
 
+const isLoading = ref(true);
 const daysInMonth = ref(
   eachDayOfInterval({
-    start: startOfMonth(currentMonth.value),
-    end: endOfMonth(currentMonth.value),
+    start: startOfMonth(selectedMonthStore.selectedMonth),
+    end: endOfMonth(selectedMonthStore.selectedMonth),
   }).map(date => ({
     date,
     hours: 0,
@@ -44,8 +49,8 @@ const daysInMonth = ref(
 
 const updateDaysInMonth = () => {
   daysInMonth.value = eachDayOfInterval({
-    start: startOfMonth(currentMonth.value),
-    end: endOfMonth(currentMonth.value),
+    start: startOfMonth(selectedMonthStore.selectedMonth),
+    end: endOfMonth(selectedMonthStore.selectedMonth),
   }).map(date => ({
     date,
     hours: 0,
@@ -55,39 +60,34 @@ const updateDaysInMonth = () => {
 };
 
 const prevMonth = () => {
-  currentMonth.value = sub(currentMonth.value, { months: 1 });
+  isLoading.value = true
+  selectedMonthStore.setMonth(sub(selectedMonthStore.selectedMonth, { months: 1 }))
   updateDaysInMonth();
   getDates()
 };
 
 const nextMonth = () => {
-  currentMonth.value = add(currentMonth.value, { months: 1 });
+  isLoading.value = true
+  selectedMonthStore.setMonth(add(selectedMonthStore.selectedMonth, { months: 1 }));
   updateDaysInMonth();
   getDates()
 
 };
 
 const getDates = async () => {
+  monthTimeStore.clear()
   calculatedWorkTime.value = 0;
   calculatedOvertimeTime.value = 0;
 
   try {
-    const shifts = await getUserShifts(currentMonth.value);
-    const overtimes = await getOvertime(currentMonth.value);
+    const shifts = await getUserShifts();
+    const overtimes = await getOvertime();
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
     daysAfterRange.value = range(endDay.value, 6);
 
     const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
-
-    const splitOverTime = (shiftTime) => {
-      if (shiftTime <= 28800) {
-        return {'work': shiftTime, 'overtime': 0};
-      } else {
-        return {'work': 28800, 'overtime': shiftTime - 28800};
-      }
-    };
 
     const groupedShifts = shifts.reduce((acc, shift) => {
       const date = getDate(shift.start);
@@ -107,14 +107,11 @@ const getDates = async () => {
     Object.keys(groupedShifts).forEach(date => {
 
       const totalWork = groupedShifts[date].totalWork;
-      const splitOvertime = splitOverTime(totalWork);
-
-      calculatedWorkTime.value += splitOvertime.work;
-      calculatedOvertimeTime.value += splitOvertime.overtime;
+      const splitOvertime = monthTimeStore.splitOvertime(totalWork)
 
       if (groupedShifts[date].overtimeTaken){
         const ovTaken = groupedShifts[date].overtimeTaken.hours * 3600
-        calculatedOvertimeTime.value -= ovTaken
+        monthTimeStore.subOvertime(ovTaken)
       }
 
       groupedShifts[date].regular = splitOvertime.work;
@@ -131,8 +128,7 @@ const getDates = async () => {
       };
     });
 
-    emit('calculatedTime',
-        {'work': formatTime(calculatedWorkTime.value), 'overtime': formatTime(calculatedOvertimeTime.value)});
+    isLoading.value = false
 
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -166,6 +162,7 @@ const refreshModal = async () => {
 onMounted(async () => {
   updateDaysInMonth();
   await refreshShifts()
+
 });
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -174,10 +171,13 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 
 <template>
   <Alert />
-  <div class="calendar">
+  <div v-if="isLoading" class="loading-spinner">
+    <Spinner />
+  </div>
+  <div v-else class="calendar">
     <div class="calendar-navigation">
       <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
-      <span class="nav-label">{{ format(currentMonth, 'MMMM yyyy') }}</span>
+      <span class="nav-label">{{ format(selectedMonthStore.selectedMonth, 'MMMM yyyy') }}</span>
       <CustomNaviButton direction="next" size="20" @click="nextMonth"/>
     </div>
 
