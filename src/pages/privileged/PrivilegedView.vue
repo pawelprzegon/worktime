@@ -3,9 +3,10 @@
 import {ref} from 'vue'
 import {getUsers} from "@/fetchers.js";
 import PDFgenerator from "@/pages/privileged/PDFgenerator.vue";
+import {useSelectedUser} from "@/stores/privileged.js";
 
 const users = ref([])
-const selectedUser = ref(null)
+const selectedUser = useSelectedUser()
 
 const usersList = async () => {
   users.value = await getUsers()
@@ -21,12 +22,12 @@ usersList()
   <div>
     <p
         v-for="user in users"
-        @click="selectedUser = user"
+        @click="selectedUser.setUser(user)"
     >
       {{user.first_name}} {{user.last_name}}
     </p>
 
-    <PDFgenerator :user="selectedUser" />
+    <PDFgenerator/>
 
   </div>
 </div>

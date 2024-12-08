@@ -1,22 +1,21 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {getOvertime} from "@/fetchers.js";
 
-export const useSelectedMonthStore = defineStore('selectedMonth', () => {
-  const selectedMonth = ref(new Date());
+export const useSelectedMonth = defineStore('selectedMonth', () => {
+  const month = ref(new Date());
 
-  const setMonth = (month) => {
-    selectedMonth.value = month;
+  const setMonth = (newMonth) => {
+    month.value = newMonth;
   };
 
   return {
-    selectedMonth,
+    month,
     setMonth
   };
 });
 
 
-export const useMonthTimeStore = defineStore("useMonthTimeStore", () => {
+export const useMonthTime = defineStore("useMonthTime", () => {
   const overtimeInSeconds = ref(0);
   const worktimeInSeconds = ref(0);
 

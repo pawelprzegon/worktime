@@ -8,10 +8,12 @@ import Alert from "@/components/Alert.vue";
 import {range} from "@/utils.js";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import Spinner from "@/components/Spinner.vue";
-import {useMonthTimeStore, useSelectedMonthStore} from "@/stores/overtime.js";
+import {useMonthTime, useSelectedMonth} from "@/stores/overtime.js";
+import {useAuthStore} from "@/stores/auth.js";
 
-const selectedMonthStore = useSelectedMonthStore();
-const monthTimeStore = useMonthTimeStore();
+const authStore = useAuthStore()
+const selectedMonth = useSelectedMonth();
+const monthTime = useMonthTime();
 
 const alert = inject('alert');
 
@@ -37,8 +39,8 @@ const closeModal = () => {
 const isLoading = ref(true);
 const daysInMonth = ref(
   eachDayOfInterval({
-    start: startOfMonth(selectedMonthStore.selectedMonth),
-    end: endOfMonth(selectedMonthStore.selectedMonth),
+    start: startOfMonth(selectedMonth.month),
+    end: endOfMonth(selectedMonth.month),
   }).map(date => ({
     date,
     hours: 0,
@@ -49,8 +51,8 @@ const daysInMonth = ref(
 
 const updateDaysInMonth = () => {
   daysInMonth.value = eachDayOfInterval({
-    start: startOfMonth(selectedMonthStore.selectedMonth),
-    end: endOfMonth(selectedMonthStore.selectedMonth),
+    start: startOfMonth(selectedMonth.month),
+    end: endOfMonth(selectedMonth.month),
   }).map(date => ({
     date,
     hours: 0,
@@ -61,27 +63,27 @@ const updateDaysInMonth = () => {
 
 const prevMonth = () => {
   isLoading.value = true
-  selectedMonthStore.setMonth(sub(selectedMonthStore.selectedMonth, { months: 1 }))
+  selectedMonth.setMonth(sub(selectedMonth.month, { months: 1 }))
   updateDaysInMonth();
   getDates()
 };
 
 const nextMonth = () => {
   isLoading.value = true
-  selectedMonthStore.setMonth(add(selectedMonthStore.selectedMonth, { months: 1 }));
+  selectedMonth.setMonth(add(selectedMonth.month, { months: 1 }));
   updateDaysInMonth();
   getDates()
 
 };
 
 const getDates = async () => {
-  monthTimeStore.clear()
+  monthTime.clear()
   calculatedWorkTime.value = 0;
   calculatedOvertimeTime.value = 0;
 
   try {
-    const shifts = await getUserShifts();
-    const overtimes = await getOvertime();
+    const shifts = await getUserShifts(authStore.user._id, selectedMonth.month);
+    const overtimes = await getOvertime(authStore.user._id, selectedMonth.month);
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -107,11 +109,11 @@ const getDates = async () => {
     Object.keys(groupedShifts).forEach(date => {
 
       const totalWork = groupedShifts[date].totalWork;
-      const splitOvertime = monthTimeStore.splitOvertime(totalWork)
+      const splitOvertime = monthTime.splitOvertime(totalWork)
 
       if (groupedShifts[date].overtimeTaken){
         const ovTaken = groupedShifts[date].overtimeTaken.hours * 3600
-        monthTimeStore.subOvertime(ovTaken)
+        monthTime.subOvertime(ovTaken)
       }
 
       groupedShifts[date].regular = splitOvertime.work;
@@ -177,7 +179,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   <div v-else class="calendar">
     <div class="calendar-navigation">
       <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
-      <span class="nav-label">{{ format(selectedMonthStore.selectedMonth, 'MMMM yyyy') }}</span>
+      <span class="nav-label">{{ format(selectedMonth.month, 'MMMM yyyy') }}</span>
       <CustomNaviButton direction="next" size="20" @click="nextMonth"/>
     </div>
 

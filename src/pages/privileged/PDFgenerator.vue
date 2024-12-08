@@ -8,17 +8,14 @@ import {formatTime, getLastStartStop, range, getTime} from "@/utils.js";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js"
 import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
+import {useSelectedUser, useSelectedMonth} from "@/stores/privileged.js";
 
-const props = defineProps({
-  user: {
-    type: Object,
-    required: false
-  }
-})
+const selectedUser = useSelectedUser()
+const selectedMonth = useSelectedMonth()
 
 const baseShiftTime = 28800
 const baseShiftDelta = 900
-const currentMonth = ref(new Date());
+
 const calculatedWorkTime = ref(0)
 const calculatedOvertimeTime = ref(0)
 const startDay = ref(null);
@@ -28,8 +25,8 @@ const daysAfterRange = ref(null);
 
 const daysInMonth = ref(
   eachDayOfInterval({
-    start: startOfMonth(currentMonth.value),
-    end: endOfMonth(currentMonth.value),
+    start: startOfMonth(selectedMonth.month),
+    end: endOfMonth(selectedMonth.month),
   }).map(date => ({
     date,
     hours: 0,
@@ -41,8 +38,8 @@ const daysInMonth = ref(
 
 const updateDaysInMonth = () => {
   daysInMonth.value = eachDayOfInterval({
-    start: startOfMonth(currentMonth.value),
-    end: endOfMonth(currentMonth.value),
+    start: startOfMonth(selectedMonth.month),
+    end: endOfMonth(selectedMonth.month),
   }).map(date => ({
     date,
     hours: 0,
@@ -52,13 +49,13 @@ const updateDaysInMonth = () => {
 };
 
 const prevMonth = () => {
-  currentMonth.value = sub(currentMonth.value, { months: 1 });
+  selectedMonth.month = sub(selectedMonth.month, { months: 1 });
   updateDaysInMonth();
   getDates()
 };
 
 const nextMonth = () => {
-  currentMonth.value = add(currentMonth.value, { months: 1 });
+  selectedMonth.month = add(selectedMonth.month, { months: 1 });
   updateDaysInMonth();
   getDates()
 
@@ -69,8 +66,9 @@ const getDates = async () => {
   calculatedOvertimeTime.value = 0;
 
   try {
-    const shifts = await getUserShifts(currentMonth.value, props.user._id);
-    const overtimes = await getOvertime(currentMonth.value, props.user._id);
+    const shifts = await getUserShifts(selectedUser.user._id, selectedMonth.month);
+    const overtimes = await getOvertime(selectedUser.user._id, selectedMonth.month);
+
     startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
     endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
     daysBeforeRange.value = range(2, startDay.value);
@@ -134,16 +132,16 @@ const getDates = async () => {
 };
 
 watch(
-  () => props.user,
+  () => selectedUser.user,
   (newValue, oldValue) => {
     console.log('User changed:', newValue, oldValue);
     getDates();
   },
-  { deep: true } // Jeśli chcesz reagować na zmiany wewnątrz obiektu user
+  { deep: true }
 );
 
 onMounted(() => {
-  if (props.user) {
+  if (selectedUser.user) {
     getDates();
   }
 });
@@ -235,7 +233,7 @@ const monthMapper = (monthAsNumber) => {
 };
 
 const generatePDF = () => {
-  const monthYear = `${monthMapper(format(currentMonth.value, 'MM'))}-${format(currentMonth.value, 'yyyy')}`
+  const monthYear = `${monthMapper(format(selectedMonth.month, 'MM'))}-${format(selectedMonth.month, 'yyyy')}`
   let totalHours = 0
   const doc = new jsPDF('landscape');
   const pageWidth = doc.internal.pageSize.width;
@@ -480,14 +478,14 @@ const calculateTime = (day) => {
 </script>
 
 <template>
-  <div v-if="props.user">
-    <button @click="generatePDF">Pobierz harmonogram</button>
+  <div v-if="selectedUser.user">
+    <button @click="generatePDF">Get Harmonogram</button>
 
-    <h1>{{props.user.first_name}} {{props.user.last_name}}</h1>
+    <h1>{{selectedUser.user.first_name}} {{selectedUser.user.last_name}}</h1>
 
     <div class="calendar-navigation">
       <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
-      <span class="nav-label">{{ format(currentMonth, 'MMMM yyyy') }}</span>
+      <span class="nav-label">{{ format(selectedMonth.month, 'MMMM yyyy') }}</span>
       <CustomNaviButton direction="next" size="20" @click="nextMonth"/>
     </div>
     <table>
