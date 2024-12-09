@@ -10,6 +10,7 @@ import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import Spinner from "@/components/Spinner.vue";
 import {useMonthTime, useSelectedMonth} from "@/stores/overtimeStore.js";
 import {useAuthStore} from "@/stores/authStore.js";
+import '@/assets/calendarNavigation.css';
 
 const authStore = useAuthStore()
 const selectedMonth = useSelectedMonth();
@@ -256,13 +257,6 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
   width:100%;
 }
 
-.calendar-navigation {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -331,14 +325,7 @@ textarea {
   margin-top: 10px;
 }
 
-.nav-label {
-  width: 200px;
-  display: block;
-  text-align: center;
-  margin: 5px 10px;
-  font-size: 20px;
-  color:var(--color-text-active)
-}
+
 
 .unfinished-shift {
   background: var(--vt-c-indigo);

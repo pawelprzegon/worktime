@@ -57,7 +57,7 @@ export const daysInMonth = ref(
   );
 
 
-export const getDates = async (selectedUser, selectedMonth) => {
+const getDates = async (selectedUser, selectedMonth) => {
 
       let calculatedWorkTime = 0;
       let calculatedOvertimeTime = 0;
@@ -122,6 +122,10 @@ export const getDates = async (selectedUser, selectedMonth) => {
           console.error("Error fetching users:", error);
         }
 };
+
+export const getData = async (selectedUser, selectedMonth) => {
+  await getDates(selectedUser.user._id, selectedMonth.month)
+}
 
 const prepareStartAndStopTime = (day, dayData) => {
   let start = ''
