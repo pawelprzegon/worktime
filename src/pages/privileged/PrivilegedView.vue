@@ -2,17 +2,20 @@
 
 import {ref} from 'vue'
 import {getUsers} from "@/fetchers.js";
-import PDFgenerator from "@/pages/privileged/PDFgenerator.vue";
+import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
 import SelectList from "@/components/SelectList.vue";
 
 const users = ref([])
 
-
-const usersList = async () => {
-  users.value = await getUsers()
+const loadUsers = async () => {
+  try {
+    users.value = await getUsers()
+  } catch (error) {
+    console.error('Błąd podczas ładowania użytkowników:', error)
+  }
 }
 
-usersList()
+loadUsers()
 
 </script>
 
@@ -23,7 +26,7 @@ usersList()
         :data-list="users"
     />
 
-    <PDFgenerator/>
+    <MonthlySchedule/>
 
 </template>
 

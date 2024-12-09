@@ -23,9 +23,15 @@ function handleSelection() {
   selectedUser.setUser(selectedUserValue.value);
 }
 
-watch(() => props.dataList, (newDataList) => {
-  if (newDataList.length > 0) {
-    selectedUserValue.value = newDataList[0]; // Domyślnie wybierz pierwszy element
+watch(() => props.dataList, () => {
+
+  if (props.dataList.length > 0 && selectedUser.user !== null) {
+    console.log(selectedUser.user)
+    const matchedUser = props.dataList.find(usr => usr._id === selectedUser.user._id);
+    if (matchedUser) {
+
+      selectedUserValue.value = matchedUser;
+    }
   }
 }, { immediate: true });
 
@@ -51,8 +57,7 @@ watch(() => props.dataList, (newDataList) => {
       </option>
 
     </select>
-    <p v-if="selectedUserValue !== null">
-      User: {{ selectedUserValue.first_name }} {{ selectedUserValue.last_name }}</p>
+
   </section>
 
 </template>

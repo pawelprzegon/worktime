@@ -1,0 +1,24 @@
+import {getTime} from "@/utils.js";
+
+export const prepareStartAndStopTimePDF = (day, dayData) => {
+  let start = ''
+  let stop = ''
+
+  dayData.forEach(shift => {
+
+    const startTime = day.shifts.list.length > 0
+      ? shift.startTime : '';
+
+    const stopTime = day.shifts.list.length > 0
+      ? shift.stopTime : '';
+
+    start += start ? ', ' + getTime(startTime).slice(0, -3) : getTime(startTime).slice(0, -3)
+    stop += stop ? ', ' + getTime(stopTime).slice(0, -3) : getTime(stopTime).slice(0, -3)
+
+  })
+
+  start = start ? start : ''
+  stop = stop ? stop : ''
+
+  return [start, stop]
+}

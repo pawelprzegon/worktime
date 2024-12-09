@@ -66,3 +66,17 @@ export const getLastStartStop = (shift, type) => {
       return shift.stop
   }
 }
+
+export const getLast = (day) => {
+  let shifts = []
+  day.shifts.list.forEach(shift => {
+    let obj = {
+      startTime: Number,
+      stopTime: Number,
+    }
+    obj.startTime = getLastStartStop(shift, 'start')
+    obj.stopTime = getLastStartStop(shift, 'stop')
+    shifts.push(obj)
+  })
+  return shifts
+}
