@@ -74,4 +74,52 @@ tr {
   color: #9a4242;
 }
 
+@media (max-width: 1300px) {
+  /* Nagłówki tabeli */
+  thead th {
+    padding: 2px;
+  }
+
+  /* Ramki dla komórek tabeli */
+  td, th {
+    padding: 2px;
+  }
+}
+
+@media (max-width: 1000px) {
+  table {
+    width: 90%;
+    font-size: 9px;
+  }
+
+  /* Nagłówki tabeli */
+  thead th {
+    padding: 2px;
+  }
+
+  /* Ramki dla komórek tabeli */
+  td, th {
+    padding: 2px;
+  }
+}
+
+
+@media (max-width: 800px) {
+  table {
+    width: 90%;
+    font-size: 8px;
+  }
+
+  /* Nagłówki tabeli */
+  thead th {
+    padding: 2px;
+  }
+
+  /* Ramki dla komórek tabeli */
+  td, th {
+    padding: 2px;
+  }
+}
+
+
 </style>

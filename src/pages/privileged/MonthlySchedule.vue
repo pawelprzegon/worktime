@@ -27,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="selectedUser.user">
+  <div v-if="selectedUser.user" class="schedule-container">
     <button @click="generatePDF(selectedUser, selectedMonth)">Get Schedule</button>
     <CalendarNavigation />
     <ScheduleTable/>
@@ -35,5 +35,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
+.schedule-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 </style>
