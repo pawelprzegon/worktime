@@ -2,7 +2,7 @@
 import {ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {loginFetch} from '@/fetchers.js'
-import { useAuthStore } from '@/stores/auth.js';
+import { useAuthStore } from '@/stores/authStore.js';
 
 const authStore = useAuthStore();
 

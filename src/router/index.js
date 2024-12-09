@@ -4,7 +4,7 @@ import Login from "@/pages/login/LoginView.vue";
 import UserPanel from "@/pages/userPanel/UserPanelView.vue";
 import SignUp from "@/pages/signup/SignUpView.vue";
 import Privileged from "@/pages/privileged/PrivilegedView.vue";
-import { useAuthStore } from '@/stores/auth.js';
+import { useAuthStore } from '@/stores/authStore.js';
 
 const routes = [
     {

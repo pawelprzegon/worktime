@@ -8,7 +8,7 @@ import {formatTime, getLastStartStop, range, getTime} from "@/utils.js";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js"
 import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
-import {useSelectedUser, useSelectedMonth} from "@/stores/privileged.js";
+import {useSelectedUser, useSelectedMonth} from "@/stores/privilegedStore.js";
 
 const selectedUser = useSelectedUser()
 const selectedMonth = useSelectedMonth()
@@ -64,7 +64,7 @@ const nextMonth = () => {
 const getDates = async () => {
   calculatedWorkTime.value = 0;
   calculatedOvertimeTime.value = 0;
-
+  console.log(selectedUser.user._id)
   try {
     const shifts = await getUserShifts(selectedUser.user._id, selectedMonth.month);
     const overtimes = await getOvertime(selectedUser.user._id, selectedMonth.month);
@@ -246,7 +246,7 @@ const generatePDF = () => {
   doc.setFontSize(16);
   doc.text(`Harmonogram czasu pracy: ${monthYear}`, 10, 10);
   doc.setFontSize(12);
-  doc.text(`${props.user.first_name} ${props.user.last_name}`, 10, 20);
+  doc.text(`${selectedUser.user.first_name} ${selectedUser.user.last_name}`, 10, 20);
 
   // Nagłówki tabeli
   const headers = [
@@ -430,7 +430,7 @@ const generatePDF = () => {
   });
 
   // Zapisanie pliku PDF
-  doc.save(`${props.user.first_name}_${props.user.last_name}-${monthYear}.pdf`);
+  doc.save(`${selectedUser.user.first_name}_${selectedUser.user.last_name}-${monthYear}.pdf`);
 };
 
 

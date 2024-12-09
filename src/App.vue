@@ -3,7 +3,7 @@
   import {onMounted, ref, watch, computed} from 'vue'
   import {getMe} from "@/fetchers.js";
   import CustomTextButton from "@/components/CustomTextButton.vue";
-  import { useAuthStore } from '@/stores/auth.js';
+  import { useAuthStore } from '@/stores/authStore.js';
 
   const authStore = useAuthStore();
   const router = useRouter()

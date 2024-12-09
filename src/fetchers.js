@@ -1,6 +1,6 @@
 import {clearCache, url} from "@/utils.js";
 import {format} from "date-fns";
-import { useAuthStore } from '@/stores/auth.js';
+import { useAuthStore } from '@/stores/authStore.js';
 
 const addAuthorization = () => {
 
@@ -128,7 +128,6 @@ export const getUserShifts = async (user_id, selectedMonth) => {
 
     const month = format(selectedMonth, 'yyyy-MM')
 
-    console.log(selectedMonth, month)
     const data = {
       method: 'GET',
         headers: {
@@ -140,7 +139,6 @@ export const getUserShifts = async (user_id, selectedMonth) => {
     if (user_id) {
         url_string += `&user_id=${user_id}`
     }
-    console.log(url_string)
     const response = await fetch(url + url_string, data)
 
     if (!response.ok) {
@@ -295,7 +293,7 @@ export const setOvertime = async (userId, overtimeId, counter, date) => {
 }
 
 export const getOvertime = async (user_id, selectedMonth) => {
-    console.log(selectedMonth)
+
     const year = format(selectedMonth, 'yyyy')
     const month = format(selectedMonth, 'MM')
 

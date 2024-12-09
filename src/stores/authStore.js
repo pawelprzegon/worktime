@@ -1,6 +1,5 @@
 import {checkIsAuthorized, getMe, getOvertime} from "@/fetchers.js";
 import {defineStore} from "pinia";
-import { ref } from "vue";
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -27,7 +26,6 @@ export const useAuthStore = defineStore('auth', {
     async getUserMetadata() {
       try{
         const response =  await getMe()
-        console.log(response)
         this.user.id = response.id
         this.user.firstName = response.first_name
         this.user.lastName = response.last_name
@@ -80,6 +78,7 @@ export const useAuthStore = defineStore('auth', {
           }
         } catch (error) {
           console.error('Authorization error:', error);
+          return false;
         }
       }
       this.clearToken();

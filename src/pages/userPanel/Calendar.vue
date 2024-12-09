@@ -8,8 +8,8 @@ import Alert from "@/components/Alert.vue";
 import {range} from "@/utils.js";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import Spinner from "@/components/Spinner.vue";
-import {useMonthTime, useSelectedMonth} from "@/stores/overtime.js";
-import {useAuthStore} from "@/stores/auth.js";
+import {useMonthTime, useSelectedMonth} from "@/stores/overtimeStore.js";
+import {useAuthStore} from "@/stores/authStore.js";
 
 const authStore = useAuthStore()
 const selectedMonth = useSelectedMonth();

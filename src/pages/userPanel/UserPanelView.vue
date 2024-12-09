@@ -2,8 +2,8 @@
 
 import Calendar from "@/pages/userPanel/Calendar.vue";
 import {ref} from "vue";
-import { useAuthStore } from '@/stores/auth.js';
-import {useMonthTime} from "@/stores/overtime.js";
+import { useAuthStore } from '@/stores/authStore.js';
+import {useMonthTime} from "@/stores/overtimeStore.js";
 import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";
 import UserDetails from "@/pages/userPanel/UserDetails.vue";
 import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
@@ -21,8 +21,6 @@ const toggleChangeAvatarModal = () => {
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
 };
-
-console.log(authStore.user)
 
 </script>
 

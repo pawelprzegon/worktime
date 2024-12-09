@@ -1,7 +1,7 @@
 <script setup>
 import { inject, ref } from "vue";
 import { validateAvatarFile, uploadAvatar, handleSuccess } from "@/composables/avatarHandler.js";
-import { useAuthStore } from "@/stores/auth.js";
+import { useAuthStore } from "@/stores/authStore.js";
 import Avatar from "@/components/Avatar.vue";
 import "@/assets/modal.css";
 
