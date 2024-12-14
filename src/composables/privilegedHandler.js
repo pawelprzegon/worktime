@@ -1,7 +1,7 @@
 import {getOvertime, getUserShifts} from "@/fetchers.js";
-import {formatTime, getLast, getLastStartStop, getTime, range} from "@/utils.js";
-import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
-import {ref} from "vue";
+import {formatTime, getLast, getTime} from "@/utils.js";
+import { format} from "date-fns";
+
 
 
 const baseShiftTime = 28800
@@ -44,27 +44,14 @@ export const transposeTable = (headers, body) => {
   ]);
 };
 
-export const daysInMonth = ref(
-    eachDayOfInterval({
-      start: startOfMonth(new Date()),
-      end: endOfMonth(new Date()),
-    }).map(date => ({
-      date,
-      hours: 0,
-      note: '',
-      shifts: { list: [], summary: 0 }
-    }))
-  );
-
-
-const getDates = async (selectedUser, selectedMonth) => {
+export const getData = async (selectedUser, selectedMonth) => {
 
       let calculatedWorkTime = 0;
       let calculatedOvertimeTime = 0;
 
       try {
-        const shifts = await getUserShifts(selectedUser, selectedMonth);
-        const overtimes = await getOvertime(selectedUser, selectedMonth);
+        const shifts = await getUserShifts(selectedUser.user._id, selectedMonth.month);
+        const overtimes = await getOvertime(selectedUser.user._id, selectedMonth.month);
 
         const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
 
@@ -110,7 +97,7 @@ const getDates = async (selectedUser, selectedMonth) => {
 
         });
 
-        daysInMonth.value = daysInMonth.value.map(day => {
+        selectedMonth.daysInMonth = selectedMonth.daysInMonth.map(day => {
           const formattedDate = format(day.date, 'yyyy-MM-dd');
           const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, overtimeTaken: null};
           return {
@@ -122,10 +109,6 @@ const getDates = async (selectedUser, selectedMonth) => {
           console.error("Error fetching users:", error);
         }
 };
-
-export const getData = async (selectedUser, selectedMonth) => {
-  await getDates(selectedUser.user._id, selectedMonth.month)
-}
 
 const prepareStartAndStopTime = (day, dayData) => {
   let start = ''

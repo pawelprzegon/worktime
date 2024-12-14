@@ -1,4 +1,4 @@
-import {daysInMonth, monthMapper, transposeTable} from "@/composables/privilegedHandler.js";
+import {monthMapper, transposeTable} from "@/composables/privilegedHandler.js";
 import {format} from "date-fns";
 import jsPDF from "jspdf";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js";
@@ -43,7 +43,7 @@ export const generatePDF = (selectedUser, selectedMonth) => {
   ];
 
   // Dane tabeli
-  const tableBody = daysInMonth.value.map(day => {
+  const tableBody = selectedMonth.daysInMonth.map(day => {
 
     const calculateWorkTime = () => {
       if (!day.shifts.regular) {

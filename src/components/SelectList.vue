@@ -1,8 +1,8 @@
 <script setup>
 
 import {watch, ref} from "vue";
-import {useSelectedUser} from "@/stores/privilegedStore.js";
-const selectedUser = useSelectedUser()
+import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
+const selectedUser = usePrivilegedSelectedUser()
 
 const props = defineProps({
   label: {

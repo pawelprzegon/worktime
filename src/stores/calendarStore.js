@@ -1,21 +1,52 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
+import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
 
-export const useSelectedMonth = defineStore('selectedMonth', () => {
+export const useCalendarSelectedMonth = defineStore('calendarSelectedMonth', () => {
   const month = ref(new Date());
+  const calculatedWorkTime = ref(0);
+  const calculatedOvertimeTime = ref(0);
 
   const setMonth = (newMonth) => {
     month.value = newMonth;
   };
 
+  const daysInMonth = ref(
+    eachDayOfInterval({
+      start: startOfMonth(month.value),
+      end: endOfMonth(month.value),
+    }).map(date => ({
+      date,
+      hours: 0,
+      note: '',
+      shifts: { list: [], summary: 0 }
+    }))
+  );
+
+  const updateDaysInMonth = () => {
+    daysInMonth.value = eachDayOfInterval({
+      start: startOfMonth(month.value),
+      end: endOfMonth(month.value),
+    }).map(date => ({
+      date,
+      hours: 0,
+      note: '',
+      shifts: { list: [], summary: 0 }
+    }));
+  };
+
   return {
     month,
+    calculatedWorkTime,
+    calculatedOvertimeTime,
+    daysInMonth,
+    updateDaysInMonth,
     setMonth
   };
 });
 
 
-export const useMonthTime = defineStore("useMonthTime", () => {
+export const useCalendarMonthTime = defineStore("useCalendarMonthTime", () => {
   const overtimeInSeconds = ref(0);
   const worktimeInSeconds = ref(0);
 

@@ -1,6 +1,11 @@
 <script setup>
 
-import {calculateTime, daysInMonth} from "@/composables/privilegedHandler.js";
+import {calculateTime} from "@/composables/privilegedHandler.js";
+
+defineProps({
+  daysInMonth: Array
+})
+
 </script>
 
 <template>

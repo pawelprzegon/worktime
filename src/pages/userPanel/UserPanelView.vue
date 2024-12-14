@@ -3,14 +3,14 @@
 import Calendar from "@/pages/userPanel/Calendar.vue";
 import {ref} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
-import {useMonthTime} from "@/stores/overtimeStore.js";
+import {useCalendarMonthTime} from "@/stores/calendarStore.js";
 import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";
 import UserDetails from "@/pages/userPanel/UserDetails.vue";
 import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
 
 
 const authStore = useAuthStore();
-const monthTime = useMonthTime();
+const monthTime = useCalendarMonthTime();
 
 const isChangeModalActive = ref(false);
 

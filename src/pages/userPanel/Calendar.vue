@@ -8,26 +8,21 @@ import Alert from "@/components/Alert.vue";
 import {range} from "@/utils.js";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
 import Spinner from "@/components/Spinner.vue";
-import {useMonthTime, useSelectedMonth} from "@/stores/overtimeStore.js";
+import {useCalendarMonthTime, useCalendarSelectedMonth} from "@/stores/calendarStore.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import '@/assets/calendarNavigation.css';
+import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
+import {getData} from "@/composables/calendarHandler.js";
 
 const authStore = useAuthStore()
-const selectedMonth = useSelectedMonth();
-const monthTime = useMonthTime();
+const selectedMonth = useCalendarSelectedMonth();
+const monthTime = useCalendarMonthTime();
 
 const alert = inject('alert');
 
-
-const calculatedWorkTime = ref(0)
-const calculatedOvertimeTime = ref(0)
 const isModalOpen = ref(false);
 const selectedDay = ref(null);
 const modalKey = ref(0);
-const startDay = ref(null);
-const daysBeforeRange = ref(null);
-const endDay = ref(null);
-const daysAfterRange = ref(null);
 
 const openModal = (day) => {
   selectedDay.value = day;
@@ -38,108 +33,37 @@ const closeModal = () => {
 };
 
 const isLoading = ref(true);
-const daysInMonth = ref(
-  eachDayOfInterval({
-    start: startOfMonth(selectedMonth.month),
-    end: endOfMonth(selectedMonth.month),
-  }).map(date => ({
-    date,
-    hours: 0,
-    note: '',
-    shifts: { list: [], summary: 0 }
-  }))
-);
 
-const updateDaysInMonth = () => {
-  daysInMonth.value = eachDayOfInterval({
-    start: startOfMonth(selectedMonth.month),
-    end: endOfMonth(selectedMonth.month),
-  }).map(date => ({
-    date,
-    hours: 0,
-    note: '',
-    shifts: { list: [], summary: 0 }
-  }));
-};
+const getDataHandler = () => {
+  const result = getData(authStore, selectedMonth, monthTime)
+  if (result) {
+    isLoading.value = false
+  }
+}
 
 const prevMonth = () => {
-  isLoading.value = true
-  selectedMonth.setMonth(sub(selectedMonth.month, { months: 1 }))
-  updateDaysInMonth();
-  getDates()
+  selectedMonth.month = sub(selectedMonth.month, { months: 1 });
+  selectedMonth.updateDaysInMonth();
+  getDataHandler();
 };
 
 const nextMonth = () => {
-  isLoading.value = true
-  selectedMonth.setMonth(add(selectedMonth.month, { months: 1 }));
-  updateDaysInMonth();
-  getDates()
-
+  selectedMonth.month = add(selectedMonth.month, { months: 1 });
+  selectedMonth.updateDaysInMonth();
+  getDataHandler();
 };
 
-const getDates = async () => {
-  monthTime.clear()
-  calculatedWorkTime.value = 0;
-  calculatedOvertimeTime.value = 0;
+const getDaysBefore = () => {
+  const startDay = new Date(selectedMonth.daysInMonth[0]['date']).getDay() || 7;
+  return range(2, startDay);
+}
+const getDaysAfter = () => {
+  const endDay = new Date(selectedMonth.daysInMonth[selectedMonth.daysInMonth.length - 1]['date']).getDay() || 7;
+  return range(endDay, 6);
+}
 
-  try {
-    const shifts = await getUserShifts(authStore.user._id, selectedMonth.month);
-    const overtimes = await getOvertime(authStore.user._id, selectedMonth.month);
-    startDay.value = new Date(daysInMonth.value[0]['date']).getDay() || 7;
-    endDay.value = new Date(daysInMonth.value[daysInMonth.value.length - 1]['date']).getDay() || 7;
-    daysBeforeRange.value = range(2, startDay.value);
-    daysAfterRange.value = range(endDay.value, 6);
-
-    const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
-
-    const groupedShifts = shifts.reduce((acc, shift) => {
-      const date = getDate(shift.start);
-      if (!acc[date]) {
-        acc[date] = {
-          list: [],
-          totalWork: 0,
-          overtime: {}
-        };
-      }
-      acc[date].list.push(shift);
-      acc[date].totalWork += shift.work;
-      acc[date].overtimeTaken = overtimes.filter(overtime => getDate(overtime.date) === date)[0]
-      return acc;
-    }, {});
-
-    Object.keys(groupedShifts).forEach(date => {
-
-      const totalWork = groupedShifts[date].totalWork;
-      const splitOvertime = monthTime.splitOvertime(totalWork)
-
-      if (groupedShifts[date].overtimeTaken){
-        const ovTaken = groupedShifts[date].overtimeTaken.hours * 3600
-        monthTime.subOvertime(ovTaken)
-      }
-
-      groupedShifts[date].regular = splitOvertime.work;
-      groupedShifts[date].overtime = splitOvertime.overtime;
-
-    });
-
-    daysInMonth.value = daysInMonth.value.map(day => {
-      const formattedDate = format(day.date, 'yyyy-MM-dd');
-      const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0};
-      return {
-        ...day,
-        shifts: groupedShift,
-      };
-    });
-
-    isLoading.value = false
-
-  } catch (error) {
-    console.error("Error fetching users:", error);
-  }
-};
-
-const refreshShifts = async () => {
-  await getDates()
+const refreshShifts = () => {
+  getDataHandler();
 };
 
 const removeShift = async(shiftId) => {
@@ -156,14 +80,14 @@ const refreshModal = async () => {
   const selectedDate = selectedDay.value.date;
   await refreshShifts();
 
-  selectedDay.value = daysInMonth.value.find(day =>
+  selectedDay.value = selectedMonth.daysInMonth.find(day =>
     format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
   modalKey.value++;
 };
 
 onMounted(async () => {
-  updateDaysInMonth();
+  selectedMonth.updateDaysInMonth();
   await refreshShifts()
 
 });
@@ -178,12 +102,11 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
     <Spinner />
   </div>
   <div v-else class="calendar">
-    <div class="calendar-navigation">
-      <CustomNaviButton direction="preview" size="20" @click="prevMonth"/>
-      <span class="nav-label">{{ format(selectedMonth.month, 'MMMM yyyy') }}</span>
-      <CustomNaviButton direction="next" size="20" @click="nextMonth"/>
-    </div>
-
+    <CalendarNavigation
+        :selected-month="selectedMonth.month"
+        @add="nextMonth"
+        @sub="prevMonth"
+    />
     <div class="calendar-grid">
       <small
           v-for="(day, index) in daysOfWeek"
@@ -193,9 +116,9 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         {{day}}
       </small>
 
-      <div v-for="(index) in daysBeforeRange" :key="index" class="preview-month-day"></div>
+      <div v-for="(index) in getDaysBefore()" :key="index" class="preview-month-day"></div>
       <div
-        v-for="(day, index) in daysInMonth"
+        v-for="(day, index) in selectedMonth.daysInMonth"
         :key="index"
         :class="['calendar-day',
         {
@@ -231,7 +154,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
 
         </div>
       </div>
-      <div v-for="(index) in daysAfterRange" :key="index" class="preview-month-day"></div>
+      <div v-for="(index) in getDaysAfter()" :key="index" class="preview-month-day"></div>
     </div>
 
     <ShiftsModal
@@ -239,7 +162,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         :key="modalKey"
         :shifts="selectedDay?.shifts.list"
         :overtime="selectedDay?.shifts.overtimeTaken"
-        :calculatedOvertime="calculatedOvertimeTime"
+        :calculatedOvertime="selectedMonth.calculatedOvertimeTime"
         :selectedDay="selectedDay.date"
         @closeModal="closeModal"
         @removeShift="removeShift"
