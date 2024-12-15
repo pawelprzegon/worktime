@@ -101,8 +101,6 @@ export const useModal = (selectedMonth) => {
     const selectedDate = selectedDay.value.date;
 
     await getDataHandler().then(() => {
-      console.log('done2');
-      console.log(selectedMonth.daysInMonth);
 
       selectedDay.value = selectedMonth.daysInMonth.find(day =>
         format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
@@ -110,7 +108,7 @@ export const useModal = (selectedMonth) => {
 
       modalKey.value++;
     }).catch(error => {
-      console.error('Błąd w getDataHandler:', error);
+      console.error('getDataHandler error:', error);
     });
   };
 

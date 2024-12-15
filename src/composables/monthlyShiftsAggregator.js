@@ -84,6 +84,5 @@ export const processMonthlyShifts = async (selectedUser, selectedMonth, monthTim
   selectedMonth.updateDaysInMonth()
 
   updateMonthDays(selectedMonth, groupedShifts);
-  console.log('done')
   return true;
 };
