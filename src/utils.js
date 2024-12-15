@@ -1,5 +1,6 @@
 import {ref} from "vue";
-import {add, format, sub} from "date-fns";
+import {defineStore} from "pinia";
+import {add, eachDayOfInterval, endOfMonth, format, startOfMonth, sub} from "date-fns";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -146,3 +147,37 @@ export const useCalendarNavigation = (selectedMonth, updateHandler) => {
 
   return { prevMonth, nextMonth };
 };
+
+export const useCalendarStore = (id) =>
+  defineStore(id, () => {
+    const month = ref(new Date());
+    const calculatedWorkTime = ref(0);
+    const calculatedOvertimeTime = ref(0);
+
+    const setMonth = (newMonth) => {
+      month.value = newMonth;
+    };
+
+    const daysInMonth = ref([]);
+
+    const updateDaysInMonth = () => {
+      daysInMonth.value = eachDayOfInterval({
+        start: startOfMonth(month.value),
+        end: endOfMonth(month.value),
+      }).map(date => ({
+        date,
+        hours: 0,
+        note: '',
+        shifts: { list: [], summary: 0 }
+      }));
+    };
+
+    return {
+      month,
+      calculatedWorkTime,
+      calculatedOvertimeTime,
+      daysInMonth,
+      updateDaysInMonth,
+      setMonth,
+    };
+  })();

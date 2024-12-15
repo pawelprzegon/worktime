@@ -1,18 +1,19 @@
 <script setup>
 import "jspdf-autotable";
 import {onMounted, ref, watch} from "vue";
-import {usePrivilegedSelectedUser, usePrivilegedSelectedMonth} from "@/stores/privilegedStore.js";
-import {generatePDF} from "@/composables/pdfScheduleHandler.js";
+import Alert from "@/components/Alert.vue";
+import {useCalendarStore} from "@/utils.js";
+import Spinner from "@/components/Spinner.vue";
+import {useCalendarNavigation} from "@/utils.js";
 import {getData} from "@/composables/privilegedHandler.js";
+import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {useCalendarNavigation} from "@/utils.js";
-import Spinner from "@/components/Spinner.vue";
-import Alert from "@/components/Alert.vue";
+import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 
 
 const selectedUser = usePrivilegedSelectedUser();
-const selectedMonth = usePrivilegedSelectedMonth();
+const selectedMonth = useCalendarStore('privilegedSelectedMonth')
 const isLoading = ref(false)
 
 
@@ -25,15 +26,15 @@ const getDataHandler = async () => {
 const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
 
 watch(
-  () => selectedUser.user, () => {
-      getData(selectedUser, selectedMonth);
+  () => selectedUser.user,  () => {
+      getDataHandler();
   },
   { deep: true }
 );
 
-onMounted(() => {
-  if (selectedUser.user) {
-    getData(selectedUser, selectedMonth);
+onMounted( () => {
+  if (selectedMonth.month && selectedUser.user) {
+    getDataHandler();
   }
 });
 

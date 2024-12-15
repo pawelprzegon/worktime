@@ -305,7 +305,7 @@ export const getOvertime = async (user_id, selectedMonth) => {
         }
     }
 
-    let url_string = `/overtime?year=${year},month=${month}`
+    let url_string = `/overtime/?year=${year},month=${month}`
     if (user_id) {
         url_string += `&user_id=${user_id}`
     }
