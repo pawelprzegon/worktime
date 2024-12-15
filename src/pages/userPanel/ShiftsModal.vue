@@ -4,12 +4,15 @@ import CustomTextButton from "@/components/CustomTextButton.vue";
 import Alert from "@/components/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
 import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
-import '@/assets/modal.css';
+
 import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
 import MainContainer from "@/pages/userPanel/mainContainer.vue";
+import ModalWrapper from "@/components/ModalWrapper.vue";
+import {format} from "date-fns";
 
-const deleteConfirmationVisible = ref(false)
-
+const deleteConfirmationVisible = ref(false);
+const isModalOpen = ref(true);
+const modalKey = ref(0);
 
 const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
 
@@ -24,7 +27,13 @@ const props = defineProps({
     default: 0
   },
   selectedDay: Date,
+  closeModal: Function,
 })
+
+const closeModal = () => {
+  props.closeModal();
+  isModalOpen.value = false;
+}
 
 props.shifts.forEach(shift => {
   shift.isCorrectingTime = false;
@@ -83,11 +92,6 @@ const deleteConfirmed = (shiftId) => {
   emit('removeShift', shiftId)
 }
 
-
-const closeModal = () => {
-  emit('closeModal')
-}
-
 onBeforeUnmount(() => {
   props.shifts.forEach(shift => {
     shift.isEditingNote = false
@@ -98,12 +102,8 @@ onBeforeUnmount(() => {
 
 <template>
   <Alert />
-  <div class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
-      <div
-          v-if="props.shifts.length > 0"
-          class="shifts-container"
-      >
+  <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
+      <div class="shifts-container">
         <div class="shifts-label">
           <h2 style="font-weight: 600">{{ date }}</h2>
         </div>
@@ -177,8 +177,7 @@ onBeforeUnmount(() => {
             @refreshModal="refreshModal"
         />
       </div>
-    </div>
-  </div>
+  </ModalWrapper>
 </template>
 
 <style scoped>

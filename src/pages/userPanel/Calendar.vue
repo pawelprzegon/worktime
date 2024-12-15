@@ -9,15 +9,22 @@ import {removeShift} from "@/composables/calendarHandler.js";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {formatTime, useCalendarDays, useModal, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
+import {formatTime, useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
+import ShiftAdder from "@/pages/userPanel/ShiftAdderModal.vue";
+import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
+import {format} from "date-fns";
 
 
 const authStore = useAuthStore()
 const selectedMonth = useCalendarStore('calendarSelectedMonth');
 const monthTime = useCalendarMonthTime('calendarMonthTime');
+const selectedDay = useCalendarSelectedDay();
 
 const alert = inject('alert');
 const isLoading = ref(true);
+const isShiftAdderOpen = ref(false);
+const isDailyShiftsOpen = ref(false);
+const modalKey = ref(0)
 
 const getDataHandler = () => {
   isLoading.value = true;
@@ -27,17 +34,44 @@ const getDataHandler = () => {
 }
 
 const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
-const { isModalOpen, selectedDay, modalKey, openModal, closeModal, refreshModal } = useModal(selectedMonth);
+
 const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
 
 const handleRemoveShift = async (shiftId) => {
-  await removeShift(shiftId, selectedDay, alert);
+  await removeShift(shiftId, selectedDay.day, alert);
   await getDataHandler()
 };
 
-watch(modalKey, (newKey) => {
-  console.log("Modal key changed:", newKey);
-});
+const handleRefreshModal = async () => {
+
+    await getDataHandler().then(() => {
+
+      const dayToSet =  selectedMonth.daysInMonth.find(day =>
+        format(day.date, 'yyyy-MM-dd') === format(selectedDay.day.date, 'yyyy-MM-dd')
+      );
+      selectedDay.setDay(dayToSet)
+      modalKey.value++;
+    }).catch(error => {
+      console.error('getDataHandler error:', error);
+    });
+  };
+
+const dayOpenerHandler = (day) => {
+  selectedDay.setDay(day)
+  if (day?.shifts.list.length > 0) {
+    isDailyShiftsOpen.value = true
+  } else {
+    isShiftAdderOpen.value = true;
+  }
+}
+
+const closeDailyShifts = () => {
+  isDailyShiftsOpen.value = false;
+}
+
+const closeShiftAdder = () => {
+  isShiftAdderOpen.value = false;
+}
 
 onMounted(async () => {
   selectedMonth.updateDaysInMonth();
@@ -77,7 +111,7 @@ onMounted(async () => {
           'unfinished-shift': day.shifts.list.length > 0,
           'finished-shift': (day.shifts.regular + (day.shifts.overtimeTaken?.hours || 0) * 3600) >= 28800
         }]"
-        @click="openModal(day)"
+        @click="dayOpenerHandler(day)"
       >
         <span class="day-header">{{ day.date.getDate() }}</span>
         <div class="shifts-list">
@@ -109,16 +143,20 @@ onMounted(async () => {
       <div v-for="(index) in getDaysAfter()" :key="index" class="preview-month-day"></div>
     </div>
 
+    <ShiftAdder
+        v-if="isShiftAdderOpen"
+        :closeModal="closeShiftAdder"
+    />
     <ShiftsModal
-        v-if="isModalOpen && selectedDay?.shifts.list.length > 0"
+        v-if="isDailyShiftsOpen && selectedDay.day?.shifts.list.length > 0"
         :key="modalKey"
-        :shifts="selectedDay?.shifts.list"
-        :overtime="selectedDay?.shifts.overtimeTaken"
+        :shifts="selectedDay.day?.shifts.list"
+        :overtime="selectedDay.day?.shifts.overtimeTaken"
         :calculatedOvertime="selectedMonth.calculatedOvertimeTime"
-        :selectedDay="selectedDay.date"
-        @closeModal="closeModal"
-        @removeShift="handleRemoveShift"
-        @refreshModal="refreshModal(getDataHandler)"
+        :selectedDay="selectedDay.day?.date"
+        :closeModal="closeDailyShifts"
+        @remove-shift="handleRemoveShift"
+        @refresh-modal="handleRefreshModal"
     />
 
   </div>

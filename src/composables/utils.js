@@ -1,5 +1,4 @@
-import {ref} from "vue";
-import {add, format, sub} from "date-fns";
+import {add, sub} from "date-fns";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -82,45 +81,6 @@ export const getLast = (day) => {
   })
   return shifts
 }
-
-export const useModal = (selectedMonth) => {
-  const isModalOpen = ref(false);
-  const selectedDay = ref(null);
-  const modalKey = ref(0);
-
-  const openModal = (day) => {
-    selectedDay.value = day;
-    isModalOpen.value = true;
-  };
-
-  const closeModal = () => {
-    isModalOpen.value = false;
-  };
-
-  const refreshModal = async (getDataHandler) => {
-    const selectedDate = selectedDay.value.date;
-
-    await getDataHandler().then(() => {
-
-      selectedDay.value = selectedMonth.daysInMonth.find(day =>
-        format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
-      );
-
-      modalKey.value++;
-    }).catch(error => {
-      console.error('getDataHandler error:', error);
-    });
-  };
-
-  return {
-    isModalOpen,
-    selectedDay,
-    modalKey,
-    openModal,
-    closeModal,
-    refreshModal,
-  };
-};
 
 export const useCalendarDays = (selectedMonth) => {
   const getDaysBefore = () => {

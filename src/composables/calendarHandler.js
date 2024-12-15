@@ -4,7 +4,7 @@ export const removeShift = async (shiftId, selectedDay, alert) => {
   try {
     const response = await deleteShiftFetch(shiftId);
     if (response) {
-      selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(
+      selectedDay.shifts.list = selectedDay.shifts.list.filter(
         (shift) => shift.id !== shiftId
       );
       alert.show(response.status, response.message);
