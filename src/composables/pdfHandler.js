@@ -1,4 +1,4 @@
-import {getTime} from "@/utils.js";
+import {getTime} from "@/composables/utils.js";
 
 export const prepareStartAndStopTimePDF = (day, dayData) => {
   let start = ''

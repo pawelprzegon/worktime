@@ -2,7 +2,7 @@ import {monthMapper, transposeTable} from "@/composables/privilegedHandler.js";
 import {format} from "date-fns";
 import jsPDF from "jspdf";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js";
-import {formatTime, getLast} from "@/utils.js";
+import {formatTime, getLast} from "@/composables/utils.js";
 import {prepareStartAndStopTimePDF} from "@/composables/pdfHandler.js";
 import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
 

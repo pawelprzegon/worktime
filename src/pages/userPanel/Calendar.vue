@@ -1,15 +1,15 @@
 <script setup>
 import '@/assets/calendarNavigation.css';
-import {ref, onMounted, inject} from 'vue';
+import {ref, onMounted, inject, watch} from 'vue';
 import Alert from "@/components/Alert.vue";
-import {useCalendarStore} from "@/utils.js";
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
-import {useCalendarMonthTime, getData} from "@/utils.js";
 import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
 import {removeShift} from "@/composables/calendarHandler.js";
+import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
+import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {formatTime, useCalendarDays, useModal, daysOfWeek, useCalendarNavigation} from "@/utils.js";
+import {formatTime, useCalendarDays, useModal, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 
 
 const authStore = useAuthStore()
@@ -21,8 +21,9 @@ const isLoading = ref(true);
 
 const getDataHandler = () => {
   isLoading.value = true;
-  const result = getData(authStore, selectedMonth, monthTime);
+  const result = processMonthlyShifts(authStore, selectedMonth, monthTime);
   isLoading.value = !result;
+  return result;
 }
 
 const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
@@ -31,12 +32,16 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
 
 const handleRemoveShift = async (shiftId) => {
   await removeShift(shiftId, selectedDay, alert);
-  getDataHandler()
+  await getDataHandler()
 };
+
+watch(modalKey, (newKey) => {
+  console.log("Modal key changed:", newKey);
+});
 
 onMounted(async () => {
   selectedMonth.updateDaysInMonth();
-  getDataHandler();
+  await getDataHandler();
 
 });
 
@@ -113,7 +118,7 @@ onMounted(async () => {
         :selectedDay="selectedDay.date"
         @closeModal="closeModal"
         @removeShift="handleRemoveShift"
-        @refreshModal="refreshModal"
+        @refreshModal="refreshModal(getDataHandler)"
     />
 
   </div>

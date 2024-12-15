@@ -1,10 +1,10 @@
 <script setup>
 
-import {formatTime, getDate, getLastStartStop, getTime} from "@/utils.js";
+import {formatTime, getDate, getLastStartStop, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/pages/userPanel/ShiftNoteContainer.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {saveShiftNote} from "@/fetchers.js";
+import {saveShiftNote} from "@/composables/fetchers.js";
 import Alert from "@/components/Alert.vue";
 import {inject, ref} from "vue";
 

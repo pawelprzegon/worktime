@@ -1,7 +1,7 @@
 <script setup>
 
 import {onMounted, ref} from "vue";
-import {startShift, stopShift, getActiveShift} from "@/fetchers.js";
+import {startShift, stopShift, getActiveShift} from "@/composables/fetchers.js";
 import Avatar from "@/components/Avatar.vue";
 import UserName from "@/components/UserName.vue";
 import ShiftTime from "@/pages/dash/ShiftTime.vue";

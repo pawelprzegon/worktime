@@ -1,4 +1,4 @@
-import { saveAvatar } from "@/fetchers.js";
+import { saveAvatar } from "@/composables/fetchers.js";
 
 /**
  * Waliduje plik przed wysłaniem na serwer

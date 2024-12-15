@@ -1,7 +1,7 @@
 <script setup>
 
 import {ref} from 'vue'
-import {getUsers} from "@/fetchers.js";
+import {getUsers} from "@/composables/fetchers.js";
 import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
 import SelectList from "@/components/SelectList.vue";
 

@@ -1,7 +1,7 @@
 <script setup>
   import { useRouter } from "vue-router";
   import {onMounted, ref, watch, computed} from 'vue'
-  import {getMe} from "@/fetchers.js";
+  import {getMe} from "@/composables/fetchers.js";
   import CustomTextButton from "@/components/CustomTextButton.vue";
   import { useAuthStore } from '@/stores/authStore.js';
 

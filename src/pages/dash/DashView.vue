@@ -1,5 +1,5 @@
 <script setup>
-import {getDashUsers} from "@/fetchers.js";
+import {getDashUsers} from "@/composables/fetchers.js";
 import {onMounted, ref} from "vue";
 import User from "@/pages/dash/User.vue";
 

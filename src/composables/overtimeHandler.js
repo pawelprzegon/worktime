@@ -1,6 +1,6 @@
 import { computed, ref } from "vue";
 import {defineStore} from "pinia";
-import {formatTime} from "@/utils.js";
+import {formatTime} from "@/composables/utils.js";
 
 export const useMonthTimeStore = defineStore("useMonthTimeStore", () => {
   const worktimeInSeconds = ref(0);

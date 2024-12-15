@@ -1,7 +1,7 @@
 
 <script setup>
   import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
-  import { formatTime } from "@/utils.js";
+  import { formatTime } from "@/composables/utils.js";
   defineProps(["worktimeInSeconds", "overtimeInSeconds"]);
 
 </script>

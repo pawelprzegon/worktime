@@ -1,9 +1,9 @@
 <script setup>
 import {inject, ref} from 'vue'
-import {getHoursAsNumber} from "@/utils.js";
+import {getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {setOvertime} from "@/fetchers.js";
+import {setOvertime} from "@/composables/fetchers.js";
 
 const props = defineProps({
   maxToTake: Number,

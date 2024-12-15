@@ -1,6 +1,6 @@
 <script setup>
 import { ref, inject } from 'vue';
-import {registerUser, saveAvatar} from "@/fetchers.js";
+import {registerUser, saveAvatar} from "@/composables/fetchers.js";
 import { useRouter } from "vue-router";
 
 const alert = inject('alert');

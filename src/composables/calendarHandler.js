@@ -1,4 +1,4 @@
-import {deleteShiftFetch} from "@/fetchers.js";
+import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 export const removeShift = async (shiftId, selectedDay, alert) => {
   try {

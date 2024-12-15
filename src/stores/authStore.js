@@ -1,4 +1,4 @@
-import {checkIsAuthorized, getMe, getOvertime} from "@/fetchers.js";
+import {checkIsAuthorized, getMe, getOvertime} from "@/composables/fetchers.js";
 import {defineStore} from "pinia";
 
 export const useAuthStore = defineStore('auth', {
