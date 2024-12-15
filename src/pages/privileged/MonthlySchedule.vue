@@ -1,28 +1,28 @@
 <script setup>
 import "jspdf-autotable";
-import {onMounted, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {usePrivilegedSelectedUser, usePrivilegedSelectedMonth} from "@/stores/privilegedStore.js";
 import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import {getData} from "@/composables/privilegedHandler.js";
 import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {add, sub} from "date-fns";
+import {useCalendarNavigation} from "@/utils.js";
+import Spinner from "@/components/Spinner.vue";
+import Alert from "@/components/Alert.vue";
 
 
 const selectedUser = usePrivilegedSelectedUser();
 const selectedMonth = usePrivilegedSelectedMonth();
+const isLoading = ref(false)
 
-const prevMonth = () => {
-  selectedMonth.month = sub(selectedMonth.month, { months: 1 });
-  selectedMonth.updateDaysInMonth();
-    getData(selectedUser, selectedMonth);
+
+const getDataHandler = async () => {
+  isLoading.value = true;
+  const result = await getData(selectedUser, selectedMonth);
+  isLoading.value = !result;
 };
 
-const nextMonth = () => {
-  selectedMonth.month = add(selectedMonth.month, { months: 1 });
-  selectedMonth.updateDaysInMonth();
-    getData(selectedUser, selectedMonth);
-};
+const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
 
 watch(
   () => selectedUser.user, () => {
@@ -40,6 +40,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <Alert />
   <div v-if="selectedUser.user" class="schedule-container">
     <button @click="generatePDF(selectedUser, selectedMonth)">Get Schedule</button>
     <CalendarNavigation
@@ -47,9 +48,16 @@ onMounted(() => {
         @add="nextMonth"
         @sub="prevMonth"
     />
+    <div v-if="isLoading" class="loading-spinner">
+      <Spinner />
+    </div>
     <ScheduleTable
+        v-else
         :days-in-month="selectedMonth.daysInMonth"
     />
+  </div>
+  <div v-else class="no-user">
+    <p>No user selected. Please choose a user to view the schedule.</p>
   </div>
 </template>
 

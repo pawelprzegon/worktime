@@ -1,113 +1,59 @@
 <script setup>
-import {ref, onMounted, inject} from 'vue';
-import { format,  add, sub, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
-import {deleteShiftFetch, getOvertime, getUserShifts} from "@/fetchers.js";
-import {formatTime} from "@/utils.js";
-import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
-import Alert from "@/components/Alert.vue";
-import {range} from "@/utils.js";
-import CustomNaviButton from "@/components/CustomNaviButton.vue";
-import Spinner from "@/components/Spinner.vue";
-import {useCalendarMonthTime, useCalendarSelectedMonth} from "@/stores/calendarStore.js";
-import {useAuthStore} from "@/stores/authStore.js";
 import '@/assets/calendarNavigation.css';
+import {ref, onMounted, inject} from 'vue';
+import Alert from "@/components/Alert.vue";
+import Spinner from "@/components/Spinner.vue";
+import {useAuthStore} from "@/stores/authStore.js";
+import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
+import {getData, removeShift} from "@/composables/calendarHandler.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {getData} from "@/composables/calendarHandler.js";
+import {useCalendarMonthTime, useCalendarSelectedMonth} from "@/stores/calendarStore.js";
+import {formatTime, useCalendarDays, useModal, daysOfWeek, useCalendarNavigation} from "@/utils.js";
+
 
 const authStore = useAuthStore()
 const selectedMonth = useCalendarSelectedMonth();
 const monthTime = useCalendarMonthTime();
 
 const alert = inject('alert');
-
-const isModalOpen = ref(false);
-const selectedDay = ref(null);
-const modalKey = ref(0);
-
-const openModal = (day) => {
-  selectedDay.value = day;
-  isModalOpen.value = true;
-};
-const closeModal = () => {
-  isModalOpen.value = false;
-};
-
 const isLoading = ref(true);
 
 const getDataHandler = () => {
-  const result = getData(authStore, selectedMonth, monthTime)
-  if (result) {
-    isLoading.value = false
-  }
+  isLoading.value = true;
+  const result = getData(authStore, selectedMonth, monthTime);
+  isLoading.value = !result;
 }
 
-const prevMonth = () => {
-  selectedMonth.month = sub(selectedMonth.month, { months: 1 });
-  selectedMonth.updateDaysInMonth();
-  getDataHandler();
-};
+const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
+const { isModalOpen, selectedDay, modalKey, openModal, closeModal, refreshModal } = useModal(selectedMonth);
+const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
 
-const nextMonth = () => {
-  selectedMonth.month = add(selectedMonth.month, { months: 1 });
-  selectedMonth.updateDaysInMonth();
-  getDataHandler();
-};
-
-const getDaysBefore = () => {
-  const startDay = new Date(selectedMonth.daysInMonth[0]['date']).getDay() || 7;
-  return range(2, startDay);
-}
-const getDaysAfter = () => {
-  const endDay = new Date(selectedMonth.daysInMonth[selectedMonth.daysInMonth.length - 1]['date']).getDay() || 7;
-  return range(endDay, 6);
-}
-
-const refreshShifts = () => {
-  getDataHandler();
-};
-
-const removeShift = async(shiftId) => {
-  selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(shift => shift.id !== shiftId);
-  const response = await deleteShiftFetch(shiftId)
-  if (response) {
-    alert.show(response.status, response.message)
-  }
-  await refreshShifts()
-  alert.show(response.status, response.message)
-};
-
-const refreshModal = async () => {
-  const selectedDate = selectedDay.value.date;
-  await refreshShifts();
-
-  selectedDay.value = selectedMonth.daysInMonth.find(day =>
-    format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
-  );
-  modalKey.value++;
+const handleRemoveShift = async (shiftId) => {
+  await removeShift(shiftId, selectedDay, alert);
+  getDataHandler()
 };
 
 onMounted(async () => {
   selectedMonth.updateDaysInMonth();
-  await refreshShifts()
+  getDataHandler();
 
 });
-
-const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 </script>
 
 <template>
   <Alert />
-  <div v-if="isLoading" class="loading-spinner">
-    <Spinner />
-  </div>
-  <div v-else class="calendar">
+
+  <div class="calendar">
     <CalendarNavigation
         :selected-month="selectedMonth.month"
         @add="nextMonth"
         @sub="prevMonth"
     />
-    <div class="calendar-grid">
+     <div v-if="isLoading" class="loading-spinner">
+      <Spinner />
+    </div>
+    <div v-else class="calendar-grid">
       <small
           v-for="(day, index) in daysOfWeek"
           :key="index"
@@ -165,7 +111,7 @@ const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sat
         :calculatedOvertime="selectedMonth.calculatedOvertimeTime"
         :selectedDay="selectedDay.date"
         @closeModal="closeModal"
-        @removeShift="removeShift"
+        @removeShift="handleRemoveShift"
         @refreshModal="refreshModal"
     />
 

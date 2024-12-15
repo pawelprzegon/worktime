@@ -1,5 +1,5 @@
-import {getOvertime, getUserShifts} from "@/fetchers.js";
-import {format} from "date-fns";
+import {deleteShiftFetch, getOvertime, getUserShifts} from "@/fetchers.js";
+import {format, sub, add} from "date-fns";
 
 
 export const getData = async (selectedUser, selectedMonth, monthTime) => {
@@ -56,5 +56,23 @@ export const getData = async (selectedUser, selectedMonth, monthTime) => {
 
   } catch (error) {
     console.error("Error fetching users:", error);
+    return false
+  }
+};
+
+export const removeShift = async (shiftId, selectedDay, alert) => {
+  try {
+    const response = await deleteShiftFetch(shiftId);
+    if (response) {
+      selectedDay.value.shifts.list = selectedDay.value.shifts.list.filter(
+        (shift) => shift.id !== shiftId
+      );
+      alert.show(response.status, response.message);
+    }
+
+    alert.show(response.status, response.message);
+  } catch (error) {
+    console.error("Error removing shift:", error);
+    alert.show("error", "Failed to remove shift.");
   }
 };

@@ -1,5 +1,10 @@
+import {ref} from "vue";
+import {add, format, sub} from "date-fns";
+
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
+
+export const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export function formatTime(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -40,14 +45,11 @@ export function getDate(timestamp) {
   });
 }
 
-
 export const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
-
 
 export const clearCache = () => {
   sessionStorage.clear();
 }
-
 
 export const getLastStartStop = (shift, type) => {
   // sprawdzanie czy są jakieś korekty i jeśli tak to nadpisanie nimi start i stop
@@ -80,3 +82,67 @@ export const getLast = (day) => {
   })
   return shifts
 }
+
+export const useModal = (selectedMonth) => {
+  const isModalOpen = ref(false);
+  const selectedDay = ref(null);
+  const modalKey = ref(0);
+
+  const openModal = (day) => {
+    selectedDay.value = day;
+    isModalOpen.value = true;
+  };
+
+  const closeModal = () => {
+    isModalOpen.value = false;
+  };
+
+  const refreshModal = (getDataHandler) => {
+    const selectedDate = selectedDay.value.date;
+    getDataHandler();
+
+    selectedDay.value = selectedMonth.daysInMonth.find(day =>
+      format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
+    );
+    modalKey.value++;
+  };
+
+  return {
+    isModalOpen,
+    selectedDay,
+    modalKey,
+    openModal,
+    closeModal,
+    refreshModal,
+  };
+};
+
+export const useCalendarDays = (selectedMonth) => {
+  const getDaysBefore = () => {
+    const startDay = new Date(selectedMonth.daysInMonth[0]['date']).getDay() || 7;
+    return range(2, startDay);
+  };
+
+  const getDaysAfter = () => {
+    const endDay = new Date(selectedMonth.daysInMonth[selectedMonth.daysInMonth.length - 1]['date']).getDay() || 7;
+    return range(endDay, 6);
+  };
+
+  return { getDaysBefore, getDaysAfter };
+};
+
+export const useCalendarNavigation = (selectedMonth, updateHandler) => {
+  const prevMonth = () => {
+    selectedMonth.month = sub(selectedMonth.month, { months: 1 });
+    selectedMonth.updateDaysInMonth();
+    updateHandler();
+  };
+
+  const nextMonth = () => {
+    selectedMonth.month = add(selectedMonth.month, { months: 1 });
+    selectedMonth.updateDaysInMonth();
+    updateHandler();
+  };
+
+  return { prevMonth, nextMonth };
+};

@@ -105,8 +105,10 @@ export const getData = async (selectedUser, selectedMonth) => {
             shifts: groupedShift,
           };
         });
+        return true
       } catch (error) {
           console.error("Error fetching users:", error);
+          return false
         }
 };
 
