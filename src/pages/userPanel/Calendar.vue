@@ -14,6 +14,8 @@ import ShiftAdder from "@/pages/userPanel/ShiftAdderModal.vue";
 import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
 import {format} from "date-fns";
 import DayContainer from "@/pages/userPanel/DayContainer.vue";
+import EmptyDayContainer from "@/pages/userPanel/EmptyDayContainer.vue";
+import WeekDayNameContainer from "@/pages/userPanel/WeekDayNameContainer.vue";
 
 
 const authStore = useAuthStore()
@@ -95,22 +97,27 @@ onMounted(async () => {
       <Spinner />
     </div>
     <div v-else class="calendar-grid">
-      <small
-          v-for="(day, index) in daysOfWeek"
-          :key="index"
-          style="text-align: center;"
-      >
-        {{day}}
-      </small>
+      <WeekDayNameContainer
+        v-for="(day, index) in daysOfWeek"
+        :key="index"
+        :day="day"
+      />
 
-      <div v-for="(index) in getDaysBefore()" :key="index" class="preview-month-day"></div>
+      <EmptyDayContainer
+          v-for="(index) in getDaysBefore()"
+          :key="index"
+      />
+
       <DayContainer
         v-for="(day, index) in selectedMonth.daysInMonth"
         :key="index"
         :day="day"
         @click="dayOpenerHandler(day)"
       />
-      <div v-for="(index) in getDaysAfter()" :key="index" class="preview-month-day"></div>
+      <EmptyDayContainer
+          v-for="(index) in getDaysAfter()"
+          :key="index"
+      />
     </div>
 
     <ShiftAdder
@@ -150,16 +157,6 @@ onMounted(async () => {
 
 
 
-
-
-.preview-month-day {
-  background: var(--vt-c-black-mute);
-  border-radius: 8px;
-  width: 100px;
-  height: 100px;
-}
-
-
 input[type="number"] {
   width: 60px;
 }
@@ -173,21 +170,12 @@ textarea {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   }
-  .preview-month-day {
-    width: 90px;
-    height: 90px;
-  }
 }
 
 @media(max-width: 800px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 10px;
-  }
-  .preview-month-day {
-    width: 80px;
-    height: 80px;
-    border-radius: 5px;
   }
 }
 
@@ -196,26 +184,12 @@ textarea {
     grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
     gap: 10px;
   }
-
-  .preview-month-day {
-    width: 75px;
-    height: 75px;
-    border-radius: 5px;
-    padding: 4px;
-  }
 }
 
 @media(max-width: 690px) {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     gap: 10px;
-  }
-
-  .preview-month-day {
-    width: 70px;
-    height: 70px;
-    border-radius: 5px;
-    padding: 4px;
   }
 }
 
@@ -224,14 +198,6 @@ textarea {
     grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
     gap: 8px;
   }
-
-  .preview-month-day {
-    width: 65px;
-    height: 65px;
-    border-radius: 3px;
-    padding: 4px;
-  }
-
 }
 
 @media(max-width: 620px) {
@@ -242,13 +208,6 @@ textarea {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
     gap: 8px;
-  }
-
-  .preview-month-day {
-    width: 60px;
-    height: 60px;
-    border-radius: 3px;
-    padding: 3px;
   }
 
   .calendar-grid small {
@@ -267,13 +226,6 @@ textarea {
     gap: 8px;
   }
 
-  .preview-month-day {
-    width: 55px;
-    height: 55px;
-    border-radius: 3px;
-    padding: 3px;
-  }
-
   .calendar-grid small {
     font-size: 9px;
   }
@@ -287,13 +239,6 @@ textarea {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
     gap: 8px;
-  }
-
-  .preview-month-day {
-    width: 50px;
-    height: 50px;
-    border-radius: 3px;
-    padding: 2px;
   }
 
   .calendar-grid small {
@@ -311,13 +256,6 @@ textarea {
     gap: 6px;
   }
 
-  .preview-month-day {
-    width: 45px;
-    height: 45px;
-    border-radius: 2px;
-    padding: 2px;
-  }
-
   .calendar-grid small {
     font-size: 8px;
   }
@@ -331,13 +269,6 @@ textarea {
   .calendar-grid {
     grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
     gap: 5px;
-  }
-
-  .preview-month-day {
-    width: 40px;
-    height: 40px;
-    border-radius: 2px;
-    padding: 2px;
   }
 
   .calendar-grid small {
