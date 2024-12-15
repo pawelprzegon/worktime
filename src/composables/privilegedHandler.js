@@ -1,8 +1,5 @@
 import { format} from "date-fns";
 import {formatTime, getLast, getTime} from "@/utils.js";
-import {getOvertime, getUserShifts} from "@/fetchers.js";
-
-
 
 const baseShiftTime = 28800
 
@@ -42,76 +39,6 @@ export const transposeTable = (headers, body) => {
       header,
       ...body.map(row => row[i] || ""),
   ]);
-};
-
-export const getData = async (selectedUser, selectedMonth) => {
-
-    let calculatedWorkTime = 0;
-    let calculatedOvertimeTime = 0;
-
-    try {
-      const shifts = await getUserShifts(selectedUser.user._id, selectedMonth.month);
-      const overtimes = await getOvertime(selectedUser.user._id, selectedMonth.month);
-
-      const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
-
-      const splitOverTime = (shiftTime) => {
-        if (shiftTime <= baseShiftTime) {
-          return {'work': shiftTime, 'overtime': 0};
-        } else {
-          return {'work': baseShiftTime, 'overtime': shiftTime - baseShiftTime};
-        }
-      };
-
-      const groupedShifts = shifts.reduce((acc, shift) => {
-        const date = getDate(shift.start);
-        if (!acc[date]) {
-          acc[date] = {
-            list: [],
-            totalWork: 0,
-            overtime: {}
-          };
-        }
-        acc[date].list.push(shift);
-        acc[date].totalWork += shift.work;
-        const matchedOvertime = overtimes.filter(overtime => getDate(overtime.date) === date)[0];
-        acc[date].overtimeTaken = matchedOvertime ? matchedOvertime : null;
-        return acc;
-      }, {});
-
-      Object.keys(groupedShifts).forEach(date => {
-
-        const totalWork = groupedShifts[date].totalWork;
-        const splitOvertime = splitOverTime(totalWork);
-
-        calculatedWorkTime += splitOvertime.work;
-        calculatedOvertimeTime += splitOvertime.overtime;
-
-        if (groupedShifts[date].overtimeTaken){
-          const ovTaken = (groupedShifts[date].overtimeTaken.hours || 0) * 3600;
-          calculatedOvertimeTime -= ovTaken
-        }
-
-        groupedShifts[date].regular = splitOvertime.work;
-        groupedShifts[date].overtime = splitOvertime.overtime;
-
-      });
-
-      selectedMonth.updateDaysInMonth()
-
-      selectedMonth.daysInMonth = selectedMonth.daysInMonth.map(day => {
-        const formattedDate = format(day.date, 'yyyy-MM-dd');
-        const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, overtimeTaken: null};
-        return {
-          ...day,
-          shifts: groupedShift,
-        };
-      });
-      return true
-    } catch (error) {
-        console.error("Error fetching users:", error);
-        return false
-      }
 };
 
 const prepareStartAndStopTime = (day, dayData) => {

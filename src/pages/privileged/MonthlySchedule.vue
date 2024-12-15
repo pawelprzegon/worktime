@@ -2,10 +2,9 @@
 import "jspdf-autotable";
 import {onMounted, ref, watch} from "vue";
 import Alert from "@/components/Alert.vue";
-import {useCalendarStore} from "@/utils.js";
+import {useCalendarMonthTime, useCalendarStore} from "@/utils.js";
 import Spinner from "@/components/Spinner.vue";
-import {useCalendarNavigation} from "@/utils.js";
-import {getData} from "@/composables/privilegedHandler.js";
+import {useCalendarNavigation, getData} from "@/utils.js";
 import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
@@ -14,12 +13,13 @@ import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 
 const selectedUser = usePrivilegedSelectedUser();
 const selectedMonth = useCalendarStore('privilegedSelectedMonth')
+const monthTime = useCalendarMonthTime('privilegedMonthTime')
 const isLoading = ref(false)
 
 
 const getDataHandler = async () => {
   isLoading.value = true;
-  const result = await getData(selectedUser, selectedMonth);
+  const result = await getData(selectedUser, selectedMonth, monthTime);
   isLoading.value = !result;
 };
 

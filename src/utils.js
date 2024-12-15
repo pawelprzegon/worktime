@@ -1,6 +1,7 @@
 import {ref} from "vue";
 import {defineStore} from "pinia";
 import {add, eachDayOfInterval, endOfMonth, format, startOfMonth, sub} from "date-fns";
+import {getOvertime, getUserShifts} from "@/fetchers.js";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -181,3 +182,103 @@ export const useCalendarStore = (id) =>
       setMonth,
     };
   })();
+
+export const useCalendarMonthTime = (id) =>
+  defineStore(id, () => {
+    const overtimeInSeconds = ref(0);
+    const worktimeInSeconds = ref(0);
+
+    const subOvertime = (overtimeTaken) => {
+      overtimeInSeconds.value -= overtimeTaken;
+    };
+
+    const clear = () => {
+      overtimeInSeconds.value = 0;
+      worktimeInSeconds.value = 0;
+    };
+
+    const splitOvertime = (shiftTime) => {
+      if (shiftTime <= 28800) {
+        worktimeInSeconds.value += shiftTime;
+        return {'work': shiftTime, 'overtime': 0};
+      } else {
+        worktimeInSeconds.value += 28800;
+        overtimeInSeconds.value += shiftTime - 28800;
+        return {'work': 28800, 'overtime': shiftTime - 28800};
+      }
+    };
+
+    return {
+      overtimeInSeconds,
+      worktimeInSeconds,
+      subOvertime,
+      clear,
+      splitOvertime
+    };
+  })();
+
+export const getData = async (selectedUser, selectedMonth, monthTime) => {
+
+  monthTime.clear()
+  selectedMonth.calculatedWorkTime = 0;
+  selectedMonth.calculatedOvertimeTime = 0;
+
+  let calculatedWorkTime = 0;
+  let calculatedOvertimeTime = 0;
+
+  try {
+    const shifts = await getUserShifts(selectedUser.user._id, selectedMonth.month);
+    const overtimes = await getOvertime(selectedUser.user._id, selectedMonth.month);
+
+    const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
+
+    const groupedShifts = shifts.reduce((acc, shift) => {
+      const date = getDate(shift.start);
+      if (!acc[date]) {
+        acc[date] = {
+          list: [],
+          totalWork: 0,
+          overtime: {}
+        };
+      }
+      acc[date].list.push(shift);
+      acc[date].totalWork += shift.work;
+      const matchedOvertime = overtimes.filter(overtime => getDate(overtime.date) === date)[0];
+      acc[date].overtimeTaken = matchedOvertime ? matchedOvertime : null;
+      return acc;
+    }, {});
+
+    Object.keys(groupedShifts).forEach(date => {
+
+      const totalWork = groupedShifts[date].totalWork;
+      const splitOvertime = monthTime.splitOvertime(totalWork);
+
+      calculatedWorkTime += splitOvertime.work;
+      calculatedOvertimeTime += splitOvertime.overtime;
+
+      if (groupedShifts[date].overtimeTaken){
+        const ovTaken = (groupedShifts[date].overtimeTaken.hours || 0) * 3600;
+        calculatedOvertimeTime -= ovTaken
+      }
+
+      groupedShifts[date].regular = splitOvertime.work;
+      groupedShifts[date].overtime = splitOvertime.overtime;
+
+    });
+
+    selectedMonth.updateDaysInMonth()
+
+    selectedMonth.daysInMonth = selectedMonth.daysInMonth.map(day => {
+      const formattedDate = format(day.date, 'yyyy-MM-dd');
+      const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, overtimeTaken: null};
+      return {
+        ...day,
+        shifts: groupedShift,
+      };
+    });
+    return true
+  } catch (error) {
+      console.error("Error fetching users:", error);
+      return false
+    }
+};

@@ -5,16 +5,16 @@ import Alert from "@/components/Alert.vue";
 import {useCalendarStore} from "@/utils.js";
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
+import {useCalendarMonthTime, getData} from "@/utils.js";
 import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
-import {useCalendarMonthTime} from "@/stores/calendarStore.js";
-import {getData, removeShift} from "@/composables/calendarHandler.js";
+import {removeShift} from "@/composables/calendarHandler.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {formatTime, useCalendarDays, useModal, daysOfWeek, useCalendarNavigation} from "@/utils.js";
 
 
 const authStore = useAuthStore()
 const selectedMonth = useCalendarStore('calendarSelectedMonth');
-const monthTime = useCalendarMonthTime();
+const monthTime = useCalendarMonthTime('calendarMonthTime');
 
 const alert = inject('alert');
 const isLoading = ref(true);
