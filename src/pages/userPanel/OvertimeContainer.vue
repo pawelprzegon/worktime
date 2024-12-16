@@ -98,7 +98,7 @@ const saveTakenHours = async () => {
         <CustomTextButton
             label="save"
             :width="80"
-            :padding="2"
+            :padding="5"
             :margin="2"
             @click="saveTakenHours"
         />

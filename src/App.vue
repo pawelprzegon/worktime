@@ -93,7 +93,7 @@
     <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" />
     <div class="nav">
       <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
-      <div class="nav-buttons">
+      <div class="flex justify-end items-end space-x-2">
         <CustomTextButton
             label="Dashboard"
             :isActive="isDashActive"
@@ -238,7 +238,6 @@
 @media (orientation: landscape) {
 
   @media (max-width: 1300px) {
-
     .logo {
       width:65px;
       height:50px

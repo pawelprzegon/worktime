@@ -94,7 +94,7 @@ const addNote = async (shift) => {
         v-if="!shift.isEditingNote && props.shift.noteContent !== ''"
         label="edit"
         :width="80"
-        :padding="2"
+        :padding="5"
         :margin="2"
         @click="toggleShowNoteEditor(shift)"
       />
@@ -102,7 +102,7 @@ const addNote = async (shift) => {
         v-if="!shift.isEditingNote && props.shift.noteContent == ''"
         label="add note"
         :width="80"
-        :padding="2"
+        :padding="5"
         :margin="2"
         @click="toggleShowNoteEditor(shift)"
       />
@@ -111,7 +111,7 @@ const addNote = async (shift) => {
         v-if="shift.isEditingNote"
         label="save"
         :width="80"
-        :padding="2"
+        :padding="5"
         :margin="2"
         @click="submitForm"
         style="margin-left: auto"
@@ -121,7 +121,7 @@ const addNote = async (shift) => {
         v-if="shift.isEditingNote"
         label="cancel"
         :width="80"
-        :padding="2"
+        :padding="5"
         :margin="2"
         @click="shift.isEditingNote = false"
       />

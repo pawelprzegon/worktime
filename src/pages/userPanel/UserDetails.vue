@@ -8,10 +8,10 @@
 <template>
 
     <section class="details">
-      <DetailsContainer :label="'firstname'" :data="firstName" :background="'#282828'" />
-      <DetailsContainer :label="'lastname'" :data="lastName" :background="'#282828'" />
-      <DetailsContainer :label="'email'" :data="email" :background="'#282828'" />
-      <DetailsContainer :label="'role'" :data="role" :background="'#282828'" />
+      <DetailsContainer :label="'firstname'" :data="firstName" :background="'#282828'" :color="'#CCCCCCFF'"/>
+      <DetailsContainer :label="'lastname'" :data="lastName" :background="'#282828'" :color="'#CCCCCCFF'"/>
+      <DetailsContainer :label="'email'" :data="email" :background="'#282828'" :color="'#CCCCCCFF'"/>
+      <DetailsContainer :label="'role'" :data="role" :background="'#282828'" :color="'#CCCCCCFF'"/>
     </section>
 
 </template>

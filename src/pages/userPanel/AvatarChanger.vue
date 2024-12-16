@@ -34,7 +34,6 @@ const closeAvatarChanger = () => {
       v-if="isAvatarChangerOpen"
       :close-modal="closeAvatarChanger"
     />
-    <p>{{isAvatarChangerOpen}}</p>
   </section>
 
 </template>

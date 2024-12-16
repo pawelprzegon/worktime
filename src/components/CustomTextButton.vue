@@ -1,5 +1,4 @@
 <script setup>
-
 const props = defineProps({
   label: {
     type: String,
@@ -34,76 +33,37 @@ const props = defineProps({
     default: 'var(--color-background-mute)'
   }
 })
-
 </script>
 
 <template>
-
   <button
-      :class="['button', { 'active-button': props.isActive }]"
-      type="button"
+      :class="[
+      'flex items-center justify-center cursor-pointer box-border transition-all duration-200 text-sm rounded-md',
+      { 'bg-indigo-500 text-white': props.isActive, 'bg-mute-gray': !props.isActive },
+      { 'hover:bg-white hover:text-black hover:border-gray-300': !props.isActive }
+    ]"
       :style="{
-    width: props.width + 'px',
-    padding: props.padding + 'px',
-    margin: props.margin + 'px' ,
-    fontSize: props.fontSize + 'px',
-    color: props.color,
-    backgroundColor: props.background
-  }"
-  >{{props.label}}</button>
-
+      width: props.width + 'px',
+      padding: props.padding + 'px',
+      margin: props.margin + 'px',
+      fontSize: props.fontSize + 'px',
+      backgroundColor: props.background
+    }"
+      type="button"
+  >
+    {{ props.label }}
+  </button>
 </template>
 
 <style scoped>
-
-.button {
-  align-items: center;
+/* Przykład dla tła i kolorów, które nie są zdefiniowane w Tailwind (jak var(--color-background-mute)) */
+.bg-mute-gray {
   background-color: var(--color-background-mute);
-  border: 1px solid gray;
-  border-radius: 6px;
-  box-sizing: border-box;
-  color: #9f9f9f;
-  cursor: pointer;
-  display: flex;
-  font-size: 18px;
-  justify-content: center;
-  line-height: 28px;
-  text-decoration: none;
-  transition: all .2s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  box-shadow: var(--vt-box-shadow-sm);
-}
-
-.button:active,
-.button:hover {
-  outline: 0;
-}
-
-.button:hover {
-  background-color: #FFFFFF !important;
-  color: black !important;
-  border-color: rgba(0, 0, 0, 0.19);
-}
-
-.active-button {
-  background-color: var(--vt-c-indigo);
-  color: #fff;
 }
 
 @media (orientation: landscape) {
-  @media (max-width: 1300px) {
-    .button {
-      font-size: 10px;
-      border-radius: 3px;
-      width: 70px !important;
-      margin: 5px !important;
-      padding: 1px !important;
-    }
-  }
   @media (max-width: 800px) {
-    .button {
+    button {
       font-size: 10px;
       border-radius: 3px;
       width: 70px !important;
@@ -114,31 +74,23 @@ const props = defineProps({
 }
 
 @media (orientation: portrait) {
-  @media (max-width: 1300px) {
-    .button {
-      font-size: 10px;
-      border-radius: 3px;
-      width: 70px !important;
-      margin: 5px !important;
-      padding: 1px !important;
-    }
-  }
+
   @media (max-width: 800px) {
-    .button {
+    button {
       font-size: 10px;
       border-radius: 3px;
-      width: 70px !important;
-      margin: 5px !important;
-      padding: 1px !important;
+      width: 75px !important;
+      margin: 7px !important;
+      padding: 3px !important;
     }
   }
-  @media (max-width: 450px) {
-    .button {
+  @media (max-width: 500px) {
+    button {
       font-size: 11px !important;
       border-radius: 3px !important;
-      width: 60px !important;
+      width: 65px !important;
       margin: 3px !important;
-      padding: 1px !important;
+      padding: 2px !important;
     }
   }
 }

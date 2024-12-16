@@ -11,6 +11,7 @@
       :label="'regular'"
       :data="formatTime(worktimeInSeconds).toString()"
       :background="'#282828'"
+      :color="'#CCCCCCFF'"
     />
     <DetailsContainer
       :label="'overtime'"

@@ -194,6 +194,11 @@ defineProps({
     border-radius: 3px;
     padding: 4px;
   }
+
+  .add-shift img {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media(max-width: 620px) {
@@ -246,6 +251,10 @@ defineProps({
     height: 45px;
     border-radius: 2px;
     padding: 2px;
+  }
+  .add-shift img {
+    width: 16px;
+    height: 16px;
   }
 }
 

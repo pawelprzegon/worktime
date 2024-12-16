@@ -26,7 +26,7 @@
 
 <template>
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
-    <div class="add-container fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="add-container inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div class="bg-white rounded-lg shadow-lg p-6 w-96">
         <h2 class="bg-blue-500 text-white p-4 rounded-lg" >Dodaj zmianę pracownika</h2>
 
