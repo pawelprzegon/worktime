@@ -8,13 +8,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        'soft': '#222222',
         'mute': '#282828',
-        'soft': '#b7b7b7',
+        'light': '#b7b7b7'
       }
     },
 
     screens: {
-      'landscape': '360px',
+      'portrait-xs': '400px',
       'portrait-small': '480px',
       'portrait-medium': '768px',
       'portrait-large': '1024px',
