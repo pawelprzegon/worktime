@@ -17,7 +17,11 @@ defineProps({
         }]"
   >
     <span class="day-header">{{ day.date.getDate() }}</span>
-    <div class="shifts-list">
+
+    <div
+        v-if="day.shifts.list.length > 0"
+        class="shifts-list"
+    >
 
       <small
           v-if="day.shifts.list.length > 0"
@@ -42,6 +46,12 @@ defineProps({
       </small>
 
     </div>
+    <div
+        v-else
+        class="add-shift"
+    >
+      <img src="@/assets/img/add.png" alt="add-shift">
+    </div>
   </div>
 
 </template>
@@ -49,6 +59,8 @@ defineProps({
 <style scoped>
 
 .calendar-day {
+  display: grid;
+  grid-template-rows: 1fr 3fr;
   background-color: var(--vt-c-black-mute);
   border: 1px solid var(--vt-c-black-mute);
   padding: 6px;
@@ -110,6 +122,20 @@ defineProps({
 
 .overtime {
   color: var(--color-text-overtime);
+}
+
+.add-shift {
+  display: block;
+  margin: auto;
+}
+
+.add-shift img {
+  filter: invert(30%);
+}
+
+.calendar-day:hover > .add-shift img {
+  filter: invert(100%);
+  transform: scale(1.02);
 }
 
 @media(max-width: 875px) {

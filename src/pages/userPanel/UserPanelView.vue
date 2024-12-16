@@ -2,7 +2,7 @@
 
 import {ref} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
-import Calendar from "@/pages/userPanel/Calendar.vue";
+import Calendar from "@/pages/userPanel/calendar/Calendar.vue";
 import {useCalendarMonthTime} from "@/stores/utilsStore.js";
 import UserDetails from "@/pages/userPanel/UserDetails.vue";
 import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";

@@ -6,9 +6,9 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
 
 import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
-import MainContainer from "@/pages/userPanel/mainContainer.vue";
+import MainContainer from "@/pages/userPanel/MainContainer.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import {format} from "date-fns";
+
 
 const deleteConfirmationVisible = ref(false);
 const isModalOpen = ref(true);
@@ -147,7 +147,7 @@ onBeforeUnmount(() => {
               <img
                 v-if="!deleteConfirmationVisible"
                 class="shift-delete"
-                src="../../assets/img/delete.png"
+                src="../../../assets/img/delete.png"
                 alt="delete"
                 @click="deleteConfirmationVisibleToggle(shift.id)"
               >

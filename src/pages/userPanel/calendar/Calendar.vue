@@ -4,18 +4,18 @@ import {ref, onMounted, inject, watch} from 'vue';
 import Alert from "@/components/Alert.vue";
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
-import ShiftsModal from "@/pages/userPanel/ShiftsModal.vue";
+import ShiftsModal from "@/pages/userPanel/modals/ShiftsModal.vue";
 import {removeShift} from "@/composables/calendarHandler.js";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {formatTime, useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
-import ShiftAdder from "@/pages/userPanel/ShiftAdderModal.vue";
+import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
+import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
 import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
 import {format} from "date-fns";
-import DayContainer from "@/pages/userPanel/DayContainer.vue";
-import EmptyDayContainer from "@/pages/userPanel/EmptyDayContainer.vue";
-import WeekDayNameContainer from "@/pages/userPanel/WeekDayNameContainer.vue";
+import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
+import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
+import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
 
 const authStore = useAuthStore()
@@ -120,7 +120,7 @@ onMounted(async () => {
       />
     </div>
 
-    <ShiftAdder
+    <ShiftAdderModal
         v-if="isShiftAdderOpen"
         :closeModal="closeShiftAdder"
     />
