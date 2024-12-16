@@ -26,19 +26,19 @@
 
 <template>
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="add-container fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div class="bg-white rounded-lg shadow-lg p-6 w-96">
-        <h2 class="text-xl font-bold mb-4">Dodaj zmianę pracownika</h2>
+        <h2 class="bg-blue-500 text-white p-4 rounded-lg" >Dodaj zmianę pracownika</h2>
 
         <form @submit.prevent="submitShift">
           <!-- Pole godziny rozpoczęcia -->
           <div class="mb-4">
-            <label for="startTime" class="block text-sm font-medium text-gray-700">Godzina rozpoczęcia</label>
+            <label for="startTime" class="block text-lg font-medium text-gray-700">Godzina rozpoczęcia</label>
             <input
               v-model="shift.startTime"
               type="time"
               id="startTime"
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
               required
             />
           </div>
@@ -50,7 +50,7 @@
               v-model="shift.endTime"
               type="time"
               id="endTime"
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
               required
             />
           </div>
@@ -81,5 +81,12 @@
 
 
 <style scoped>
-/* Dodaj własne style lub użyj TailwindCSS */
+.add-container {
+  background-color: var(--color-background-soft);
+  color: #fff;
+  text-align: center;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 16px 20px 50px 10px #222222;
+}
 </style>

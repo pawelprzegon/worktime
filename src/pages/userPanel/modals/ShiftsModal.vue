@@ -9,10 +9,8 @@ import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
 import MainContainer from "@/pages/userPanel/MainContainer.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
-
 const deleteConfirmationVisible = ref(false);
 const isModalOpen = ref(true);
-const modalKey = ref(0);
 
 const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
 
