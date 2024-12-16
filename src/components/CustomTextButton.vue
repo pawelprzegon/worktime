@@ -28,71 +28,31 @@ const props = defineProps({
     type: String,
     default: null
   },
-  background: {
-    type: String,
-    default: 'var(--color-background-mute)'
-  }
 })
 </script>
 
 <template>
   <button
-      :class="[
+    :class="[
       'flex items-center justify-center cursor-pointer box-border transition-all duration-200 text-sm rounded-md',
-      { 'bg-indigo-500 text-white': props.isActive, 'bg-mute-gray': !props.isActive },
-      { 'hover:bg-white hover:text-black hover:border-gray-300': !props.isActive }
+      { 'bg-blue-500 text-white': props.isActive, 'bg-mute': !props.isActive },
+      { 'hover:bg-soft hover:text-black hover:border-gray-300': !props.isActive },
+      'portrait-small:w-23 portrait-small:h-6 portrait-small:font-xs portrait-small:p-2 portrait-small:m-2',
+      'portrait-medium:w-25 portrait-medium:h-7 portrait-medium:font-sm portrait-medium:p-3 portrait-medium:m-3',
+      'portrait-large:w-25 portrait-large:h-7 portrait-large:font-sm portrait-large:p-3 portrait-large:m-3',
+      'portrait-xl:w-28 portrait-xl:h-10 portrait-xl:font-base portrait-xl:p-3 portrait-xl:m-3'
     ]"
-      :style="{
-      width: props.width + 'px',
-      padding: props.padding + 'px',
-      margin: props.margin + 'px',
+    :style="{
       fontSize: props.fontSize + 'px',
-      backgroundColor: props.background
     }"
-      type="button"
+    type="button"
   >
     {{ props.label }}
   </button>
 </template>
 
 <style scoped>
-/* Przykład dla tła i kolorów, które nie są zdefiniowane w Tailwind (jak var(--color-background-mute)) */
-.bg-mute-gray {
-  background-color: var(--color-background-mute);
-}
 
-@media (orientation: landscape) {
-  @media (max-width: 800px) {
-    button {
-      font-size: 10px;
-      border-radius: 3px;
-      width: 70px !important;
-      margin: 5px !important;
-      padding: 1px !important;
-    }
-  }
-}
 
-@media (orientation: portrait) {
-
-  @media (max-width: 800px) {
-    button {
-      font-size: 10px;
-      border-radius: 3px;
-      width: 75px !important;
-      margin: 7px !important;
-      padding: 3px !important;
-    }
-  }
-  @media (max-width: 500px) {
-    button {
-      font-size: 11px !important;
-      border-radius: 3px !important;
-      width: 65px !important;
-      margin: 3px !important;
-      padding: 2px !important;
-    }
-  }
-}
 
 </style>
