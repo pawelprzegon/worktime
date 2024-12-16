@@ -1,18 +1,22 @@
 <script setup>
 
 import Avatar from "@/components/Avatar.vue";
-import ChangeAvatar from "@/pages/userPanel/ChangeAvatarModal.vue";
+import ChangeAvatarModal from "@/pages/userPanel/ChangeAvatarModal.vue";
+import {ref} from "vue";
 
-defineProps(["avatar", "isModalActive"]);
-const emit = defineEmits(["toggleModal", "refresh"]);
+defineProps(["avatar"]);
+const emit = defineEmits(["refresh"]);
 
-  const toggleModal = () => {
-    emit("toggleModal");
-  };
+const isAvatarChangerOpen = ref(false)
 
-  const refresh = () => {
-    emit("refresh");
-  };
+const openAvatarChanger = () => {
+  isAvatarChangerOpen.value = true;
+};
+
+const closeAvatarChanger = () => {
+  isAvatarChangerOpen.value = false;
+  emit("refresh");
+};
 
 </script>
 
@@ -24,13 +28,13 @@ const emit = defineEmits(["toggleModal", "refresh"]);
       class="avatar-overlay"
       src="../../assets/img/refresh.png"
       alt="overlay"
-      @click="toggleModal"
+      @click="openAvatarChanger()"
     />
-    <ChangeAvatar
-      v-if="isModalActive"
-      @closeModal="toggleModal"
-      @refresh="refresh"
+    <ChangeAvatarModal
+      v-if="isAvatarChangerOpen"
+      :close-modal="closeAvatarChanger"
     />
+    <p>{{isAvatarChangerOpen}}</p>
   </section>
 
 </template>

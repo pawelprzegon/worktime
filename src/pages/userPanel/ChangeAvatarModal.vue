@@ -4,10 +4,14 @@ import { validateAvatarFile, uploadAvatar, handleSuccess } from "@/composables/a
 import { useAuthStore } from "@/stores/authStore.js";
 import Avatar from "@/components/Avatar.vue";
 import "@/assets/modal.css";
+import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const authStore = useAuthStore();
 const alert = inject("alert");
-const emit = defineEmits(["refresh", "closeModal"]);
+const props = defineProps({
+  closeModal: Function,
+})
+const isModalOpen = ref(true);
 
 const handleFileChange = async (event) => {
   const file = event.target.files[0];
@@ -21,21 +25,21 @@ const handleFileChange = async (event) => {
   try {
     const response = await uploadAvatar(authStore.user.id, file);
     handleSuccess(alert, response.status, response.message);
-    emit("refresh");
-    emit("closeModal");
+    closeModal()
   } catch (error) {
     alert.show("error", error.detail || "An unexpected error occurred.");
   }
 };
 
 const closeModal = () => {
-  emit("closeModal");
-};
+  props.closeModal();
+  isModalOpen.value = false;
+}
+
 </script>
 
 <template>
-  <div class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
+  <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
       <section class="change-avatar-container">
         <Avatar
             :avatar="authStore.user.avatar"
@@ -53,8 +57,7 @@ const closeModal = () => {
           />
         </div>
       </section>
-    </div>
-  </div>
+  </ModalWrapper>
 </template>
 
 <style scoped>

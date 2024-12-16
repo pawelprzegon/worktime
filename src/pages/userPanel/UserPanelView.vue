@@ -34,6 +34,7 @@ const refreshUserPanel = () => {
       <AvatarChanger
         :avatar="authStore.user.avatar"
         :is-modal-active="isChangeModalActive"
+        @refresh="refreshUserPanel"
       />
       <UserDetails
         :first-name="authStore.user.firstName"
