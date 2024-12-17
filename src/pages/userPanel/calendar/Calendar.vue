@@ -61,6 +61,7 @@ const handleRefreshModal = async () => {
 
 const dayOpenerHandler = (day) => {
   selectedDay.setDay(day)
+
   if (day?.shifts.list.length > 0) {
     isDailyShiftsOpen.value = true
   } else {
@@ -123,6 +124,7 @@ onMounted(async () => {
     <ShiftAdderModal
         v-if="isShiftAdderOpen"
         :closeModal="closeShiftAdder"
+        :date="selectedDay.day?.date"
     />
     <ShiftsModal
         v-if="isDailyShiftsOpen && selectedDay.day?.shifts.list.length > 0"

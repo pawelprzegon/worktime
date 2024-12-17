@@ -8,6 +8,7 @@ import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
 import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
 import MainContainer from "@/pages/userPanel/MainContainer.vue";
 import ModalWrapper from "@/components/ModalWrapper.vue";
+import {getDateString} from "@/composables/utils.js";
 
 const deleteConfirmationVisible = ref(false);
 const isModalOpen = ref(true);
@@ -43,13 +44,7 @@ props.shifts.forEach(shift => {
   shift.noteContent = shift.note || '';
 });
 
-const date = computed(() => {
-  const newDate = new Date(props.selectedDay);
-  const year = newDate.getFullYear();
-  const month = String(newDate.getMonth() + 1).padStart(2, '0');
-  const day = String(newDate.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-});
+const dt = getDateString(props.selectedDay)
 
 const toggleSelectedCard = (shift, selected) => {
   shift.isMainSelected = false;
@@ -103,7 +98,7 @@ onBeforeUnmount(() => {
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
       <div class="shifts-container">
         <div class="shifts-label">
-          <h2 style="font-weight: 600">{{ date }}</h2>
+          <h2 style="font-weight: 600">{{ dt }}</h2>
         </div>
 
         <div

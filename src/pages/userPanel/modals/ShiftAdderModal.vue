@@ -2,6 +2,7 @@
 <script setup>
   import { ref } from 'vue';
   import ModalWrapper from "@/components/ModalWrapper.vue";
+  import {getDateString} from "@/composables/utils.js";
 
   const isModalOpen = ref(true);
   const shift = ref({
@@ -10,8 +11,11 @@
   });
 
   const props = defineProps({
-    closeModal: Function
+    closeModal: Function,
+    date: Date
   })
+
+  const dt = getDateString(props.date)
 
   const closeModal = () => {
     props.closeModal();
@@ -20,6 +24,7 @@
 
   function submitShift() {
     console.log('Zapisane dane zmiany:', shift.value);
+    console.log(props.date)
     closeModal();
   }
 </script>
@@ -29,9 +34,8 @@
     <div class="bg-soft shadow-2xl text-white flex justify-center items-center box-border rounded-md p-5">
       <div>
         <h2 class="text-white p-4 rounded-lg" >Add Shift</h2>
-
+        <h3>{{dt}}</h3>
         <form @submit.prevent="submitShift">
-          <!-- Pole godziny rozpoczęcia -->
           <div class="mb-4">
             <label for="startTime" class="block text-lg font-medium text-gray-400">Start hour</label>
             <input
@@ -43,7 +47,6 @@
             />
           </div>
 
-          <!-- Pole godziny zakończenia -->
           <div class="mb-4">
             <label for="endTime" class="block text-xl font-medium text-gray-400">Stop hour</label>
             <input
@@ -55,7 +58,6 @@
             />
           </div>
 
-          <!-- Przyciski akcji -->
           <div class="flex justify-end gap-4">
             <button
               type="button"

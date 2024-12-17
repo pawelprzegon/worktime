@@ -1,4 +1,5 @@
 import {add, sub} from "date-fns";
+import {computed} from "vue";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -110,4 +111,12 @@ export const useCalendarNavigation = (selectedMonth, updateHandler) => {
   };
 
   return { prevMonth, nextMonth };
+};
+
+export const getDateString = (datetime) => {
+  const newDate = new Date(datetime);
+  const year = newDate.getFullYear();
+  const month = String(newDate.getMonth() + 1).padStart(2, '0');
+  const day = String(newDate.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
