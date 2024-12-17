@@ -73,7 +73,7 @@ export const processMonthlyShifts = async (selectedUser, selectedMonth, monthTim
   selectedMonth.calculatedWorkTime = 0;
   selectedMonth.calculatedOvertimeTime = 0;
 
-  const { shifts, overtimes } = await fetchUserShifts(selectedUser.user._id, selectedMonth.month);
+  const { shifts, overtimes } = await fetchUserShifts(selectedUser.user.id, selectedMonth.month);
 
   const groupedShifts = groupShiftsByDate(shifts, overtimes);
 

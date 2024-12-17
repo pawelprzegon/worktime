@@ -155,6 +155,7 @@ onBeforeUnmount(() => {
             <CorrectorContainer
               v-if="shift.isCorrectSelected"
               :shift="shift"
+              :date="selectedDay"
               @refreshModal="refreshModal"
             />
 

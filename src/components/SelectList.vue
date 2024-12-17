@@ -27,7 +27,7 @@ watch(() => props.dataList, () => {
 
   if (props.dataList.length > 0 && selectedUser.user !== null) {
     console.log(selectedUser.user)
-    const matchedUser = props.dataList.find(usr => usr._id === selectedUser.user._id);
+    const matchedUser = props.dataList.find(usr => usr.id === selectedUser.user.id);
     if (matchedUser) {
 
       selectedUserValue.value = matchedUser;

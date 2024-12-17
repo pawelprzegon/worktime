@@ -234,13 +234,12 @@ export const deleteShiftFetch = async (shift_id) => {
     }
 }
 
-export const shiftCorrection = async (userId, shiftId, new_date, startOrStop, comment='') => {
+export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
     const body = JSON.stringify({
         'shift_id': shiftId,
         'user_id': userId,
-        'new_date': new_date,
-        'start_stop': startOrStop,
-        'comment': comment
+        'start': timeCorrection.start,
+        'stop': timeCorrection.stop,
     });
 
     const data = {

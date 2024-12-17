@@ -8,6 +8,7 @@ const users = ref([])
 onMounted(async () => {
   try {
     users.value = await getDashUsers();
+    console.log(users.value)
   } catch (error) {
     console.error("Error fetching users:", error);
   }

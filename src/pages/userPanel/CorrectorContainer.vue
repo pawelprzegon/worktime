@@ -10,7 +10,10 @@ import Alert from "@/components/Alert.vue";
 
 const props = defineProps({
   shift: Object,
+  date: Date
 })
+
+console.log(props.date)
 
 const emit = defineEmits(['newDateTime', 'refreshModal'])
 const alert = inject('alert');
@@ -50,10 +53,10 @@ const checkIsAny = (corrected) => {
 
 const saveCorrection = async () => {
   const shiftDt = {
-      start: combineDateWithTime(shiftTime.value.start),
-      stop: combineDateWithTime(shiftTime.value.stop),
+      start: combineDateWithTime(props.date, shiftTime.value.start),
+      stop: combineDateWithTime(props.date, shiftTime.value.stop),
     }
-  const response = await shiftCorrection(props.shift.user_id, props.shift.id, selectedNewDateTime.value, pickedStartStop.value)
+  const response = await shiftCorrection(props.shift.user_id, props.shift.id, shiftDt)
   alert.show(response.status, response.message)
   emit('refreshModal')
 }
@@ -62,7 +65,7 @@ const saveCorrection = async () => {
 
 <template>
   <div class="corrector-container">
-
+    <Alert/>
     <section>
       <h4 style="text-align: left">Correction history:</h4>
       <div class="defaults">

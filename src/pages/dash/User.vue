@@ -20,7 +20,7 @@ const toggleModalVisibility = () => {
 
 const checkActiveShift = async () => {
   try{
-    props.user.activeShift = await getActiveShift(props.user._id)
+    props.user.activeShift = await getActiveShift(props.user.id)
   } catch (error) {
     console.error("Error fetching getActiveSift:", error);
   }
@@ -49,7 +49,7 @@ const updateShiftTimes = () => {
 
 const toggleShift = async () => {
 
-  const userId = props.user._id
+  const userId = props.user.id
   const note = ''
   try{
 

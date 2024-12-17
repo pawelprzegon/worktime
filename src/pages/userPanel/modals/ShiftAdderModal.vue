@@ -29,8 +29,8 @@
 
   function submitShift() {
     const shiftDt = {
-      start: combineDateWithTime(shiftTime.value.start),
-      stop: combineDateWithTime(shiftTime.value.stop),
+      start: combineDateWithTime(props.date, shiftTime.value.start),
+      stop: combineDateWithTime(props.date, shiftTime.value.stop),
     }
     const response = setManualShift(shiftDt, note.value)
     closeModal();

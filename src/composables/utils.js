@@ -121,9 +121,9 @@ export const getDateString = (datetime) => {
   return `${year}-${month}-${day}`;
 };
 
-export const combineDateWithTime = (timeString) => {
+export const combineDateWithTime = (date, timeString) => {
     const [hours, minutes] = timeString.split(":").map(Number);
-    const resultDate = new Date(props.date);
+    const resultDate = new Date(date);
     resultDate.setHours(hours, minutes, 0, 0);
     return resultDate;
   }
