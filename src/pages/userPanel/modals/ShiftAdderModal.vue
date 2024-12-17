@@ -2,13 +2,16 @@
 <script setup>
   import { ref } from 'vue';
   import ModalWrapper from "@/components/ModalWrapper.vue";
-  import {getDateString} from "@/composables/utils.js";
+  import {combineDateWithTime, getDateString} from "@/composables/utils.js";
+  import {setManualShift} from "@/composables/fetchers.js";
 
   const isModalOpen = ref(true);
-  const shift = ref({
-    startTime: '',
-    endTime: ''
+  const shiftTime = ref({
+    start: '',
+    stop: ''
   });
+
+  const note = ref('')
 
   const props = defineProps({
     closeModal: Function,
@@ -17,14 +20,19 @@
 
   const dt = getDateString(props.date)
 
+
+
   const closeModal = () => {
     props.closeModal();
     isModalOpen.value = false;
   }
 
   function submitShift() {
-    console.log('Zapisane dane zmiany:', shift.value);
-    console.log(props.date)
+    const shiftDt = {
+      start: combineDateWithTime(shiftTime.value.start),
+      stop: combineDateWithTime(shiftTime.value.stop),
+    }
+    const response = setManualShift(shiftDt, note.value)
     closeModal();
   }
 </script>
@@ -39,7 +47,7 @@
           <div class="mb-4">
             <label for="startTime" class="block text-lg font-medium text-gray-400">Start hour</label>
             <input
-              v-model="shift.startTime"
+              v-model="shiftTime.start"
               type="time"
               id="startTime"
               class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
@@ -50,12 +58,23 @@
           <div class="mb-4">
             <label for="endTime" class="block text-xl font-medium text-gray-400">Stop hour</label>
             <input
-              v-model="shift.endTime"
+              v-model="shiftTime.stop"
               type="time"
               id="endTime"
               class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
               required
             />
+          </div>
+
+          <div class="mb-4">
+            <label for="note" class="block text-lg font-medium text-gray-400">Note</label>
+            <textarea
+              v-model="note"
+              id="note"
+              rows="3"
+              class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg resize-none"
+              placeholder="Add any notes about this shift..."
+            ></textarea>
           </div>
 
           <div class="flex justify-end gap-4">

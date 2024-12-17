@@ -166,7 +166,7 @@ onBeforeUnmount(() => {
             :maxToTake="summaryWorkTime()"
             :overtime="props.overtime"
             :monthOvertimes="props.calculatedOvertime"
-            :date="date"
+            :date="dt"
             @refreshModal="refreshModal"
         />
       </div>

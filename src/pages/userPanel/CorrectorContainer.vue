@@ -1,11 +1,11 @@
 <script setup>
 import {inject, ref, watch} from 'vue'
-import { getDate, getTime } from "@/composables/utils.js";
+import {combineDateWithTime, getDate, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DatePicker from "@/pages/userPanel/DatePicker.vue";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {shiftCorrection} from "@/composables/fetchers.js";
+import {setManualShift, shiftCorrection} from "@/composables/fetchers.js";
 import Alert from "@/components/Alert.vue";
 
 const props = defineProps({
@@ -26,6 +26,17 @@ const newDateTime = (selectedDateTime) => {
   selectedNewDateTime.value = selectedDateTime
 }
 
+const getLastCorrections = () => {
+  props.shift.time_correction.forEach(correction => {
+    console.log(correction)
+  })
+}
+
+const shiftTime = ref({
+    start: '',
+    stop: ''
+  });
+
 const checkIsLast = (correction) => {
   const filtered = props.shift.time_correction.filter(c => c.corrected === correction.corrected);
   const lastFiltered = filtered[filtered.length -1]
@@ -38,6 +49,10 @@ const checkIsAny = (corrected) => {
 }
 
 const saveCorrection = async () => {
+  const shiftDt = {
+      start: combineDateWithTime(shiftTime.value.start),
+      stop: combineDateWithTime(shiftTime.value.stop),
+    }
   const response = await shiftCorrection(props.shift.user_id, props.shift.id, selectedNewDateTime.value, pickedStartStop.value)
   alert.show(response.status, response.message)
   emit('refreshModal')
@@ -65,7 +80,6 @@ const saveCorrection = async () => {
               <td>default</td>
               <td>
                 <ShiftDetailContainer
-                  :date="getDate(props.shift.start)"
                   :time="getTime(props.shift.start)"
                   :class="['corrections-section',
                   { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('start') }]"
@@ -73,7 +87,6 @@ const saveCorrection = async () => {
               </td>
               <td>
                 <ShiftDetailContainer
-                  :date="getDate(props.shift.stop)"
                   :time="getTime(props.shift.stop)"
                   :class="['corrections-section',
                   { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('stop')}]"
@@ -87,13 +100,12 @@ const saveCorrection = async () => {
               >
                 {{`${index + 1} correction`}}
                 <div class="tooltip-container">
-                  {{getDate(correction.updated_at)}} {{getTime(correction.updated_at)}}
+                  {{getTime(correction.updated_at)}}
                 </div>
               </td>
               <td>
                 <ShiftDetailContainer
                   v-if="correction.corrected === 'start'"
-                  :date="getDate(correction.date)"
                   :time="getTime(correction.date)"
                   :class="['corrections-section', { 'shift-time-inactive': !checkIsLast(correction)}]"
                 />
@@ -101,7 +113,6 @@ const saveCorrection = async () => {
               <td>
                 <ShiftDetailContainer
                   v-if="correction.corrected === 'stop'"
-                  :date="getDate(correction.date)"
                   :time="getTime(correction.date)"
                   :class="['corrections-section', { 'shift-time-inactive': !checkIsLast(correction)}]"
                 />
@@ -116,29 +127,29 @@ const saveCorrection = async () => {
 
     <section class="calendar-section">
       <section class="add-correction">
-        <h4 style="text-align: left; font-size: 13px">Add new correction:</h4>
-        <div class="picker-group">
-          <p
-            id="start"
-            class="picker"
-            @click="select('start')"
-            :class="{ selected: pickedStartStop === 'start' }"
-          >
-            start time
-          </p>
-          <p
-            id="stop"
-            class="picker"
-            @click="select('stop')"
-            :class="{ selected: pickedStartStop === 'stop' }"
-          >
-            stop time
-          </p>
-        </div>
-        <DatePicker
-          @newDatetime="newDateTime"
-          :key="datePickerKey"
-        />
+        <form @submit.prevent="saveCorrection">
+          <div class="mb-4">
+            <label for="startTime" class="block text-medium font-medium text-gray-400">Start hour</label>
+            <input
+              v-model="shiftTime.start"
+              type="time"
+              id="startTime"
+              class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="endTime" class="block text-medium font-medium text-gray-400">Stop hour</label>
+            <input
+              v-model="shiftTime.stop"
+              type="time"
+              id="endTime"
+              class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg"
+              required
+            />
+          </div>
+        </form>
       </section>
 
       <section class="shift-details-header" id="correct">

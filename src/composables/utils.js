@@ -120,3 +120,10 @@ export const getDateString = (datetime) => {
   const day = String(newDate.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+export const combineDateWithTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    const resultDate = new Date(props.date);
+    resultDate.setHours(hours, minutes, 0, 0);
+    return resultDate;
+  }

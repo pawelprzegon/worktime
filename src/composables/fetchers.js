@@ -3,7 +3,6 @@ import {format} from "date-fns";
 import { useAuthStore } from '@/stores/authStore.js';
 
 const addAuthorization = () => {
-
     const authStore = useAuthStore();
     return `Bearer ${authStore.$state.token}`
 
@@ -350,6 +349,33 @@ export const getUsers = async () => {
     }
 
     const response = await fetch(url + '/user/', data)
+    if (!response.ok) {
+      throw new Error('Login failed. Please check your credentials.')
+    }
+
+    return await response.json()
+}
+
+export const setManualShift = async (shiftTime, note) => {
+    const authStore = useAuthStore();
+
+    const body = JSON.stringify({
+        'user_id': authStore.user.id,
+        'start_time': shiftTime.start,
+        'stop_time': shiftTime.stop,
+        'note': note
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/manual', data)
+
     if (!response.ok) {
       throw new Error('Login failed. Please check your credentials.')
     }
