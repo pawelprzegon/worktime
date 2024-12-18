@@ -35,7 +35,7 @@ const props = defineProps({
   <button
     :class="[
       'flex items-center justify-center cursor-pointer box-border transition-all duration-200 text-sm rounded-md',
-      { 'bg-blue-500 text-white': props.isActive, 'bg-mute': !props.isActive },
+      { 'bg-beb text-white': props.isActive, 'bg-mute': !props.isActive },
       { 'hover:bg-light hover:text-black hover:border-gray-300': !props.isActive },
       'portrait-xs:w-23 portrait-xs:h-5 portrait-xs:font-xs portrait-xs:p-2 portrait-xs:m-1',
       'portrait-small:w-23 portrait-small:h-6 portrait-small:font-xs portrait-small:p-2 portrait-small:m-2',

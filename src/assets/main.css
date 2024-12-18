@@ -23,6 +23,13 @@
   height: 100%;
 }
 
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /*@media (orientation: portrait) {*/
 /*  @media (max-width: 450px) {*/

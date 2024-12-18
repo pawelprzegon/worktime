@@ -74,7 +74,7 @@ const summaryWorkTime = () => {
 
 
 const deleteConfirmationVisibleToggle = (shiftId) => {
-  deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? null : shiftId;
+  deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? false : shiftId;
 }
 
 const refreshModal = () => {
@@ -83,6 +83,7 @@ const refreshModal = () => {
 
 const deleteConfirmed = (shiftId) => {
   emit('removeShift', shiftId)
+  deleteConfirmationVisible.value = false;
 }
 
 onBeforeUnmount(() => {

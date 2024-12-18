@@ -99,7 +99,7 @@ const addNote = async (shift) => {
         @click="toggleShowNoteEditor(shift)"
       />
       <CustomTextButton
-        v-if="!shift.isEditingNote && props.shift.noteContent == ''"
+        v-if="!shift.isEditingNote && props.shift.noteContent === ''"
         label="add note"
         :width="80"
         :padding="5"

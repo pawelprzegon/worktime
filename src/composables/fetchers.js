@@ -60,16 +60,16 @@ export const getDashUsers = async () => {
     return await response.json()
 }
 
-export const getActiveShift = async (user_id) => {
+export const getActiveShifts = async () => {
 
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         }
     }
 
-    const response = await fetch(url + `/shift/active?user_id=${user_id}`, data)
+    const response = await fetch(url + '/shift/active', data)
 
     if (!response.ok) {
       throw new Error('Fetch active shift failed.')

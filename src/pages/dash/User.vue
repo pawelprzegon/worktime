@@ -1,30 +1,29 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
-import {startShift, stopShift, getActiveShift} from "@/composables/fetchers.js";
+import {onMounted, ref, watch} from "vue";
+import {startShift, stopShift} from "@/composables/fetchers.js";
 import Avatar from "@/components/Avatar.vue";
 import UserName from "@/components/UserName.vue";
 import ShiftTime from "@/pages/dash/ShiftTime.vue";
 import ShiftToggleModal from "@/pages/dash/ShiftToggleModal.vue";
+import {useActiveShifts} from "@/stores/shiftStore.js";
+import Spinner from "@/components/Spinner.vue";
 
+const activeShifts = useActiveShifts()
 
 const props = defineProps({
   user: Object,
+  checkActiveShift: Function
 })
+
+const activeShift = ref(null)
+const activeShiftDuration = ref(null)
+const isLoading = ref(true)
 
 const modalVisibility = ref(false)
 
 const toggleModalVisibility = () => {
   modalVisibility.value = !modalVisibility.value
-}
-
-const checkActiveShift = async () => {
-  try{
-    props.user.activeShift = await getActiveShift(props.user.id)
-  } catch (error) {
-    console.error("Error fetching getActiveSift:", error);
-  }
-
 }
 
 const calculateShift = (shiftStart) => {
@@ -41,10 +40,10 @@ const calculateShift = (shiftStart) => {
 };
 
 const updateShiftTimes = () => {
-  if (props.user.activeShift) {
-    props.user.shiftDuration = calculateShift(props.user.activeShift.start);
+  if (activeShift.value) {
+    activeShiftDuration.value = calculateShift(activeShift.value.start);
   }
-
+  isLoading.value = false;
 };
 
 const toggleShift = async () => {
@@ -53,13 +52,13 @@ const toggleShift = async () => {
   const note = ''
   try{
 
-    if (props.user.activeShift) {
-      const shiftId = props.user.activeShift.id
+    if (activeShift.value) {
+      const shiftId = activeShift.value.id
       await stopShift(shiftId, userId)
-      props.user.activeShift = null
+      activeShift.value = null
     } else {
       await startShift(userId, note)
-      await checkActiveShift()
+      await props.checkActiveShift()
     }
 
   } catch (error) {
@@ -69,20 +68,22 @@ const toggleShift = async () => {
   }
 }
 
-
-
 onMounted(async () => {
   try {
-    await checkActiveShift()
-    updateShiftTimes()
     setInterval(updateShiftTimes, 1000);
-    setInterval(async () => {
-      await checkActiveShift()
-    }, 60000)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
 });
+
+watch(() => activeShifts.activeShifts, (update) => {
+    if (update) {
+      const foundShift = activeShifts.activeShifts.find(shift => shift.user_id === props.user.id);
+      if (foundShift){
+        activeShift.value = foundShift
+      }
+    }
+  });
 
 const closeModal = () => {
   modalVisibility.value = false;
@@ -91,11 +92,11 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div :class="{'user': true, 'active': props.user.activeShift}">
+  <div :class="{'user': true, 'active': activeShift}">
 
     <Avatar
         :avatar="props.user.avatar"
-        :active-shift="props.user.activeShift"
+        :active-shift="activeShift"
         @toggle="toggleModalVisibility"
     />
 
@@ -104,9 +105,17 @@ const closeModal = () => {
         :last-name="props.user.last_name"
     />
 
+    <div v-if="isLoading" class="loading-spinner">
+      <Spinner
+          :height=30
+          :width=30
+      />
+    </div>
+
     <ShiftTime
-        :active-shift="props.user.activeShift"
-        :shift-duration="props.user.shiftDuration"
+        v-else
+        :active-shift="activeShift"
+        :shift-duration="activeShiftDuration"
     />
 
     <ShiftToggleModal

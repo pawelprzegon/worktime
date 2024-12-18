@@ -10,7 +10,8 @@ export default {
       colors: {
         'soft': '#222222',
         'mute': '#282828',
-        'light': '#b7b7b7'
+        'light': '#b7b7b7',
+        'beb': '#3498db'
       }
     },
 

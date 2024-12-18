@@ -1,18 +1,35 @@
 <script setup>
-import {getDashUsers} from "@/composables/fetchers.js";
+import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
 import {onMounted, ref} from "vue";
 import User from "@/pages/dash/User.vue";
+import {useActiveShifts} from "@/stores/shiftStore.js";
+
+const activeShifts = useActiveShifts()
 
 const users = ref([])
+
+const checkActiveShift = async () => {
+  try{
+    const activeShiftsList = await getActiveShifts()
+    if (activeShiftsList) {
+      activeShifts.setActiveShifts(activeShiftsList)
+    }
+
+  } catch (error) {
+    console.error("Error fetching getActiveSift:", error);
+  }
+}
 
 onMounted(async () => {
   try {
     users.value = await getDashUsers();
-    console.log(users.value)
+    await checkActiveShift()
+    setInterval(async () => {
+      await checkActiveShift()
+    }, 5000)
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching users and active shifts:", error);
   }
-
 });
 </script>
 
@@ -23,6 +40,7 @@ onMounted(async () => {
         v-for="user in users"
         :key="user.id"
         :user="user"
+        :check-active-shift="checkActiveShift"
     />
 
   </div>
