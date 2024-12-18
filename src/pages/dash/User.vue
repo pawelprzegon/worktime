@@ -78,7 +78,7 @@ onMounted(async () => {
     setInterval(updateShiftTimes, 1000);
     setInterval(async () => {
       await checkActiveShift()
-    }, 5000)
+    }, 60000)
   } catch (error) {
     console.error("Error fetching users:", error);
   }
