@@ -11,7 +11,8 @@ export default {
         'soft': '#222222',
         'mute': '#282828',
         'light': '#b7b7b7',
-        'beb': '#3498db'
+        'beb': '#3498db',
+        'modal-back': "rgba(64, 64, 64, 0.84)",
       }
     },
 

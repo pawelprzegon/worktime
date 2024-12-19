@@ -72,6 +72,9 @@ const summaryWorkTime = () => {
   return summaryWork
 }
 
+const setSelectedShift = (shift) => {
+  selectedShift.setSelectedShift(shift)
+}
 
 const deleteConfirmationVisibleToggle = (shiftId) => {
   deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? false : shiftId;
@@ -136,8 +139,14 @@ onBeforeUnmount(() => {
           >
 
             <div class="shift-details-header">
-              <p :class="['card-button', { selected: shift.isMainSelected }]" @click="toggleSelectedCard(shift, 'main')">main</p>
-              <p :class="['card-button', { selected: shift.isCorrectSelected }]" @click="toggleSelectedCard(shift, 'correct')">correct</p>
+              <p
+                  :class="['card-button', { selected: shift.isMainSelected }]"
+                  @click="toggleSelectedCard(shift, 'main')"
+              >main</p>
+              <p
+                  :class="['card-button', { selected: shift.isCorrectSelected, 'has-corrections': shift.update?.length > 0}]"
+                  @click="toggleSelectedCard(shift, 'correct')"
+              >correct</p>
               <img
                 v-if="!deleteConfirmationVisible"
                 class="shift-delete"
@@ -242,6 +251,21 @@ onBeforeUnmount(() => {
   background: var(--color-background-light);
   border-radius: 5px 5px 0 0;
   color: var(--color-text-active)
+}
+
+.has-corrections {
+  position: relative;
+}
+
+.has-corrections::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  background-color: #c41313;
+  border-radius: 50%;
 }
 
 @media (max-width: 800px) {

@@ -1,24 +1,4 @@
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(64, 64, 64, 0.84);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  z-index: 1000;
-}
 
-.modal-content {
-  border-radius: 8px;
-  text-align: center;
-  width: fit-content;
-  min-width: 300px;
-  margin-top: 150px;
-  padding: 10px;
-}
 
 .shift-details-header {
   display: flex;

@@ -121,7 +121,7 @@ const closeModal = () => {
     <ShiftToggleModal
         v-if="modalVisibility"
         :user="props.user"
-        @closeModal="closeModal"
+        :close-modal="closeModal"
         @toggleShift="toggleShift"
     />
     

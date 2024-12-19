@@ -13,27 +13,9 @@ const props = defineProps({
   date: Date
 })
 
-console.log(props.date)
-
 const emit = defineEmits(['newDateTime', 'refreshModal'])
 const alert = inject('alert');
-const pickedStartStop = ref(null);
-const datePickerKey = ref(0)
-const selectedNewDateTime = ref('')
-
-const select = (selectedToCorrect) => {
-  pickedStartStop.value = selectedToCorrect;
-}
-
-const newDateTime = (selectedDateTime) => {
-  selectedNewDateTime.value = selectedDateTime
-}
-
-const getLastCorrections = () => {
-  props.shift.time_correction.forEach(correction => {
-    console.log(correction)
-  })
-}
+const anyCorrection = ref(props.shift.update?.length > 0)
 
 const shiftTime = ref({
     start: '',
@@ -41,15 +23,10 @@ const shiftTime = ref({
   });
 
 const checkIsLast = (correction) => {
-  const filtered = props.shift.time_correction.filter(c => c.corrected === correction.corrected);
+  const filtered = props.shift.update.filter(c => c.corrected === correction.corrected);
   const lastFiltered = filtered[filtered.length -1]
   return correction === lastFiltered
 };
-
-const checkIsAny = (corrected) => {
-  const filtered = props.shift.time_correction.filter(c => c.corrected === corrected);
-  return filtered.length > 0;
-}
 
 const saveCorrection = async () => {
   const shiftDt = {
@@ -70,7 +47,9 @@ const saveCorrection = async () => {
       <h4 style="text-align: left">Correction history:</h4>
       <div class="defaults">
 
-        <table class="corrections-table">
+        <table
+            v-if="anyCorrection"
+            class="corrections-table">
           <thead>
             <tr>
               <th>#</th>
@@ -85,38 +64,33 @@ const saveCorrection = async () => {
                 <ShiftDetailContainer
                   :time="getTime(props.shift.start)"
                   :class="['corrections-section',
-                  { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('start') }]"
+                  { 'shift-time-inactive': anyCorrection }]"
                 />
               </td>
               <td>
                 <ShiftDetailContainer
                   :time="getTime(props.shift.stop)"
                   :class="['corrections-section',
-                  { 'shift-time-inactive': props.shift.time_correction.length > 0 && checkIsAny('stop')}]"
+                  { 'shift-time-inactive': anyCorrection}]"
                 />
               </td>
             </tr>
-            <tr v-for="(correction, index) in props.shift.time_correction" :key="index">
+            <tr v-for="(correction, index) in props.shift.update" :key="index">
 
               <td
                   class="correction-index"
               >
                 {{`${index + 1} correction`}}
-                <div class="tooltip-container">
-                  {{getTime(correction.updated_at)}}
-                </div>
               </td>
               <td>
                 <ShiftDetailContainer
-                  v-if="correction.corrected === 'start'"
-                  :time="getTime(correction.date)"
+                  :time="getTime(correction.start)"
                   :class="['corrections-section', { 'shift-time-inactive': !checkIsLast(correction)}]"
                 />
               </td>
               <td>
                 <ShiftDetailContainer
-                  v-if="correction.corrected === 'stop'"
-                  :time="getTime(correction.date)"
+                  :time="getTime(correction.stop)"
                   :class="['corrections-section', { 'shift-time-inactive': !checkIsLast(correction)}]"
                 />
               </td>

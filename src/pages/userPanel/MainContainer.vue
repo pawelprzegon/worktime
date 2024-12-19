@@ -19,13 +19,11 @@ const submitForm = () => {
   form.requestSubmit();
 };
 
-
-
-const toggleShowNoteEditor = (shift) => {
+const toggleShowNoteEditor = () => {
   props.shift.isEditingNote = !props.shift.isEditingNote
 }
 
-const addNote = async (shift) => {
+const addNote = async () => {
   const response = await saveShiftNote(props.shift.user_id, props.shift.id, props.shift.noteContent)
 
   if (response) {
@@ -49,13 +47,11 @@ const addNote = async (shift) => {
             :label="'start'"
             :date="getDate(getLastStartStop(shift, 'start'))"
             :time="getTime(getLastStartStop(shift, 'start'))"
-            :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'start')}"
         />
         <ShiftDetailContainer
             :label="'stop'"
             :date="getDate(getLastStartStop(shift, 'stop'))"
             :time="getTime(getLastStartStop(shift, 'stop'))"
-            :class="{'has-corrections': shift.time_correction.some(c => c.corrected === 'stop')}"
         />
         <ShiftDetailContainer
             :label="'work'"
@@ -190,21 +186,6 @@ textarea {
 textarea:focus {
   outline: none;
   border-color: #777;
-}
-
-.has-corrections {
-  position: relative;
-}
-
-.has-corrections::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  right: 10px;
-  width: 5px;
-  height: 5px;
-  background-color: #c41313;
-  border-radius: 50%;
 }
 
 #noteEditor {

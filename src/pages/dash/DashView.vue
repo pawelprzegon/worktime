@@ -1,12 +1,13 @@
 <script setup>
 import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
-import {onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import User from "@/pages/dash/User.vue";
 import {useActiveShifts} from "@/stores/shiftStore.js";
 
 const activeShifts = useActiveShifts()
 
 const users = ref([])
+const intervalId = ref(null);
 
 const checkActiveShift = async () => {
   try{
@@ -24,12 +25,16 @@ onMounted(async () => {
   try {
     users.value = await getDashUsers();
     await checkActiveShift()
-    setInterval(async () => {
-      await checkActiveShift()
-    }, 5000)
+    intervalId.value = setInterval(async () => {
+    await checkActiveShift()
+  }, 5000)
   } catch (error) {
     console.error("Error fetching users and active shifts:", error);
   }
+});
+
+onBeforeUnmount(() => {
+  clearInterval(intervalId.value);
 });
 </script>
 

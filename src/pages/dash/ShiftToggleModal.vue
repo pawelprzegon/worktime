@@ -3,10 +3,15 @@ import {ref, onMounted} from 'vue'
 import Avatar from "@/components/Avatar.vue";
 import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
+import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const props = defineProps({
   user: {
     type: Object,
+    required: true
+  },
+  closeModal: {
+    type: Function,
     required: true
   }
 })
@@ -22,33 +27,31 @@ onMounted(() => {
 
 <template>
 
-  <div class="modal-overlay" @click="emit('closeModal')">
-    <div class="modal-content" @click.stop>
+  <ModalWrapper :close-modal="props.closeModal">
 
-      <div class="shift-toggle-modal">
+    <div class="shift-toggle-modal">
 
-        <Avatar
-            :avatar="props.user.avatar"
-            :active-shift="props.user.activeShift"
-            :static="true"
-        />
-        <UserName
-            :first-name="props.user.first_name"
-            :last-name="props.user.last_name"
-        />
+      <Avatar
+          :avatar="props.user.avatar"
+          :active-shift="props.user.activeShift"
+          :static="true"
+      />
+      <UserName
+          :first-name="props.user.first_name"
+          :last-name="props.user.last_name"
+      />
 
-        <h2 class="shift-toggle-label">{{label}}</h2>
+      <h2 class="shift-toggle-label">{{label}}</h2>
 
-        <div class="shift-answer">
+      <div class="shift-answer">
 
-          <p class="answer-button" @click="emit('toggleShift')">Yes</p>
-          <p class="answer-button" @click="emit('closeModal')">No</p>
-
-        </div>
+        <p class="answer-button" @click="emit('toggleShift')">Yes</p>
+        <p class="answer-button" @click="emit('closeModal')">No</p>
 
       </div>
+
     </div>
-  </div>
+  </ModalWrapper>
 
 </template>
 
