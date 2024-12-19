@@ -1,16 +1,17 @@
 <script setup>
 
-import {formatTime, getDate, getLastStartStop, getTime} from "@/composables/utils.js";
+import {formatTime, getDate, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/pages/userPanel/ShiftNoteContainer.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {saveShiftNote} from "@/composables/fetchers.js";
-import Alert from "@/components/Alert.vue";
 import {inject, ref} from "vue";
 
 const props = defineProps({
   shift: Object
 })
+const start = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).start : props.shift.start
+const stop = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).stop : props.shift.stop
 const alert = inject('alert');
 const emit = defineEmits(['refreshModal'])
 
@@ -45,13 +46,13 @@ const addNote = async () => {
       <div class="shift-details-data">
         <ShiftDetailContainer
             :label="'start'"
-            :date="getDate(getLastStartStop(shift, 'start'))"
-            :time="getTime(getLastStartStop(shift, 'start'))"
+            :date="getDate(start)"
+            :time="getTime(start)"
         />
         <ShiftDetailContainer
             :label="'stop'"
-            :date="getDate(getLastStartStop(shift, 'stop'))"
-            :time="getTime(getLastStartStop(shift, 'stop'))"
+            :date="getDate(stop)"
+            :time="getTime(stop)"
         />
         <ShiftDetailContainer
             :label="'work'"

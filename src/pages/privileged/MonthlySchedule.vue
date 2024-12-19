@@ -53,9 +53,9 @@ onMounted( () => {
     <div v-if="isLoading" class="loading-spinner">
       <Spinner />
     </div>
+
     <ScheduleTable
         v-else
-        :days-in-month="selectedMonth.daysInMonth"
     />
   </div>
   <div v-else class="no-user">

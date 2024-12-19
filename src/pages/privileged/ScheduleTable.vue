@@ -1,10 +1,9 @@
 <script setup>
 
 import {calculateTime} from "@/composables/privilegedHandler.js";
+import {useCalendarStore} from "@/stores/utilsStore.js";
 
-defineProps({
-  daysInMonth: Array
-})
+const selectedMonth = useCalendarStore('privilegedSelectedMonth')
 
 </script>
 
@@ -23,7 +22,7 @@ defineProps({
       </thead>
       <tbody>
         <tr
-            v-for="(day, index) in daysInMonth"
+            v-for="(day, index) in selectedMonth.daysInMonth"
             :key="index"
             v-html="calculateTime(day)"
         >

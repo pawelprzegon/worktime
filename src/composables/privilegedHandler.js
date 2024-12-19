@@ -46,12 +46,11 @@ const prepareStartAndStopTime = (day, dayData) => {
   let stop = ''
 
   dayData.forEach(shift => {
-
     const startTime = day.shifts.list.length > 0
-      ? shift.startTime : '-';
+      ? shift.start : '-';
 
     const stopTime = day.shifts.list.length > 0
-      ? shift.stopTime : '-';
+      ? shift.stop : '-';
 
     start += `<p>${getTime(startTime)}</p>`
     stop += `<p>${getTime(stopTime)}</p>`
@@ -65,6 +64,7 @@ const prepareStartAndStopTime = (day, dayData) => {
 }
 
 export const calculateTime = (day) => {
+
   const formattedDate = format(day.date, 'yyyy-MM-dd');
   const overtime = day.shifts.overtime ? formatTime(day.shifts.overtime) : ''
   const overtimeHours = day.shifts.overtimeTaken?.hours || 0
@@ -74,7 +74,6 @@ export const calculateTime = (day) => {
   const dayData = getLast(day)
 
   const [start, stop] = prepareStartAndStopTime(day, dayData)
-
   result += `
     <td class="multiple-data">${start}</td>
     <td class="multiple-data">${stop}</td>

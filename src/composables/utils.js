@@ -51,34 +51,24 @@ export const clearCache = () => {
   sessionStorage.clear();
 }
 
-export const getLastStartStop = (shift, type) => {
-  // sprawdzanie czy są jakieś korekty i jeśli tak to nadpisanie nimi start i stop
-  if (shift.time_correction.length > 0) {
-    const filtered = shift.time_correction.filter(c => c.corrected === type);
-
-    if (filtered.length > 0){
-      return filtered[filtered.length -1]['date']
-    }
-
+export const getLastCorrectionUpdate = (shift) => {
+  if (shift.update.length > 0) {
+    const lastUpdate = shift.update[shift.update.length - 1];
+    return { ...lastUpdate };
   }
-  switch (type) {
-    case 'start':
-      return shift.start
-    case 'stop':
-      return shift.stop
-  }
-}
+  return {};
+};
 
 export const getLast = (day) => {
   let shifts = []
   day.shifts.list.forEach(shift => {
-    let obj = {
-      startTime: Number,
-      stopTime: Number,
+    const lastCorrectionUpdate = getLastCorrectionUpdate(shift)
+    if (Object.keys(lastCorrectionUpdate).length > 0){
+      shifts.push(lastCorrectionUpdate)
+    } else {
+      shifts.push(shift)
     }
-    obj.startTime = getLastStartStop(shift, 'start')
-    obj.stopTime = getLastStartStop(shift, 'stop')
-    shifts.push(obj)
+
   })
   return shifts
 }
