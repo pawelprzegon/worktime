@@ -82,9 +82,9 @@ const handleSubmit = async () => {
             autocomplete="current-password"
             id="password"
             required />
-        <label class="text-font-secondary" for="avatar">Upload avatar:</label>
+        <label class="text-font-secondary mt-10" for="avatar">Upload avatar:</label>
         <input
-            class="w-3/4 flex flex-col m-0 text-font-secondary hover:cursor-pointer"
+            class="w-3/4 flex flex-col m-0 text-font-secondary hover:cursor-pointer mt-2"
             type="file"
             id="avatar"
             @change="handleFileChange"
@@ -94,7 +94,7 @@ const handleSubmit = async () => {
 
       <button
           type="submit"
-          class="mt-auto py-2 px-4 bg-x-secondary text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+          class="mt-10 py-2 px-4 border-2 border-third text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
       >SIGN UP</button>
     </form>
 

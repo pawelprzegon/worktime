@@ -21,7 +21,7 @@ export default {
 
         'primary': '#222222',
         'secondary': '#2e2e31',
-        'x-secondary': '#3a3a3d',
+        'third': '#3a3a3d',
         'dark-green': '#556067',
         'green': '#6d8389',
         'light-green': '#87a8a8',

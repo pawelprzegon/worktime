@@ -65,7 +65,7 @@ const handleLogin = async () => {
       <button
         type="submit"
         :disabled="loading"
-        class="mt-auto py-2 px-4 bg-x-secondary text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+        class="mt-auto py-2 px-4 border-2 border-third text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
       >
         {{ loading ? 'Logging in...' : 'LOGIN' }}
       </button>
