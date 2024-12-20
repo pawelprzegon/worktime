@@ -37,22 +37,65 @@ const handleSubmit = async () => {
 
 <template>
 
-  <section class="signup-section">
+  <section class="flex justify-center items-center h-full">
 
-    <form @submit.prevent="handleSubmit">
-      <h1 class="form-label">Sign up</h1>
-      <div>
-        <input v-model="form.first_name" type="text" placeholder="first name" id="first_name" required />
-        <input v-model="form.last_name" type="text" placeholder="last name" id="last_name" required />
-        <input v-model="form.email" type="email" placeholder="email" id="email" required />
-        <input v-model="form.username" type="text" placeholder="username" id="username" autocomplete="current-username" required />
-        <input v-model="form.password" type="password" placeholder="password" autocomplete="current-password" id="password" required />
-        <label for="avatar">Upload avatar:</label>
-        <input type="file" id="avatar" @change="handleFileChange" accept=".png, .jpg, .jpeg, .gif, .svg"/>
+    <form
+        @submit.prevent="handleSubmit"
+        class="flex flex-col w-[300px] min-h-[450px] p-4 bg-secondary shadow-xl rounded-xl"
+    >
+      <h1 class="text-beb text-center text-2xl mb-10">Sign up</h1>
+      <div class="flex flex-col justify-center items-center">
+        <input
+            v-model="form.first_name"
+            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
+            type="text"
+            placeholder="first name"
+            id="first_name"
+            required />
+        <input
+            v-model="form.last_name"
+            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
+            type="text"
+            placeholder="last name"
+            id="last_name"
+            required />
+        <input
+            v-model="form.email"
+            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
+            type="email"
+            placeholder="email"
+            id="email"
+            required />
+        <input
+            v-model="form.username"
+            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
+            type="text"
+            placeholder="username"
+            id="username"
+            autocomplete="current-username"
+            required />
+        <input
+            v-model="form.password"
+            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
+            type="password"
+            placeholder="password"
+            autocomplete="current-password"
+            id="password"
+            required />
+        <label class="text-font-secondary" for="avatar">Upload avatar:</label>
+        <input
+            class="w-3/4 flex flex-col m-0 text-font-secondary hover:cursor-pointer"
+            type="file"
+            id="avatar"
+            @change="handleFileChange"
+            accept=".png, .jpg, .jpeg, .gif, .svg"/>
       </div>
 
 
-      <button type="submit">SIGN UP</button>
+      <button
+          type="submit"
+          class="mt-auto py-2 px-4 bg-x-secondary text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+      >SIGN UP</button>
     </form>
 
   </section>
@@ -60,60 +103,5 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 300px;
-  min-height: 450px;
-  padding: 1rem;
-  background: var(--vt-c-black-mute);
-  box-shadow: -4px 13px 27px 9px black;
-  border-radius: 10px;
-}
 
-.form-label {
-  font-weight: bolder;
-  margin: 1rem auto;
-  color: lightgray;
-}
-
-div {
-  margin-bottom: 10px;
-}
-
-label {
-
-  margin-bottom: 5px;
-}
-
-input {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid black;
-  outline: none;
-  color: gray;
-  padding: 10px;
-  margin: 5px;
-  width: 100%;
-}
-
-input:focus {
-  border-bottom: 1px solid gray;
-}
-
-button {
-  padding: 10px;
-  background-color: var(--vt-c-black-mute);
-  color: gray;
-  cursor: pointer;
-  font-size: 16px;
-  border-radius: 3px;
-  border: solid 1px var(--vt-c-black);
-}
-
-button:hover {
-  background-color: var(--vt-c-black);
-  color: lightgray;
-}
 </style>

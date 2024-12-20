@@ -37,18 +37,20 @@ const handleLogin = async () => {
 </script>
 
 <template>
-
-  <section class="login-section">
-
-    <form @submit.prevent="handleLogin">
-      <h1 class="login-label">Login</h1>
-      <div>
+  <section class="flex justify-center items-center h-full">
+    <form
+      @submit.prevent="handleLogin"
+      class="flex flex-col w-[300px] min-h-[450px] p-4 bg-secondary shadow-xl rounded-xl"
+    >
+      <h1 class="text-beb text-center text-2xl mb-10">Login</h1>
+      <div class="flex flex-col justify-center items-center space-y-4">
         <input
           v-model="username"
           type="text"
           id="username"
           placeholder="username"
           required
+          class="w-3/4  bg-transparent border-b border-zinc-900 text-gray-300 placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1"
         />
 
         <input
@@ -57,81 +59,23 @@ const handleLogin = async () => {
           id="password"
           placeholder="password"
           required
+          class="w-3/4 bg-transparent border-b border-zinc-900 text-gray-300 placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1"
         />
       </div>
-      <button type="submit" :disabled="loading">
+      <button
+        type="submit"
+        :disabled="loading"
+        class="mt-auto py-2 px-4 bg-x-secondary text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+      >
         {{ loading ? 'Logging in...' : 'LOGIN' }}
       </button>
-      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      <p v-if="errorMessage" class="text-red-500 text-center mt-4">
+        {{ errorMessage }}
+      </p>
     </form>
-
   </section>
-
 </template>
 
 <style scoped>
 
-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 300px;
-  min-height: 450px;
-  padding: 1rem;
-  background: var(--vt-c-black-mute);
-  box-shadow: -4px 13px 27px 9px black;
-  border-radius: 10px;
-}
-
-h1 {
-  font-weight: bolder;
-  margin: 1rem auto;
-  color: lightgray;
-  text-align: center;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-input {
-  background-color: transparent;
-  border: none;
-  border-bottom: 1px solid black;
-  outline: none;
-  color: gray;
-  padding: 10px;
-  margin: 5px;
-  width: 100%;
-}
-
-input:focus {
-  border-bottom: 1px solid gray;
-}
-
-button {
-  padding: 10px;
-  background-color: var(--vt-c-black-mute);
-  color: gray;
-  cursor: pointer;
-  font-size: 16px;
-  border-radius: 3px;
-  border: solid 1px var(--vt-c-black);
-  margin-top: auto;
-}
-
-button:hover {
-  background-color: var(--vt-c-black);
-  color: lightgray;
-}
-
-button:disabled {
-  background-color: #ccc;
-}
-
-.error {
-  color: red;
-  text-align: center;
-}
 </style>
