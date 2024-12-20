@@ -96,7 +96,7 @@ const closeModal = () => {
   :class="[
     'grid grid-rows-[2fr_auto_40px] gap-2 justify-items-center p-1',
     {
-      'text-white bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
+      'text-platinum bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
       'hover:text-white hover:bg-dark-green hover:rounded-lg hover:shadow-lg hover:shadow-neutral-900': true
     }
   ]"
@@ -129,6 +129,7 @@ const closeModal = () => {
     <ShiftToggleModal
         v-if="modalVisibility"
         :user="props.user"
+        :active-shift="activeShift"
         :close-modal="closeModal"
         @toggleShift="toggleShift"
     />

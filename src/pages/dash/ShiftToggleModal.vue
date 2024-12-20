@@ -10,6 +10,10 @@ const props = defineProps({
     type: Object,
     required: true
   },
+  activeShift: {
+    type: Object,
+    default: {}
+  },
   closeModal: {
     type: Function,
     required: true
@@ -20,7 +24,7 @@ const emit = defineEmits(['closeModal', 'toggleShift'])
 const label = ref('')
 
 onMounted(() => {
-  label.value = props.user.activeShift ? 'Stop shift?' : 'Start shift?';
+  label.value = props.activeShift ? 'Stop shift?' : 'Start shift?';
 })
 
 </script>
@@ -46,7 +50,7 @@ onMounted(() => {
       <div class="shift-answer">
 
         <p class="answer-button" @click="emit('toggleShift')">Yes</p>
-        <p class="answer-button" @click="emit('closeModal')">No</p>
+        <p class="answer-button" @click="props.closeModal()">No</p>
 
       </div>
 
