@@ -92,7 +92,15 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div :class="{'user': true, 'active': activeShift}">
+ <div
+  :class="[
+    'grid grid-rows-[2fr_auto_40px] gap-2 justify-items-center p-1',
+    {
+      'text-white bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
+      'hover:text-white hover:bg-dark-green hover:rounded-lg hover:shadow-lg hover:shadow-neutral-900': true
+    }
+  ]"
+>
 
     <Avatar
         :avatar="props.user.avatar"
@@ -105,7 +113,7 @@ const closeModal = () => {
         :last-name="props.user.last_name"
     />
 
-    <div v-if="isLoading" class="loading-spinner">
+    <div v-if="activeShift ? isLoading : null" class="loading-spinner">
       <Spinner
           :height=30
           :width=30

@@ -38,8 +38,8 @@ const shiftToggle = () => {
 <style scoped>
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   margin: auto;
   object-fit: cover;
   object-position: center;
