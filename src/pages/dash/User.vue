@@ -140,49 +140,6 @@ const closeModal = () => {
 
 <style scoped>
 
-.user {
-  display: grid;
-  grid-template-rows: 2fr auto 50px;
-  gap: 10px;
-  justify-items: center;
-  padding: 3px;
-}
-
-.active,
-.user:hover {
-  color: white;
-  background: var(--vt-c-black-mute);
-  border-radius: 10px;
-  box-shadow: var(--vt-box-shadow);
-}
-
-@media (max-width: 1300px) {
-  .user {
-    grid-template-rows: 100px 30px 50px;
-    gap: 3px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .user {
-    grid-template-rows: 85px 30px 50px;
-    gap: 3px;
-  }
-}
-
-@media (max-width: 800px) {
-  .user {
-    grid-template-rows: 75px 30px 50px;
-    gap: 3px;
-  }
-}
-
-@media (max-width: 600px) {
-  .user {
-    grid-template-rows: 65px 30px 50px;
-    gap: 3px;
-  }
-}
 
 
 </style>

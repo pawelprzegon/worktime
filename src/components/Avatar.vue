@@ -24,9 +24,10 @@ const shiftToggle = () => {
 
 <template>
   <img
-    :class="['avatar', {
-      'off': !activeShift,
-      'no-click': static
+    :class="['w-24 h-24 mx-auto object-cover object-center rounded-full cursor-pointer' +
+    {
+      'grayscale': !activeShift,
+      'cursor-default': static
     }]"
     :src="`${apiURL}/${avatar}`"
     alt="avatar"
@@ -37,19 +38,6 @@ const shiftToggle = () => {
 
 <style scoped>
 
-.avatar {
-  width: 100px;
-  height: 100px;
-  margin: auto;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
-}
-
-.avatar:hover {
-  cursor: pointer;
-  filter: grayscale(50%);
-}
 
 .off {
   filter: grayscale(100%);
