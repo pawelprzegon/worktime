@@ -60,7 +60,7 @@ onMounted(() => {
 
         <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
            @click="emit('toggleShift')">Yes</p>
-        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
+        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-silver hover:text-white hover:border-silver hover:cursor-pointer"
            @click="props.closeModal()">No</p>
 
       </div>
