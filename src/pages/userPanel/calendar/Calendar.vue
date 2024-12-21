@@ -4,7 +4,7 @@ import {ref, onMounted, inject, watch} from 'vue';
 import Alert from "@/components/Alert.vue";
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
-import ShiftsModal from "@/pages/userPanel/modals/ShiftsModal.vue";
+import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftsDetailsModal.vue";
 import {removeShift} from "@/composables/calendarHandler.js";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
@@ -126,7 +126,7 @@ onMounted(async () => {
         :closeModal="closeShiftAdder"
         :date="selectedDay.day?.date"
     />
-    <ShiftsModal
+    <ShiftsDetailsModal
         v-if="isDailyShiftsOpen && selectedDay.day?.shifts.list.length > 0"
         :key="modalKey"
         :shifts="selectedDay.day?.shifts.list"

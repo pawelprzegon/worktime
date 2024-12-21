@@ -1,14 +1,13 @@
 <script setup>
-import {computed, ref, onBeforeUnmount} from 'vue';
-import CustomTextButton from "@/components/CustomTextButton.vue";
+import {ref, onBeforeUnmount} from 'vue';
 import Alert from "@/components/Alert.vue";
 import '@vuepic/vue-datepicker/dist/main.css'
-import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
-
-import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
-import MainContainer from "@/pages/userPanel/MainContainer.vue";
-import ModalWrapper from "@/components/ModalWrapper.vue";
 import {getDateString} from "@/composables/utils.js";
+import ModalWrapper from "@/components/ModalWrapper.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
+import MainContainer from "@/pages/userPanel/MainContainer.vue";
+import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
+import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
 
 const deleteConfirmationVisible = ref(false);
 const isModalOpen = ref(true);
@@ -70,10 +69,6 @@ const summaryWorkTime = () => {
     summaryWork += shift.work
   })
   return summaryWork
-}
-
-const setSelectedShift = (shift) => {
-  selectedShift.setSelectedShift(shift)
 }
 
 const deleteConfirmationVisibleToggle = (shiftId) => {

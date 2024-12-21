@@ -1,11 +1,15 @@
 <script setup>
-import {inject, ref, watch} from 'vue'
-import {combineDateWithTime, getDate, getTime} from "@/composables/utils.js";
+import {inject, ref} from 'vue'
+import {
+  combineDateWithTime,
+  getLastCorrectionUpdate,
+  getTime,
+  getTimeString
+} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import DatePicker from "@/pages/userPanel/DatePicker.vue";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {setManualShift, shiftCorrection} from "@/composables/fetchers.js";
+import {shiftCorrection} from "@/composables/fetchers.js";
 import Alert from "@/components/Alert.vue";
 
 const props = defineProps({
@@ -13,14 +17,19 @@ const props = defineProps({
   date: Date
 })
 
+const shiftTime = ref({
+  start: props.shift.update.length > 0 ? getTimeString(getLastCorrectionUpdate(props.shift).start) : getTimeString(props.shift.start),
+  stop: props.shift.update.length > 0 ? getTimeString(getLastCorrectionUpdate(props.shift).stop) : getTimeString(props.shift.stop)
+})
+
+const shiftTimeCorrection = ref({
+  start: '',
+  stop: ''
+});
+
 const emit = defineEmits(['newDateTime', 'refreshModal'])
 const alert = inject('alert');
 const anyCorrection = ref(props.shift.update?.length > 0)
-
-const shiftTime = ref({
-    start: '',
-    stop: ''
-  });
 
 const checkIsLast = (correction) => {
   const filtered = props.shift.update.filter(c => c.corrected === correction.corrected);
@@ -30,8 +39,8 @@ const checkIsLast = (correction) => {
 
 const saveCorrection = async () => {
   const shiftDt = {
-      start: combineDateWithTime(props.date, shiftTime.value.start),
-      stop: combineDateWithTime(props.date, shiftTime.value.stop),
+      start: combineDateWithTime(props.date, shiftTimeCorrection.value.start),
+      stop: combineDateWithTime(props.date, shiftTimeCorrection.value.stop),
     }
   const response = await shiftCorrection(props.shift.user_id, props.shift.id, shiftDt)
   alert.show(response.status, response.message)
