@@ -24,8 +24,12 @@ const emit = defineEmits(['closeModal', 'toggleShift'])
 const label = ref('')
 
 onMounted(() => {
-  label.value = props.activeShift ? 'Stop shift?' : 'Start shift?';
-})
+  const isShiftActive = props.activeShift;
+  label.value = {
+    data: isShiftActive ? 'Stop shift?' : 'Start shift?',
+    color: isShiftActive ? 'red' : 'green',
+  };
+});
 
 </script>
 
@@ -33,7 +37,7 @@ onMounted(() => {
 
   <ModalWrapper :close-modal="props.closeModal">
 
-    <div class="shift-toggle-modal">
+    <div class="bg-mute shadow-xl text-center p-8 rounded-lg m-auto">
 
       <Avatar
           :avatar="props.user.avatar"
@@ -45,12 +49,19 @@ onMounted(() => {
           :last-name="props.user.last_name"
       />
 
-      <h2 class="shift-toggle-label">{{label}}</h2>
+      <h2
+        class="mt-4 font-extrabold text-2xl"
+        :class="props.activeShift ? 'text-red-500' : 'text-emerald-700'"
+      >
+        {{ label.data }}
+      </h2>
 
-      <div class="shift-answer">
+      <div class="flex flex-row justify-center items-center p-2 my-2">
 
-        <p class="answer-button" @click="emit('toggleShift')">Yes</p>
-        <p class="answer-button" @click="props.closeModal()">No</p>
+        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
+           @click="emit('toggleShift')">Yes</p>
+        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
+           @click="props.closeModal()">No</p>
 
       </div>
 
@@ -60,49 +71,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-.shift-toggle-modal {
-  background-color: #222222;
-  color: #fff;
-  text-align: center;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 16px 20px 50px 10px #222222;
-  margin: auto;
-}
-
-.shift-answer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  margin-top: 5px;
-}
-
-.answer-button {
-  width: 20%;
-  border: 1px solid gray;
-  border-radius: 5px;
-  margin: 15px;
-  font-size: 20px;
-}
-
-.answer-button:hover {
-  background: gray;
-  color: black;
-  cursor: pointer;
-}
-
-.shift-toggle-label {
-  margin-top: 15px;
-}
-
-@media (max-width: 1300px) {
-  .shift-toggle-modal {
-    min-width: 300px;
-    max-width: 400px;
-  }
-}
 
 </style>
