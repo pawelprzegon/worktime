@@ -50,7 +50,12 @@ const handleLogin = async () => {
           id="username"
           placeholder="username"
           required
-          class="w-3/4  bg-transparent border-b border-zinc-900 text-gray-300 placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1"
+          class="
+          w-3/4 py-2 px-1
+          bg-third text-gray-300
+          border-solid border border-zinc-600 rounded-lg focus:border-beb
+          placeholder-font-third
+          outline-none"
         />
 
         <input
@@ -59,13 +64,20 @@ const handleLogin = async () => {
           id="password"
           placeholder="password"
           required
-          class="w-3/4 bg-transparent border-b border-zinc-900 text-gray-300 placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1"
+          class="w-3/4 py-2 px-1
+          bg-third text-gray-300
+          border-solid border border-zinc-600 rounded-lg focus:border-beb
+          placeholder-font-third
+          outline-none"
         />
       </div>
       <button
         type="submit"
         :disabled="loading"
-        class="mt-auto py-2 px-4 border-2 border-third text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+        class="bg-third mt-auto py-2 px-4
+        text-black
+        border border-third rounded-md
+        hover:bg-beb hover:text-white"
       >
         {{ loading ? 'Logging in...' : 'LOGIN' }}
       </button>

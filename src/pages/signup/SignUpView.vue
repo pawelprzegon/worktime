@@ -46,55 +46,111 @@ const handleSubmit = async () => {
       <h1 class="text-beb text-center text-2xl mb-10">Sign up</h1>
       <div class="flex flex-col justify-center items-center">
         <input
-            v-model="form.first_name"
-            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
-            type="text"
-            placeholder="first name"
-            id="first_name"
-            required />
+          v-model="form.first_name"
+          class="
+            w-3/4 py-2 px-1 my-1
+            placeholder-font-secondary
+            bg-third text-gray-300 placeholder-font-third
+            border-solid border border-zinc-600 rounded-lg
+            focus:border-beb
+            outline-none
+          "
+          type="text"
+          placeholder="first name"
+          id="first_name"
+          required
+        />
         <input
-            v-model="form.last_name"
-            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
-            type="text"
-            placeholder="last name"
-            id="last_name"
-            required />
+          v-model="form.last_name"
+          class="
+            w-3/4 py-2 px-1 my-1
+            placeholder-font-secondary
+            bg-third text-gray-300 placeholder-font-third
+            border-solid border border-zinc-600 rounded-lg
+            focus:border-beb
+            outline-none
+          "
+          type="text"
+          placeholder="last name"
+          id="last_name"
+          required
+        />
         <input
-            v-model="form.email"
-            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
-            type="email"
-            placeholder="email"
-            id="email"
-            required />
+          v-model="form.email"
+          class="
+            w-3/4 py-2 px-1 my-1
+            placeholder-font-secondary
+            bg-third text-gray-300 placeholder-font-third
+            border-solid border border-zinc-600 rounded-lg
+            focus:border-beb
+            outline-none
+          "
+          type="email"
+          placeholder="email"
+          id="email"
+          required
+        />
         <input
-            v-model="form.username"
-            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
-            type="text"
-            placeholder="username"
-            id="username"
-            autocomplete="current-username"
-            required />
+          v-model="form.username"
+          class="
+            w-3/4 py-2 px-1 my-1
+            placeholder-font-secondary
+            bg-third text-gray-300 placeholder-font-third
+            border-solid border border-zinc-600 rounded-lg
+            focus:border-beb
+            outline-none
+          "
+          type="text"
+          placeholder="username"
+          id="username"
+          autocomplete="current-username"
+          required
+        />
         <input
-            v-model="form.password"
-            class="w-3/4 bg-transparent border-b border-zinc-900 text-light placeholder-font-secondary focus:border-zinc-600 outline-none py-2 px-1 my-1"
-            type="password"
-            placeholder="password"
-            autocomplete="current-password"
-            id="password"
-            required />
-        <label class="text-font-secondary mt-10" for="avatar">Upload avatar:</label>
+          v-model="form.password"
+          class="
+            w-3/4 py-2 px-1 my-1
+            placeholder-font-secondary
+            bg-third text-gray-300 placeholder-font-third
+            border-solid border border-zinc-600 rounded-lg
+            focus:border-beb
+            outline-none
+          "
+          type="password"
+          placeholder="password"
+          autocomplete="current-password"
+          id="password"
+          required
+        />
+        <label
+          class="
+            mt-10
+            text-font-secondary
+          "
+          for="avatar"
+        >
+          Upload avatar:
+        </label>
         <input
-            class="w-3/4 flex flex-col m-0 text-font-secondary hover:cursor-pointer mt-2"
-            type="file"
-            id="avatar"
-            @change="handleFileChange"
-            accept=".png, .jpg, .jpeg, .gif, .svg"/>
+          class="
+            w-3/4 mt-2
+            text-font-secondary
+            hover:cursor-pointer
+            flex flex-col m-0
+          "
+          type="file"
+          id="avatar"
+          @change="handleFileChange"
+          accept=".png, .jpg, .jpeg, .gif, .svg"
+        />
       </div>
-
 
       <button
           type="submit"
-          class="mt-10 py-2 px-4 border-2 border-third text-black hover:bg-beb hover:text-white rounded-md disabled:bg-gray-500 disabled:cursor-not-allowed"
+          class="bg-third mt-auto py-2 px-4
+          text-black
+          border border-third rounded-md
+          hover:bg-beb hover:text-white"
       >SIGN UP</button>
     </form>
 
