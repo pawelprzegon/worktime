@@ -8,7 +8,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <section class="flex flex-col justify-center items-center gap-0 my-5 portrait-medium:my-3 portrait-xs:my-2">
+  <section class="flex flex-col justify-center items-center gap-0 my-3 portrait-medium:my-2 portrait-xs:my-1">
     <small
       class="text-[15px] leading-[1.5] sm:text-[13px] md:text-[12px] lg:text-[11px] xl:text-[10px]
       portrait-medium:text-sm portrait-xs:text-xs"

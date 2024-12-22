@@ -94,7 +94,7 @@ const closeModal = () => {
 <template>
  <div
   :class="[
-    'grid grid-rows-[2fr_auto_40px] gap-2 justify-items-center p-1',
+    'grid grid-rows-[2fr_auto_40px] gap-1 justify-items-center p-1',
     {
       'text-platinum bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
       'hover:text-white hover:bg-dark-green hover:rounded-lg hover:shadow-lg hover:shadow-neutral-900': true

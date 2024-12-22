@@ -1,7 +1,7 @@
 <script setup>
 import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
 import {onBeforeUnmount, onMounted, ref} from "vue";
-import User from "@/pages/dash/User.vue";
+import UserCard from "@/pages/dash/UserCard.vue";
 import {useActiveShifts} from "@/stores/shiftStore.js";
 
 const activeShifts = useActiveShifts()
@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="dash-user-list">
 
-    <User
+    <UserCard
         v-for="user in users"
         :key="user.id"
         :user="user"
