@@ -18,6 +18,7 @@ export default {
         'soft': '#222222',
         'beb': '#3498db',
         'turquoise': '#4CE0D2',
+        'overtime': '#B97B28FF',
 
         'primary': '#222222',
         'secondary': '#2e2e31',

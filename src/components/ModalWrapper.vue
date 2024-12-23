@@ -13,7 +13,7 @@ defineProps({
   z-50 w-100 h-100
   fixed inset-0
   bg-modal-back backdrop-blur" @click="closeModal">
-    <div class="rounded-lg text-center w-auto min-w-[300px] mt-36" @click.stop>
+    <div class="rounded-lg text-center w-auto min-w-[500px] mt-36" @click.stop>
       <slot></slot>
     </div>
   </div>

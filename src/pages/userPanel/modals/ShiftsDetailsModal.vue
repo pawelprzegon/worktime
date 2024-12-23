@@ -5,9 +5,12 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import {getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import MainContainer from "@/pages/userPanel/MainContainer.vue";
+import MainContainer from "@/pages/userPanel/modals/MainContainer.vue";
 import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
-import CorrectorContainer from "@/pages/userPanel/CorrectorContainer.vue";
+import CorrectorContainer from "@/pages/userPanel/modals/CorrectorContainer.vue";
+import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
+import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
+import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetailsRow.vue";
 
 const deleteConfirmationVisible = ref(false);
 const isModalOpen = ref(true);
@@ -128,53 +131,61 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <div
-              v-else
-              @click.self="shift.isEditingNote = false"
-          >
+<!--          <div-->
+<!--              v-else-->
+<!--              @click.self="shift.isEditingNote = false"-->
+<!--          >-->
 
-            <div class="shift-details-header">
-              <p
-                  :class="['card-button', { selected: shift.isMainSelected }]"
-                  @click="toggleSelectedCard(shift, 'main')"
-              >main</p>
-              <p
-                  :class="['card-button', { selected: shift.isCorrectSelected, 'has-corrections': shift.update?.length > 0}]"
-                  @click="toggleSelectedCard(shift, 'correct')"
-              >correct</p>
-              <img
-                v-if="!deleteConfirmationVisible"
-                class="shift-delete"
-                src="../../../assets/img/delete.png"
-                alt="delete"
-                @click="deleteConfirmationVisibleToggle(shift.id)"
-              >
-            </div>
+<!--            <div class="shift-details-header">-->
+<!--              <p-->
+<!--                  :class="['card-button', { selected: shift.isMainSelected }]"-->
+<!--                  @click="toggleSelectedCard(shift, 'main')"-->
+<!--              >main</p>-->
+<!--              <p-->
+<!--                  :class="['card-button', { selected: shift.isCorrectSelected, 'has-corrections': shift.update?.length > 0}]"-->
+<!--                  @click="toggleSelectedCard(shift, 'correct')"-->
+<!--              >correct</p>-->
+<!--              <img-->
+<!--                v-if="!deleteConfirmationVisible"-->
+<!--                class="shift-delete"-->
+<!--                src="../../../assets/img/delete.png"-->
+<!--                alt="delete"-->
+<!--                @click="deleteConfirmationVisibleToggle(shift.id)"-->
+<!--              >-->
+<!--            </div>-->
 
-            <MainContainer
-              v-if="shift.isMainSelected"
-              :shift="shift"
-              @refreshModal="refreshModal"
-            />
+<!--            <MainContainer-->
+<!--              v-if="shift.isMainSelected"-->
+<!--              :shift="shift"-->
+<!--              @refreshModal="refreshModal"-->
+<!--            />-->
 
-            <CorrectorContainer
-              v-if="shift.isCorrectSelected"
-              :shift="shift"
-              :date="selectedDay"
-              @refreshModal="refreshModal"
-            />
+<!--            <CorrectorContainer-->
+<!--              v-if="shift.isCorrectSelected"-->
+<!--              :shift="shift"-->
+<!--              :date="selectedDay"-->
+<!--              @refreshModal="refreshModal"-->
+<!--            />-->
 
-          </div>
+<!--          </div>-->
 
 
         </div>
-        <OvertimeConsumer
-            :maxToTake="summaryWorkTime()"
-            :overtime="props.overtime"
-            :monthOvertimes="props.calculatedOvertime"
-            :date="dt"
-            @refreshModal="refreshModal"
-        />
+<!--        <OvertimeConsumer-->
+<!--            :maxToTake="summaryWorkTime()"-->
+<!--            :overtime="props.overtime"-->
+<!--            :monthOvertimes="props.calculatedOvertime"-->
+<!--            :date="dt"-->
+<!--            @refreshModal="refreshModal"-->
+<!--        />-->
+
+        <ShiftDetailsRow
+            v-for="(shift, index) in props.shifts"
+            :key=index
+            :shift="shift"
+            :index="index+1"
+        ></ShiftDetailsRow>
+
       </div>
   </ModalWrapper>
 </template>

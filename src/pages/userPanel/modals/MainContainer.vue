@@ -12,6 +12,7 @@ const props = defineProps({
 })
 const start = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).start : props.shift.start
 const stop = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).stop : props.shift.stop
+
 const alert = inject('alert');
 const emit = defineEmits(['refreshModal'])
 
