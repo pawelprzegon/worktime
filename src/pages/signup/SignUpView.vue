@@ -2,9 +2,9 @@
 import { ref, inject } from 'vue';
 import {registerUser, saveAvatar} from "@/composables/fetchers.js";
 import { useRouter } from "vue-router";
+import {useAlertStore} from "@/stores/alertStore.js";
 
-const alert = inject('alert');
-
+const alert = useAlertStore()
 const router = useRouter()
 const form = ref({
   first_name: '',
@@ -41,7 +41,7 @@ const handleSubmit = async () => {
 
     <form
         @submit.prevent="handleSubmit"
-        class="flex flex-col w-[300px] min-h-[450px] p-4 bg-secondary shadow-xl rounded-xl"
+        class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
     >
       <h1 class="text-beb text-center text-2xl mb-10">Sign up</h1>
       <div class="flex flex-col justify-center items-center">
@@ -147,7 +147,7 @@ const handleSubmit = async () => {
 
       <button
           type="submit"
-          class="bg-third mt-auto py-2 px-4
+          class="bg-third mt-auto py-2 px-4 m-2
           text-black
           border border-third rounded-md
           hover:bg-beb hover:text-white"

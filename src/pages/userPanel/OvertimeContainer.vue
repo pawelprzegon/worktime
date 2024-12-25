@@ -1,9 +1,12 @@
 <script setup>
-import {inject, ref} from 'vue'
+import {ref} from 'vue'
 import {getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setOvertime} from "@/composables/fetchers.js";
+import {useAlertStore} from "@/stores/alertStore.js";
+
+const alert = useAlertStore()
 
 const props = defineProps({
   maxToTake: Number,
@@ -23,7 +26,6 @@ const maxToTake = ref(props.maxToTake)
 const taken = ref(props.overtime?.hours || 0)
 
 const emit = defineEmits(['takenHours', 'refreshModal'])
-const alert = inject('alert');
 
 const hoursPool = ref(getHoursAsNumber(props.monthOvertimes))
 maxToTake.value = Math.floor((28800 - maxToTake.value) / 3600) + 1
@@ -97,9 +99,6 @@ const saveTakenHours = async () => {
       <div class="shift-details-header">
         <CustomTextButton
             label="save"
-            :width="80"
-            :padding="5"
-            :margin="2"
             @click="saveTakenHours"
         />
 

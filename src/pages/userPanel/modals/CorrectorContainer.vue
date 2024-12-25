@@ -1,5 +1,5 @@
 <script setup>
-import {inject, ref} from 'vue'
+import {ref} from 'vue'
 import {
   combineDateWithTime,
   getLastCorrectionUpdate,
@@ -10,7 +10,9 @@ import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {shiftCorrection} from "@/composables/fetchers.js";
-import Alert from "@/components/Alert.vue";
+import {useAlertStore} from "@/stores/alertStore.js";
+
+const alert = useAlertStore()
 
 const props = defineProps({
   shift: Object,
@@ -28,7 +30,6 @@ const shiftTimeCorrection = ref({
 });
 
 const emit = defineEmits(['newDateTime', 'refreshModal'])
-const alert = inject('alert');
 const anyCorrection = ref(props.shift.update?.length > 0)
 
 const checkIsLast = (correction) => {
@@ -43,15 +44,14 @@ const saveCorrection = async () => {
       stop: combineDateWithTime(props.date, shiftTimeCorrection.value.stop),
     }
   const response = await shiftCorrection(props.shift.user_id, props.shift.id, shiftDt)
-  alert.show(response.status, response.message)
   emit('refreshModal')
+  alert.show(response.status, response.message)
 }
 
 </script>
 
 <template>
   <div class="corrector-container">
-    <Alert/>
     <section>
       <h4 style="text-align: left">Correction history:</h4>
       <div class="defaults">
@@ -141,9 +141,6 @@ const saveCorrection = async () => {
       <section class="shift-details-header" id="correct">
         <CustomTextButton
           :label="'save'"
-          :width="80"
-          :padding="2"
-          :margin="2"
           @click="saveCorrection"
         />
 

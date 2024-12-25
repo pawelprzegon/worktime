@@ -1,33 +1,21 @@
 <script setup>
-import {ref, onBeforeUnmount} from 'vue';
-import Alert from "@/components/Alert.vue";
+import {ref} from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import {getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import CustomTextButton from "@/components/CustomTextButton.vue";
-import MainContainer from "@/pages/userPanel/modals/MainContainer.vue";
-import OvertimeConsumer from "@/pages/userPanel/OvertimeContainer.vue";
-import CorrectorContainer from "@/pages/userPanel/modals/CorrectorContainer.vue";
-import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
-import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
 import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetailsRow.vue";
+import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
 
-const deleteConfirmationVisible = ref(false);
+const selectedDay = useCalendarSelectedDay();
 const isModalOpen = ref(true);
 
 const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
 
 const props = defineProps({
-  shifts: {
-    type: Array,
-    default: () => []
-  },
-  overtime: Object,
   calculatedOvertime: {
     type: Number,
     default: 0
   },
-  selectedDay: Date,
   closeModal: Function,
 })
 
@@ -36,153 +24,25 @@ const closeModal = () => {
   isModalOpen.value = false;
 }
 
-props.shifts.forEach(shift => {
-  shift.isCorrectingTime = false;
-  shift.isEditingNote = false;
-  shift.isOverTime = false;
-  shift.isMainSelected = true;
-  shift.isCorrectSelected = false;
-  shift.isOvertimeSelected = false;
-  shift.noteContent = shift.note || '';
-});
-
-const dt = getDateString(props.selectedDay)
-
-const toggleSelectedCard = (shift, selected) => {
-  shift.isMainSelected = false;
-  shift.isOvertimeSelected = false;
-  shift.isCorrectSelected = false;
-
-  switch (selected) {
-    case 'main':
-      shift.isMainSelected = true;
-      break;
-    case 'correct':
-      shift.isCorrectSelected = true;
-      break;
-    case 'overtime':
-      shift.isOvertimeSelected = true;
-      break;
-  }
-}
-
-const summaryWorkTime = () => {
-  let summaryWork = 0
-  props.shifts.forEach(shift => {
-    summaryWork += shift.work
-  })
-  return summaryWork
-}
-
-const deleteConfirmationVisibleToggle = (shiftId) => {
-  deleteConfirmationVisible.value = deleteConfirmationVisible.value === shiftId ? false : shiftId;
-}
+const dt = getDateString(selectedDay.day?.date)
 
 const refreshModal = () => {
   emit('refreshModal')
 }
 
-const deleteConfirmed = (shiftId) => {
-  emit('removeShift', shiftId)
-  deleteConfirmationVisible.value = false;
-}
-
-onBeforeUnmount(() => {
-  props.shifts.forEach(shift => {
-    shift.isEditingNote = false
-  })
-})
-
 </script>
 
 <template>
-  <Alert />
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
       <div class="shifts-container">
         <div class="shifts-label">
           <h2 style="font-weight: 600">{{ dt }}</h2>
         </div>
 
-        <div
-            v-for="shift in props.shifts"
-            :key="shift.id"
-            class="shift-details-container"
-        >
-
-          <div
-              v-if="deleteConfirmationVisible === shift.id"
-              class="shift-delete-confirm"
-          >
-            <h3>delete shift?</h3>
-            <div class="shift-delete-confirm-buttons">
-              <CustomTextButton
-                  label="yes"
-                  color="white"
-                  background="darkred"
-                  @click="deleteConfirmed(shift.id)"
-              />
-
-              <CustomTextButton
-                  label="no"
-                  color="white"
-                  background=""
-                  @click="deleteConfirmationVisibleToggle(shift.id)"
-              />
-            </div>
-          </div>
-
-<!--          <div-->
-<!--              v-else-->
-<!--              @click.self="shift.isEditingNote = false"-->
-<!--          >-->
-
-<!--            <div class="shift-details-header">-->
-<!--              <p-->
-<!--                  :class="['card-button', { selected: shift.isMainSelected }]"-->
-<!--                  @click="toggleSelectedCard(shift, 'main')"-->
-<!--              >main</p>-->
-<!--              <p-->
-<!--                  :class="['card-button', { selected: shift.isCorrectSelected, 'has-corrections': shift.update?.length > 0}]"-->
-<!--                  @click="toggleSelectedCard(shift, 'correct')"-->
-<!--              >correct</p>-->
-<!--              <img-->
-<!--                v-if="!deleteConfirmationVisible"-->
-<!--                class="shift-delete"-->
-<!--                src="../../../assets/img/delete.png"-->
-<!--                alt="delete"-->
-<!--                @click="deleteConfirmationVisibleToggle(shift.id)"-->
-<!--              >-->
-<!--            </div>-->
-
-<!--            <MainContainer-->
-<!--              v-if="shift.isMainSelected"-->
-<!--              :shift="shift"-->
-<!--              @refreshModal="refreshModal"-->
-<!--            />-->
-
-<!--            <CorrectorContainer-->
-<!--              v-if="shift.isCorrectSelected"-->
-<!--              :shift="shift"-->
-<!--              :date="selectedDay"-->
-<!--              @refreshModal="refreshModal"-->
-<!--            />-->
-
-<!--          </div>-->
-
-
-        </div>
-<!--        <OvertimeConsumer-->
-<!--            :maxToTake="summaryWorkTime()"-->
-<!--            :overtime="props.overtime"-->
-<!--            :monthOvertimes="props.calculatedOvertime"-->
-<!--            :date="dt"-->
-<!--            @refreshModal="refreshModal"-->
-<!--        />-->
-
         <ShiftDetailsRow
-            v-for="(shift, index) in props.shifts"
+            v-for="(shift, index) in selectedDay.day.shifts.list"
             :key=index
-            :shift="shift"
+            :shift-id="shift.id"
             :index="index+1"
         ></ShiftDetailsRow>
 

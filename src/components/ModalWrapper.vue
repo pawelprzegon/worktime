@@ -10,7 +10,7 @@ defineProps({
 <template>
   <div class="
   flex justify-center items-start
-  z-50 w-100 h-100
+  z-40 w-100 h-100
   fixed inset-0
   bg-modal-back backdrop-blur" @click="closeModal">
     <div class="rounded-lg text-center w-auto min-w-[500px] mt-36" @click.stop>

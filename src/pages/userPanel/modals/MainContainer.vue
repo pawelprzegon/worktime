@@ -1,11 +1,13 @@
 <script setup>
-
+// Stare
 import {formatTime, getDate, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import ShiftNoteContainer from "@/pages/userPanel/ShiftNoteContainer.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {saveShiftNote} from "@/composables/fetchers.js";
-import {inject, ref} from "vue";
+import {useAlertStore} from "@/stores/alertStore.js";
+
+const alert = useAlertStore()
 
 const props = defineProps({
   shift: Object
@@ -13,7 +15,6 @@ const props = defineProps({
 const start = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).start : props.shift.start
 const stop = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).stop : props.shift.stop
 
-const alert = inject('alert');
 const emit = defineEmits(['refreshModal'])
 
 const submitForm = () => {
@@ -72,7 +73,6 @@ const addNote = async () => {
             v-if="shift.isEditingNote"
             @submit.prevent="addNote(shift)"
             ref="noteForm"
-
         >
           <textarea
             style="border-radius: 5px; width: 95%"
@@ -91,36 +91,23 @@ const addNote = async () => {
       <CustomTextButton
         v-if="!shift.isEditingNote && props.shift.noteContent !== ''"
         label="edit"
-        :width="80"
-        :padding="5"
-        :margin="2"
         @click="toggleShowNoteEditor(shift)"
       />
       <CustomTextButton
         v-if="!shift.isEditingNote && props.shift.noteContent === ''"
         label="add note"
-        :width="80"
-        :padding="5"
-        :margin="2"
         @click="toggleShowNoteEditor(shift)"
       />
 
       <CustomTextButton
         v-if="shift.isEditingNote"
         label="save"
-        :width="80"
-        :padding="5"
-        :margin="2"
         @click="submitForm"
-        style="margin-left: auto"
       />
 
       <CustomTextButton
         v-if="shift.isEditingNote"
         label="cancel"
-        :width="80"
-        :padding="5"
-        :margin="2"
         @click="shift.isEditingNote = false"
       />
 
@@ -172,23 +159,7 @@ form {
   width: 100%;
 }
 
-textarea {
-  background-color: var(--color-background-mute);
-  color: #fff;
-  border: 1px solid #444;
-  padding: 10px;
-  font-size: 14px;
-  font-family: Poppins, sans-serif;
-  border-radius: 5px;
-  width: 95%;
-  height: 85%;
-  resize: none;
-}
 
-textarea:focus {
-  outline: none;
-  border-color: #777;
-}
 
 #noteEditor {
   max-width: 500px;

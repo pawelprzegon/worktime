@@ -1,7 +1,6 @@
 <script setup>
 
 const props = defineProps({
-  label: String,
   note: String,
 })
 
@@ -12,7 +11,6 @@ const props = defineProps({
 <template>
 
   <div class="shift-note">
-    <p>{{props.label}}:</p>
     <h3>{{props.note}}</h3>
 
   </div>

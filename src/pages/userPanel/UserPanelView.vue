@@ -7,6 +7,7 @@ import {useCalendarMonthTime} from "@/stores/utilsStore.js";
 import UserDetails from "@/pages/userPanel/UserDetails.vue";
 import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";
 import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
+import Alert from "@/components/Alert.vue";
 
 
 const authStore = useAuthStore();
@@ -26,7 +27,7 @@ const refreshUserPanel = () => {
 
 
 <template>
-
+  <Alert/>
   <section class="user-section">
     <Calendar />
 

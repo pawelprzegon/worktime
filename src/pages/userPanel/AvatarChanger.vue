@@ -42,6 +42,7 @@ const closeAvatarChanger = () => {
 
 .avatar-container {
   position: relative;
+  z-index: 30;
 }
 
 .avatar-overlay {

@@ -4,76 +4,97 @@ import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
+import {ref} from "vue";
+import CustomIconButton from "@/components/CustomIconButton.vue";
+import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
+import {useAlertStore} from "@/stores/alertStore.js";
+
+const selectedDay = useCalendarSelectedDay();
+const alert = useAlertStore()
 
 const props = defineProps({
-  shift: {
-    type: Object,
+  shiftId: {
+    type: String,
     required: true
   },
-  overtime: Object,
-  calculatedOvertime: {
-    type: Number,
-    default: 0
-  },
-  selectedDay: Date,
-  closeModal: Function,
-  index: Number
+  index: String
 })
 
-const start = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).start : props.shift.start
-const stop = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).stop : props.shift.stop
+const shift = selectedDay.getShift(props.shiftId)
+
+console.log(props.shiftId)
+
+const isOpen = ref(false)
+
+const toggleDropdown = (buttonStatus) => {
+  isOpen.value = buttonStatus
+}
+
+const handleDeleteShift = async () => {
+  const response = await selectedDay.removeShift(shift.id)
+  alert.show(response.status, response.message)
+}
+
+const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
+const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
 
 </script>
 
 <template>
 
   <div
-      class="flex flex-col items-center
-      border border-silver rounded-lg">
+      class="flex flex-col items-center m-3
+      border rounded-lg"
+      :class="isOpen ? 'border-silver' : 'border-third'"
+  >
 
-    <div class="w-full flex flex-row justify-between">
+    <div
+        class="w-full flex flex-row justify-between"
+        :class="!isOpen ? 'hover:bg-secondary' : 'hover:bg-none'"
+    >
 
-      <div
-        class="flex flex-row justify-around items-center">
-
-        <p class="text-2xl m-2">{{props.index}}</p>
-
-        <ShiftDetailContainer
-          :label="'start'"
-          :time="getTime(start)"
-          :orient="'row'"
-        />
-
-        <ShiftDetailContainer
-          :label="'stop'"
-          :time="getTime(stop)"
-          :orient="'row'"
-        />
-
-        <ShiftDetailContainer
-          :label="'work'"
-          :time="formatTime(shift.work)"
-          :orient="'row'"
-          :text-color="'overtime'"
-        />
-
-      </div>
-
-      <img
-        class="
-        w-10 h-10 m-1 grayscale
-        hover:grayscale-0 hover:cursor-pointer"
-        src="../../../assets/img/delete.png"
-        alt="delete"
+      <DetailsDropdown
+          @open="toggleDropdown"
       >
+        <div
+          class="flex flex-row justify-around items-center">
+
+          <p class="text-2xl m-2">{{props.index}}</p>
+
+          <ShiftDetailContainer
+            :label="'start'"
+            :time="getTime(start)"
+            :orient="'row'"
+          />
+
+          <ShiftDetailContainer
+            :label="'stop'"
+            :time="getTime(stop)"
+            :orient="'row'"
+          />
+
+          <ShiftDetailContainer
+            :label="'work'"
+            :time="formatTime(shift.work)"
+            :orient="'row'"
+            :text-color="'overtime'"
+          />
+
+        </div>
+
+      </DetailsDropdown>
+
+      <CustomIconButton
+          icon="delete.png"
+          @click="handleDeleteShift"
+      />
 
     </div>
 
-    <DetailsDropdown>
-      <ShiftDetails
-          :shift="shift"
-      />
-  </DetailsDropdown>
+    <ShiftDetails
+        :shift="shift"
+        :is-open="isOpen"
+    />
 
   </div>
 

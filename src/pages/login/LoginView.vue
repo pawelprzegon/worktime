@@ -40,7 +40,7 @@ const handleLogin = async () => {
   <section class="flex justify-center items-center h-full">
     <form
       @submit.prevent="handleLogin"
-      class="flex flex-col w-[300px] min-h-[450px] p-4 bg-secondary shadow-xl rounded-xl"
+      class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
     >
       <h1 class="text-beb text-center text-2xl mb-10">Login</h1>
       <div class="flex flex-col justify-center items-center space-y-4">
@@ -54,7 +54,7 @@ const handleLogin = async () => {
           w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-third
+          placeholder-font-secondary
           outline-none"
         />
 
@@ -67,7 +67,7 @@ const handleLogin = async () => {
           class="w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-third
+          placeholder-font-secondary
           outline-none"
         />
       </div>

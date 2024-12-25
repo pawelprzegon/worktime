@@ -97,54 +97,35 @@
         <CustomTextButton
             label="Dashboard"
             :isActive="isDashActive"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoDash"
         ></CustomTextButton>
         <CustomTextButton
             v-if="!authStore.isAuthenticated"
             label="Login"
             :isActive="isLoginActive"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoLogin"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated && authStore.isAdmin"
             label="Privileged"
             :isActive="isPrivilegedActive"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoPrivileged"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated"
             label="User Panel"
             :isActive="isUserPanelActive"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoUserPanel"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated"
             label="Logout"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoLogout"
         ></CustomTextButton>
         <CustomTextButton
-            class="link"
             v-if="!authStore.isAuthenticated"
             label="SignUp"
             :isActive="isSignUpActive"
-            :margin="10"
-            :padding="3"
-            :width="120"
             @click="gotoSignUp"
         >SignUp</CustomTextButton>
       </div>

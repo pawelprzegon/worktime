@@ -1,24 +1,17 @@
 <script setup>
-import { inject, onMounted, ref, watch } from 'vue';
+import { onMounted,  watch } from 'vue';
+import {useAlertStore} from "@/stores/alertStore.js";
 
-const alert = inject('alert');
+const alert = useAlertStore()
 
 const closeAlert = () => {
   alert.status = null;
+  alert.message = '';
 };
 
 onMounted(() => {
   if (alert.status) {
     setTimeout(() => {
-      alert.status = null;
-    }, 5000);
-  }
-});
-
-watch(() => alert.status, (newStatus) => {
-  if (newStatus) {
-    setTimeout(() => {
-      alert.status = null;
     }, 5000);
   }
 });
@@ -27,8 +20,12 @@ watch(() => alert.status, (newStatus) => {
 <template>
   <div
     v-if="alert.status"
-    :class="['alert', alert.status]"
-    class="alert-container"
+    :class="[
+      'fixed top-5 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-md font-bold z-50 cursor-pointer w-1/2 text-center transition-opacity duration-500',
+      alert.status === 'success' ? 'bg-emerald-700 text-white' :
+      alert.status === 'error' ? 'bg-red-600 text-white' :
+      alert.status === 'warning' ? 'bg-yellow-400 text-black' : ''
+    ]"
     @click="closeAlert"
   >
     <p>{{ alert.message }}</p>
@@ -36,31 +33,5 @@ watch(() => alert.status, (newStatus) => {
 </template>
 
 <style scoped>
-.alert-container {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  z-index: 9999;
-  cursor: pointer;
-  max-width: 80%;
-  transition: opacity 0.5s ease-in-out;
-}
 
-.alert.success {
-  background-color: #6f986f;
-}
-
-.alert.error {
-  background-color: #9a5858;
-}
-
-.alert.warning {
-  background-color: #a9a963;
-  color: black;
-}
 </style>

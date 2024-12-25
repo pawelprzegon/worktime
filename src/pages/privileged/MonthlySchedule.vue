@@ -1,7 +1,6 @@
 <script setup>
 import "jspdf-autotable";
 import {onMounted, ref, watch} from "vue";
-import Alert from "@/components/Alert.vue";
 import Spinner from "@/components/Spinner.vue";
 import {useCalendarNavigation} from "@/composables/utils.js";
 import {generatePDF} from "@/composables/pdfScheduleHandler.js";
@@ -10,7 +9,6 @@ import {processMonthlyShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import {useCalendarMonthTime, useCalendarStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-
 
 const selectedUser = usePrivilegedSelectedUser();
 const selectedMonth = useCalendarStore('privilegedSelectedMonth')
@@ -42,7 +40,6 @@ onMounted( () => {
 </script>
 
 <template>
-  <Alert />
   <div v-if="selectedUser.user" class="schedule-container">
     <button @click="generatePDF(selectedUser, selectedMonth)">Get Schedule</button>
     <CalendarNavigation

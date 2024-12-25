@@ -1,29 +1,24 @@
 <script setup>
 import '@/assets/calendarNavigation.css';
-import {ref, onMounted, inject, watch} from 'vue';
-import Alert from "@/components/Alert.vue";
+import {ref, onMounted} from 'vue';
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftsDetailsModal.vue";
-import {removeShift} from "@/composables/calendarHandler.js";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
 import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
-import {format} from "date-fns";
 import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
-
 
 const authStore = useAuthStore()
 const selectedMonth = useCalendarStore('calendarSelectedMonth');
 const monthTime = useCalendarMonthTime('calendarMonthTime');
 const selectedDay = useCalendarSelectedDay();
 
-const alert = inject('alert');
 const isLoading = ref(true);
 const isShiftAdderOpen = ref(false);
 const isDailyShiftsOpen = ref(false);
@@ -39,25 +34,6 @@ const getDataHandler = () => {
 const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
 
 const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
-
-const handleRemoveShift = async (shiftId) => {
-  await removeShift(shiftId, selectedDay.day, alert);
-  await getDataHandler()
-};
-
-const handleRefreshModal = async () => {
-
-    await getDataHandler().then(() => {
-
-      const dayToSet =  selectedMonth.daysInMonth.find(day =>
-        format(day.date, 'yyyy-MM-dd') === format(selectedDay.day.date, 'yyyy-MM-dd')
-      );
-      selectedDay.setDay(dayToSet)
-      modalKey.value++;
-    }).catch(error => {
-      console.error('getDataHandler error:', error);
-    });
-  };
 
 const dayOpenerHandler = (day) => {
   selectedDay.setDay(day)
@@ -86,7 +62,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Alert />
 
   <div class="calendar">
     <CalendarNavigation
@@ -129,13 +104,8 @@ onMounted(async () => {
     <ShiftsDetailsModal
         v-if="isDailyShiftsOpen && selectedDay.day?.shifts.list.length > 0"
         :key="modalKey"
-        :shifts="selectedDay.day?.shifts.list"
-        :overtime="selectedDay.day?.shifts.overtimeTaken"
         :calculatedOvertime="selectedMonth.calculatedOvertimeTime"
-        :selectedDay="selectedDay.day?.date"
         :closeModal="closeDailyShifts"
-        @remove-shift="handleRemoveShift"
-        @refresh-modal="handleRefreshModal"
     />
 
   </div>

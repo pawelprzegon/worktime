@@ -20,9 +20,6 @@ const props = defineProps({
     </span>
     <CustomTextButton
       v-else
-      :width="50"
-      :padding="2"
-      :margin="2"
       label="add note"
       :fontSize="12"
     />
