@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
+import {splitTime} from "@/composables/utils.js";
 
 export const useSelectedDayStore = (id) =>
   defineStore(id, () => {
@@ -51,14 +52,10 @@ export const useCalendarMonthTime = (id) =>
     };
 
     const splitOvertime = (shiftTime) => {
-      if (shiftTime <= 28800) {
-        worktimeInSeconds.value += shiftTime;
-        return {'work': shiftTime, 'overtime': 0};
-      } else {
-        worktimeInSeconds.value += 28800;
-        overtimeInSeconds.value += shiftTime - 28800;
-        return {'work': 28800, 'overtime': shiftTime - 28800};
-      }
+        const splitTimeObj = splitTime(shiftTime)
+        worktimeInSeconds.value += splitTimeObj.regular;
+        overtimeInSeconds.value += splitTimeObj.overtime
+      return splitTimeObj
     };
 
     return {

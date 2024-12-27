@@ -4,7 +4,7 @@ import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
-import {ref} from "vue";
+import {ref, defineEmits} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
@@ -12,27 +12,30 @@ import {useAlertStore} from "@/stores/alertStore.js";
 const dailyShifts = useDailyShiftsList();
 const alert = useAlertStore()
 
+const emit = defineEmits(['refreshCalendar'])
+
 const props = defineProps({
   shiftId: {
     type: String,
     required: true
   },
-  index: String
+  index: Number
 })
 
 const shift = dailyShifts.getShift(props.shiftId)
 
-const isOpen = ref(false)
 
+const isOpen = ref(false)
 const toggleDropdown = (buttonStatus) => {
   isOpen.value = buttonStatus
-}
 
+}
 const handleDeleteShift = async () => {
   const response = await dailyShifts.removeShift(shift.id)
   alert.show(response.status, response.message)
-}
+  emit('refreshCalendar')
 
+}
 const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
 const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
 
@@ -72,17 +75,22 @@ const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shi
           />
 
           <ShiftDetailContainer
-            :label="'work'"
+            :label="'shift time'"
             :time="formatTime(shift.work)"
             :orient="'row'"
-            :text-color="'overtime'"
+          />
+
+          <ShiftDetailContainer
+            :label="'regular time'"
+            :time="formatTime(shift.regular)"
+            :orient="'row'"
           />
 
           <ShiftDetailContainer
             :label="'overtime'"
-            :time="formatTime(shift.work)"
+            :time="formatTime(shift.overtime)"
             :orient="'row'"
-            :text-color="'overtime'"
+            :text-color="shift.overtime ? 'overtime' : 'stone-700'"
           />
 
         </div>

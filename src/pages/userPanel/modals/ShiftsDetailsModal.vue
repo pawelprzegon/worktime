@@ -1,17 +1,16 @@
 <script setup>
 import {ref} from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css'
-import {formatTime, getDateString, getTimeString} from "@/composables/utils.js";
+import {formatTime, getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetailsRow.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
-import {useSelectedDayStore} from "@/stores/utilsStore.js";
+import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 
-const selectedMonth = useSelectedDayStore('calendarSelectedMonth');
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
 
-const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal'])
+const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal', 'refreshCalendar'])
 
 const props = defineProps({
   closeModal: Function,
@@ -22,10 +21,10 @@ const closeModal = () => {
   isModalOpen.value = false;
 }
 
-const dt = getDateString(dailyShifts.shiftsList?.date)
+const dt = getDateString(dailyShifts.date)
 
-const refreshModal = () => {
-  emit('refreshModal')
+const refreshCalendar = () => {
+  emit('refreshCalendar')
 }
 
 </script>
@@ -35,14 +34,27 @@ const refreshModal = () => {
       <div class="shifts-container">
         <div class="shifts-label">
           <h2 style="font-weight: 600">{{ dt }}</h2>
-          <h3>{{formatTime(selectedMonth.calculatedOvertimeTime)}}</h3>
+
+          <ShiftDetailContainer
+            :label="'daily regular'"
+            :time="formatTime(dailyShifts.dailyRegular)"
+            :orient="'row'"
+          />
+
+          <ShiftDetailContainer
+            :label="'daily overtime'"
+            :time="formatTime(dailyShifts.dailyOvertime)"
+            :orient="'row'"
+            :text-color="'overtime'"
+          />
         </div>
 
         <ShiftDetailsRow
-            v-for="(shift, index) in dailyShifts.shiftsList.shifts.list"
+            v-for="(shift, index) in dailyShifts.shiftsList"
             :key=index
             :shift-id="shift.id"
             :index="index+1"
+            @refreshCalendar="refreshCalendar"
         ></ShiftDetailsRow>
 
       </div>

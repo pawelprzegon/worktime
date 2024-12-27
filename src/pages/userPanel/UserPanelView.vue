@@ -45,7 +45,6 @@ const refreshUserPanel = () => {
         @toggleModal="toggleChangeAvatarModal"
         @refresh="refreshUserPanel"
       />
-
       <MonthlyDetails
         :worktime-in-seconds="monthTime.worktimeInSeconds"
         :overtime-in-seconds="monthTime.overtimeInSeconds"

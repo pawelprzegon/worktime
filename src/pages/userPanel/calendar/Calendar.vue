@@ -53,10 +53,13 @@ const closeShiftAdder = () => {
   isShiftAdderOpen.value = false;
 }
 
+const refreshCalendar = () => {
+  modalKey.value = modalKey.value ++;
+}
+
 onMounted(async () => {
   selectedMonth.updateDaysInMonth();
   await getDataHandler();
-
 });
 
 </script>
@@ -102,8 +105,9 @@ onMounted(async () => {
         :date="dailyShifts.shiftsList?.date"
     />
     <ShiftsDetailsModal
-        v-if="isDailyShiftsOpen && dailyShifts.shiftsList?.shifts.list.length > 0"
+        v-if="isDailyShiftsOpen && dailyShifts.shiftsList?.length > 0"
         :key="modalKey"
+        :refreshCalendar="refreshCalendar"
         :closeModal="closeDailyShifts"
     />
 

@@ -3,21 +3,34 @@ import {defineStore} from "pinia";
 import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
+  const date = ref(null)
   const shiftsList = ref(null);
+  const dailyRegular = ref(null);
+  const dailyOvertime = ref(null);
+
 
   const setDay = (newDay) => {
-    shiftsList.value = newDay;
+    date.value = newDay.date
+    shiftsList.value = newDay.shifts.list;
+    dailyRegular.value = newDay.shifts.regular
+    dailyOvertime.value = newDay.shifts.overtime
   };
 
+  const calculateShiftRegularOvertime = () => {
+    shiftsList.value.forEach(shift => {
+
+    })
+  }
+
   const getShift = (shiftId) => {
-    return shiftsList.value.shifts.list.filter((shift) => shift.id === shiftId)[0];
+    return shiftsList.value.filter((shift) => shift.id === shiftId)[0];
   }
 
   const removeShift = async (shiftId) => {
     try {
       const response = await deleteShiftFetch(shiftId);
       if (response) {
-        shiftsList.value.shifts.list = shiftsList.value.shifts.list.filter(
+        shiftsList.value = shiftsList.value.filter(
           (shift) => shift.id !== shiftId
         );
       }
@@ -30,7 +43,10 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
   };
 
   return {
+    date,
     shiftsList,
+    dailyRegular,
+    dailyOvertime,
     setDay,
     getShift,
     removeShift

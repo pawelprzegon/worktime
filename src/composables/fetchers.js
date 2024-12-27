@@ -280,7 +280,7 @@ export const setOvertime = async (userId, overtimeId, counter, date) => {
         body: body
     }
     try {
-        const response = await fetch(url + '/overtime/set', data)
+        const response = await fetch(url + '/toil/set', data)
 
         return await response.json();
 
@@ -290,7 +290,7 @@ export const setOvertime = async (userId, overtimeId, counter, date) => {
     }
 }
 
-export const getOvertime = async (user_id, selectedMonth) => {
+export const getToil = async (user_id, selectedMonth) => {
 
     const year = format(selectedMonth, 'yyyy')
     const month = format(selectedMonth, 'MM')
@@ -303,7 +303,7 @@ export const getOvertime = async (user_id, selectedMonth) => {
         }
     }
 
-    let url_string = `/overtime/?year=${year},month=${month}`
+    let url_string = `/toil/?year=${year},month=${month}`
     if (user_id) {
         url_string += `&user_id=${user_id}`
     }

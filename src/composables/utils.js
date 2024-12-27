@@ -118,8 +118,16 @@ export const getDateString = (datetime) => {
 };
 
 export const combineDateWithTime = (date, timeString) => {
-    const [hours, minutes] = timeString.split(":").map(Number);
-    const resultDate = new Date(date);
-    resultDate.setHours(hours, minutes, 0, 0);
-    return resultDate;
+  const [hours, minutes] = timeString.split(":").map(Number);
+  const resultDate = new Date(date);
+  resultDate.setHours(hours, minutes, 0, 0);
+  return resultDate;
+}
+
+export const splitTime = (shiftTime) => {
+  if (shiftTime <= 28800) {
+    return {regular: shiftTime, overtime: 0};
+  } else {
+    return {regular: 28800, overtime: shiftTime - 28800};
   }
+};
