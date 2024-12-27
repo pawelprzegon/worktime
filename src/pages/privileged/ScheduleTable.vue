@@ -1,9 +1,9 @@
 <script setup>
 
 import {calculateTime} from "@/composables/privilegedHandler.js";
-import {useCalendarStore} from "@/stores/utilsStore.js";
+import {useSelectedDayStore} from "@/stores/utilsStore.js";
 
-const selectedMonth = useCalendarStore('privilegedSelectedMonth')
+const selectedMonth = useSelectedDayStore('privilegedSelectedMonth')
 
 </script>
 

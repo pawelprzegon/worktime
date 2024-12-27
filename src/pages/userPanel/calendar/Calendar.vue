@@ -5,19 +5,19 @@ import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftsDetailsModal.vue";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
-import {useCalendarStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
+import {useSelectedDayStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
-import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
+import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
 const authStore = useAuthStore()
-const selectedMonth = useCalendarStore('calendarSelectedMonth');
+const selectedMonth = useSelectedDayStore('calendarSelectedMonth');
 const monthTime = useCalendarMonthTime('calendarMonthTime');
-const selectedDay = useCalendarSelectedDay();
+const dailyShifts = useDailyShiftsList();
 
 const isLoading = ref(true);
 const isShiftAdderOpen = ref(false);
@@ -36,7 +36,7 @@ const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHan
 const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
 
 const dayOpenerHandler = (day) => {
-  selectedDay.setDay(day)
+  dailyShifts.setDay(day)
 
   if (day?.shifts.list.length > 0) {
     isDailyShiftsOpen.value = true
@@ -99,12 +99,11 @@ onMounted(async () => {
     <ShiftAdderModal
         v-if="isShiftAdderOpen"
         :closeModal="closeShiftAdder"
-        :date="selectedDay.day?.date"
+        :date="dailyShifts.shiftsList?.date"
     />
     <ShiftsDetailsModal
-        v-if="isDailyShiftsOpen && selectedDay.day?.shifts.list.length > 0"
+        v-if="isDailyShiftsOpen && dailyShifts.shiftsList?.shifts.list.length > 0"
         :key="modalKey"
-        :calculatedOvertime="selectedMonth.calculatedOvertimeTime"
         :closeModal="closeDailyShifts"
     />
 

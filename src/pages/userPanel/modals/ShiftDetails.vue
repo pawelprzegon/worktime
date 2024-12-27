@@ -51,7 +51,7 @@ const addNote = async () => {
       <div class="grid grid-flow-row m-2 bg-secondary rounded-md">
         <h2 class="text-silver text-left px-2 ml-1">Note</h2>
         <div
-          class="h-full ">
+          class="h-full">
           <ShiftNoteContainer
             v-if="shift.note && !noteEdit"
             :note="shift.note"

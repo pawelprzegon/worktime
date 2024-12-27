@@ -6,10 +6,10 @@ import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
 import {ref} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
-import {useCalendarSelectedDay} from "@/stores/calendarStore.js";
+import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 
-const selectedDay = useCalendarSelectedDay();
+const dailyShifts = useDailyShiftsList();
 const alert = useAlertStore()
 
 const props = defineProps({
@@ -20,9 +20,7 @@ const props = defineProps({
   index: String
 })
 
-const shift = selectedDay.getShift(props.shiftId)
-
-console.log(props.shiftId)
+const shift = dailyShifts.getShift(props.shiftId)
 
 const isOpen = ref(false)
 
@@ -31,7 +29,7 @@ const toggleDropdown = (buttonStatus) => {
 }
 
 const handleDeleteShift = async () => {
-  const response = await selectedDay.removeShift(shift.id)
+  const response = await dailyShifts.removeShift(shift.id)
   alert.show(response.status, response.message)
 }
 
@@ -75,6 +73,13 @@ const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shi
 
           <ShiftDetailContainer
             :label="'work'"
+            :time="formatTime(shift.work)"
+            :orient="'row'"
+            :text-color="'overtime'"
+          />
+
+          <ShiftDetailContainer
+            :label="'overtime'"
             :time="formatTime(shift.work)"
             :orient="'row'"
             :text-color="'overtime'"

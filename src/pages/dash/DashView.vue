@@ -39,6 +39,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+
   <div class="dash-user-list">
 
     <UserCard

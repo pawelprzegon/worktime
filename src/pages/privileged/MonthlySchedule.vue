@@ -7,11 +7,11 @@ import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
 import {processMonthlyShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
-import {useCalendarMonthTime, useCalendarStore} from "@/stores/utilsStore.js";
+import {useCalendarMonthTime, useSelectedDayStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 
 const selectedUser = usePrivilegedSelectedUser();
-const selectedMonth = useCalendarStore('privilegedSelectedMonth')
+const selectedMonth = useSelectedDayStore('privilegedSelectedMonth')
 const monthTime = useCalendarMonthTime('privilegedMonthTime')
 const isLoading = ref(false)
 

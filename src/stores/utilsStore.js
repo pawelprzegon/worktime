@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
 
-export const useCalendarStore = (id) =>
+export const useSelectedDayStore = (id) =>
   defineStore(id, () => {
     const month = ref(new Date());
     const calculatedWorkTime = ref(0);

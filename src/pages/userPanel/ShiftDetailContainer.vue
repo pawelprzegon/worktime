@@ -28,7 +28,7 @@ const props = defineProps({
       {{ label }}:
     </p>
 
-    <h3 :class="['m-1 text-lg', `text-${props.textColor}`]">
+    <h3 :class="['m-1 text-lg', props.textColor ? `text-${props.textColor}` : 'text-platinum']">
       {{ time }}
     </h3>
 

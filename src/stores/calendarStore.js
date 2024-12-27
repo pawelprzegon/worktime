@@ -2,22 +2,22 @@ import {ref} from "vue";
 import {defineStore} from "pinia";
 import {deleteShiftFetch} from "@/composables/fetchers.js";
 
-export const useCalendarSelectedDay = defineStore('calendarSelectedDay', () => {
-  const day = ref(null);
+export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
+  const shiftsList = ref(null);
 
-  const setDay = (newUser) => {
-    day.value = newUser;
+  const setDay = (newDay) => {
+    shiftsList.value = newDay;
   };
 
   const getShift = (shiftId) => {
-    return day.value.shifts.list.filter((shift) => shift.id === shiftId)[0];
+    return shiftsList.value.shifts.list.filter((shift) => shift.id === shiftId)[0];
   }
 
   const removeShift = async (shiftId) => {
     try {
       const response = await deleteShiftFetch(shiftId);
       if (response) {
-        day.value.shifts.list = day.value.shifts.list.filter(
+        shiftsList.value.shifts.list = shiftsList.value.shifts.list.filter(
           (shift) => shift.id !== shiftId
         );
       }
@@ -30,7 +30,7 @@ export const useCalendarSelectedDay = defineStore('calendarSelectedDay', () => {
   };
 
   return {
-    day,
+    shiftsList,
     setDay,
     getShift,
     removeShift

@@ -5,6 +5,11 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: [
+    {
+      pattern: /^text-(platinum|beb|silver|turquoise|overtime)$/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
