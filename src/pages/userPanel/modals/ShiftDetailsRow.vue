@@ -33,11 +33,16 @@ const toggleDropdown = (buttonStatus) => {
 const handleDeleteShift = async () => {
   const response = await dailyShifts.removeShift(shift.id)
   alert.show(response.status, response.message)
-  emit('refreshCalendar')
+  emitRefreshCalendar()
 
 }
 const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
 const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
+
+const emitRefreshCalendar = () => {
+  emit("refreshCalendar");
+};
+
 
 </script>
 
@@ -46,7 +51,7 @@ const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shi
   <div
       class="flex flex-col items-center m-3
       border rounded-lg"
-      :class="isOpen ? 'border-silver' : 'border-third'"
+      :class="isOpen ? 'border-silver bg-secondary' : 'border-third'"
   >
 
     <div
@@ -57,10 +62,8 @@ const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shi
       <DetailsDropdown
           @open="toggleDropdown"
       >
-        <div
-          class="flex flex-row justify-around items-center">
-
-          <p class="text-2xl m-2">{{props.index}}</p>
+        <div class="flex flex-row justify-around items-center">
+          <p class="text-2xl m-2 text-beb font-bold p-1">{{props.index}}</p>
 
           <ShiftDetailContainer
             :label="'start'"
@@ -80,33 +83,24 @@ const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shi
             :orient="'row'"
           />
 
-          <ShiftDetailContainer
-            :label="'regular time'"
-            :time="formatTime(shift.regular)"
-            :orient="'row'"
-          />
-
-          <ShiftDetailContainer
-            :label="'overtime'"
-            :time="formatTime(shift.overtime)"
-            :orient="'row'"
-            :text-color="shift.overtime ? 'overtime' : 'stone-700'"
-          />
-
         </div>
 
       </DetailsDropdown>
 
-      <CustomIconButton
+      <div class="place-items-end my-auto">
+        <CustomIconButton
           icon="delete.png"
           @click="handleDeleteShift"
-      />
+        />
+      </div>
+
 
     </div>
 
     <ShiftDetails
         :shift="shift"
         :is-open="isOpen"
+        @refresh-calendar="emitRefreshCalendar"
     />
 
   </div>

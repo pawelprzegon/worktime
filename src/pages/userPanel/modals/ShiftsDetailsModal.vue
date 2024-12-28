@@ -36,16 +36,16 @@ const refreshCalendar = () => {
           <h2 style="font-weight: 600">{{ dt }}</h2>
 
           <ShiftDetailContainer
-            :label="'daily regular'"
+            :label="'regular time'"
             :time="formatTime(dailyShifts.dailyRegular)"
             :orient="'row'"
           />
 
           <ShiftDetailContainer
-            :label="'daily overtime'"
+            :label="'overtime'"
             :time="formatTime(dailyShifts.dailyOvertime)"
             :orient="'row'"
-            :text-color="'overtime'"
+            :text-color="dailyShifts.dailyOvertime > 0 ? 'overtime' : 'stone-700'"
           />
         </div>
 

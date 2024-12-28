@@ -4,20 +4,17 @@ import {ref} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
 import Calendar from "@/pages/userPanel/calendar/Calendar.vue";
 import {useCalendarMonthTime} from "@/stores/utilsStore.js";
-import UserDetails from "@/pages/userPanel/UserDetails.vue";
-import MonthlyDetails from "@/pages/userPanel/MonthlyDetails.vue";
 import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
 import Alert from "@/components/Alert.vue";
+import {formatTime} from "@/composables/utils.js";
+import ShadowBox from "@/components/ShadowBox.vue";
+import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
 
 
 const authStore = useAuthStore();
 const monthTime = useCalendarMonthTime('calendarMonthTime');
 
 const isChangeModalActive = ref(false);
-
-const toggleChangeAvatarModal = () => {
-  isChangeModalActive.value = !isChangeModalActive.value;
-};
 
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
@@ -37,18 +34,28 @@ const refreshUserPanel = () => {
         :is-modal-active="isChangeModalActive"
         @refresh="refreshUserPanel"
       />
-      <UserDetails
-        :first-name="authStore.user.firstName"
-        :last-name="authStore.user.lastName"
-        :email="authStore.user.email"
-        :role="authStore.user.role"
-        @toggleModal="toggleChangeAvatarModal"
-        @refresh="refreshUserPanel"
-      />
-      <MonthlyDetails
-        :worktime-in-seconds="monthTime.worktimeInSeconds"
-        :overtime-in-seconds="monthTime.overtimeInSeconds"
-      />
+      <ShadowBox>
+        <DetailsContainer :label="'firstname'" :data="authStore.user.firstName" :background="'#282828'" :color="'#CCCCCCFF'"/>
+        <DetailsContainer :label="'lastname'" :data="authStore.user.lastName" :background="'#282828'" :color="'#CCCCCCFF'"/>
+        <DetailsContainer :label="'email'" :data="authStore.user.email" :background="'#282828'" :color="'#CCCCCCFF'"/>
+        <DetailsContainer :label="'role'" :data="authStore.user.role" :background="'#282828'" :color="'#CCCCCCFF'"/>
+      </ShadowBox>
+
+      <ShadowBox>
+        <DetailsContainer
+          :label="'regular'"
+          :data="formatTime(monthTime.worktimeInSeconds).toString()"
+          :background="'#282828'"
+          :color="'#CCCCCCFF'"
+        />
+        <DetailsContainer
+          :label="'overtime'"
+          :data="formatTime(monthTime.overtimeInSeconds).toString()"
+          :background="'#282828'"
+          color="var(--color-text-overtime)"
+        />
+      </ShadowBox>
+
     </div>
   </section>
 

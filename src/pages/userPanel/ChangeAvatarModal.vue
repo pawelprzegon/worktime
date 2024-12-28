@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import { validateAvatarFile, uploadAvatar, handleSuccess } from "@/composables/avatarHandler.js";
 import { useAuthStore } from "@/stores/authStore.js";
 import Avatar from "@/components/Avatar.vue";
@@ -7,7 +7,6 @@ import "@/assets/modal.css";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 
 const authStore = useAuthStore();
-const alert = inject("alert");
 const props = defineProps({
   closeModal: Function,
 })

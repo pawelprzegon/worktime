@@ -54,7 +54,7 @@ const closeShiftAdder = () => {
 }
 
 const refreshCalendar = () => {
-  modalKey.value = modalKey.value ++;
+  modalKey.value = modalKey.value++;
 }
 
 onMounted(async () => {
