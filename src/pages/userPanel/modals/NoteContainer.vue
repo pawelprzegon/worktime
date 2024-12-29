@@ -10,7 +10,6 @@ const alert = useAlertStore()
 const props = defineProps({
   shift: {
     type: Object,
-    required: true,
   }
 });
 
@@ -20,12 +19,6 @@ const noteEdit = ref(false)
 const toggleShowNoteEditor = () => {
   noteEdit.value = !noteEdit.value
 }
-
-const submitForm = () => {
-  const form = document.querySelector('form');
-  form.requestSubmit();
-
-};
 
 const addNote = async () => {
   const response = await saveShiftNote(props.shift.user_id, props.shift.id, noteContent.value)
@@ -52,7 +45,7 @@ const addNote = async () => {
 
     <form
         v-if="noteEdit"
-        @submit.prevent="addNote(shift)" ref="noteForm">
+        @submit.prevent.stop="addNote" ref="noteForm">
       <textarea
         class="rounded-md w-[95%] p-1 text-black"
         v-model="noteContent"
@@ -65,24 +58,25 @@ const addNote = async () => {
       <CustomTextButton
         v-if="!noteEdit && props.shift.note !== ''"
         label="edit"
-        @click="toggleShowNoteEditor(shift)"
+        @click="toggleShowNoteEditor"
       />
       <CustomTextButton
         v-if="!noteEdit && props.shift.note === ''"
         label="add note"
-        @click="toggleShowNoteEditor(shift)"
+        @click="toggleShowNoteEditor"
       />
       <div
           v-if="noteEdit"
-          class="grid grid-flow-col">
-        <CustomTextButton
-          label="save"
-          @click="submitForm"
-        />
-        <CustomTextButton
-          label="cancel"
-          @click="toggleShowNoteEditor(shift)"
-        />
+          class="grid grid-flow-col"
+      >
+          <CustomTextButton
+            label="save"
+            @click="addNote"
+          />
+          <CustomTextButton
+            label="cancel"
+            @click="toggleShowNoteEditor"
+          />
       </div>
     </div>
 

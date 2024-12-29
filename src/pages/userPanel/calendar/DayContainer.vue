@@ -2,8 +2,11 @@
 
 import {formatTime} from "@/composables/utils.js";
 
-defineProps({
-  day: Object
+const props = defineProps({
+  day: Object,
+  toilTaken: Number,
+  regular: Number,
+  overtime: Number
 })
 </script>
 
@@ -12,37 +15,37 @@ defineProps({
   <div
     :class="['calendar-day',
         {
-          'unfinished-shift': day.shifts.list.length > 0,
-          'finished-shift': (day.shifts.regular + (day.shifts.overtimeTaken?.hours || 0) * 3600) >= 28800
+          'unfinished-shift': props.day.list.length > 0,
+          'finished-shift': (props.day.regular + (props.day.overtime || 0) * 3600) >= 28800
         }]"
   >
-    <span class="day-header">{{ day.date.getDate() }}</span>
+    <span class="day-header">{{ props.day.date.getDate() }}</span>
 
     <div
-        v-if="day.shifts.list.length > 0"
+        v-if="props.day.list.length > 0"
         class="shifts-list"
     >
 
       <small
-          v-if="day.shifts.list.length > 0"
+          v-if="props.day.list.length > 0"
           class="shift"
-          :class="{'has-corrections': day.shifts.overtimeTaken}"
+          :class="{'has-corrections': props.day.toilTaken}"
       >
-        {{ formatTime(day.shifts.regular) }}
+        {{ formatTime(props.day.regular) }}
       </small>
 
       <small
-          v-if="day.shifts.list.length > 0 && day.shifts.overtime"
+          v-if="props.day.list.length > 0 && props.day.overtime"
           class="shift overtime"
       >
-        +{{ formatTime(day.shifts.overtime) }}
+        +{{ formatTime(props.day.overtime) }}
       </small>
 
       <small
-          v-if="day.shifts.overtimeTaken"
+          v-if="props.day.list.length > 0 && props.day.toilTaken"
           class="shift overtime"
       >
-        -{{ formatTime(day.shifts.overtimeTaken.hours * 3600) }}
+        -{{ formatTime(props.day.toilTaken.hours * 3600) }}
       </small>
 
     </div>

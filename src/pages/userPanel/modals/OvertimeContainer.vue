@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import {getDateString, getHoursAsNumber} from "@/composables/utils.js";
+import {formatTime, getDateString, getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setToil} from "@/composables/fetchers.js";
@@ -16,25 +16,26 @@ const monthTime = useSelectedMonthStore('calendar');
 const authStore = useAuthStore()
 
 const props = defineProps({
-  maxToTake: Number,
-  monthOvertimes: {
-    type: Number,
-    required: false,
-    default: 0
-  },
-  shift: Object,
+  shifts: Array,
 })
-
-const maxToTake = ref(props.shift.overtime > 0 ? 0 : Math.floor((28800 - props.shift.regular) / 3600 + 1))
+const calculateMaxToTake = () => {
+  let max = 0;
+  props.shifts.forEach(shift => {
+    max += shift.overtime > 0 ? 0 : Math.floor((28800 - shift.regular) / 3600)
+  })
+  return max
+}
+console.log(dailyShifts.selectedDay.toil)
+const maxToTake = ref(calculateMaxToTake())
 const toilTaken = ref({
   id: dailyShifts.selectedDay.toil?.id || null,
-  hours: dailyShifts.selectedDay.toil?.hours || null
+  hours: dailyShifts.selectedDay.toil?.hours || 0
 })
-
-const emit = defineEmits(['takenHours', 'refreshModal'])
-
 const hoursPool = ref(getHoursAsNumber(monthTime.selected.monthlyOvertime))
 const counter = ref(toilTaken.value.hours)
+
+
+
 
 const increment = () => {
   if (counter.value < maxToTake.value &&
@@ -60,9 +61,7 @@ const saveTakenHours = async () => {
 
   const response = await setToil(authStore.user.id, toilTaken.value.id, counter.value, getDateString(dailyShifts.date))
   if (response) {
-    emit('refreshModal');
     alert.show(response.status, response.message)
-
   }
 }
 
@@ -71,7 +70,6 @@ const saveTakenHours = async () => {
 <template>
 
   <div class="grid grid-cols-[auto_150px]">
-
 
     <div class="grid grid-cols-[150px_auto] justify-items-center">
       <div class="label-data-container">

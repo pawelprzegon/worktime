@@ -15,8 +15,6 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['refreshCalendar'])
-
 </script>
 
 <template>
@@ -30,27 +28,15 @@ const emit = defineEmits(['refreshCalendar'])
       <!-- Sekcja notatki -->
       <div class="grid grid-rows-[30px_auto] m-3 rounded-md border border-silver bg-third">
         <h2 class="text-mute bg-silver font-bold text-lg text-left px-2 w-full rounded-t-md">NOTE</h2>
-        <NoteContainer
-            :shift="shift"
-        />
+        <NoteContainer :shift="props.shift"/>
       </div>
 
       <!-- Sekcja poprawek -->
       <div class="grid grid-rows-[30px_auto] m-3 rounded-md border border-silver bg-third">
         <h2 class="text-mute bg-silver font-bold text-lg text-left px-2 w-full rounded-t-md">CORRECT</h2>
-        <CorrectionsContainer
-            :shift="shift"
-            @refresh-calendar="emit('refreshCalendar')"
-        />
+        <CorrectionsContainer :shift="props.shift"/>
       </div>
 
-      <!-- Sekcja nadgodzin -->
-      <div class="grid grid-rows-[30px_auto] m-3 rounded-md border border-silver bg-third">
-        <h2 class="text-mute bg-silver font-bold text-lg text-left px-2 w-full rounded-t-md">TOIL HOURS</h2>
-        <OvertimeContainer
-           :shift="shift"
-         />
-      </div>
     </div>
   </div>
 

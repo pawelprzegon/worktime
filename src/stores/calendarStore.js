@@ -15,11 +15,12 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
 
   const setDay = (newDay) => {
     date.value = newDay.date
+    console.log(newDay)
     selectedDay.value = {
-      shiftsList: newDay.shifts.list,
-      regular: newDay.shifts.regular,
-      overtime: newDay.shifts.overtime,
-      toil: newDay.shifts.toilTaken,
+      shiftsList: newDay.list,
+      regular: newDay.regular,
+      overtime: newDay.overtime,
+      toil: newDay.toilTaken,
     };
   };
 
@@ -31,7 +32,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
     try {
       const response = await deleteShiftFetch(shiftId);
       if (response) {
-        selectedDay.shiftsList = selectedDay.shiftsList.filter(
+        selectedDay.value.shiftsList = selectedDay.value.shiftsList.filter(
           (shift) => shift.id !== shiftId
         );
       }

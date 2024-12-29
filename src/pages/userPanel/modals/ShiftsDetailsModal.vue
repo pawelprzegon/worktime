@@ -6,14 +6,14 @@ import ModalWrapper from "@/components/ModalWrapper.vue";
 import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetailsRow.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
+import OvertimeContainer from "@/pages/userPanel/modals/OvertimeContainer.vue";
 
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
 
-const emit = defineEmits(['closeModal', 'removeShift', 'refreshModal', 'refreshCalendar'])
-
 const props = defineProps({
   closeModal: Function,
+  refreshCalendar: Function
 })
 
 const closeModal = () => {
@@ -22,10 +22,6 @@ const closeModal = () => {
 }
 
 const dt = getDateString(dailyShifts.date)
-
-const refreshCalendar = () => {
-  emit('refreshCalendar')
-}
 
 </script>
 
@@ -49,18 +45,24 @@ const refreshCalendar = () => {
           />
 
           <ShiftDetailContainer
-            :label="'TOIL hours taken'"
+            :label="'TOIL taken'"
             :time="formatTime(dailyShifts.selectedDay.toil?.hours * 3600 || 0)"
             :orient="'row'"
           />
+
+          <!-- Sekcja nadgodzin -->
+          <div class="grid grid-row rounded-md m-3 border border-third">
+            <OvertimeContainer :shifts="dailyShifts.selectedDay.shiftsList"/>
+          </div>
         </div>
 
+<!--         Shifts List-->
+        <p class="text-left text-xl">Shifts:</p>
         <ShiftDetailsRow
             v-for="(shift, index) in dailyShifts.selectedDay.shiftsList"
             :key=index
             :shift-id="shift.id"
             :index="index+1"
-            @refreshCalendar="refreshCalendar"
         ></ShiftDetailsRow>
 
       </div>

@@ -73,14 +73,14 @@ export const getLast = (day) => {
 }
 
 export const useCalendarDays = (monthStore) => {
-  console.log(monthStore)
+
   const getDaysBefore = () => {
-    const startDay = new Date(monthStore.daysInMonth[0]['date']).getDay() || 7;
+    const startDay = new Date(monthStore.selected.month).getDay() || 7;
     return range(2, startDay);
   };
 
   const getDaysAfter = () => {
-    const endDay = new Date(monthStore.daysInMonth[monthStore.daysInMonth.length - 1]['date']).getDay() || 7;
+    const endDay = new Date(monthStore.selected.month[monthStore.selected.month.length - 1]).getDay() || 7;
     return range(endDay, 6);
   };
 

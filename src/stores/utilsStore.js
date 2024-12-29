@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {eachDayOfInterval, endOfMonth, startOfMonth} from "date-fns";
+import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
 
 export const useSelectedDayStore = (id) =>
@@ -39,30 +39,32 @@ export const useSelectedMonthStore = (id) =>
   defineStore(id, () => {
 
     const selected = ref({
-      month: new Date(),
-      toils: 0,
-      monthlyRegularTime: 0,
-      monthlyOvertime: 0,
+        month: new Date(),
+        toils: 0,
+        monthlyRegularTime: 0,
+        monthlyOvertime: 0,
+        days: []
     })
 
-    const daysInMonth = ref([]);
-
     const updateDaysInMonth = () => {
-      daysInMonth.value = eachDayOfInterval({
+      selected.value.days = eachDayOfInterval({
         start: startOfMonth(selected.value.month),
         end: endOfMonth(selected.value.month),
       }).map(date => ({
-        date,
-        hours: 0,
-        note: '',
-        shifts: { list: [], summary: 0 }
+        date: date,
+        list: [],
+        regular: 0,
+        overtime: 0,
+        toilTaken: 0,
       }));
     };
 
     const clear = () => {
-        selected.monthlyRegularTime = 0;
-        selected.monthlyOvertime = 0;
-    };
+        selected.value.monthlyRegularTime = 0;
+        selected.value.monthlyOvertime = 0;
+        selected.value.toils = 0;
+        selected.value.days = [];
+    }
 
     const splitOvertime = (shiftTime) => {
         const splitTimeObj = splitTime(shiftTime)
@@ -73,7 +75,6 @@ export const useSelectedMonthStore = (id) =>
 
     return {
         selected,
-        daysInMonth,
         updateDaysInMonth,
         clear,
         splitOvertime

@@ -26,7 +26,6 @@ const shiftTime = ref({
   stop: props.shift.update.length > 0 ? getTimeString(getLastCorrectionUpdate(props.shift).stop) : getTimeString(props.shift.stop)
 })
 
-const emit = defineEmits(['refreshCalendar'])
 const anyCorrection = ref(props.shift.update?.length > 0)
 
 const checkIsLast = (correction) => {
@@ -41,7 +40,7 @@ const saveCorrection = async () => {
       stop: combineDateWithTime(dt, shiftTime.value.stop),
     }
   const response = await shiftCorrection(props.shift.user_id, props.shift.id, shiftDt)
-  emit('refreshCalendar')
+
   alert.show(response.status, response.message)
 }
 
@@ -98,7 +97,7 @@ const saveCorrection = async () => {
     <div class="grid grid-flow-row justify-stretch align-middle h-full">
 
       <form
-          @submit.prevent="saveCorrection"
+          @submit.prevent.stop="saveCorrection"
           class="grid grid-flow-col w-full mb-3"
       >
         <div class="grid grid-flow-row justify-center items-center">

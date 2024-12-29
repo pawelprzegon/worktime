@@ -12,7 +12,7 @@ import {useAlertStore} from "@/stores/alertStore.js";
 const dailyShifts = useDailyShiftsList();
 const alert = useAlertStore()
 
-const emit = defineEmits(['refreshCalendar'])
+const emit = defineEmits(['refreshCalendar', 'closeModal'])
 
 const props = defineProps({
   shiftId: {
@@ -33,16 +33,10 @@ const toggleDropdown = (buttonStatus) => {
 const handleDeleteShift = async () => {
   const response = await dailyShifts.removeShift(shift.id)
   alert.show(response.status, response.message)
-  emitRefreshCalendar()
-
 }
+
 const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
 const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
-
-const emitRefreshCalendar = () => {
-  emit("refreshCalendar");
-};
-
 
 </script>
 
@@ -101,7 +95,6 @@ const emitRefreshCalendar = () => {
     <ShiftDetails
         :shift="shift"
         :is-open="isOpen"
-        @refresh-calendar="emitRefreshCalendar"
     />
 
   </div>

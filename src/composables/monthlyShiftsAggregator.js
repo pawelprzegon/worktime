@@ -20,17 +20,26 @@ const groupShiftsByDate = (shifts, toils) => {
     const date = getDate(shift.start);
     if (!acc[date]) {
       acc[date] = {
-        list: [],
-        totalShiftTime: 0,
+        shifts: {
+          date: null,
+          list: [],
+        },
+        totalShiftsTime: 0,
         regular: 0,
         overtime: 0,
         toilTaken: 0
       };
     }
-    acc[date].list.push(shift);
-    acc[date].totalShiftTime += shift.work;
+    acc[date].shifts.list.push(shift);
+    acc[date].totalShiftsTime += shift.work;
 
-    const matchedToil = toils.find(overtime => getDate(overtime.date) === date);
+    // Oblicz regularne i nadgodziny
+    const splitTimeObj = splitTime(shift.work);
+    acc[date].regular += splitTimeObj.regular || 0;
+    acc[date].overtime += splitTimeObj.overtime || 0;
+
+    // Uwzględnij wykorzystany TOIL
+    const matchedToil = toils.find(toil => getDate(toil.date) === date);
     acc[date].toilTaken = matchedToil ? matchedToil : 0;
 
     return acc;
@@ -42,26 +51,26 @@ const calculateWorkAndOvertime = (groupedShifts, monthStore) => {
   let calculatedMonthlyOvertime = 0;
 
   Object.keys(groupedShifts).forEach(date => {
-    const totalShiftTime = groupedShifts[date].totalShiftTime;
-    const splitOvertime = monthStore.splitOvertime(totalShiftTime);
+    const totalShiftsTime = groupedShifts[date].totalShiftsTime;
+    const splitOvertime = monthStore.splitOvertime(totalShiftsTime);
 
     // get regular and overtime for each shift
-    groupedShifts[date].list.forEach(shift => {
-      const splitOvertime = splitTime(shift.work)
-      shift.regular = splitOvertime?.regular || 0;
-      shift.overtime = splitOvertime?.overtime || 0;
+    groupedShifts[date].shifts.list.forEach(shift => {
+     const shiftSplitOvertime = splitTime(shift.work);
+      shift.regular = shiftSplitOvertime?.regular || 0;
+      shift.overtime = shiftSplitOvertime?.overtime || 0;
     })
 
     calculatedMonthlyRegularTime += splitOvertime?.regular || 0;
     calculatedMonthlyOvertime += splitOvertime?.overtime || 0;
 
     if (groupedShifts[date].toilTaken) {
-      const ovTaken = (groupedShifts[date].toilTaken.hours || 0) * 3600;
+      const ovTaken = (groupedShifts[date].toilTaken || 0);
       calculatedMonthlyOvertime -= ovTaken;
     }
 
-    groupedShifts[date].regular = splitOvertime.regular;
-    groupedShifts[date].overtime = splitOvertime.overtime;
+    groupedShifts[date].regular = splitOvertime?.regular || 0;
+    groupedShifts[date].overtime = splitOvertime?.overtime || 0;
 
   });
 
@@ -70,12 +79,16 @@ const calculateWorkAndOvertime = (groupedShifts, monthStore) => {
 };
 
 const updateMonthDays = (monthStore, groupedShifts) => {
-  monthStore.daysInMonth = monthStore.daysInMonth.map(day => {
+  monthStore.selected.days = monthStore.selected.days.map(day => {
     const formattedDate = format(day.date, 'yyyy-MM-dd');
-    const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, toilTaken: 0 };
+    const shiftData = groupedShifts[formattedDate] || {};
+
     return {
       ...day,
-      shifts: groupedShift,
+      list: shiftData.shifts?.list || [],
+      regular: shiftData.regular || 0,
+      overtime: shiftData.overtime || 0,
+      toilTaken: shiftData.toilTaken || 0,
     };
   });
 };
@@ -92,5 +105,6 @@ export const processMonthlyShifts = async (selectedUser, monthStore) => {
   monthStore.updateDaysInMonth()
 
   updateMonthDays(monthStore, groupedShifts);
+
   return true;
 };

@@ -37,7 +37,7 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 const dayOpenerHandler = (day) => {
   dailyShifts.setDay(day)
 
-  if (day?.shifts.list.length > 0) {
+  if (day?.list.length > 0) {
     isDailyShiftsOpen.value = true
   } else {
     isShiftAdderOpen.value = true;
@@ -87,7 +87,7 @@ onMounted(async () => {
       />
 
       <DayContainer
-        v-for="(day, index) in monthStore.daysInMonth"
+        v-for="(day, index) in monthStore.selected.days"
         :key="index"
         :day="day"
         @click="dayOpenerHandler(day)"
