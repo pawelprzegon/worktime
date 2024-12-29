@@ -1,6 +1,6 @@
 import {getToil, getUserShifts} from "@/composables/fetchers.js";
 import {format} from "date-fns";
-import {formatTime, splitTime} from "@/composables/utils.js";
+import {splitTime} from "@/composables/utils.js";
 
 export const fetchUserShifts = async (userId, month) => {
   try {
@@ -13,7 +13,7 @@ export const fetchUserShifts = async (userId, month) => {
   }
 };
 
-const groupShiftsByDate = (shifts, overtimes) => {
+const groupShiftsByDate = (shifts, toils) => {
   const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
 
   return shifts.reduce((acc, shift) => {
@@ -23,26 +23,27 @@ const groupShiftsByDate = (shifts, overtimes) => {
         list: [],
         totalShiftTime: 0,
         regular: 0,
-        overtime: 0
+        overtime: 0,
+        toilTaken: 0
       };
     }
     acc[date].list.push(shift);
     acc[date].totalShiftTime += shift.work;
 
-    const matchedOvertime = overtimes.find(overtime => getDate(overtime.date) === date);
-    acc[date].overtimeTaken = matchedOvertime ? matchedOvertime : 0;
+    const matchedToil = toils.find(overtime => getDate(overtime.date) === date);
+    acc[date].toilTaken = matchedToil ? matchedToil : 0;
 
     return acc;
   }, {});
 };
 
-const calculateWorkAndOvertime = (groupedShifts, monthTime) => {
-  let calculatedMonthlyWorkTime = 0;
-  let calculatedMonthlyOvertimeTime = 0;
+const calculateWorkAndOvertime = (groupedShifts, monthStore) => {
+  let calculatedMonthlyRegularTime = 0;
+  let calculatedMonthlyOvertime = 0;
 
   Object.keys(groupedShifts).forEach(date => {
     const totalShiftTime = groupedShifts[date].totalShiftTime;
-    const splitOvertime = monthTime.splitOvertime(totalShiftTime);
+    const splitOvertime = monthStore.splitOvertime(totalShiftTime);
 
     // get regular and overtime for each shift
     groupedShifts[date].list.forEach(shift => {
@@ -51,12 +52,12 @@ const calculateWorkAndOvertime = (groupedShifts, monthTime) => {
       shift.overtime = splitOvertime?.overtime || 0;
     })
 
-    calculatedMonthlyWorkTime += splitOvertime?.regular || 0;
-    calculatedMonthlyOvertimeTime += splitOvertime?.overtime || 0;
+    calculatedMonthlyRegularTime += splitOvertime?.regular || 0;
+    calculatedMonthlyOvertime += splitOvertime?.overtime || 0;
 
-    if (groupedShifts[date].overtimeTaken) {
-      const ovTaken = (groupedShifts[date].overtimeTaken.hours || 0) * 3600;
-      calculatedMonthlyOvertimeTime -= ovTaken;
+    if (groupedShifts[date].toilTaken) {
+      const ovTaken = (groupedShifts[date].toilTaken.hours || 0) * 3600;
+      calculatedMonthlyOvertime -= ovTaken;
     }
 
     groupedShifts[date].regular = splitOvertime.regular;
@@ -64,13 +65,14 @@ const calculateWorkAndOvertime = (groupedShifts, monthTime) => {
 
   });
 
-  return { calculatedMonthlyWorkTime, calculatedMonthlyOvertimeTime };
+  monthStore.selected.monthlyRegularTime = calculatedMonthlyRegularTime;
+  monthStore.selected.monthlyOvertime = calculatedMonthlyOvertime;
 };
 
-const updateMonthDays = (selectedMonth, groupedShifts) => {
-  selectedMonth.daysInMonth = selectedMonth.daysInMonth.map(day => {
+const updateMonthDays = (monthStore, groupedShifts) => {
+  monthStore.daysInMonth = monthStore.daysInMonth.map(day => {
     const formattedDate = format(day.date, 'yyyy-MM-dd');
-    const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, overtimeTaken: 0 };
+    const groupedShift = groupedShifts[formattedDate] || { list: [], regular: 0, toilTaken: 0 };
     return {
       ...day,
       shifts: groupedShift,
@@ -78,21 +80,17 @@ const updateMonthDays = (selectedMonth, groupedShifts) => {
   });
 };
 
-export const processMonthlyShifts = async (selectedUser, selectedMonth, monthTime) => {
-  monthTime.clear();
-  selectedMonth.calculatedMonthlyWorkTime = 0;
-  selectedMonth.calculatedMonthlyOvertimeTime = 0;
+export const processMonthlyShifts = async (selectedUser, monthStore) => {
+  monthStore.clear();
 
-  const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selectedMonth.month);
+  const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, monthStore.selected.month);
 
   const groupedShifts = groupShiftsByDate(shifts, toils);
 
-  const { calculatedMonthlyWorkTime, calculatedMonthlyOvertimeTime } = calculateWorkAndOvertime(groupedShifts, monthTime);
+  calculateWorkAndOvertime(groupedShifts, monthStore);
 
-  selectedMonth.calculatedMonthlyWorkTime = calculatedMonthlyWorkTime;
-  selectedMonth.calculatedMonthlyOvertimeTime = calculatedMonthlyOvertimeTime;
-  selectedMonth.updateDaysInMonth()
+  monthStore.updateDaysInMonth()
 
-  updateMonthDays(selectedMonth, groupedShifts);
+  updateMonthDays(monthStore, groupedShifts);
   return true;
 };

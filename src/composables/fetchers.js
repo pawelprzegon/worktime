@@ -262,11 +262,11 @@ export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
     }
 }
 
-export const setOvertime = async (userId, overtimeId, counter, date) => {
+export const setToil = async (userId, toilId, counter, date) => {
 
     const body = JSON.stringify({
         'user_id': userId,
-        'overtime_id': overtimeId,
+        'toil_id': toilId,
         'hours': counter,
         'date': date,
     });
@@ -303,7 +303,7 @@ export const getToil = async (user_id, selectedMonth) => {
         }
     }
 
-    let url_string = `/toil/?year=${year},month=${month}`
+    let url_string = `/toil/?year=${year}&month=${month}`
     if (user_id) {
         url_string += `&user_id=${user_id}`
     }

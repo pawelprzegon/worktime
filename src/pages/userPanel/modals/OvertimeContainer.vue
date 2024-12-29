@@ -1,52 +1,53 @@
 <script setup>
 import {ref} from 'vue'
-import {getHoursAsNumber} from "@/composables/utils.js";
+import {getDateString, getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {setOvertime} from "@/composables/fetchers.js";
+import {setToil} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {useAuthStore} from "@/stores/authStore.js";
 
 const alert = useAlertStore()
 
+const dailyShifts = useDailyShiftsList()
+const monthTime = useSelectedMonthStore('calendar');
+const authStore = useAuthStore()
+
 const props = defineProps({
   maxToTake: Number,
-  overtime: {
-    type: Object,
-    default: {}
-  },
   monthOvertimes: {
     type: Number,
     required: false,
     default: 0
   },
-  date: String
+  shift: Object,
 })
 
-const maxToTake = ref(props.maxToTake)
-const taken = ref(props.overtime?.hours || 0)
+const maxToTake = ref(props.shift.overtime > 0 ? 0 : Math.floor((28800 - props.shift.regular) / 3600 + 1))
+const toilTaken = ref({
+  id: dailyShifts.selectedDay.toil?.id || null,
+  hours: dailyShifts.selectedDay.toil?.hours || null
+})
 
 const emit = defineEmits(['takenHours', 'refreshModal'])
 
-const hoursPool = ref(getHoursAsNumber(props.monthOvertimes))
-maxToTake.value = Math.floor((28800 - maxToTake.value) / 3600) + 1
-maxToTake.value = maxToTake.value <= 0 ? 0 : maxToTake.value
-const counter = ref(taken)
+const hoursPool = ref(getHoursAsNumber(monthTime.selected.monthlyOvertime))
+const counter = ref(toilTaken.value.hours)
 
 const increment = () => {
   if (counter.value < maxToTake.value &&
-      counter.value < getHoursAsNumber(props.monthOvertimes)){
+      counter.value < hoursPool.value){
     counter.value += 1
     hoursPool.value--;
-    emit('takenHours', counter.value)
   }
-
 }
 
 const decrement = () => {
   if (counter.value > 0) {
     counter.value -= 1
     hoursPool.value++;
-    emit('takenHours', counter.value)
   }
 }
 
@@ -56,11 +57,8 @@ const saveTakenHours = async () => {
     alert.show("warning", 'You picked higher amount of hours')
     return
   }
-  const userId = sessionStorage.getItem('userId')
 
-  const overtimeId = props.overtime?.id || null;
-
-  const response = await setOvertime(userId, overtimeId, counter.value, props.date)
+  const response = await setToil(authStore.user.id, toilTaken.value.id, counter.value, getDateString(dailyShifts.date))
   if (response) {
     emit('refreshModal');
     alert.show(response.status, response.message)
@@ -71,39 +69,28 @@ const saveTakenHours = async () => {
 </script>
 
 <template>
-  <div class="overtime-container">
-    <section class="overtime-status">
 
-       <div style="display: inline-flex">
-          <h3>max to pick:</h3>
-          <span class="overtime-color">{{maxToTake}}</span>
-        </div>
+  <div class="grid grid-cols-[auto_150px]">
 
-    </section>
 
-    <div class="buttons-container">
-
-      <div class="counter-label-container">
-        <div class="label-data-container">
-          <h3>overtime:</h3>
-          <span class="overtime-color">{{hoursPool}}</span>
-        </div>
-
-        <div class="counter-engine">
-          <img src="../../assets/img/decrease.png" alt="decrease" @click="decrement" />
-          <span>{{ counter }}</span>
-          <img src="../../assets/img/increase.png" alt="increase" @click="increment" />
-        </div>
+    <div class="grid grid-cols-[150px_auto] justify-items-center">
+      <div class="label-data-container">
+        <h3>overtimes pool:</h3>
+        <span class="overtime-color">{{hoursPool}}</span>
       </div>
 
-      <div class="shift-details-header">
+      <div class="grid grid-cols-[50px_30px_50px] items-center justify-items-center">
+        <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
+        <span>{{ counter }}</span>
+        <img src="../../../assets/img/increase.png" alt="increase" @click="increment"/>
+      </div>
+    </div>
+
+    <div class="place-items-end">
         <CustomTextButton
             label="save"
             @click="saveTakenHours"
         />
-
-      </div>
-
     </div>
 
   </div>
@@ -111,24 +98,6 @@ const saveTakenHours = async () => {
 </template>
 
 <style scoped>
-
-.overtime-container {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 10px;
-  padding: 5px;
-  border-radius: 5px;
-  background: var(--vt-c-black-light);
-  height: fit-content;
-}
-
-.overtime-status {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  margin: auto;
-}
 
 .label-data-container {
   display: flex;

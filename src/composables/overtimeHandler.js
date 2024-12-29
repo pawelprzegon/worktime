@@ -3,15 +3,15 @@ import {defineStore} from "pinia";
 import {formatTime} from "@/composables/utils.js";
 
 export const useMonthTimeStore = defineStore("useMonthTimeStore", () => {
-  const worktimeInSeconds = ref(0);
-  const overtimeInSeconds = ref(0);
+  const monthlyWorkTime = ref(0);
+  const monthlyOvertime = ref(0);
 
-  const formattedWorkTime = computed(() => formatTime(worktimeInSeconds.value));
-  const formattedOvertime = computed(() => formatTime(overtimeInSeconds.value));
+  const formattedWorkTime = computed(() => formatTime(monthlyWorkTime.value));
+  const formattedOvertime = computed(() => formatTime(monthlyOvertime.value));
 
   return {
-    worktimeInSeconds,
-    overtimeInSeconds,
+    monthlyWorkTime,
+    monthlyOvertime,
     formattedWorkTime,
     formattedOvertime,
   };

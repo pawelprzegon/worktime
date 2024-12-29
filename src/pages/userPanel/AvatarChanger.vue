@@ -1,7 +1,7 @@
 <script setup>
 
 import Avatar from "@/components/Avatar.vue";
-import ChangeAvatarModal from "@/pages/userPanel/ChangeAvatarModal.vue";
+import ChangeAvatarModal from "@/pages/userPanel/modals/ChangeAvatarModal.vue";
 import {ref} from "vue";
 
 defineProps(["avatar"]);

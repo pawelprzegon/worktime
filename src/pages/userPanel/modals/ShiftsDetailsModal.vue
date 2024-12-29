@@ -33,24 +33,30 @@ const refreshCalendar = () => {
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
       <div class="shifts-container">
         <div class="shifts-label">
-          <h2 style="font-weight: 600">{{ dt }}</h2>
+          <h2 class="font-bold text-2xl">{{ dt }}</h2>
 
           <ShiftDetailContainer
             :label="'regular time'"
-            :time="formatTime(dailyShifts.dailyRegular)"
+            :time="formatTime(dailyShifts.selectedDay.regular)"
             :orient="'row'"
           />
 
           <ShiftDetailContainer
             :label="'overtime'"
-            :time="formatTime(dailyShifts.dailyOvertime)"
+            :time="formatTime(dailyShifts.selectedDay.overtime)"
             :orient="'row'"
-            :text-color="dailyShifts.dailyOvertime > 0 ? 'overtime' : 'stone-700'"
+            :text-color="dailyShifts.selectedDay.overtime > 0 ? 'overtime' : 'stone-700'"
+          />
+
+          <ShiftDetailContainer
+            :label="'TOIL hours taken'"
+            :time="formatTime(dailyShifts.selectedDay.toil?.hours * 3600 || 0)"
+            :orient="'row'"
           />
         </div>
 
         <ShiftDetailsRow
-            v-for="(shift, index) in dailyShifts.shiftsList"
+            v-for="(shift, index) in dailyShifts.selectedDay.shiftsList"
             :key=index
             :shift-id="shift.id"
             :index="index+1"

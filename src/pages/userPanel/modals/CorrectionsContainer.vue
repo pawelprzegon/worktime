@@ -48,9 +48,9 @@ const saveCorrection = async () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 m-3">
+  <div class="grid grid-cols-2">
 
-    <table class="corrections-table">
+    <table class="corrections-table m-3">
       <thead>
         <tr>
           <th>#</th>
@@ -95,7 +95,7 @@ const saveCorrection = async () => {
       </tbody>
     </table>
 
-    <div class="grid grid-flow-row justify-stretch align-middle h-fit">
+    <div class="grid grid-flow-row justify-stretch align-middle h-full">
 
       <form
           @submit.prevent="saveCorrection"
@@ -124,7 +124,7 @@ const saveCorrection = async () => {
         </div>
       </form>
 
-      <div class="place-items-center">
+      <div class="place-items-end place-content-end">
 
          <CustomTextButton
           :label="'add'"

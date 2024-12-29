@@ -63,6 +63,7 @@ const emitRefreshCalendar = () => {
           @open="toggleDropdown"
       >
         <div class="flex flex-row justify-around items-center">
+
           <p class="text-2xl m-2 text-beb font-bold p-1">{{props.index}}</p>
 
           <ShiftDetailContainer

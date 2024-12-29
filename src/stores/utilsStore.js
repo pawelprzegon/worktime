@@ -6,8 +6,7 @@ import {splitTime} from "@/composables/utils.js";
 export const useSelectedDayStore = (id) =>
   defineStore(id, () => {
     const month = ref(new Date());
-    const calculatedWorkTime = ref(0);
-    const calculatedOvertimeTime = ref(0);
+    const toils = ref(0);
 
     const setMonth = (newMonth) => {
       month.value = newMonth;
@@ -28,41 +27,55 @@ export const useSelectedDayStore = (id) =>
     };
 
     return {
-      month,
-      calculatedWorkTime,
-      calculatedOvertimeTime,
-      daysInMonth,
-      updateDaysInMonth,
-      setMonth,
+        month,
+        toils,
+        daysInMonth,
+        updateDaysInMonth,
+        setMonth,
     };
   })();
 
-export const useCalendarMonthTime = (id) =>
+export const useSelectedMonthStore = (id) =>
   defineStore(id, () => {
-    const overtimeInSeconds = ref(0);
-    const worktimeInSeconds = ref(0);
 
-    const subOvertime = (overtimeTaken) => {
-      overtimeInSeconds.value -= overtimeTaken;
+    const selected = ref({
+      month: new Date(),
+      toils: 0,
+      monthlyRegularTime: 0,
+      monthlyOvertime: 0,
+    })
+
+    const daysInMonth = ref([]);
+
+    const updateDaysInMonth = () => {
+      daysInMonth.value = eachDayOfInterval({
+        start: startOfMonth(selected.value.month),
+        end: endOfMonth(selected.value.month),
+      }).map(date => ({
+        date,
+        hours: 0,
+        note: '',
+        shifts: { list: [], summary: 0 }
+      }));
     };
 
     const clear = () => {
-      overtimeInSeconds.value = 0;
-      worktimeInSeconds.value = 0;
+        selected.monthlyRegularTime = 0;
+        selected.monthlyOvertime = 0;
     };
 
     const splitOvertime = (shiftTime) => {
         const splitTimeObj = splitTime(shiftTime)
-        worktimeInSeconds.value += splitTimeObj.regular;
-        overtimeInSeconds.value += splitTimeObj.overtime
+        selected.monthlyRegularTime += splitTimeObj.regular;
+        selected.monthlyOvertime += splitTimeObj.overtime;
       return splitTimeObj
     };
 
     return {
-      overtimeInSeconds,
-      worktimeInSeconds,
-      subOvertime,
-      clear,
-      splitOvertime
+        selected,
+        daysInMonth,
+        updateDaysInMonth,
+        clear,
+        splitOvertime
     };
   })();

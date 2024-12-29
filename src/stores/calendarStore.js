@@ -4,33 +4,34 @@ import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
   const date = ref(null)
-  const shiftsList = ref(null);
-  const dailyRegular = ref(null);
-  const dailyOvertime = ref(null);
+
+  const selectedDay = ref({
+    shiftsList: null,
+    regular: null,
+    overtime: null,
+    toil: null
+  })
 
 
   const setDay = (newDay) => {
     date.value = newDay.date
-    shiftsList.value = newDay.shifts.list;
-    dailyRegular.value = newDay.shifts.regular
-    dailyOvertime.value = newDay.shifts.overtime
+    selectedDay.value = {
+      shiftsList: newDay.shifts.list,
+      regular: newDay.shifts.regular,
+      overtime: newDay.shifts.overtime,
+      toil: newDay.shifts.toilTaken,
+    };
   };
 
-  const calculateShiftRegularOvertime = () => {
-    shiftsList.value.forEach(shift => {
-
-    })
-  }
-
   const getShift = (shiftId) => {
-    return shiftsList.value.filter((shift) => shift.id === shiftId)[0];
+    return selectedDay.value.shiftsList.filter((shift) => shift.id === shiftId)[0];
   }
 
   const removeShift = async (shiftId) => {
     try {
       const response = await deleteShiftFetch(shiftId);
       if (response) {
-        shiftsList.value = shiftsList.value.filter(
+        selectedDay.shiftsList = selectedDay.shiftsList.filter(
           (shift) => shift.id !== shiftId
         );
       }
@@ -44,9 +45,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
 
   return {
     date,
-    shiftsList,
-    dailyRegular,
-    dailyOvertime,
+    selectedDay,
     setDay,
     getShift,
     removeShift

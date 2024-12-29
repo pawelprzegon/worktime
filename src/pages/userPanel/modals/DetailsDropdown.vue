@@ -16,7 +16,7 @@
 
     <button
       @click="toggleDropdown"
-      class="font-thin"
+      class="font-thin w"
       :class="isOpen ? 'text-white' : 'text-silver'"
     >
       <slot></slot>

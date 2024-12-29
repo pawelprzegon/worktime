@@ -3,6 +3,9 @@
   import ModalWrapper from "@/components/ModalWrapper.vue";
   import {combineDateWithTime, getDateString} from "@/composables/utils.js";
   import {setManualShift} from "@/composables/fetchers.js";
+  import {useDailyShiftsList} from "@/stores/calendarStore.js";
+
+  const dailyShifts = useDailyShiftsList();
 
   const isModalOpen = ref(true);
   const shiftTime = ref({
@@ -14,12 +17,9 @@
 
   const props = defineProps({
     closeModal: Function,
-    date: Date
   })
 
-  const dt = getDateString(props.date)
-
-
+  const dt = getDateString(dailyShifts.date)
 
   const closeModal = () => {
     props.closeModal();
@@ -28,8 +28,8 @@
 
   function submitShift() {
     const shiftDt = {
-      start: combineDateWithTime(props.date, shiftTime.value.start),
-      stop: combineDateWithTime(props.date, shiftTime.value.stop),
+      start: combineDateWithTime(dailyShifts.date, shiftTime.value.start),
+      stop: combineDateWithTime(dailyShifts.date, shiftTime.value.stop),
     }
     const response = setManualShift(shiftDt, note.value)
     closeModal();

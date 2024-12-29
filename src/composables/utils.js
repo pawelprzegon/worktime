@@ -72,30 +72,31 @@ export const getLast = (day) => {
   return shifts
 }
 
-export const useCalendarDays = (selectedMonth) => {
+export const useCalendarDays = (monthStore) => {
+  console.log(monthStore)
   const getDaysBefore = () => {
-    const startDay = new Date(selectedMonth.daysInMonth[0]['date']).getDay() || 7;
+    const startDay = new Date(monthStore.daysInMonth[0]['date']).getDay() || 7;
     return range(2, startDay);
   };
 
   const getDaysAfter = () => {
-    const endDay = new Date(selectedMonth.daysInMonth[selectedMonth.daysInMonth.length - 1]['date']).getDay() || 7;
+    const endDay = new Date(monthStore.daysInMonth[monthStore.daysInMonth.length - 1]['date']).getDay() || 7;
     return range(endDay, 6);
   };
 
   return { getDaysBefore, getDaysAfter };
 };
 
-export const useCalendarNavigation = (selectedMonth, updateHandler) => {
+export const useCalendarNavigation = (monthStore, updateHandler) => {
   const prevMonth = () => {
-    selectedMonth.month = sub(selectedMonth.month, { months: 1 });
-    selectedMonth.updateDaysInMonth();
+    monthStore.selected.month = sub(monthStore.selected.month, { months: 1 });
+    monthStore.updateDaysInMonth();
     updateHandler();
   };
 
   const nextMonth = () => {
-    selectedMonth.month = add(selectedMonth.month, { months: 1 });
-    selectedMonth.updateDaysInMonth();
+    monthStore.selected.month = add(monthStore.selected.month, { months: 1 });
+    monthStore.updateDaysInMonth();
     updateHandler();
   };
 

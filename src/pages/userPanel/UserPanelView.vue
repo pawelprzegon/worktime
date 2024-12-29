@@ -3,7 +3,7 @@
 import {ref} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
 import Calendar from "@/pages/userPanel/calendar/Calendar.vue";
-import {useCalendarMonthTime} from "@/stores/utilsStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
 import Alert from "@/components/Alert.vue";
 import {formatTime} from "@/composables/utils.js";
@@ -12,7 +12,7 @@ import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
 
 
 const authStore = useAuthStore();
-const monthTime = useCalendarMonthTime('calendarMonthTime');
+const monthStore = useSelectedMonthStore('calendar');
 
 const isChangeModalActive = ref(false);
 
@@ -44,13 +44,13 @@ const refreshUserPanel = () => {
       <ShadowBox>
         <DetailsContainer
           :label="'regular'"
-          :data="formatTime(monthTime.worktimeInSeconds).toString()"
+          :data="formatTime(monthStore.selected.monthlyRegularTime).toString()"
           :background="'#282828'"
           :color="'#CCCCCCFF'"
         />
         <DetailsContainer
           :label="'overtime'"
-          :data="formatTime(monthTime.overtimeInSeconds).toString()"
+          :data="formatTime(monthStore.selected.monthlyOvertime).toString()"
           :background="'#282828'"
           color="var(--color-text-overtime)"
         />

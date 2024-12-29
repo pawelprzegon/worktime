@@ -5,7 +5,7 @@ import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftsDetailsModal.vue";
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
-import {useSelectedDayStore, useCalendarMonthTime} from "@/stores/utilsStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
@@ -15,8 +15,7 @@ import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue"
 import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
 const authStore = useAuthStore()
-const selectedMonth = useSelectedDayStore('calendarSelectedMonth');
-const monthTime = useCalendarMonthTime('calendarMonthTime');
+const monthStore = useSelectedMonthStore('calendar');
 const dailyShifts = useDailyShiftsList();
 
 const isLoading = ref(true);
@@ -26,14 +25,14 @@ const modalKey = ref(0)
 
 const getDataHandler = () => {
   isLoading.value = true;
-  const result = processMonthlyShifts(authStore, selectedMonth, monthTime);
+  const result = processMonthlyShifts(authStore, monthStore);
   isLoading.value = !result;
   return result;
 }
 
-const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
+const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandler);
 
-const { getDaysBefore, getDaysAfter } = useCalendarDays(selectedMonth);
+const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
   dailyShifts.setDay(day)
@@ -58,7 +57,7 @@ const refreshCalendar = () => {
 }
 
 onMounted(async () => {
-  selectedMonth.updateDaysInMonth();
+  monthStore.updateDaysInMonth();
   await getDataHandler();
 });
 
@@ -68,7 +67,7 @@ onMounted(async () => {
 
   <div class="calendar">
     <CalendarNavigation
-        :selected-month="selectedMonth.month"
+        :selected-month="monthStore.selected.month"
         @add="nextMonth"
         @sub="prevMonth"
     />
@@ -88,7 +87,7 @@ onMounted(async () => {
       />
 
       <DayContainer
-        v-for="(day, index) in selectedMonth.daysInMonth"
+        v-for="(day, index) in monthStore.daysInMonth"
         :key="index"
         :day="day"
         @click="dayOpenerHandler(day)"
@@ -105,7 +104,7 @@ onMounted(async () => {
         :date="dailyShifts.shiftsList?.date"
     />
     <ShiftsDetailsModal
-        v-if="isDailyShiftsOpen && dailyShifts.shiftsList?.length > 0"
+        v-if="isDailyShiftsOpen"
         :key="modalKey"
         :refreshCalendar="refreshCalendar"
         :closeModal="closeDailyShifts"
