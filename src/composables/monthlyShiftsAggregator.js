@@ -41,7 +41,6 @@ const groupShiftsByDate = (shifts, toils) => {
     // Uwzględnij wykorzystany TOIL
     const matchedToil = toils.find(toil => getDate(toil.date) === date);
     acc[date].toilTaken = matchedToil ? matchedToil : 0;
-
     return acc;
   }, {});
 };
@@ -64,8 +63,8 @@ const calculateWorkAndOvertime = (groupedShifts, monthStore) => {
     calculatedMonthlyRegularTime += splitOvertime?.regular || 0;
     calculatedMonthlyOvertime += splitOvertime?.overtime || 0;
 
-    if (groupedShifts[date].toilTaken) {
-      const ovTaken = (groupedShifts[date].toilTaken || 0);
+    if (groupedShifts[date].toilTaken.hours) {
+      const ovTaken = (groupedShifts[date].toilTaken.hours * 3600 || 0);
       calculatedMonthlyOvertime -= ovTaken;
     }
 

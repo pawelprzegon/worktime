@@ -25,7 +25,7 @@ const calculateMaxToTake = () => {
   })
   return max
 }
-console.log(dailyShifts.selectedDay.toil)
+
 const maxToTake = ref(calculateMaxToTake())
 const toilTaken = ref({
   id: dailyShifts.selectedDay.toil?.id || null,
