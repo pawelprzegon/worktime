@@ -36,16 +36,31 @@ export default {
         'font-secondary': '#575757',
 
         'modal-back': "rgba(64, 64, 64, 0.84)",
-      }
+      },
+      fontSize: {
+        '2xs': '9px',
+      },
     },
 
     screens: {
+      'portrait-2xs': '300px',
       'portrait-xs': '400px',
       'portrait-small': '480px',
       'portrait-medium': '768px',
       'portrait-large': '1024px',
       'portrait-xl': '1300px',
-    }
+      'portrait-2xl': '1500px',
+    },
+    scale: {
+      '102': '1.02',
+    },
+    filter: {
+      'invert-30': 'invert(30%)',
+      'invert-100': 'invert(100%)',
+    },
+
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-filters'),
+  ],
 }

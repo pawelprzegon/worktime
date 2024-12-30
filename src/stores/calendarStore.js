@@ -15,7 +15,6 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
 
   const setDay = (newDay) => {
     date.value = newDay.date
-    console.log(newDay)
     selectedDay.value = {
       shiftsList: newDay.list,
       regular: newDay.regular,

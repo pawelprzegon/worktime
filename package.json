@@ -16,6 +16,7 @@
     "jspdf-autotable": "^3.8.4",
     "jwt-decode": "^4.0.0",
     "pinia": "^2.3.0",
+    "tailwindcss-filters": "^3.0.0",
     "vue": "^3.5.11",
     "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.4.5"

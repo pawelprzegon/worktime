@@ -74,7 +74,17 @@ onMounted(async () => {
      <div v-if="isLoading" class="loading-spinner">
       <Spinner />
     </div>
-    <div v-else class="calendar-grid">
+    <div v-else
+          class="
+          grid [grid-template-columns:repeat(7,minmax(90px,1fr))] max-w-[800px] gap-2 mx-auto justify-items-center items-center
+
+          portrait-xs:gap-1 portrait-xs:[grid-template-columns:repeat(7,minmax(50px,1fr))] portrait-xs:max-w-[400px]
+          portrait-small:gap-3 portrait-small:[grid-template-columns:repeat(7,minmax(60px,1fr))] portrait-small:max-w-[500px]
+          portrait-medium:gap-4 portrait-medium:[grid-template-columns:repeat(7,minmax(70px,1fr))] portrait-medium:max-w-[600px]
+          portrait-large:gap-5 portrait-large:[grid-template-columns:repeat(7,minmax(80px,1fr))] portrait-large:max-w-[700px]
+          portrait-xl:gap-5 portrait-xl:[grid-template-columns:repeat(7,minmax(90px,1fr))] portrait-xl:max-w-[800px]
+          "
+    >
       <WeekDayNameContainer
         v-for="(day, index) in daysOfWeek"
         :key="index"
@@ -92,6 +102,7 @@ onMounted(async () => {
         :day="day"
         @click="dayOpenerHandler(day)"
       />
+
       <EmptyDayContainer
           v-for="(index) in getDaysAfter()"
           :key="index"
@@ -123,10 +134,12 @@ onMounted(async () => {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(7, minmax(90px, 1fr));
   gap: 10px;
   max-width: 800px;
-  margin: 0 auto
+  margin: 0 auto;
+  justify-items: center;
+  align-items: center;
 }
 
 

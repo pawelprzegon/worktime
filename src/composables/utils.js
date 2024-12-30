@@ -1,4 +1,4 @@
-import {add, sub} from "date-fns";
+import {add, addDays, endOfMonth, getDay, startOfMonth, sub} from "date-fns";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -74,14 +74,26 @@ export const getLast = (day) => {
 
 export const useCalendarDays = (monthStore) => {
 
+  const getAdjustedDay = (date) => {
+    const day = date.getDay();
+    return day === 0 ? 7 : day;
+  };
+
   const getDaysBefore = () => {
-    const startDay = new Date(monthStore.selected.month).getDay() || 7;
-    return range(2, startDay);
+    const firstDayOfMonth = startOfMonth(monthStore.selected.month);
+    const startDay = getAdjustedDay(firstDayOfMonth);
+    return range(2, startDay).map((_, index) =>
+      addDays(firstDayOfMonth, -(startDay - index))
+    );
   };
 
   const getDaysAfter = () => {
-    const endDay = new Date(monthStore.selected.month[monthStore.selected.month.length - 1]).getDay() || 7;
-    return range(endDay, 6);
+    const lastDayOfMonth = endOfMonth(monthStore.selected.month);
+    const endDay = getAdjustedDay(lastDayOfMonth);
+    const daysToAdd = 7 - endDay;
+    return range(2, daysToAdd + 1).map((_, index) =>
+      addDays(lastDayOfMonth, index + 1)
+    );
   };
 
   return { getDaysBefore, getDaysAfter };

@@ -4,7 +4,18 @@
 
 <template>
 
-  <div class="empty-day"></div>
+  <div
+      class="
+      rounded-lg bg-mute p-2  w-24 h-24
+      portrait-xs:w-14 portrait-xs:h-14
+      portrait-small:w-16 portrait-small:h-16
+      portrait-medium:w-20 portrait-medium:h-20
+      portrait-large:w-24 portrait-large:h-24
+      portrait-xl:w-24 portrait-xl:h-24
+      "
+  >
+
+  </div>
 
 </template>
 
