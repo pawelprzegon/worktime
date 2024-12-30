@@ -40,6 +40,21 @@ export default {
       fontSize: {
         '2xs': '9px',
       },
+      gridTemplateAreas: {
+        'screen-wide': [
+          'area-calendar area-user-details',
+        ],
+        'screen-narrow': [
+          'area-user-details area-calendar',
+        ],
+      },
+      gridTemplateColumns: {
+        'screen-wide': '75% 25%',
+
+      },
+      gridTemplateRows: {
+        'screen-narrow': '25% 75%'
+      }
     },
 
     screens: {
@@ -62,5 +77,6 @@ export default {
   },
   plugins: [
     require('tailwindcss-filters'),
+    require('@savvywombat/tailwindcss-grid-areas'),
   ],
 }

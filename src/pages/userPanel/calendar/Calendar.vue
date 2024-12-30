@@ -65,7 +65,7 @@ onMounted(async () => {
 
 <template>
 
-  <div class="calendar">
+
     <CalendarNavigation
         :selected-month="monthStore.selected.month"
         @add="nextMonth"
@@ -121,7 +121,6 @@ onMounted(async () => {
         :closeModal="closeDailyShifts"
     />
 
-  </div>
 </template>
 
 <style scoped>
@@ -130,27 +129,6 @@ onMounted(async () => {
   grid-area: calendar;
   padding: 20px;
   width:100%;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(90px, 1fr));
-  gap: 10px;
-  max-width: 800px;
-  margin: 0 auto;
-  justify-items: center;
-  align-items: center;
-}
-
-
-
-input[type="number"] {
-  width: 60px;
-}
-
-textarea {
-  width: 95%;
-  margin-top: 10px;
 }
 
 @media(max-width: 875px) {
