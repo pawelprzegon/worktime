@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
+import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 export const useSelectedDayStore = (id) =>
   defineStore(id, () => {
@@ -80,3 +81,17 @@ export const useSelectedMonthStore = (id) =>
         splitOvertime
     };
   })();
+
+export const useScreenSizeStore = defineStore('screenSizeStore', () => {
+  const isPortraitXsOr2Xs = ref(false)
+
+  const setSize = (newSize) => {
+    isPortraitXsOr2Xs.value = newSize < 480;
+
+  };
+
+  return {
+    isPortraitXsOr2Xs,
+    setSize,
+  };
+});

@@ -77,20 +77,32 @@ html, body {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
   body {
     font-size: 12px;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   body {
     font-size: 11px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   body {
     font-size: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  body {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 300px) {
+  body {
+    font-size: 8px;
   }
 }

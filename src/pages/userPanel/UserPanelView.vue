@@ -26,15 +26,15 @@ const refreshUserPanel = () => {
 <template>
   <Alert/>
   <section
-  class="grid h-full
-         grid-areas-screen-narrow
-         portrait-large:grid-areas-screen-wide"
+  class="grid justify-items-center
+         grid-areas-grid-column
+         portrait-large:grid-areas-grid-row"
 >
-  <div class="area-calendar w-fit">
+  <div class="grid-in-area-calendar w-fit">
     <Calendar />
   </div>
 
-  <div class="area-user-details w-fit">
+  <div class="grid-in-area-user w-fit">
       <AvatarChanger
         :avatar="authStore.user.avatar"
         :is-modal-active="isChangeModalActive"

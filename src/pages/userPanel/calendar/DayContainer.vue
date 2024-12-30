@@ -1,6 +1,9 @@
 <script setup>
 
 import {formatTime} from "@/composables/utils.js";
+import {useScreenSizeStore} from "@/stores/utilsStore.js";
+
+const screenSize = useScreenSizeStore()
 
 const props = defineProps({
   day: Object,
@@ -17,11 +20,14 @@ const props = defineProps({
         rounded-lg bg-mute p-2 shadow-lg border border-third w-24 h-24
         hover:cursor-pointer hover:scale-102
         m-auto
-        portrait-xs:w-14 portrait-xs:h-14 portrait-xs:p-1
-        portrait-small:w-16 portrait-small:h-16 portrait-small:p-1
-        portrait-medium:w-20 portrait-medium:h-20
-        portrait-large:w-24 portrait-large:h-24
-        portrait-xl:w-24 portrait-xl:h-24
+
+        below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md
+        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md
+        portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md
+        portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s
+        portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-md
+        portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-lg
+        portrait-xl:w-[90px] portrait-xl:h-[90px] portrait-xl:rounded-lg
         "
       :class="[
           {
@@ -33,19 +39,34 @@ const props = defineProps({
           class="
           h-1/4 w-full border-b border-silver inline-block
 
-          portrait-xs:text-2xs
-          portrait-small:text-xs
+          leading-none m-0 p-0
+          portrait-2xs:text-xs
+          portrait-xs:text-xs
+          portrait-small:text-2xs
           portrait-medium:text-xs
           portrait-large:text-sm
           portrait-xl:text-base
           "
       >
-        {{ props.day.date.getDate() }}
+        {{ props.day.date.getDate()}}
+        <span :class="{ hidden: !screenSize.isPortraitXsOr2Xs }">
+          {{ props.day.date.toLocaleDateString('pl-PL', { weekday: 'long' }) }}
+        </span>
       </span>
 
       <div
           v-if="props.day.list.length > 0"
-          class="h-3/4 w-full flex flex-col justify-center place-items-center"
+          class="h-3/4 w-full
+          flex flex-col justify-center place-items-center
+
+          below-portrait-2xs:flex-row
+          portrait-2xs:flex-row
+          portrait-xs:flex-row
+          portrait-small:flex-col
+          portrait-medium:flex-col
+          portrait-large:flex-col
+          portrait-xl:flex-col
+          "
       >
 
         <small
@@ -54,8 +75,9 @@ const props = defineProps({
             text-platinum text-base
 
             leading-none m-0 p-0
-            portrait-xs:text-2xs
-            portrait-small:text-xs
+            portrait-2xs:text-sm
+            portrait-xs:text-sm
+            portrait-small:text-2xs
             portrait-medium:text-sm
             portrait-large:text-base
             portrait-xl:text-lg
@@ -70,8 +92,10 @@ const props = defineProps({
             text-overtime text-base
 
             leading-none m-0 p-0
-            portrait-xs:text-2xs
-            portrait-small:text-xs
+
+            portrait-2xs:text-sm
+            portrait-xs:text-sm
+            portrait-small:text-2xs
             portrait-medium:text-sm
             portrait-large:text-base
             portrait-xl:text-lg
@@ -85,7 +109,8 @@ const props = defineProps({
             class="
             text-turquoise text-base
 
-            portrait-xs:text-2xs
+            portrait-2xs:text-sm
+            portrait-xs:text-sm
             portrait-small:text-xs
             portrait-medium:text-sm
             portrait-large:text-base
@@ -103,6 +128,13 @@ const props = defineProps({
         <img class="
         filter-invert-30
         group-hover:filter-invert-100
+
+        portrait-2xs:h-[20px] portrait-2xs:w-[20px]
+        portrait-xs:h-[20px] portrait-xs:w-[20px]
+        portrait-small:h-[20px] portrait-small:w-[20px]
+        portrait-medium:h-[25px] portrait-medium:w-[25px]
+        portrait-large:h-[30px] portrait-large:w-[30px]
+        portrait-xl:h-[35px] portrait-xl:w-[35px]
         "
              src="@/assets/img/add.png" alt="add-shift">
       </div>

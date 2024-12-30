@@ -39,25 +39,22 @@ export default {
       },
       fontSize: {
         '2xs': '9px',
+        '3xs': '8px',
       },
       gridTemplateAreas: {
-        'screen-wide': [
-          'area-calendar area-user-details',
+        'grid-row': [
+          'area-calendar area-user',
         ],
-        'screen-narrow': [
-          'area-user-details area-calendar',
+        'grid-column': [
+          'area-user',
+          'area-calendar',
         ],
       },
-      gridTemplateColumns: {
-        'screen-wide': '75% 25%',
 
-      },
-      gridTemplateRows: {
-        'screen-narrow': '25% 75%'
-      }
     },
 
     screens: {
+      'below-portrait-2xs': { max: '300px' },
       'portrait-2xs': '300px',
       'portrait-xs': '400px',
       'portrait-small': '480px',
@@ -74,6 +71,10 @@ export default {
       'invert-100': 'invert(100%)',
     },
 
+  },
+  gridArea: {
+    'area-calendar': 'area-calendar',
+    'area-user': 'area-user',
   },
   plugins: [
     require('tailwindcss-filters'),
