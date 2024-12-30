@@ -22,8 +22,8 @@ const props = defineProps({
         m-auto
 
         leading-none m-0 p-0
-        below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md
-        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md
+        below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md below-portrait-2xs:m-1
+        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md  portrait-2xs:m-1
         portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md
 
         portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s

@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
 
-  <div class="dash-user-list">
+  <div class="grid [grid-template-columns:repeat(auto-fit,minmax(100px,1fr))] gap-4">
 
     <UserCard
         v-for="user in users"
@@ -55,40 +55,5 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-
-.dash-user-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 16px;
-  margin: 15px;
-}
-
-@media (max-width: 1300px) {
-  .dash-user-list {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    margin: 5px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .dash-user-list {
-      grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-      margin: 5px;
-    }
-}
-
-@media (max-width: 800px) {
-  .dash-user-list {
-    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-    margin: 5px;
-  }
-}
-
-@media (max-width: 600px) {
-  .dash-user-list {
-    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-    margin: 5px;
-  }
-}
 
 </style>
