@@ -38,6 +38,4 @@ const closeAvatarChanger = () => {
 
 <style scoped>
 
-
-
 </style>

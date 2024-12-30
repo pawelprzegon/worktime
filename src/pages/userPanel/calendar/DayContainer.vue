@@ -21,9 +21,11 @@ const props = defineProps({
         hover:cursor-pointer hover:scale-102
         m-auto
 
+        leading-none m-0 p-0
         below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md
         portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md
         portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md
+
         portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s
         portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-md
         portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-lg
@@ -39,7 +41,6 @@ const props = defineProps({
           class="
           h-1/4 w-full border-b border-silver inline-block
 
-          leading-none m-0 p-0
           portrait-2xs:text-xs
           portrait-xs:text-xs
           portrait-small:text-2xs
@@ -59,9 +60,9 @@ const props = defineProps({
           class="h-3/4 w-full
           flex flex-col justify-center place-items-center
 
-          below-portrait-2xs:flex-row
-          portrait-2xs:flex-row
-          portrait-xs:flex-row
+          below-portrait-2xs:flex-row below-portrait-2xs:justify-around
+          portrait-2xs:flex-row portrait-2xs:justify-around
+          portrait-xs:flex-row portrait-xs:justify-around
           portrait-small:flex-col
           portrait-medium:flex-col
           portrait-large:flex-col
@@ -75,6 +76,7 @@ const props = defineProps({
             text-platinum text-base
 
             leading-none m-0 p-0
+
             portrait-2xs:text-sm
             portrait-xs:text-sm
             portrait-small:text-2xs
@@ -108,6 +110,8 @@ const props = defineProps({
             v-if="props.day.list.length > 0 && props.day.toilTaken"
             class="
             text-turquoise text-base
+
+            leading-none m-0 p-0
 
             portrait-2xs:text-sm
             portrait-xs:text-sm

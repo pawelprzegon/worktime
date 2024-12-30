@@ -34,7 +34,7 @@ const refreshUserPanel = () => {
     <Calendar />
   </div>
 
-  <div class="grid-in-area-user w-fit">
+  <div class="grid-in-area-user">
       <AvatarChanger
         :avatar="authStore.user.avatar"
         :is-modal-active="isChangeModalActive"
