@@ -17,19 +17,18 @@ const props = defineProps({
     <div
         class="
         group
-        rounded-lg bg-mute p-2 shadow-lg border border-third w-24 h-24
+        rounded-lg bg-mute shadow-lg border border-third w-24 h-24
         hover:cursor-pointer hover:scale-102
-        m-auto
 
         leading-none m-0 p-0
         below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md below-portrait-2xs:m-1
-        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md  portrait-2xs:m-1
-        portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md
+        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md portrait-2xs:m-1
+        portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md portrait-xs:m-1
 
-        portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s
-        portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-md
-        portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-lg
-        portrait-xl:w-[90px] portrait-xl:h-[90px] portrait-xl:rounded-lg
+        portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s portrait-small:m-0
+        portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-md portrait-medium:m-0
+        portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-lg portrait-large:m-0
+        portrait-xl:w-[90px] portrait-xl:h-[90px] portrait-xl:rounded-lg portrait-xl:m-0
         "
       :class="[
           {

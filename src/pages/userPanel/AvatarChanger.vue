@@ -21,7 +21,7 @@ const closeAvatarChanger = () => {
 </script>
 
 <template>
-  <section class="relative z-30 m-2">
+  <section class="relative z-30 m-2 w-28 h-28">
     <Avatar :avatar="avatar" :static="true" />
     <img
       class="absolute bottom-0 right-0 w-6 h-6 filter invert-[50%] hover:invert-100 hover:animate-spin cursor-pointer"
