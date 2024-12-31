@@ -1,7 +1,7 @@
 <script setup>
-import CorrectionsContainer from "@/pages/userPanel/modals/CorrectionsContainer.vue";
-import NoteContainer from "@/pages/userPanel/modals/NoteContainer.vue";
-import OvertimeContainer from "@/pages/userPanel/modals/OvertimeContainer.vue";
+import CorrectionsContainer from "@/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
+import NoteContainer from "@/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
+import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
 
 
 const props = defineProps({

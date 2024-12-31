@@ -38,10 +38,15 @@
 
 <template>
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
-    <div class="bg-soft shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3">
-      <div class="w-full p-2">
+    <div
+        class="
+          bg-soft shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3
+          w-[75vw] max-w-[500px] min-w-[250px]
+        ">
+      <div class="p-2 w-full">
         <h3 class="text-beb font-bold text-xl">{{dt}}</h3>
         <h3 class="text-silver text-base p-4 rounded-lg" >Add Shift</h3>
+
         <form @submit.prevent="submitShift">
           <div class="flex flex-row justify-start items-center mb-4">
             <label for="startTime" class="block text-base font-thin text-silver text-left mr-4">Start hour</label>
@@ -49,7 +54,7 @@
               v-model="shiftTime.start"
               type="time"
               id="startTime"
-              class="block w-1/3 border text-black border-gray-300 rounded-md shadow-sm text-lg"
+              class="block w-[100px] border text-black border-gray-300 rounded-md shadow-sm text-lg"
               required
             />
           </div>
@@ -60,7 +65,7 @@
               v-model="shiftTime.stop"
               type="time"
               id="endTime"
-              class="block w-1/3 border text-black border-gray-300 rounded-md shadow-sm text-lg"
+              class="block w-[100px] border text-black border-gray-300 rounded-md shadow-sm text-lg"
               required
             />
           </div>

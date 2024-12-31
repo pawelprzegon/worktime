@@ -2,8 +2,8 @@
 
 import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import DetailsDropdown from "@/pages/userPanel/modals/DetailsDropdown.vue";
-import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails.vue";
+import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
+import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
 import {ref, defineEmits} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";

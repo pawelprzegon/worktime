@@ -78,9 +78,9 @@ const saveTakenHours = async () => {
       </div>
 
       <div class="grid grid-cols-[50px_30px_50px] items-center justify-items-center">
-        <img src="../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
+        <img src="../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
         <span>{{ counter }}</span>
-        <img src="../../../assets/img/increase.png" alt="increase" @click="increment"/>
+        <img src="../../../../assets/img/increase.png" alt="increase" @click="increment"/>
       </div>
     </div>
 

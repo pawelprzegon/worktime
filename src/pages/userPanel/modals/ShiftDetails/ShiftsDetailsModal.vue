@@ -3,10 +3,10 @@ import {ref} from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import {formatTime, getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetailsRow.vue";
+import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetails/ShiftDetailsRow.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import OvertimeContainer from "@/pages/userPanel/modals/OvertimeContainer.vue";
+import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
 
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
