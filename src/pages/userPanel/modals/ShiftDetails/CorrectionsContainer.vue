@@ -47,7 +47,13 @@ const saveCorrection = async () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2">
+  <div
+      class="
+      grid grid-cols-2
+
+      portrait-2xs:grid-rows-2 portrait-2xs:grid-cols-none
+      portrait-medium:grid-rows-none portrait-medium:grid-cols-2
+      ">
 
     <table class="corrections-table m-3">
       <thead>
