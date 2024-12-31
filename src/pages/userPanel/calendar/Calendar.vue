@@ -85,7 +85,7 @@ onMounted(async () => {
            below-portrait-2xs:gap-1 below-portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] below-portrait-2xs:w-max-[280px]
            portrait-2xs:gap-1 portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] portrait-2xs:w-max-[280px]
            portrait-xs:gap-1 portrait-xs:[grid-template-columns:repeat(1,minmax(300px,1fr))] portrait-xs:w-max-[380px]
-           portrait-small:gap-2 portrait-small:[grid-template-columns:repeat(7,minmax(55px,55px))] portrait-small:w-max-[440px]
+           portrait-small:gap-[5px] portrait-small:[grid-template-columns:repeat(7,minmax(55px,55px))] portrait-small:w-max-[440px]
            portrait-medium:gap-2 portrait-medium:[grid-template-columns:repeat(7,minmax(70px,70px))] portrait-medium:w-max-[600px]
            portrait-large:gap-2 portrait-large:[grid-template-columns:repeat(7,minmax(80px,80px))] portrait-large:w-max-[700px]
            portrait-xl:gap-4 portrait-xl:[grid-template-columns:repeat(7,minmax(90px,90px))] portrait-xl:w-max-[800px]
