@@ -15,10 +15,14 @@ const props = defineProps({
 <template>
   <div :style="{ background: props.background }"
        class="
-       flex flex-row justify-between rounded-sm p-1 m-0 mb-1 w-full
-       portrait-xs:text-2xs
-       portrait-small::text-xs
-       portrait-medium:text-sm
+       flex flex-row justify-between rounded-sm p-1 mb-1 w-full
+
+       portrait-2xs:text-3xs portrait-2xs:p-[1px] portrait-2xs:m-[1px]
+       portrait-xs:text-2xs portrait-xs:p-[2px] portrait-xs:m-[2px]
+       portrait-small:text-2xs portrait-small:p-[2px] portrait-small:m-[2px]
+       portrait-medium:text-xs
+       portrait-large:text-base
+       portrait-xl:text-base
        ">
 
     <label>{{ props.label }}:</label>

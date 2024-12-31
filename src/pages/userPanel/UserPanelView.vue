@@ -26,11 +26,14 @@ const refreshUserPanel = () => {
 <template>
   <Alert/>
   <section
-  class="grid justify-items-center
-         grid-areas-grid-column
-         portrait-large:grid-areas-grid-row"
+    class="
+    grid justify-items-center
+    grid-areas-grid-column
+    portrait-large:grid-areas-grid-row
+    w-full
+    "
 >
-  <div class="grid-in-area-calendar w-fit">
+  <div class="grid-in-area-calendar">
     <Calendar />
   </div>
 
@@ -38,10 +41,11 @@ const refreshUserPanel = () => {
       class="
         grid-in-area-user
         grid justify-items-center items-end
-        portrait-2xs:grid-cols-3
-        portrait-xs:grid-cols-3
-        portrait-small:grid-cols-3
-        portrait-medium:grid-cols-3
+
+        portrait-2xs:block
+        portrait-xs:block
+        portrait-small:[grid-template-columns:auto_auto_auto] portrait-small:grid
+        portrait-medium:[grid-template-columns:auto_auto_auto]
         portrait-large:block
         portrait-xl:block
         portrait-2xl:block

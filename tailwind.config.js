@@ -38,7 +38,7 @@ export default {
         'modal-back': "rgba(64, 64, 64, 0.84)",
       },
       fontSize: {
-        '2xs': '9px',
+        '2xs': '10px',
         '3xs': '8px',
       },
       gridTemplateAreas: {

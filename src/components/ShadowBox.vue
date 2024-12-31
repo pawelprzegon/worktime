@@ -6,11 +6,13 @@
 
    <section
       class="
-      min-w-[300px] max-w-[80%] rounded-lg bg-mute p-2 m-2 shadow-xl h-fit
+      min-w-[200px] max-w-[80%] rounded-lg bg-mute p-2 m-2 shadow-xl h-fit
+
+      portrait-2xs:w-[200px] portrait-2xs:p-[1px] portrait-2xs:m-[1px]
+      portrait-xs:min-w-[180px] portrait-xs:max-w-[20%] portrait-xs:p-[1px] portrait-xs:m-[1px]
+      portrait-small:min-w-[150px] portrait-small:max-w-[150px] portrait-small:p-[1px] portrait-small:m-[1px]]
+      portrait-medium:min-w-[200px] portrait-medium:max-w-[30%] portrait-medium:p-1 portrait-medium:m-1
       portrait-large:min-w-[250px] portrait-large:max-w-[40%]
-      portrait-medium:min-w-[200px] portrait-medium:max-w-[30%] portrait-medium:m-1
-      portrait-small:min-w-[180px] portrait-small:max-w-[20%] portrait-small:m-1
-      portrait-xs:min-w-[180px] portrait-xs:max-w-[20%] portrait-xs:m-1
       ">
     <slot></slot>
   </section>
