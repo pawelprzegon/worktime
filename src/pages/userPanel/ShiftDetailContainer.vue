@@ -20,7 +20,7 @@ const props = defineProps({
 <template>
 
   <div
-      class="flex m-1"
+      class="flex m-[2px]"
       :class="[`flex-${props.orient}`, props.background ? `bg-${props.background}` : ``]"
   >
     <p
@@ -40,12 +40,12 @@ const props = defineProps({
 
     <h3
         class="
-        m-1
+        m-[1px]
 
         portrait-2xs:text-2xs
         portrait-xs:text-xs
         portrait-small:text-sm
-        portrait-medium:text-base
+        portrait-medium:text-base portrait-medium:m-1
         portrait-large:text-lg
         portrait-xl:text-xl
         "

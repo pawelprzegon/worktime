@@ -39,15 +39,25 @@ const addNote = async () => {
 
     <div
         v-if="props.shift.note && !noteEdit"
-        class="shift-note text-left px-3">
-      <h3>{{props.shift.note}}</h3>
+        class="
+        shift-note text-left px-3 font-thin
+
+        portrait-2xs:text-2xs
+        portrait-medium:text-base
+        ">
+      <small class="break-all">{{props.shift.note}}</small>
     </div>
 
     <form
         v-if="noteEdit"
         @submit.prevent.stop="addNote" ref="noteForm">
       <textarea
-        class="rounded-md w-[95%] p-1 text-black"
+        class="
+        rounded-md w-[95%] p-1 text-black
+
+        portrait-2xs:text-2xs
+        portrait-medium:text-base
+        "
         v-model="noteContent"
         id="noteEditor"
         name="noteEditor"
