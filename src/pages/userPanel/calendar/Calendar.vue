@@ -7,7 +7,7 @@ import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDeta
 import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
+import {useCalendarDays, daysOfWeek, useCalendarNavigation, updateScreenSize} from "@/composables/utils.js";
 import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
@@ -57,15 +57,11 @@ const refreshCalendar = () => {
   modalKey.value = modalKey.value++;
 }
 
-function updateScreenSize() {
-  const width = window.innerWidth;
-  screenSize.setSize(width) // Dopasuj breakpoint (xs i 2xs)
-}
 
 onMounted(async () => {
   monthStore.updateDaysInMonth();
   await getDataHandler();
-  updateScreenSize();
+  updateScreenSize(screenSize);
   window.addEventListener('resize', updateScreenSize);
 });
 

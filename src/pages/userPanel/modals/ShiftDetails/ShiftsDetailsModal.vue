@@ -27,9 +27,25 @@ const dt = getDateString(dailyShifts.date)
 
 <template>
   <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
-      <div class="shifts-container">
+
+      <div
+          class="
+          bg-soft shadow-2xl text-white box-border rounded-md p-3
+          w-[75vw] max-w-[600px] min-w-[250px] max-h-[600px] overflow-auto">
+
         <div class="shifts-label">
-          <h2 class="font-bold text-2xl">{{ dt }}</h2>
+
+          <h2
+              class="
+              font-bold
+
+              portrait-2xs:text-sm
+              portrait-medium:text-base
+              portrait-xl:text-lg
+              "
+          >
+            {{ dt }}
+          </h2>
 
           <ShiftDetailContainer
             :label="'regular time'"
@@ -51,7 +67,7 @@ const dt = getDateString(dailyShifts.date)
           />
 
           <!-- Sekcja nadgodzin -->
-          <div class="grid grid-row rounded-md m-3 border border-third">
+          <div class="rounded-md m-3 border border-third">
             <OvertimeContainer :shifts="dailyShifts.selectedDay.shiftsList"/>
           </div>
         </div>

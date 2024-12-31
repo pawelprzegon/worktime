@@ -144,3 +144,8 @@ export const splitTime = (shiftTime) => {
     return {regular: 28800, overtime: shiftTime - 28800};
   }
 };
+
+export const updateScreenSize = (screenSize) => {
+  const width = window.innerWidth;
+  screenSize.setSize(width)
+}

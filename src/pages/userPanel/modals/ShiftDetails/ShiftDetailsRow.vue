@@ -1,18 +1,18 @@
 <script setup>
 
-import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
+import {formatTime, getLastCorrectionUpdate, getTime, updateScreenSize} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
-import {ref, defineEmits} from "vue";
+import {ref, defineEmits, onMounted} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
+import {useScreenSizeStore} from "@/stores/utilsStore.js";
 
 const dailyShifts = useDailyShiftsList();
 const alert = useAlertStore()
-
-const emit = defineEmits(['refreshCalendar', 'closeModal'])
+const screenSize = useScreenSizeStore()
 
 const props = defineProps({
   shiftId: {
@@ -38,56 +38,80 @@ const handleDeleteShift = async () => {
 const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
 const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
 
+onMounted(async () => {
+  updateScreenSize(screenSize);
+});
+
 </script>
 
 <template>
 
   <div
-      class="flex flex-col items-center m-3
-      border rounded-lg"
+      class="inline-grid items-center m-3
+      border rounded-lg
+      overflow-auto
+      "
       :class="isOpen ? 'border-silver bg-secondary' : 'border-third'"
   >
 
     <div
-        class="w-full flex flex-row justify-between"
+        class="grid grid-cols-[1fr_auto] items-center gap-4"
         :class="!isOpen ? 'hover:bg-secondary' : 'hover:bg-none'"
     >
 
       <DetailsDropdown
           @open="toggleDropdown"
       >
-        <div class="flex flex-row justify-around items-center">
+        <div class="
+        flex flex-row justify-around items-center
+        ">
 
-          <p class="text-2xl m-2 text-beb font-bold p-1">{{props.index}}</p>
+          <p
+              class="
+              text-2xl m-2 text-beb font-bold p-1
 
-          <ShiftDetailContainer
-            :label="'start'"
-            :time="getTime(start)"
-            :orient="'row'"
-          />
+              portrait-2xs:m-0 portrait-2xs:p-0
+              portrait-medium:m-1 portrait-medium:p-1
+              "
+          >{{props.index}}</p>
 
-          <ShiftDetailContainer
-            :label="'stop'"
-            :time="getTime(stop)"
-            :orient="'row'"
-          />
+          <div
+              class="
+              flex
 
-          <ShiftDetailContainer
-            :label="'shift time'"
-            :time="formatTime(shift.work)"
-            :orient="'row'"
-          />
+              portrait-2xs:text-xs portrait-2xs:flex-cols
+              portrait-medium:text-base portrait-medium:flex-row
+              "
+          >
+            <ShiftDetailContainer
+              :label="'start'"
+              :time="getTime(start)"
+              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+            />
+
+            <ShiftDetailContainer
+              :label="'stop'"
+              :time="getTime(stop)"
+              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+            />
+
+            <ShiftDetailContainer
+              :label="'shift time'"
+              :time="formatTime(shift.work)"
+              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+            />
+          </div>
 
         </div>
 
       </DetailsDropdown>
 
-      <div class="place-items-end my-auto">
-        <CustomIconButton
-          icon="delete.png"
-          @click="handleDeleteShift"
-        />
-      </div>
+
+      <CustomIconButton
+        icon="delete.png"
+        @click="handleDeleteShift"
+      />
+
 
 
     </div>

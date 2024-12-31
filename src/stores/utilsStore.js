@@ -83,15 +83,17 @@ export const useSelectedMonthStore = (id) =>
   })();
 
 export const useScreenSizeStore = defineStore('screenSizeStore', () => {
-  const isPortraitXsOr2Xs = ref(false)
+    const isPortraitXsOr2Xs = ref(false)
+    const isPortraitSmall = ref(false)
 
-  const setSize = (newSize) => {
+    const setSize = (newSize) => {
     isPortraitXsOr2Xs.value = newSize < 480;
+    isPortraitSmall.value = newSize < 768;
+    };
 
-  };
-
-  return {
+    return {
     isPortraitXsOr2Xs,
+    isPortraitSmall,
     setSize,
-  };
+    };
 });

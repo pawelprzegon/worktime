@@ -69,27 +69,40 @@ const saveTakenHours = async () => {
 
 <template>
 
-  <div class="grid grid-cols-[auto_150px]">
+  <div
+      class="
+        grid w-full gap-1 place-items-center m-1 p-1
 
-    <div class="grid grid-cols-[150px_auto] justify-items-center">
-      <div class="label-data-container">
-        <h3>overtimes pool:</h3>
-        <span class="overtime-color">{{hoursPool}}</span>
-      </div>
+        portrait-xs:grid-rows-3
+        portrait-small:grid-rows-none portrait-small:grid-cols-3
+        portrait-medium:grid-rows-none portrait-medium:grid-cols-3
+      ">
 
-      <div class="grid grid-cols-[50px_30px_50px] items-center justify-items-center">
-        <img src="../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
-        <span>{{ counter }}</span>
-        <img src="../../../../assets/img/increase.png" alt="increase" @click="increment"/>
-      </div>
+    <div class="inline-flex">
+      <h3 class="m-auto">overtimes pool:</h3>
+      <span class="text-overtime">{{hoursPool}}</span>
     </div>
 
-    <div class="place-items-end">
-        <CustomTextButton
-            label="save"
-            @click="saveTakenHours"
-        />
+    <div class="grid grid-cols-[50px_30px_50px] items-center justify-items-center">
+      <img
+          class="
+          filter-invert-30 hover:filter-invert-100 hover:cursor-pointer
+
+          "
+          src="../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
+      <span>{{ counter }}</span>
+      <img
+          class="
+          filter-invert-30 hover:filter-invert-100 hover:cursor-pointer
+          "
+          src="../../../../assets/img/increase.png" alt="increase" @click="increment"/>
     </div>
+
+
+    <CustomTextButton
+        label="save"
+        @click="saveTakenHours"
+    />
 
   </div>
 
@@ -97,62 +110,7 @@ const saveTakenHours = async () => {
 
 <style scoped>
 
-.label-data-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
 
-h3 {
-  margin: auto;
-}
-
-.counter-label p {
-  margin: 0 2px;
-  padding: 0;
-}
-
-.counter-label p:nth-child(2) {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-text-overtime)
-}
-
-.overtime-color {
-  color: var(--color-text-overtime)
-}
-
-.counter-engine {
-  display: grid;
-  grid-template-columns: repeat(3, 30px);
-  justify-items: center;
-  align-items: center;
-}
-
-.counter-engine p {
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 10px;
-}
-
-
-.counter-label-container{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 0 10px;
-}
-
-img {
-  filter: invert(40%)
-}
-
-img:hover {
-  filter: invert(100%);
-  cursor: pointer;
-}
 
 span {
   font-size: 18px;

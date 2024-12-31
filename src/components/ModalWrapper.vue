@@ -16,7 +16,7 @@ defineProps({
       bg-modal-back backdrop-blur
       "
        @click="closeModal">
-    <div class="place-items-center  rounded-lg text-center w-fit min-w-[500px] mt-36" @click.stop>
+    <div class="place-items-center rounded-lg text-center w-fit min-w-[500px] mt-12" @click.stop>
       <slot></slot>
     </div>
   </div>
