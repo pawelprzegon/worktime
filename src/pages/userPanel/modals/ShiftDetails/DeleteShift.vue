@@ -16,17 +16,19 @@ const props = defineProps({
 })
 
 const handleConfirmDelete = async (deleteStatus) => {
-
-  if (deleteStatus) {
+  if (!deleteStatus) {
     props.openHandler(false)
-    const response = await dailyShifts.removeShift(props.shiftId)
-    alert.show(response.status, response.message)
-    if (dailyShifts.selectedDay.shiftsList.length <= 0){
-      props.closeModal()
-    }
-    await monthStore.refresh()
+    return
   }
 
+  const response = await dailyShifts.removeShift(props.shiftId)
+  props.openHandler(false)
+  alert.show(response.status, response.message)
+  if (dailyShifts.selectedDay.shiftsList.length === 0) {
+    props.closeModal()
+  }
+
+  await monthStore.refresh()
 }
 
 </script>

@@ -47,7 +47,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
   const removeShift = async (shiftId) => {
     try {
       const response = await deleteShiftFetch(shiftId);
-      if (response) {
+      if (response.status === 'success') {
         selectedDay.value.shiftsList = selectedDay.value.shiftsList.filter(
           (shift) => shift.id !== shiftId
         );

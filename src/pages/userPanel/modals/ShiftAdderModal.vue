@@ -5,9 +5,11 @@
   import {setManualShift} from "@/composables/fetchers.js";
   import {useDailyShiftsList} from "@/stores/calendarStore.js";
   import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+  import {useAlertStore} from "@/stores/alertStore.js";
 
   const monthStore = useSelectedMonthStore('calendar')
   const dailyShifts = useDailyShiftsList();
+  const alert = useAlertStore()
 
   const isModalOpen = ref(true);
   const shiftTime = ref({
@@ -28,15 +30,20 @@
     isModalOpen.value = false;
   }
 
-  function submitShift() {
+  const submitShift = async () => {
     const shiftDt = {
       start: combineDateWithTime(dailyShifts.date, shiftTime.value.start),
       stop: combineDateWithTime(dailyShifts.date, shiftTime.value.stop),
     }
-    setManualShift(shiftDt, note.value)
-    monthStore.refresh()
-    closeModal();
+    const response = await setManualShift(shiftDt, note.value)
+
+    if (response.status === 'success') {
+      await monthStore.refresh()
+      closeModal();
+    }
+    alert.show(response.status, response.message)
   }
+
 </script>
 
 <template>

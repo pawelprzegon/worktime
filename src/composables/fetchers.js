@@ -223,7 +223,6 @@ export const deleteShiftFetch = async (shift_id) => {
         },
         body: body,
     }
-    console.log('delete', body)
     try {
         const response = await fetch(url + '/shift/delete', data)
 
