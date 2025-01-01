@@ -1,10 +1,9 @@
 <script setup>
 import '@/assets/calendarNavigation.css';
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import Spinner from "@/components/Spinner.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
-import {processMonthlyShifts } from "@/composables/monthlyShiftsAggregator.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation, updateScreenSize} from "@/composables/utils.js";
@@ -14,7 +13,6 @@ import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
-const authStore = useAuthStore()
 const monthStore = useSelectedMonthStore('calendar');
 const dailyShifts = useDailyShiftsList();
 const screenSize = useScreenSizeStore()
@@ -26,7 +24,7 @@ const modalKey = ref(0)
 
 const getDataHandler = () => {
   isLoading.value = true;
-  const result = processMonthlyShifts(authStore, monthStore);
+  const result = monthStore.processMonthlyShifts()
   isLoading.value = !result;
   return result;
 }
@@ -36,7 +34,8 @@ const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandle
 const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
-  dailyShifts.setDay(day)
+
+  dailyShifts.setDay(day);
 
   if (day?.list.length > 0) {
     isDailyShiftsOpen.value = true
@@ -53,13 +52,7 @@ const closeShiftAdder = () => {
   isShiftAdderOpen.value = false;
 }
 
-const refreshCalendar = () => {
-  modalKey.value = modalKey.value++;
-}
-
-
 onMounted(async () => {
-  monthStore.updateDaysInMonth();
   await getDataHandler();
   updateScreenSize(screenSize);
   window.addEventListener('resize', updateScreenSize);
@@ -125,7 +118,6 @@ onMounted(async () => {
     <ShiftsDetailsModal
         v-if="isDailyShiftsOpen"
         :key="modalKey"
-        :refreshCalendar="refreshCalendar"
         :closeModal="closeDailyShifts"
     />
 

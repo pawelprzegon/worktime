@@ -13,7 +13,7 @@ export const fetchUserShifts = async (userId, month) => {
   }
 };
 
-const groupShiftsByDate = (shifts, toils) => {
+export const groupShiftsByDate = (shifts, toils) => {
   const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
 
   return shifts.reduce((acc, shift) => {

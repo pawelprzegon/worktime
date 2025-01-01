@@ -106,7 +106,7 @@ const props = defineProps({
         </small>
 
         <small
-            v-if="props.day.list.length > 0 && props.day.toilTaken"
+            v-if="props.day.list.length > 0 && props.day.toilTaken.hours >  0"
             class="
             text-turquoise text-base
 

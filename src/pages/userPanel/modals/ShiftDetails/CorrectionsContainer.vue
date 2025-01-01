@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import {
   combineDateWithTime, getDateString,
   getLastCorrectionUpdate,
@@ -12,8 +12,11 @@ import CustomTextButton from "@/components/CustomTextButton.vue";
 import {shiftCorrection} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+
 
 const alert = useAlertStore()
+const monthStore = useSelectedMonthStore('calendar')
 const dailyShifts = useDailyShiftsList();
 const dt = getDateString(dailyShifts.date)
 
@@ -21,15 +24,19 @@ const props = defineProps({
   shift: Object,
 })
 
+const selectedDayShifts = ref(props.shift)
+
+console.log(selectedDayShifts.value)
+
 const shiftTime = ref({
-  start: props.shift.update.length > 0 ? getTimeString(getLastCorrectionUpdate(props.shift).start) : getTimeString(props.shift.start),
-  stop: props.shift.update.length > 0 ? getTimeString(getLastCorrectionUpdate(props.shift).stop) : getTimeString(props.shift.stop)
+  start: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).start) : getTimeString(selectedDayShifts.value.start),
+  stop: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).stop) : getTimeString(selectedDayShifts.value.stop)
 })
 
 const anyCorrection = ref(props.shift.update?.length > 0)
 
 const checkIsLast = (correction) => {
-  const filtered = props.shift.update.filter(c => c.corrected === correction.corrected);
+  const filtered = selectedDayShifts.value.update.filter(c => c.corrected === correction.corrected);
   const lastFiltered = filtered[filtered.length -1]
   return correction === lastFiltered
 };
@@ -39,10 +46,22 @@ const saveCorrection = async () => {
       start: combineDateWithTime(dt, shiftTime.value.start),
       stop: combineDateWithTime(dt, shiftTime.value.stop),
     }
-  const response = await shiftCorrection(props.shift.user_id, props.shift.id, shiftDt)
+  const response = await shiftCorrection(selectedDayShifts.value.user_id, selectedDayShifts.value.id, shiftDt)
 
-  alert.show(response.status, response.message)
+  if (response.status === 'success') {
+    alert.show(response.status, response.message)
+    await monthStore.refresh()
+    dailyShifts.updateDay()
+    selectedDayShifts.value = dailyShifts.getShift(selectedDayShifts.value.id)
+  } else {
+    alert.show(response.status, response.message)
+  }
 }
+
+watch(() => props.shift, (newShift, oldShift) => {
+  console.log(selectedDayShifts.value)
+
+}, { deep: true });
 
 </script>
 
@@ -68,18 +87,18 @@ const saveCorrection = async () => {
           <td>default</td>
           <td>
             <ShiftDetailContainer
-              :time="getTime(props.shift.start)"
+              :time="getTime(selectedDayShifts.start)"
               :text-color="anyCorrection ? 'red-500' : null"
             />
           </td>
           <td>
             <ShiftDetailContainer
-              :time="getTime(props.shift.stop)"
+              :time="getTime(selectedDayShifts.stop)"
               :text-color="anyCorrection ? 'red-500' : null"
             />
           </td>
         </tr>
-        <tr v-for="(correction, index) in props.shift.update" :key="index">
+        <tr v-for="(correction, index) in selectedDayShifts.update" :key="index">
 
           <td class="correction-index">
             {{`${index + 1} correction`}}

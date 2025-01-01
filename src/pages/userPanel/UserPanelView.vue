@@ -85,47 +85,4 @@ const refreshUserPanel = () => {
 
 <style scoped>
 
-.user-section {
-  display: grid;
-  grid-template-columns: 75% 25%;
-  grid-template-areas: "calendar user-details";
-}
-
-
-.dash-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 5px;
-}
-
-
-
-@media (max-width: 1300px) {
-  .user-section {
-    grid-template-columns: 100% 1fr;
-    grid-template-areas: "user-details" "calendar";
-    justify-items: center;
-  }
-
-  .dash-details {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-@media (max-width: 730px) {
-  .user-section {
-    grid-template-columns: 100% 1fr;
-    grid-template-areas: "user-details" "calendar";
-    justify-items: center;
-  }
-
-  .dash-details {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
 </style>

@@ -1,8 +1,13 @@
 import {ref} from "vue";
 import {defineStore} from "pinia";
 import {deleteShiftFetch} from "@/composables/fetchers.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+
+
 
 export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
+
+  const monthStore = useSelectedMonthStore('calendar');
   const date = ref(null)
 
   const selectedDay = ref({
@@ -12,7 +17,6 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
     toil: null
   })
 
-
   const setDay = (newDay) => {
     date.value = newDay.date
     selectedDay.value = {
@@ -21,6 +25,19 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
       overtime: newDay.overtime,
       toil: newDay.toilTaken,
     };
+  };
+
+  const updateDay = () => {
+    const day = monthStore.selected.days.find(d => d.date.getTime() === date.value?.getTime());
+
+    if (day) {
+      selectedDay.value = {
+        shiftsList: day.list,
+        regular: day.regular,
+        overtime: day.overtime,
+        toil: day.toilTaken,
+      };
+    }
   };
 
   const getShift = (shiftId) => {
@@ -46,6 +63,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
   return {
     date,
     selectedDay,
+    updateDay,
     setDay,
     getShift,
     removeShift

@@ -4,7 +4,9 @@ import CustomTextButton from "@/components/CustomTextButton.vue";
 import {ref} from "vue";
 import {saveShiftNote} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
+const monthStore = useSelectedMonthStore('calendar')
 const alert = useAlertStore()
 
 const props = defineProps({
@@ -22,9 +24,14 @@ const toggleShowNoteEditor = () => {
 
 const addNote = async () => {
   const response = await saveShiftNote(props.shift.user_id, props.shift.id, noteContent.value)
-  if (response) {
+
+  if (response.status === 'success') {
+    props.shift.note = noteContent
     alert.show(response.status, response.message)
     noteEdit.value = false;
+    await monthStore.refresh()
+  } else {
+    alert.show(response.status, response.message)
   }
 };
 

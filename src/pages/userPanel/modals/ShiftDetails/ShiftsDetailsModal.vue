@@ -13,7 +13,6 @@ const isModalOpen = ref(true);
 
 const props = defineProps({
   closeModal: Function,
-  refreshCalendar: Function
 })
 
 const closeModal = () => {
@@ -26,12 +25,13 @@ const dt = getDateString(dailyShifts.date)
 </script>
 
 <template>
-  <ModalWrapper v-if="isModalOpen" :close-modal="closeModal">
+  <ModalWrapper v-show="isModalOpen" :close-modal="closeModal">
 
       <div
           class="
           bg-soft shadow-2xl text-white box-border rounded-md p-3
-          w-[75vw] max-w-[600px] min-w-[250px] max-h-[600px] overflow-auto">
+          w-[75vw] max-w-[600px] min-w-[250px] max-h-[80vh] overflow-auto
+          ">
 
         <div class="shifts-label">
 
