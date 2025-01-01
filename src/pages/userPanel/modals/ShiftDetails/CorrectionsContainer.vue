@@ -94,7 +94,7 @@ const saveCorrection = async () => {
         <tr v-for="(correction, index) in selectedDayShifts.update" :key="index">
 
           <td class="correction-index">
-            {{`${index + 1} correction`}}
+            {{`${index + 1}`}}
           </td>
           <td>
             <ShiftDetailContainer

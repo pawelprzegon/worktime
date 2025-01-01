@@ -59,7 +59,7 @@ const props = defineProps({
               portrait-2xs:text-sm
               portrait-medium:text-lg
               "
-        >CORRECT</h2>
+        >CORRECTION</h2>
         <CorrectionsContainer :shift="props.shift"/>
       </div>
 

@@ -74,13 +74,14 @@ const dt = getDateString(dailyShifts.date)
 
 <!--         Shifts List-->
         <p class="text-left text-xl">Shifts:</p>
+
         <ShiftDetailsRow
             v-for="(shift, index) in dailyShifts.selectedDay.shiftsList"
             :key=index
-            :shift-id="shift.id"
+            :shift="shift"
             :index="index+1"
             :closeModal="closeModal"
-        ></ShiftDetailsRow>
+        />
 
       </div>
   </ModalWrapper>
