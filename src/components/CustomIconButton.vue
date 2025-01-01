@@ -18,7 +18,7 @@ const props = defineProps({
 <template>
   <img
       class="
-      p-1 m-auto
+      p-1 m-1
       grayscale
       hover:grayscale-0 hover:cursor-pointer
 

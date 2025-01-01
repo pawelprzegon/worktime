@@ -26,8 +26,6 @@ const props = defineProps({
 
 const selectedDayShifts = ref(props.shift)
 
-console.log(selectedDayShifts.value)
-
 const shiftTime = ref({
   start: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).start) : getTimeString(selectedDayShifts.value.start),
   stop: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).stop) : getTimeString(selectedDayShifts.value.stop)
@@ -57,11 +55,6 @@ const saveCorrection = async () => {
     alert.show(response.status, response.message)
   }
 }
-
-watch(() => props.shift, (newShift, oldShift) => {
-  console.log(selectedDayShifts.value)
-
-}, { deep: true });
 
 </script>
 

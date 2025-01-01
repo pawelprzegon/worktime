@@ -4,13 +4,14 @@ import {formatTime, getLastCorrectionUpdate, getTime, updateScreenSize} from "@/
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
-import {ref, defineEmits, onMounted} from "vue";
+import {ref, onMounted} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import {useScreenSizeStore} from "@/stores/utilsStore.js";
+import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 
 const dailyShifts = useDailyShiftsList();
+const monthStore = useSelectedMonthStore('calendar')
 const alert = useAlertStore()
 const screenSize = useScreenSizeStore()
 
@@ -19,10 +20,11 @@ const props = defineProps({
     type: String,
     required: true
   },
-  index: Number
+  index: Number,
+  closeModal: Function
 })
 
-const shift = dailyShifts.getShift(props.shiftId)
+const shift = ref(dailyShifts.getShift(props.shiftId))
 
 
 const isOpen = ref(false)
@@ -31,12 +33,17 @@ const toggleDropdown = (buttonStatus) => {
 
 }
 const handleDeleteShift = async () => {
-  const response = await dailyShifts.removeShift(shift.id)
+  console.log(props.shiftId)
+  const response = await dailyShifts.removeShift(props.shiftId)
   alert.show(response.status, response.message)
+  await monthStore.refresh()
+  if (dailyShifts.selectedDay.shiftsList.length <= 0){
+    props.closeModal()
+  }
 }
 
-const start = shift.update.length > 0 ? getLastCorrectionUpdate(shift).start : shift.start
-const stop = shift.update.length > 0 ? getLastCorrectionUpdate(shift).stop : shift.stop
+const start = shift.value.update.length > 0 ? getLastCorrectionUpdate(shift.value).start : shift.value.start
+const stop = shift.value.update.length > 0 ? getLastCorrectionUpdate(shift.value).stop : shift.value.stop
 
 onMounted(async () => {
   updateScreenSize(screenSize);
@@ -50,25 +57,24 @@ onMounted(async () => {
       class="inline-grid items-center m-3
       border rounded-lg
       overflow-auto
+      w-[95%]
       "
       :class="isOpen ? 'border-silver bg-secondary' : 'border-third'"
   >
 
     <div
-        class="grid grid-cols-[1fr_auto] items-center gap-4"
+        class="grid grid-cols-[1fr_auto] items-center gap-4 w-full"
         :class="!isOpen ? 'hover:bg-secondary' : 'hover:bg-none'"
     >
 
       <DetailsDropdown
           @open="toggleDropdown"
       >
-        <div class="
-        flex flex-row justify-around items-center
-        ">
+        <div class="flex flex-grow justify-between items-center w-full">
 
           <p
               class="
-              text-2xl m-2 text-beb font-bold p-1
+              text-2xl m-2 text-beb font-bold p-1 w-[30px]
 
               portrait-2xs:m-0 portrait-2xs:p-0
               portrait-medium:m-1 portrait-medium:p-1
@@ -102,17 +108,14 @@ onMounted(async () => {
             />
           </div>
 
+          <CustomIconButton
+            icon="delete.png"
+            @click="handleDeleteShift"
+          />
+
         </div>
 
       </DetailsDropdown>
-
-
-      <CustomIconButton
-        icon="delete.png"
-        @click="handleDeleteShift"
-      />
-
-
 
     </div>
 

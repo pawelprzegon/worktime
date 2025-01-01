@@ -79,6 +79,7 @@ const dt = getDateString(dailyShifts.date)
             :key=index
             :shift-id="shift.id"
             :index="index+1"
+            :closeModal="closeModal"
         ></ShiftDetailsRow>
 
       </div>

@@ -4,7 +4,9 @@
   import {combineDateWithTime, getDateString} from "@/composables/utils.js";
   import {setManualShift} from "@/composables/fetchers.js";
   import {useDailyShiftsList} from "@/stores/calendarStore.js";
+  import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
+  const monthStore = useSelectedMonthStore('calendar')
   const dailyShifts = useDailyShiftsList();
 
   const isModalOpen = ref(true);
@@ -31,7 +33,8 @@
       start: combineDateWithTime(dailyShifts.date, shiftTime.value.start),
       stop: combineDateWithTime(dailyShifts.date, shiftTime.value.stop),
     }
-    const response = setManualShift(shiftDt, note.value)
+    setManualShift(shiftDt, note.value)
+    monthStore.refresh()
     closeModal();
   }
 </script>
