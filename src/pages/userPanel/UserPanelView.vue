@@ -69,6 +69,14 @@ const refreshUserPanel = () => {
           :background="'#282828'"
           :color="'#CCCCCCFF'"
         />
+
+        <DetailsContainer
+          :label="'prev. month overtime'"
+          :data="formatTime(monthStore.selected.lastMonthOvertime).toString()"
+          :background="'#282828'"
+          color="var(--color-text-overtime)"
+        />
+
         <DetailsContainer
           :label="'overtime'"
           :data="formatTime(monthStore.selected.monthlyOvertime).toString()"

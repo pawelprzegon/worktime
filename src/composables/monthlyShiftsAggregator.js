@@ -3,9 +3,12 @@ import {format} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
 
 
-export const fetchOvHistory = async (userId, year, month) => {
+export const fetchOvHistory = async (userId, prevMonth) => {
   try {
-    return await getOVHistory(userId, year, month);
+    prevMonth.setMonth(prevMonth.getMonth() - 1);
+    const monthValue = prevMonth.getMonth() + 1;
+    const yearValue = prevMonth.getFullYear();
+    return await getOVHistory(userId, yearValue, monthValue);
 
   } catch (error) {
     console.error("Error fetching Overtime History:", error);

@@ -50,6 +50,7 @@ export const useSelectedMonthStore = (id) =>
             toils: 0,
             monthlyRegularTime: 0,
             monthlyOvertime: 0,
+            lastMonthOvertime: 0,
             days: []
         })
 
@@ -58,21 +59,23 @@ export const useSelectedMonthStore = (id) =>
         }
 
         const updateDaysInMonth = () => {
-          selected.value.days = eachDayOfInterval({
+            selected.value.days = eachDayOfInterval({
             start: startOfMonth(selected.value.month),
             end: endOfMonth(selected.value.month),
-          }).map(date => ({
-            date: date,
-            list: [],
-            regular: 0,
-            overtime: 0,
-            toilTaken: 0,
-          }));
+            }).map(date => ({
+                date: date,
+                list: [],
+                regular: 0,
+                overtime: 0,
+                toilTaken: 0,
+                lastMonthOvertime: 0,
+            }));
         };
 
         const clear = () => {
             selected.value.monthlyRegularTime = 0;
             selected.value.monthlyOvertime = 0;
+            selected.value.lastMonthOvertime = 0;
             selected.value.toils = 0;
             selected.value.days = [];
         }
@@ -117,7 +120,7 @@ export const useSelectedMonthStore = (id) =>
           }, {});
         };
 
-        const calculateWorkAndOvertime = () => {
+        const calculateWorkAndOvertime = (ovHistory) => {
 
           let calculatedMonthlyRegularTime = 0;
           let calculatedMonthlyOvertime = 0;
@@ -145,9 +148,12 @@ export const useSelectedMonthStore = (id) =>
             groupedShifts[date].overtime = _splitOvertime?.overtime || 0;
 
           });
+            console.log(calculatedMonthlyOvertime)
+            console.log(ovHistory.overtime)
+          selected.value.monthlyRegularTime = calculatedMonthlyRegularTime;
+          selected.value.monthlyOvertime = calculatedMonthlyOvertime;
+          selected.value.lastMonthOvertime = ovHistory.overtime || 0;
 
-          selected.monthlyRegularTime = calculatedMonthlyRegularTime;
-          selected.monthlyOvertime = calculatedMonthlyOvertime;
         };
 
         const updateMonthDays = () => {
@@ -168,13 +174,13 @@ export const useSelectedMonthStore = (id) =>
         const processMonthlyShifts = async () => {
             clear();
             updateDaysInMonth()
+
+            let prevMonth = new Date(selected.value.month);
+            const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
             const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
-            const monthValue = selected.value.month.getMonth() + 11
-            const yearValue = selected.value.month.getFullYear() - 1
-            const ovHistory = await fetchOvHistory(selectedUser.user.id, yearValue, monthValue)
             console.log(ovHistory)
             groupShiftsByDate(shifts, toils);
-            calculateWorkAndOvertime();
+            calculateWorkAndOvertime(ovHistory);
             updateDaysInMonth()
             updateMonthDays();
 
