@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 
 <template>
 
-  <div class="grid [grid-template-columns:repeat(auto-fit,minmax(100px,1fr))] gap-4">
+  <div class="grid [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))] gap-4">
 
     <UserCard
         v-for="user in users"
