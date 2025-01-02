@@ -381,3 +381,22 @@ export const setManualShift = async (shiftTime, note) => {
 
     return await response.json()
 }
+
+export const getOVHistory = async (userId, year, month) => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+    }
+    let url_string = `/ov-history/?user_id=${userId}&year=${year}&month=${month}`
+    const response = await fetch(url + url_string, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
+}

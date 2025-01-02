@@ -3,7 +3,7 @@ import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
 import {deleteShiftFetch} from "@/composables/fetchers.js";
-import {fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
+import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
 
@@ -169,6 +169,10 @@ export const useSelectedMonthStore = (id) =>
             clear();
             updateDaysInMonth()
             const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
+            const monthValue = selected.value.month.getMonth() + 11
+            const yearValue = selected.value.month.getFullYear() - 1
+            const ovHistory = await fetchOvHistory(selectedUser.user.id, yearValue, monthValue)
+            console.log(ovHistory)
             groupShiftsByDate(shifts, toils);
             calculateWorkAndOvertime();
             updateDaysInMonth()

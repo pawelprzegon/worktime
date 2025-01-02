@@ -1,6 +1,17 @@
-import {getToil, getUserShifts} from "@/composables/fetchers.js";
+import {getOVHistory, getToil, getUserShifts} from "@/composables/fetchers.js";
 import {format} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
+
+
+export const fetchOvHistory = async (userId, year, month) => {
+  try {
+    return await getOVHistory(userId, year, month);
+
+  } catch (error) {
+    console.error("Error fetching Overtime History:", error);
+    return null
+  }
+}
 
 export const fetchUserShifts = async (userId, month) => {
   try {
