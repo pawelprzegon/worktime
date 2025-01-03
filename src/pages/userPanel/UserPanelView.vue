@@ -67,22 +67,23 @@ const refreshUserPanel = () => {
           :label="'regular'"
           :data="formatTime(monthStore.selected.monthlyRegularTime).toString()"
           :background="'#282828'"
-          :color="'#CCCCCCFF'"
-        />
-
-        <DetailsContainer
-          :label="'prev. month overtime'"
-          :data="formatTime(monthStore.selected.lastMonthOvertime).toString()"
-          :background="'#282828'"
-          color="var(--color-text-overtime)"
+          color="platinum"
         />
 
         <DetailsContainer
           :label="'overtime'"
           :data="formatTime(monthStore.selected.monthlyOvertime).toString()"
           :background="'#282828'"
-          color="var(--color-text-overtime)"
+          color="overtime"
         />
+
+        <DetailsContainer
+          :label="'toils'"
+          :data="formatTime(monthStore.selected.toils).toString()"
+          :background="'#282828'"
+          color="turquoise"
+        />
+
       </ShadowBox>
 
     </div>

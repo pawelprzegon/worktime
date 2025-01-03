@@ -267,7 +267,7 @@ export const setToil = async (userId, toilId, counter, date) => {
     const body = JSON.stringify({
         'user_id': userId,
         'toil_id': toilId,
-        'hours': counter,
+        'duration_seconds': counter,
         'date': date,
     });
 

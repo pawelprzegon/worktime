@@ -50,7 +50,6 @@ export const useSelectedMonthStore = (id) =>
             toils: 0,
             monthlyRegularTime: 0,
             monthlyOvertime: 0,
-            lastMonthOvertime: 0,
             days: []
         })
 
@@ -67,98 +66,86 @@ export const useSelectedMonthStore = (id) =>
                 list: [],
                 regular: 0,
                 overtime: 0,
-                toilTaken: 0,
-                lastMonthOvertime: 0,
+                toil: 0,
             }));
         };
 
         const clear = () => {
             selected.value.monthlyRegularTime = 0;
             selected.value.monthlyOvertime = 0;
-            selected.value.lastMonthOvertime = 0;
             selected.value.toils = 0;
             selected.value.days = [];
         }
 
-        const splitOvertime = (shiftTime) => {
-            const splitTimeObj = splitTime(shiftTime)
-            selected.value.monthlyRegularTime += splitTimeObj.regular;
-            selected.value.monthlyOvertime += splitTimeObj.overtime;
-            return splitTimeObj
-        };
-
         const groupShiftsByDate = (shifts, toils) => {
 
-          const getDate = (dateTimeStr) => dateTimeStr.split('T')[0];
+          groupedShifts = shifts.reduce((acc, shift) => {
 
-          groupedShifts =  shifts.reduce((acc, shift) => {
-            const date = getDate(shift.start);
+            const date = shift.start.split('T')[0]
+
             if (!acc[date]) {
               acc[date] = {
-                shifts: {
-                  date: null,
-                  list: [],
-                },
-                totalShiftsTime: 0,
+                shifts: { date, list: [] },
                 regular: 0,
                 overtime: 0,
-                toilTaken: 0
+                toil: 0,
               };
             }
+
             acc[date].shifts.list.push(shift);
-            acc[date].totalShiftsTime += shift.work;
 
-            // Oblicz regularne i nadgodziny
             const splitTimeObj = splitTime(shift.work);
-            acc[date].regular += splitTimeObj.regular || 0;
-            acc[date].overtime += splitTimeObj.overtime || 0;
 
-            // Uwzględnij wykorzystany TOIL
-            const matchedToil = toils.find(toil => getDate(toil.date) === date) || { hours: 0 };
-            acc[date].toilTaken = matchedToil ? matchedToil : 0;
+            const matchedToil = toils.find((toil) => toil.date.split('T')[0] === date) || { duration_seconds: 0 };
+
+            acc[date].toil = matchedToil || 0;
+
+            acc[date].regular += splitTimeObj?.regular || 0;
+            acc[date].overtime += splitTimeObj?.overtime || 0;
+
+            selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
+            selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
+
             return acc;
           }, {});
         };
 
-        const calculateWorkAndOvertime = (ovHistory) => {
+        const addPrevOvertime = async () => {
+            let prevMonth = new Date(selected.value.month);
+            const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
+             selected.value.monthlyOvertime += ovHistory[0].overtime_seconds || 0;
+        }
 
-          let calculatedMonthlyRegularTime = 0;
-          let calculatedMonthlyOvertime = 0;
+        const reduceToil = (toils) => {
 
-          Object.keys(groupedShifts).forEach(date => {
-            const totalShiftsTime = groupedShifts[date].totalShiftsTime;
-            const _splitOvertime = splitOvertime(totalShiftsTime);
+            const currentYearMonth = selected.value.month.toISOString().slice(0, 7);
 
-            // get regular and overtime for each shift
-            groupedShifts[date].shifts.list.forEach(shift => {
-             const shiftSplitOvertime = splitTime(shift.work);
-              shift.regular = shiftSplitOvertime?.regular || 0;
-              shift.overtime = shiftSplitOvertime?.overtime || 0;
-            })
+            const matchedToil = toils.find((toil) => {
+                const toilYearMonth = typeof toil.date === 'string' ?
+                                      toil.date.slice(0, 7) :
+                                      new Date(toil.date).toISOString().slice(0, 7);
+                return toilYearMonth === currentYearMonth;
+            }) || { duration_seconds: 0 };
 
-            calculatedMonthlyRegularTime += _splitOvertime?.regular || 0;
-            calculatedMonthlyOvertime += _splitOvertime?.overtime || 0;
 
-            if (groupedShifts[date]?.toilTaken.hours) {
-              const ovTaken = (groupedShifts[date].toilTaken.hours * 3600 || 0);
-              calculatedMonthlyOvertime -= ovTaken;
-            }
-
-            groupedShifts[date].regular = _splitOvertime?.regular || 0;
-            groupedShifts[date].overtime = _splitOvertime?.overtime || 0;
-
-          });
-            console.log(calculatedMonthlyOvertime)
-            console.log(ovHistory.overtime)
-          selected.value.monthlyRegularTime = calculatedMonthlyRegularTime;
-          selected.value.monthlyOvertime = calculatedMonthlyOvertime;
-          selected.value.lastMonthOvertime = ovHistory.overtime || 0;
-
+            selected.value.monthlyOvertime -= matchedToil?.duration_seconds || 0;
+            selected.value.toils += matchedToil?.duration_seconds || 0;
         };
 
-        const updateMonthDays = () => {
-          selected.value.days = selected.value.days.map(day => {
-            const formattedDate = format(day.date, 'yyyy-MM-dd');
+        const processMonthlyShifts = async () => {
+          clear();
+          updateDaysInMonth();
+
+          const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
+
+          groupShiftsByDate(shifts, toils);
+
+          await addPrevOvertime()
+
+          reduceToil(toils)
+
+          selected.value.days = selected.value.days.map((day) => {
+            const formattedDate = format(day.date, "yyyy-MM-dd");
             const shiftData = groupedShifts[formattedDate] || {};
 
             return {
@@ -166,25 +153,11 @@ export const useSelectedMonthStore = (id) =>
               list: shiftData.shifts?.list || [],
               regular: shiftData.regular || 0,
               overtime: shiftData.overtime || 0,
-              toilTaken: shiftData.toilTaken || 0,
+              toil: shiftData.toil || 0,
             };
           });
-        };
 
-        const processMonthlyShifts = async () => {
-            clear();
-            updateDaysInMonth()
-
-            let prevMonth = new Date(selected.value.month);
-            const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
-            const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
-            console.log(ovHistory)
-            groupShiftsByDate(shifts, toils);
-            calculateWorkAndOvertime(ovHistory);
-            updateDaysInMonth()
-            updateMonthDays();
-
-            return true;
+          return true;
         };
 
         return {

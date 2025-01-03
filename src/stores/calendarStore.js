@@ -23,7 +23,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
       shiftsList: newDay.list,
       regular: newDay.regular,
       overtime: newDay.overtime,
-      toil: newDay.toilTaken,
+      toil: newDay.toil,
     };
   };
 
@@ -35,7 +35,7 @@ export const useDailyShiftsList = defineStore('dailyShiftsList', () => {
         shiftsList: day.list,
         regular: day.regular,
         overtime: day.overtime,
-        toil: day.toilTaken,
+        toil: day.toil,
       };
     }
   };

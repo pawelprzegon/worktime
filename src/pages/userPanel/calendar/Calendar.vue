@@ -2,7 +2,6 @@
 import '@/assets/calendarNavigation.css';
 import {ref, onMounted, watch} from 'vue';
 import Spinner from "@/components/Spinner.vue";
-import {useAuthStore} from "@/stores/authStore.js";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";

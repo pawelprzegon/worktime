@@ -22,8 +22,8 @@ export default {
         'mute': '#282828',
         'soft': '#222222',
         'beb': '#3498db',
-        'turquoise': '#4CE0D2',
-        'overtime': '#B97B28FF',
+        'overtime': '#b97b28',
+        'turquoise': '#00c9ae',
 
         'primary': '#222222',
         'secondary': '#2e2e31',

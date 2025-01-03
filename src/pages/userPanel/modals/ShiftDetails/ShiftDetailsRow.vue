@@ -6,11 +6,9 @@ import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdo
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
 import {ref, onMounted} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useScreenSizeStore} from "@/stores/utilsStore.js";
 import DeleteShift from "@/pages/userPanel/modals/ShiftDetails/DeleteShift.vue";
 
-const dailyShifts = useDailyShiftsList();
 const screenSize = useScreenSizeStore()
 
 const props = defineProps({
@@ -23,7 +21,6 @@ const props = defineProps({
 })
 
 const isDeleteOpen = ref(false)
-
 const isDropdownOpen = ref(false)
 
 const toggleDropdown = (buttonStatus) => {

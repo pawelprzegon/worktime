@@ -138,11 +138,10 @@ export const combineDateWithTime = (date, timeString) => {
 }
 
 export const splitTime = (shiftTime) => {
-  if (shiftTime <= 28800) {
-    return {regular: shiftTime, overtime: 0};
-  } else {
-    return {regular: 28800, overtime: shiftTime - 28800};
-  }
+  const basic_work_time = 28800
+  const regular_seconds = Math.min(shiftTime, basic_work_time)
+  const overtimes_seconds = Math.max(shiftTime - basic_work_time, 0)
+  return {regular: regular_seconds, overtime: overtimes_seconds};
 };
 
 export const updateScreenSize = (screenSize) => {

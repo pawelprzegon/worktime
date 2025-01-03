@@ -77,8 +77,8 @@ const calculateWorkAndOvertime = (groupedShifts, monthStore) => {
     calculatedMonthlyRegularTime += splitOvertime?.regular || 0;
     calculatedMonthlyOvertime += splitOvertime?.overtime || 0;
 
-    if (groupedShifts[date].toilTaken.hours) {
-      const ovTaken = (groupedShifts[date].toilTaken.hours * 3600 || 0);
+    if (groupedShifts[date].toilTaken.duration_seconds) {
+      const ovTaken = (groupedShifts[date].toilTaken.duration_seconds || 0);
       calculatedMonthlyOvertime -= ovTaken;
     }
 

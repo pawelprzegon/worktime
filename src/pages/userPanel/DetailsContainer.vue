@@ -28,7 +28,8 @@ const props = defineProps({
     <label>{{ props.label }}:</label>
     <span v-if="props.data !== ''"
           class="inline-block break-words"
-          :style="{ color: props.color }">
+          :class="`text-${props.color}`"
+    >
       {{ props.data }}
     </span>
     <CustomTextButton

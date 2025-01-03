@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue'
-import {formatTime, getDateString, getHoursAsNumber} from "@/composables/utils.js";
+import { getDateString, getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setToil} from "@/composables/fetchers.js";
@@ -12,29 +12,24 @@ import {useAuthStore} from "@/stores/authStore.js";
 const alert = useAlertStore()
 
 const dailyShifts = useDailyShiftsList()
-const monthTime = useSelectedMonthStore('calendar');
+const monthStore = useSelectedMonthStore('calendar');
 const authStore = useAuthStore()
 
 const props = defineProps({
   shifts: Array,
 })
 const calculateMaxToTake = () => {
-  let max = 0;
-  props.shifts.forEach(shift => {
-    max += shift.overtime > 0 ? 0 : Math.floor((28800 - shift.regular) / 3600)
-  })
-  return max
+  return  dailyShifts.selectedDay.overtime > 0 ? 0 : Math.floor((28800 - dailyShifts.selectedDay.regular) / 3600 + 1);
 }
 
 const maxToTake = ref(calculateMaxToTake())
-const toilTaken = ref({
+const toil = ref({
   id: dailyShifts.selectedDay.toil?.id || null,
-  hours: dailyShifts.selectedDay.toil?.hours || 0
+  duration_seconds: dailyShifts.selectedDay.toil?.duration_seconds || 0
 })
-const hoursPool = ref(getHoursAsNumber(monthTime.selected.monthlyOvertime))
-const counter = ref(toilTaken.value.hours)
 
-
+const hoursPool = ref(getHoursAsNumber(monthStore.selected.monthlyOvertime))
+const counter = ref(toil.value.duration_seconds / 3600)
 
 
 const increment = () => {
@@ -54,14 +49,19 @@ const decrement = () => {
 
 const saveTakenHours = async () => {
 
+  const recalculatedCounterIntoSeconds = counter.value * 3600
+
   if (counter.value > maxToTake.value) {
     alert.show("warning", 'You picked higher amount of hours')
     return
   }
 
-  const response = await setToil(authStore.user.id, toilTaken.value.id, counter.value, getDateString(dailyShifts.date))
+  const response = await setToil(authStore.user.id, toil.value.id, recalculatedCounterIntoSeconds, getDateString(dailyShifts.date))
   if (response) {
     alert.show(response.status, response.message)
+    monthStore.refresh()
+
+    // TODO dodać odświeżanie komponentu
   }
 }
 
@@ -90,7 +90,7 @@ const saveTakenHours = async () => {
 
           "
           src="../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
-      <span>{{ counter }}</span>
+      <span :class="counter > 0 ? 'text-turquoise' : 'text-platinum'">{{ counter }}</span>
       <img
           class="
           filter-invert-30 hover:filter-invert-100 hover:cursor-pointer

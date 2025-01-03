@@ -106,7 +106,7 @@ const props = defineProps({
         </small>
 
         <small
-            v-if="props.day.list.length > 0 && props.day.toilTaken.hours >  0"
+            v-if="props.day.list.length > 0 && props.day.toil.duration_seconds >  0"
             class="
             text-turquoise text-base
 
@@ -120,7 +120,7 @@ const props = defineProps({
             portrait-xl:text-lg
             "
         >
-          -{{ formatTime(props.day.toilTaken.hours * 3600) }}
+          -{{ formatTime(props.day.toil.duration_seconds) }}
         </small>
 
       </div>

@@ -7,7 +7,9 @@ import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetails/ShiftDetailsR
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
+const monthStore = useSelectedMonthStore('calendar');
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
 
@@ -21,6 +23,10 @@ const closeModal = () => {
 }
 
 const dt = getDateString(dailyShifts.date)
+
+const isToilActive = () => {
+  return dailyShifts.selectedDay.regular + dailyShifts.selectedDay.overtime < 28800;
+}
 
 </script>
 
@@ -62,12 +68,15 @@ const dt = getDateString(dailyShifts.date)
 
           <ShiftDetailContainer
             :label="'TOIL taken'"
-            :time="formatTime(dailyShifts.selectedDay.toil?.hours * 3600 || 0)"
+            :time="formatTime(dailyShifts.selectedDay.toil?.duration_seconds || 0)"
             :orient="'row'"
+            :text-color="dailyShifts.selectedDay.toil?.duration_seconds ? 'turquoise' : 'stone-700'"
           />
 
           <!-- Sekcja nadgodzin -->
-          <div class="rounded-md m-3 border border-third">
+          <div
+              v-show="isToilActive()"
+              class="rounded-md m-3 border border-third">
             <OvertimeContainer :shifts="dailyShifts.selectedDay.shiftsList"/>
           </div>
         </div>
