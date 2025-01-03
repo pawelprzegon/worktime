@@ -18,7 +18,6 @@ const tokenValid = ref({
 });
 
 const route = useRoute();
-const router = useRouter();
 
 const checkTokenValidation = async () => {
   tokenValid.value.token = route.query.token;
@@ -41,7 +40,6 @@ const checkTokenValidation = async () => {
     tokenValid.value.message = error.message || 'Token Validation Error';
   } finally {
     loading.value = false
-    console.log('test', loading.value)
   }
 };
 
@@ -54,8 +52,18 @@ onMounted(async () => {
 });
 
 const handleResetPassword = async () => {
-  const response = await resetPassword(tokenValid.value.token, password.value)
-  alert.show(response.status, response.message)
+  loading.value = true;
+  try {
+    const response = await resetPassword(tokenValid.value.token, password.value);
+    alert.show(response.status, response.message);
+    password.value = ''
+    confirm.value = ''
+  } catch(error) {
+    alert.show("error", error.message);
+  } finally {
+    loading.value = false;
+  }
+
 };
 </script>
 

@@ -3,6 +3,7 @@ import {ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {loginFetch} from '@/composables/fetchers.js'
 import { useAuthStore } from '@/stores/authStore.js';
+import CustomTextButton from "@/components/CustomTextButton.vue";
 
 const authStore = useAuthStore();
 
@@ -32,6 +33,10 @@ const handleLogin = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const redirectGenerateChangePasswordURL = () => {
+  router.push('/request-password-reset')
 }
 
 </script>
@@ -71,6 +76,12 @@ const handleLogin = async () => {
           outline-none"
         />
       </div>
+
+      <small
+          class="text-right hover:cursor-pointer hover:text-platinum"
+          @click="redirectGenerateChangePasswordURL"
+      >Forgot Password?</small>
+
       <button
         type="submit"
         :disabled="loading"

@@ -1,61 +1,30 @@
 <script setup>
-import {ref, onMounted, computed} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import {resetPassword, validateResetPasswordURL} from '@/composables/fetchers.js';
+import {ref} from 'vue';
+import { useRoute } from 'vue-router';
+import {resetPasswordURL} from '@/composables/fetchers.js';
 import Spinner from "@/components/Spinner.vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import Alert from "@/components/Alert.vue";
 
 const alert = useAlertStore()
-const password = ref('');
-const confirm = ref('');
-const loading = ref(true);
+const email = ref('')
+const loading = ref(false);
 
-const tokenValid = ref({
-  token: null,
-  status: false,
-  message: 'Token Validation...',
-});
-
-const route = useRoute();
-const router = useRouter();
-
-const checkTokenValidation = async () => {
-  tokenValid.value.token = route.query.token;
-
-  if (!tokenValid.value.token) {
-    tokenValid.value.message = 'Token missing.';
-    return;
-  }
-
-  try {
-    const response = await validateResetPasswordURL(tokenValid.value.token);
-
-    if (response.status === 'success') {
-      tokenValid.value.status = true;
-    } else {
-      tokenValid.value.message = response.message;
-    }
-  } catch (error) {
-    console.log(error)
-    tokenValid.value.message = error.message || 'Token Validation Error';
-  } finally {
-    loading.value = false
-    console.log('test', loading.value)
-  }
-};
-
-const passwordsMatch = computed(() => {
-  return password.value === confirm.value;
-});
-
-onMounted(async () => {
-  await checkTokenValidation();
-});
 
 const handleResetPasswordEmail = async () => {
-  const response = await resetPassword(tokenValid.value.token, password.value)
-  alert.show(response.status, response.message)
+  loading.value = true;
+
+  try {
+    const response = await resetPasswordURL(email.value)
+
+    alert.show(response.status, response.message)
+  } catch(error) {
+    alert.show("error", error.message)
+  } finally {
+    email.value = ''
+    loading.value = false;
+  }
+
 };
 </script>
 
@@ -69,7 +38,7 @@ const handleResetPasswordEmail = async () => {
          v-if="loading"
          class="place-items-center"
      >
-       <h1 class="block mb-10">{{tokenValid.message}}</h1>
+       <h1 class="block mb-10">Sending email..</h1>
        <div class="loading-spinner">
          <Spinner />
        </div>
@@ -78,17 +47,19 @@ const handleResetPasswordEmail = async () => {
     <form
         v-if="!loading"
         @submit.prevent="handleResetPasswordEmail"
-        class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
+        class="flex flex-col w-[300px] min-h-[300px] p-4 bg-secondary shadow-xl rounded-xl"
     >
-      <h1 class="text-beb text-center text-2xl mb-10">Reset Password</h1>
-      <h3>Please enter your email address associated with your account to receive a password reset link.</h3>
+      <h1 class="text-beb text-center text-2xl mb-10">Send reset url</h1>
+
+      <h3 class="mb-3">Please enter your email address associated with your account to receive a password reset link.</h3>
+
       <div class="flex flex-col justify-center items-center space-y-4">
 
         <input
-          v-model="password"
-          type="password"
-          id="password"
-          placeholder="new password"
+          v-model="email"
+          type="email"
+          id="email"
+          placeholder="email address"
           required
           class="w-3/4 py-2 px-1
           bg-third text-gray-300
@@ -106,7 +77,7 @@ const handleResetPasswordEmail = async () => {
         border border-third rounded-md
         hover:bg-beb hover:text-white"
       >
-        {{ loading ? 'RESETTING...' : 'RESET' }}
+        {{ loading ? 'SENDING...' : 'SEND' }}
       </button>
 
     </form>

@@ -5,6 +5,7 @@ import UserPanel from "@/pages/userPanel/UserPanelView.vue";
 import SignUp from "@/pages/signup/SignUpView.vue";
 import Privileged from "@/pages/privileged/PrivilegedView.vue";
 import ResetPasswordView from "@/pages/resetPassword/resetPasswordView.vue";
+import ResetPasswordEmailView from "@/pages/resetPassword/resetPasswordEmailView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
 
 const routes = [
@@ -34,6 +35,11 @@ const routes = [
         name: 'Privileged',
         component: Privileged,
         meta: { requiresAuth: true },
+    },
+    {
+        path: '/request-password-reset',
+        name: 'Request password reset',
+        component: ResetPasswordEmailView,
     },
     {
         path: '/reset-password',

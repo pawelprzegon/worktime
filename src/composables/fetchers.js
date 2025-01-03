@@ -93,6 +93,31 @@ export const resetPassword = async (token, password) => {
     return await response.json()
 }
 
+export const resetPasswordURL = async (email) => {
+
+    const body = JSON.stringify({
+        'recipient': email,
+    })
+
+    const data = {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/auth/reset-url', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 // USER
 
 export const registerUser = async (formData) => {
