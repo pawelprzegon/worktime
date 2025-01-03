@@ -24,7 +24,6 @@ const modalKey = ref(0)
 const getDataHandler = async () => {
   isLoading.value = true;
   const result = await monthStore.processMonthlyShifts()
-  console.log(result)
   isLoading.value = !result;
   return result;
 }

@@ -32,7 +32,7 @@ const props = defineProps({
     :class="[
       { 'bg-beb text-black': props.isSelected, 'bg-mute': !props.isSelected },
       { 'hover:bg-secondary hover:text-white hover:border-gray-300': !props.isSelected },
-      { 'cursor-not-allowed opacity-50': props.isClosed }
+      { 'cursor-not-allowed opacity-50 pointer-events-none': props.isClosed }
     ]"
     :disabled="props.isClosed"
     type="button"

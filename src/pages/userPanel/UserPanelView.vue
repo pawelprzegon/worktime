@@ -12,24 +12,43 @@ import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setOVHistory} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
+import ModalWrapper from "@/components/ModalWrapper.vue";
+import {format} from "date-fns";
 
 const alert = useAlertStore()
 const authStore = useAuthStore();
 const monthStore = ref(useSelectedMonthStore('calendar'))
 
 const isChangeModalActive = ref(false);
+const isCloseMonthModal = ref(false);
+
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
 };
+
+const openCloseMonthModal = () => {
+  isCloseMonthModal.value = true;
+}
+
+const closeCloseMonthModal = () => {
+  isCloseMonthModal.value = false;
+}
 
 const closeMonth = async () => {
   const userId = authStore.user.id
   const month = monthStore.value.selected.month.getMonth() + 1
   const year = monthStore.value.selected.month.getFullYear()
 
-  const response = await setOVHistory(userId, year, month)
+  try{
+    const response = await setOVHistory(userId, year, month)
+    alert.show(response.status, response.message)
+    monthStore.value.refresh()
+  } catch (error) {
+    alert.show("error", error.message)
+  } finally {
+    closeCloseMonthModal()
+  }
 
-  alert.show(response.status, response.message)
 
 }
 
@@ -102,11 +121,36 @@ const closeMonth = async () => {
 
         <CustomTextButton
             label="Close Month"
-            @click="closeMonth"
+            @click="openCloseMonthModal"
             :is-closed="monthStore.selected.closed"
         />
 
       </ShadowBox>
+
+    <ModalWrapper
+        v-show="isCloseMonthModal"
+        :close-modal="closeCloseMonthModal">
+
+      <ShadowBox>
+        <div class="p-3">
+
+          <h1 class="text-platinum text-base m-3">Close {{format(monthStore.selected.month, 'MMMM yyyy')}} month</h1>
+          <p class="text-red-300">After confirming, you will no longer be able to edit any shifts from this month.</p>
+          <p>Additionally, any unused overtime from this month will be carried over to the next month.</p>
+
+          <div class="m-3">
+            <div class="m-4">
+              <CustomTextButton label="Yes" @click="closeMonth"/>
+            </div>
+            <div class="m-4">
+              <CustomTextButton label="No" @click="closeCloseMonthModal"/>
+            </div>
+          </div>
+
+        </div>
+
+      </ShadowBox>
+    </ModalWrapper>
 
     </div>
   </section>
