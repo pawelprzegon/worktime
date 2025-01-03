@@ -8,9 +8,6 @@ const monthStore = useSelectedMonthStore('calendar');
 
 const props = defineProps({
   day: Object,
-  toilTaken: Number,
-  regular: Number,
-  overtime: Number
 })
 </script>
 
@@ -34,7 +31,7 @@ const props = defineProps({
       :class="[
           {
             'unfinished-shift': props.day.list.length > 0,
-            'finished-shift': (props.day.regular + (props.day.overtime || 0) * 3600) >= 28800
+            'finished-shift': (props.day.regular + props.day.overtime + props.day.toil.duration_seconds) >= 28800
           }]"
     >
       <span
@@ -103,7 +100,7 @@ const props = defineProps({
             portrait-xl:text-lg
             "
         >
-          +{{ formatTime(props.day.overtime) }}
+          {{ formatTime(props.day.overtime) }}
         </small>
 
         <small
@@ -121,7 +118,7 @@ const props = defineProps({
             portrait-xl:text-lg
             "
         >
-          -{{ formatTime(props.day.toil.duration_seconds) }}
+          {{ formatTime(props.day.toil.duration_seconds) }}
         </small>
 
       </div>

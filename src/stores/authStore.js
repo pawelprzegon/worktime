@@ -1,89 +1,98 @@
-import {checkIsAuthorized, getMe} from "@/composables/fetchers.js";
-import {defineStore} from "pinia";
+import { ref, reactive, computed } from 'vue';
+import { defineStore } from 'pinia';
+import { checkIsAuthorized, getMe } from "@/composables/fetchers.js";
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    token: sessionStorage.getItem('authToken') || null,
-    user: {
+export const useAuthStore = defineStore('auth', () => {
+  const token = ref(sessionStorage.getItem('authToken') || null);
+  const user = reactive({
+    id: null,
+    firstName: null,
+    lastName: null,
+    email: null,
+    role: null,
+    avatar: null,
+  });
+
+  const isAuthenticated = computed(() => !!token.value);
+  const isAdmin = computed(() => user.role === 'admin');
+  const isUser = computed(() => user.role === 'user');
+
+  const setToken = (newToken) => {
+    token.value = newToken;
+    sessionStorage.setItem('authToken', newToken);
+  };
+
+  const getUserMetadata = async () => {
+    try {
+      const response = await getMe();
+      user.id = response.id;
+      user.firstName = response.first_name;
+      user.lastName = response.last_name;
+      user.email = response.email;
+      user.role = response.role;
+      user.avatar = response.avatar;
+
+      sessionStorage.setItem('user', JSON.stringify(response));
+    } catch (error) {
+      console.error('Error fetching user metadata:', error);
+    }
+  };
+
+  const clearToken = () => {
+    token.value = null;
+    Object.assign(user, {
       id: null,
       firstName: null,
-      lastNane: null,
+      lastName: null,
       email: null,
       role: null,
       avatar: null,
+    });
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('user');
+  };
+
+  const hasAccess = (toPath) => {
+    const routeRoles = {
+      '/privileged': 'admin',
+      '/user-panel': ['user', 'admin'],
+    };
+
+    const requiredRole = routeRoles[toPath];
+    if (!user.role || !requiredRole) return false;
+
+    if (Array.isArray(requiredRole)) {
+      return requiredRole.includes(user.role);
     }
-  }),
-  getters: {
-    isAuthenticated: (state) => !!state.token,
-    isAdmin: (state) => state.user.role === 'admin',
-    isUser: (state) => state.user.role === 'user',
-  },
-  actions: {
-    setToken(token) {
-      this.token = token;
-      sessionStorage.setItem('authToken', token);
-    },
-    async getUserMetadata() {
-      try{
-        const response =  await getMe()
-        this.user.id = response.id
-        this.user.firstName = response.first_name
-        this.user.lastName = response.last_name
-        this.user.email = response.email
-        this.user.role = response.role
-        this.user.avatar = response.avatar
+    return requiredRole === user.role;
+  };
 
-        sessionStorage.setItem('user', JSON.stringify(response))
-
-      } catch (error) {
-        alert.show('error', error)
-      }
-
-
-    },
-    clearToken() {
-      this.token = null;
-      this.user = {
-        id: null,
-        firstName: null,
-        lastName: null,
-        email: null,
-        role: null,
-        avatar: null,
-      }
-      sessionStorage.removeItem('authToken');
-      sessionStorage.removeItem('user');
-    },
-    hasAccess(toPath) {
-      const routeRoles = {
-          '/privileged': 'admin',
-          '/user-panel': ['user', 'admin'],
-      };
-      const requiredRole = routeRoles[toPath]
-
-      if (!this.user.role || !requiredRole) return false;
-
-      if (Array.isArray(requiredRole)) {
-        return requiredRole.includes(this.user.role);
-      }
-      return requiredRole === this.user.role;
-    },
-
-    async authorizationCheck() {
-      if (this.token) {
-        try {
-          const authorized = await checkIsAuthorized();
-          if (authorized) {
-            return true;
-          }
-        } catch (error) {
-          console.error('Authorization error:', error);
-          return false;
+  const authorizationCheck = async () => {
+    if (token.value) {
+      try {
+        const authorized = await checkIsAuthorized();
+        if (authorized) {
+          return true;
         }
+      } catch (error) {
+        console.error('Authorization error:', error);
+        return false;
       }
-      this.clearToken();
-      return false;
-    },
-  },
-});
+    }
+    clearToken();
+    return false;
+  };
 
+  return {
+    token,
+    user,
+    isAuthenticated,
+    isAdmin,
+    isUser,
+    setToken,
+    getUserMetadata,
+    clearToken,
+    hasAccess,
+    authorizationCheck,
+  };
+});
