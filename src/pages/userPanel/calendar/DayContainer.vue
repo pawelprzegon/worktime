@@ -1,9 +1,10 @@
 <script setup>
 
 import {formatTime} from "@/composables/utils.js";
-import {useScreenSizeStore} from "@/stores/utilsStore.js";
+import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 
 const screenSize = useScreenSizeStore()
+const monthStore = useSelectedMonthStore('calendar');
 
 const props = defineProps({
   day: Object,
@@ -128,7 +129,9 @@ const props = defineProps({
           v-else
           class="h-3/4 w-full flex flex-col justify-center items-center"
       >
-        <img class="
+        <img
+            v-show="!monthStore.selected.closed"
+            class="
         filter-invert-30
         group-hover:filter-invert-100
 

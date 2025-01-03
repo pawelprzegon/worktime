@@ -400,3 +400,29 @@ export const getOVHistory = async (userId, year, month) => {
 
     return await response.json()
 }
+
+export const setOVHistory = async (userId, year, month) => {
+
+    const body = JSON.stringify({
+        'user_id': userId,
+        'year': year,
+        'month': month
+    })
+
+    const data = {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/ov-history/set', data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
+}

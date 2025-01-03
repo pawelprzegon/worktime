@@ -50,7 +50,8 @@ export const useSelectedMonthStore = (id) =>
             toils: 0,
             monthlyRegularTime: 0,
             monthlyOvertime: 0,
-            days: []
+            days: [],
+            closed: false
         })
 
         const refresh = async () => {
@@ -67,6 +68,7 @@ export const useSelectedMonthStore = (id) =>
                 regular: 0,
                 overtime: 0,
                 toil: 0,
+                closed: false
             }));
         };
 
@@ -111,13 +113,22 @@ export const useSelectedMonthStore = (id) =>
         };
 
         const addPrevOvertime = async () => {
-            let prevMonth = new Date(selected.value.month);
+            const currentMonth = new Date(selected.value.month);
+            let prevMonth = new Date(selected.value.month)
+            prevMonth.setMonth(prevMonth.getMonth() - 1);
+
             const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
              selected.value.monthlyOvertime += ovHistory[0].overtime_seconds || 0;
+
+             const isThisMonthClosed = await fetchOvHistory(selectedUser.user.id, currentMonth)
+             if (isThisMonthClosed.length > 0) {
+                 selected.value.closed = true;
+             } else {
+                 selected.value.closed = false;
+             }
         }
 
         const reduceToil = (toils) => {
-            console.log(toils);
 
             const currentYearMonth = selected.value.month.toISOString().slice(0, 7);
 
@@ -127,7 +138,7 @@ export const useSelectedMonthStore = (id) =>
                                       new Date(toil.date).toISOString().slice(0, 7);
 
                 if (toilYearMonth === currentYearMonth) {
-                    // Redukowanie `monthlyOvertime` i dodawanie do `toils`
+
                     selected.value.monthlyOvertime -= toil?.duration_seconds || 0;
                     selected.value.toils += toil?.duration_seconds || 0;
                 }

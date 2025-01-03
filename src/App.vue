@@ -96,25 +96,25 @@
       <div class="flex justify-end items-end space-x-2">
         <CustomTextButton
             label="Dashboard"
-            :isActive="isDashActive"
+            :isSelected="isDashActive"
             @click="gotoDash"
         ></CustomTextButton>
         <CustomTextButton
             v-if="!authStore.isAuthenticated"
             label="Login"
-            :isActive="isLoginActive"
+            :isSelected="isLoginActive"
             @click="gotoLogin"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated && authStore.isAdmin"
             label="Privileged"
-            :isActive="isPrivilegedActive"
+            :isSelected="isPrivilegedActive"
             @click="gotoPrivileged"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated"
             label="User Panel"
-            :isActive="isUserPanelActive"
+            :isSelected="isUserPanelActive"
             @click="gotoUserPanel"
         ></CustomTextButton>
         <CustomTextButton
@@ -125,7 +125,7 @@
         <CustomTextButton
             v-if="!authStore.isAuthenticated"
             label="SignUp"
-            :isActive="isSignUpActive"
+            :isSelected="isSignUpActive"
             @click="gotoSignUp"
         >SignUp</CustomTextButton>
       </div>

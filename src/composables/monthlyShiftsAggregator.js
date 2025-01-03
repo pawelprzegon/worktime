@@ -3,11 +3,11 @@ import {format} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
 
 
-export const fetchOvHistory = async (userId, prevMonth) => {
+export const fetchOvHistory = async (userId, month) => {
   try {
-    prevMonth.setMonth(prevMonth.getMonth() - 1);
-    const monthValue = prevMonth.getMonth() + 1;
-    const yearValue = prevMonth.getFullYear();
+
+    const monthValue = month.getMonth() + 1;
+    const yearValue = month.getFullYear();
     return await getOVHistory(userId, yearValue, monthValue);
 
   } catch (error) {

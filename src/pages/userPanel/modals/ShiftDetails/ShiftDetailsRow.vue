@@ -6,10 +6,11 @@ import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdo
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
 import {ref, onMounted} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
-import {useScreenSizeStore} from "@/stores/utilsStore.js";
+import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import DeleteShift from "@/pages/userPanel/modals/ShiftDetails/DeleteShift.vue";
 
 const screenSize = useScreenSizeStore()
+const monthStore = useSelectedMonthStore('calendar');
 
 const props = defineProps({
   shift: {
@@ -106,6 +107,7 @@ onMounted(async () => {
           </div>
 
           <CustomIconButton
+              v-show="!monthStore.selected.closed"
             icon="delete.png"
             @click.stop="handleDeleteShiftOpen(true)"
           />

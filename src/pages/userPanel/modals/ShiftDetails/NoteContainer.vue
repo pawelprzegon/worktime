@@ -71,7 +71,9 @@ const addNote = async () => {
         rows="2"
       />
     </form>
-    <div class="place-items-end">
+    <div
+        v-show="!monthStore.selected.closed"
+        class="place-items-end">
       <CustomTextButton
         v-if="!noteEdit && props.shift.note !== ''"
         label="edit"

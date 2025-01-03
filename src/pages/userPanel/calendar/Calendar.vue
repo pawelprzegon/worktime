@@ -39,7 +39,9 @@ const dayOpenerHandler = (day) => {
   if (day?.list.length > 0) {
     isDailyShiftsOpen.value = true
   } else {
-    isShiftAdderOpen.value = true;
+    if (!monthStore.selected.closed){
+      isShiftAdderOpen.value = true;
+    }
   }
 }
 
@@ -114,6 +116,7 @@ onMounted(async () => {
         :closeModal="closeShiftAdder"
         :date="dailyShifts.shiftsList?.date"
     />
+
     <ShiftsDetailsModal
         v-if="isDailyShiftsOpen"
         :key="modalKey"

@@ -115,6 +115,7 @@ const saveCorrection = async () => {
     <div class="grid grid-flow-row justify-stretch align-middle h-full">
 
       <form
+          v-show="!monthStore.selected.closed"
           @submit.prevent.stop="saveCorrection"
           class="grid grid-flow-col w-full mb-3"
       >
@@ -144,6 +145,7 @@ const saveCorrection = async () => {
       <div class="place-items-end place-content-end">
 
          <CustomTextButton
+           v-show="!monthStore.selected.closed"
           :label="'add'"
           @click="saveCorrection"
         />

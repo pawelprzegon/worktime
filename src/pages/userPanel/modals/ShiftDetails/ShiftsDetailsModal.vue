@@ -7,8 +7,9 @@ import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetails/ShiftDetailsR
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
-
+const monthStore = useSelectedMonthStore('calendar');
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
 
@@ -74,7 +75,7 @@ const isToilActive = () => {
 
           <!-- Sekcja nadgodzin -->
           <div
-              v-show="isToilActive()"
+              v-show="isToilActive() && !monthStore.selected.closed"
               class="rounded-md m-3 border border-third">
             <OvertimeContainer />
           </div>

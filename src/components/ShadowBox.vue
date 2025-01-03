@@ -6,7 +6,7 @@
 
    <section
       class="
-      min-w-[200px] max-w-[80%] bg-mute p-2 m-2 shadow-xl h-fit
+      min-w-[200px] max-w-[80%] bg-mute p-2 m-2 shadow-xl h-fit place-items-center
 
       portrait-2xs:w-[200px] portrait-2xs:p-[1px] portrait-2xs:m-[1px] portrait-2xs:rounded-sm
       portrait-xs:min-w-[180px] portrait-xs:max-w-[20%] portrait-xs:p-[1px] portrait-xs:m-[1px]

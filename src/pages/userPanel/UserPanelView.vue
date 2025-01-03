@@ -9,16 +9,29 @@ import Alert from "@/components/Alert.vue";
 import {formatTime} from "@/composables/utils.js";
 import ShadowBox from "@/components/ShadowBox.vue";
 import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
+import {setOVHistory} from "@/composables/fetchers.js";
+import {useAlertStore} from "@/stores/alertStore.js";
 
-
+const alert = useAlertStore()
 const authStore = useAuthStore();
-const isChangeModalActive = ref(false);
+const monthStore = ref(useSelectedMonthStore('calendar'))
 
+const isChangeModalActive = ref(false);
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
 };
 
-const monthStore = ref(useSelectedMonthStore('calendar'))
+const closeMonth = async () => {
+  const userId = authStore.user.id
+  const month = monthStore.value.selected.month.getMonth() + 1
+  const year = monthStore.value.selected.month.getFullYear()
+
+  const response = await setOVHistory(userId, year, month)
+
+  alert.show(response.status, response.message)
+
+}
 
 </script>
 
@@ -85,6 +98,12 @@ const monthStore = ref(useSelectedMonthStore('calendar'))
           :background="'#282828'"
           :color="monthStore.selected.toils ? 'turquoise' : 'secondary'"
           tooltip="Time Off In Lieu"
+        />
+
+        <CustomTextButton
+            label="Close Month"
+            @click="closeMonth"
+            :is-closed="monthStore.selected.closed"
         />
 
       </ShadowBox>
