@@ -426,3 +426,46 @@ export const setOVHistory = async (userId, year, month) => {
 
     return await response.json()
 }
+
+export const validateResetPasswordURL = async (token) => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }
+
+    const response = await fetch(url + `/auth/validate-reset-password?token=${token}`, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch validate reset password failed.')
+    }
+
+    return await response.json()
+}
+
+export const resetPassword = async (token, password) => {
+
+    const body = JSON.stringify({
+        'token': token,
+        'password': password
+    })
+
+    const data = {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/auth/reset-password', data)
+
+    if (!response.ok) {
+      throw new Error('Fetch reset-password failed.')
+    }
+
+    return await response.json()
+}
