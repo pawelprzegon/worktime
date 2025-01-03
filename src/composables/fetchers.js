@@ -27,22 +27,6 @@ export const checkIsAuthorized = async () => {
     return await response.json()
 }
 
-export const loginFetch = async (formData) => {
-    const body = formData.toString()
-    const data = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body,
-    }
-   const response = await fetch(url + '/auth/login', data)
-
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
 export const getDashUsers = async () => {
 
     const data = {
@@ -147,41 +131,7 @@ export const getUserShifts = async (user_id, selectedMonth) => {
     return await response.json()
 }
 
-export const registerUser = async (formData) => {
 
-    const body = JSON.stringify(formData)
-    const data = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: body,
-    }
-
-   const response = await fetch(url + '/user/register', data)
-
-    if (!response.ok) {
-      throw new Error('Register failed')
-    }
-
-    return await response.json()
-}
-
-export const saveAvatar = async (user_id, avatar) => {
-    const formData = new FormData();
-    formData.append('avatar', avatar);
-    const data = {
-        method: 'POST',
-        body: formData,
-    }
-    try {
-        const response = await fetch(url + `/user/${user_id}/avatar`, data)
-
-        return await response.json();
-
-    } catch (error) {
-         console.error('Error:', error.message);
-        throw error;
-    }
-}
 
 export const saveShiftNote = async (user_id, shift_id, note) => {
 
@@ -262,99 +212,6 @@ export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
     }
 }
 
-export const setToil = async (userId, toilId, counter, date) => {
-
-    const body = JSON.stringify({
-        'user_id': userId,
-        'toil_id': toilId,
-        'duration_seconds': counter,
-        'date': date,
-    });
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body
-    }
-    try {
-        const response = await fetch(url + '/toil/set', data)
-
-        return await response.json();
-
-    } catch (error) {
-         console.error('Error:', error.message);
-        throw error;
-    }
-}
-
-export const getToil = async (user_id, selectedMonth) => {
-
-    const year = format(selectedMonth, 'yyyy')
-    const month = format(selectedMonth, 'MM')
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
-    }
-
-    let url_string = `/toil/?year=${year}&month=${month}`
-    if (user_id) {
-        url_string += `&user_id=${user_id}`
-    }
-
-    const response = await fetch(url + url_string, data)
-
-    if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
-    }
-
-    return await response.json()
-}
-
-export const getMe = async () => {
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
-    }
-
-    const response = await fetch(url + `/user/me`, data)
-
-    if (!response.ok) {
-        clearCache()
-        throw new Error(`user Me response error: ${response.statusText}`)
-
-    }
-
-    return await response.json()
-}
-
-export const getUsers = async () => {
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
-    }
-
-    const response = await fetch(url + '/user/', data)
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
 export const setManualShift = async (shiftTime, note) => {
     const authStore = useAuthStore();
 
@@ -381,6 +238,8 @@ export const setManualShift = async (shiftTime, note) => {
 
     return await response.json()
 }
+
+// OvHistory
 
 export const getOVHistory = async (userId, year, month) => {
 
@@ -421,7 +280,27 @@ export const setOVHistory = async (userId, year, month) => {
     const response = await fetch(url + '/ov-history/set', data)
 
     if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+// AUTH
+
+export const loginFetch = async (formData) => {
+    const body = formData.toString()
+    const data = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body,
+    }
+   const response = await fetch(url + '/auth/login', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
     }
 
     return await response.json()
@@ -465,7 +344,144 @@ export const resetPassword = async (token, password) => {
     const response = await fetch(url + '/auth/reset-password', data)
 
     if (!response.ok) {
-      throw new Error('Fetch reset-password failed.')
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+// USER
+
+export const registerUser = async (formData) => {
+
+    const body = JSON.stringify(formData)
+    const data = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+    }
+
+   const response = await fetch(url + '/user/register', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const getMe = async () => {
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + `/user/me`, data)
+
+    if (!response.ok) {
+        clearCache()
+        throw new Error(`user Me response error: ${response.statusText}`)
+
+    }
+
+    return await response.json()
+}
+
+export const getUsers = async () => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + '/user/', data)
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const saveAvatar = async (user_id, avatar) => {
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+    const data = {
+        method: 'POST',
+        body: formData,
+    }
+
+    const response = await fetch(url + `/user/${user_id}/avatar`, data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+}
+
+// TOIL
+export const setToil = async (userId, toilId, counter, date) => {
+
+    const body = JSON.stringify({
+        'user_id': userId,
+        'toil_id': toilId,
+        'duration_seconds': counter,
+        'date': date,
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/toil/set', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+
+}
+
+export const getToil = async (user_id, selectedMonth) => {
+
+    const year = format(selectedMonth, 'yyyy')
+    const month = format(selectedMonth, 'MM')
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    let url_string = `/toil/?year=${year}&month=${month}`
+    if (user_id) {
+        url_string += `&user_id=${user_id}`
+    }
+
+    const response = await fetch(url + url_string, data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
     }
 
     return await response.json()

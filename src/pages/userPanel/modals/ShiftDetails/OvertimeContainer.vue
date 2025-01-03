@@ -52,12 +52,14 @@ const saveTakenHours = async () => {
     alert.show("warning", 'You picked higher amount of hours')
     return
   }
-
-  const response = await setToil(authStore.user.id, toil.value.id, recalculatedCounterIntoSeconds, getDateString(dailyShifts.date))
-  if (response) {
+  try {
+    const response = await setToil(authStore.user.id, toil.value.id, recalculatedCounterIntoSeconds, getDateString(dailyShifts.date))
     alert.show(response.status, response.message)
     await monthStore.refresh()
     await dailyShifts.updateDay()
+  } catch (error) {
+    alert.show('error', error.message)
+    return { shifts: [], toils: [] };
   }
 }
 

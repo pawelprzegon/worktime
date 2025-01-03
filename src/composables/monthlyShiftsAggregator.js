@@ -22,7 +22,7 @@ export const fetchUserShifts = async (userId, month) => {
     const toils = await getToil(userId, month);
     return { shifts, toils };
   } catch (error) {
-    console.error("Error fetching shifts or overtime:", error);
+    alert.show('error', error.message)
     return { shifts: [], toils: [] };
   }
 };
