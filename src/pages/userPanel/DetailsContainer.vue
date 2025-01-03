@@ -8,6 +8,10 @@ const props = defineProps({
   color: {
     type: String,
     default: 'none'
+  },
+  tooltip: {
+    type: String,
+    required: false
   }
 });
 </script>
@@ -25,7 +29,12 @@ const props = defineProps({
        portrait-xl:text-base
        ">
 
-    <label>{{ props.label }}:</label>
+    <label
+        :title="props.tooltip"
+    >
+      {{ props.label }}:
+    </label>
+
     <span v-if="props.data !== ''"
           class="inline-block break-words"
           :class="`text-${props.color}`"

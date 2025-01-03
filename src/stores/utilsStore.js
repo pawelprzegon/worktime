@@ -117,19 +117,21 @@ export const useSelectedMonthStore = (id) =>
         }
 
         const reduceToil = (toils) => {
+            console.log(toils);
 
             const currentYearMonth = selected.value.month.toISOString().slice(0, 7);
 
-            const matchedToil = toils.find((toil) => {
+            toils.forEach((toil) => {
                 const toilYearMonth = typeof toil.date === 'string' ?
                                       toil.date.slice(0, 7) :
                                       new Date(toil.date).toISOString().slice(0, 7);
-                return toilYearMonth === currentYearMonth;
-            }) || { duration_seconds: 0 };
 
-
-            selected.value.monthlyOvertime -= matchedToil?.duration_seconds || 0;
-            selected.value.toils += matchedToil?.duration_seconds || 0;
+                if (toilYearMonth === currentYearMonth) {
+                    // Redukowanie `monthlyOvertime` i dodawanie do `toils`
+                    selected.value.monthlyOvertime -= toil?.duration_seconds || 0;
+                    selected.value.toils += toil?.duration_seconds || 0;
+                }
+            });
         };
 
         const processMonthlyShifts = async () => {

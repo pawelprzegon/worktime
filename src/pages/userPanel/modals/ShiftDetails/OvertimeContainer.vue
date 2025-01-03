@@ -9,27 +9,24 @@ import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
-const alert = useAlertStore()
-
-const dailyShifts = useDailyShiftsList()
+const alert = useAlertStore();
+const dailyShifts = useDailyShiftsList();
 const monthStore = useSelectedMonthStore('calendar');
 const authStore = useAuthStore()
 
-const props = defineProps({
-  shifts: Array,
-})
+
 const calculateMaxToTake = () => {
   return  dailyShifts.selectedDay.overtime > 0 ? 0 : Math.floor((28800 - dailyShifts.selectedDay.regular) / 3600 + 1);
 }
 
-const maxToTake = ref(calculateMaxToTake())
+const maxToTake = ref(calculateMaxToTake());
 const toil = ref({
   id: dailyShifts.selectedDay.toil?.id || null,
   duration_seconds: dailyShifts.selectedDay.toil?.duration_seconds || 0
-})
+});
 
-const hoursPool = ref(getHoursAsNumber(monthStore.selected.monthlyOvertime))
-const counter = ref(toil.value.duration_seconds / 3600)
+const hoursPool = ref(getHoursAsNumber(monthStore.selected.monthlyOvertime));
+const counter = ref(toil.value.duration_seconds / 3600);
 
 
 const increment = () => {
@@ -38,14 +35,14 @@ const increment = () => {
     counter.value += 1
     hoursPool.value--;
   }
-}
+};
 
 const decrement = () => {
   if (counter.value > 0) {
     counter.value -= 1
     hoursPool.value++;
   }
-}
+};
 
 const saveTakenHours = async () => {
 
@@ -59,9 +56,8 @@ const saveTakenHours = async () => {
   const response = await setToil(authStore.user.id, toil.value.id, recalculatedCounterIntoSeconds, getDateString(dailyShifts.date))
   if (response) {
     alert.show(response.status, response.message)
-    monthStore.refresh()
-
-    // TODO dodać odświeżanie komponentu
+    await monthStore.refresh()
+    await dailyShifts.updateDay()
   }
 }
 

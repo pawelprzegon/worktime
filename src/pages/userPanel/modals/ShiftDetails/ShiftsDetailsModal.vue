@@ -7,9 +7,8 @@ import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetails/ShiftDetailsR
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
-import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
-const monthStore = useSelectedMonthStore('calendar');
+
 const dailyShifts = useDailyShiftsList();
 const isModalOpen = ref(true);
 
@@ -77,7 +76,7 @@ const isToilActive = () => {
           <div
               v-show="isToilActive()"
               class="rounded-md m-3 border border-third">
-            <OvertimeContainer :shifts="dailyShifts.selectedDay.shiftsList"/>
+            <OvertimeContainer />
           </div>
         </div>
 

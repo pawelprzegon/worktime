@@ -12,13 +12,13 @@ import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
 
 
 const authStore = useAuthStore();
-const monthStore = useSelectedMonthStore('calendar');
-
 const isChangeModalActive = ref(false);
 
 const refreshUserPanel = () => {
   authStore.getUserMetadata();
 };
+
+const monthStore = ref(useSelectedMonthStore('calendar'))
 
 </script>
 
@@ -67,21 +67,24 @@ const refreshUserPanel = () => {
           :label="'regular'"
           :data="formatTime(monthStore.selected.monthlyRegularTime).toString()"
           :background="'#282828'"
-          color="platinum"
+          :color="monthStore.selected.monthlyRegularTime ? 'platinum' : 'secondary'"
+          tooltip="Work time"
         />
 
         <DetailsContainer
           :label="'overtime'"
           :data="formatTime(monthStore.selected.monthlyOvertime).toString()"
           :background="'#282828'"
-          color="overtime"
+          :color="monthStore.selected.monthlyOvertime ? 'overtime' : 'secondary'"
+          tooltip="All overtimes collected from preview months"
         />
 
         <DetailsContainer
           :label="'toils'"
           :data="formatTime(monthStore.selected.toils).toString()"
           :background="'#282828'"
-          color="turquoise"
+          :color="monthStore.selected.toils ? 'turquoise' : 'secondary'"
+          tooltip="Time Off In Lieu"
         />
 
       </ShadowBox>
