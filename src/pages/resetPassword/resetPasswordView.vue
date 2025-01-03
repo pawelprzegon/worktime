@@ -37,11 +37,11 @@ const checkTokenValidation = async () => {
       tokenValid.value.message = response.message;
     }
   } catch (error) {
-
-    tokenValid.value.message = 'Token Validation Error';
-    console.error(error);
+    console.log(error)
+    tokenValid.value.message = error.message || 'Token Validation Error';
   } finally {
     loading.value = false
+    console.log('test', loading.value)
   }
 };
 
@@ -73,7 +73,12 @@ const handleResetPassword = async () => {
        <div class="loading-spinner">
          <Spinner />
        </div>
+    </div>
 
+    <div
+        v-if="!loading && !tokenValid.status"
+    >
+      <h1>{{tokenValid.message}}</h1>
     </div>
 
 

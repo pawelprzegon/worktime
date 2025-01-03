@@ -439,7 +439,8 @@ export const validateResetPasswordURL = async (token) => {
     const response = await fetch(url + `/auth/validate-reset-password?token=${token}`, data)
 
     if (!response.ok) {
-      throw new Error('Fetch validate reset password failed.')
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
     }
 
     return await response.json()
