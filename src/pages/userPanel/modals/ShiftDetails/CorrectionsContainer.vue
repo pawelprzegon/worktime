@@ -44,15 +44,15 @@ const saveCorrection = async () => {
       start: combineDateWithTime(dt, shiftTime.value.start),
       stop: combineDateWithTime(dt, shiftTime.value.stop),
     }
-  const response = await shiftCorrection(selectedDayShifts.value.user_id, selectedDayShifts.value.id, shiftDt)
 
-  if (response.status === 'success') {
+  try {
+    const response = await shiftCorrection(selectedDayShifts.value.user_id, selectedDayShifts.value.id, shiftDt)
     alert.show(response.status, response.message)
     await monthStore.refresh()
     dailyShifts.updateDay()
     selectedDayShifts.value = dailyShifts.getShift(selectedDayShifts.value.id)
-  } else {
-    alert.show(response.status, response.message)
+  } catch (error) {
+    alert.show("error", error.message)
   }
 }
 

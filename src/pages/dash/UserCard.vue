@@ -8,7 +8,10 @@ import ShiftTime from "@/pages/dash/ShiftTime.vue";
 import ShiftToggleModal from "@/pages/dash/ShiftToggleModal.vue";
 import {useActiveShifts} from "@/stores/shiftStore.js";
 import Spinner from "@/components/Spinner.vue";
+import {useAlertStore} from "@/stores/alertStore.js";
+import Alert from "@/components/Alert.vue";
 
+const alert = useAlertStore()
 const activeShifts = useActiveShifts()
 
 const props = defineProps({
@@ -62,7 +65,7 @@ const toggleShift = async () => {
     }
 
   } catch (error) {
-    console.error("Error fetching stopShift:", error);
+    alert.show("error", error.message)
   } finally {
     toggleModalVisibility()
   }
@@ -92,15 +95,16 @@ const closeModal = () => {
 </script>
 
 <template>
- <div
-  :class="[
-    'grid grid-rows-[2fr_auto_40px] gap-1 justify-items-center p-1',
-    {
-      'text-platinum bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
-      'hover:text-white hover:bg-dark-green hover:rounded-lg hover:shadow-lg hover:shadow-neutral-900': true
-    }
-  ]"
->
+  <Alert />
+   <div
+    :class="[
+      'grid grid-rows-[2fr_auto_40px] gap-1 justify-items-center p-1',
+      {
+        'text-platinum bg-secondary rounded-lg shadow-lg shadow-neutral-900': activeShift,
+        'hover:text-white hover:bg-dark-green hover:rounded-lg hover:shadow-lg hover:shadow-neutral-900': true
+      }
+    ]"
+  >
 
     <Avatar
         :avatar="props.user.avatar"

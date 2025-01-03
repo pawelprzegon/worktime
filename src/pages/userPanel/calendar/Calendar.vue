@@ -21,9 +21,10 @@ const isShiftAdderOpen = ref(false);
 const isDailyShiftsOpen = ref(false);
 const modalKey = ref(0)
 
-const getDataHandler = () => {
+const getDataHandler = async () => {
   isLoading.value = true;
-  const result = monthStore.processMonthlyShifts()
+  const result = await monthStore.processMonthlyShifts()
+  console.log(result)
   isLoading.value = !result;
   return result;
 }
@@ -54,6 +55,7 @@ const closeShiftAdder = () => {
 }
 
 onMounted(async () => {
+  console.log('test')
   await getDataHandler();
   updateScreenSize(screenSize);
   window.addEventListener('resize', updateScreenSize);

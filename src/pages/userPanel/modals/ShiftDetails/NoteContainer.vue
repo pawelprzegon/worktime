@@ -23,16 +23,17 @@ const toggleShowNoteEditor = () => {
 }
 
 const addNote = async () => {
-  const response = await saveShiftNote(props.shift.user_id, props.shift.id, noteContent.value)
 
-  if (response.status === 'success') {
+  try {
+    const response = await saveShiftNote(props.shift.user_id, props.shift.id, noteContent.value)
     props.shift.note = noteContent
     alert.show(response.status, response.message)
     noteEdit.value = false;
     await monthStore.refresh()
-  } else {
-    alert.show(response.status, response.message)
+  } catch (error) {
+    alert.show('error', error.message)
   }
+
 };
 
 </script>

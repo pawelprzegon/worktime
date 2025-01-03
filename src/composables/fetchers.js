@@ -8,10 +8,13 @@ const addAuthorization = () => {
 
 }
 
+
+// AUTH
+
 export const checkIsAuthorized = async () => {
 
     const data = {
-      method: 'GET',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': addAuthorization()
@@ -21,273 +24,12 @@ export const checkIsAuthorized = async () => {
     const response = await fetch(url + '/auth/check', data)
 
     if (!response.ok) {
-        return false
-    }
-
-    return await response.json()
-}
-
-export const getDashUsers = async () => {
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-
-    const response = await fetch(url + '/dash/users', data)
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
-export const getActiveShifts = async () => {
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }
-
-    const response = await fetch(url + '/shift/active', data)
-
-    if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
-    }
-
-    return await response.json()
-}
-
-export const startShift = async (userId, note) => {
-
-    const body = JSON.stringify({
-        'user_id': `${userId}`,
-        'note': note
-    });
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: body
-    }
-    const response = await fetch(url + '/shift/start', data)
-
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
-export const stopShift = async (shiftId, userId) => {
-    const body = JSON.stringify({
-        'shift_id': `${shiftId}`,
-        'user_id': `${userId}`
-    });
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: body
-    }
-    const response = await fetch(url + '/shift/stop', data)
-
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
-export const getUserShifts = async (user_id, selectedMonth) => {
-
-    const month = format(selectedMonth, 'yyyy-MM')
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
-    }
-    let url_string = `/shift/user?month=${month}`
-    if (user_id) {
-        url_string += `&user_id=${user_id}`
-    }
-    const response = await fetch(url + url_string, data)
-
-    if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
-    }
-
-    return await response.json()
-}
-
-
-
-export const saveShiftNote = async (user_id, shift_id, note) => {
-
-    const body = JSON.stringify({
-        'user_id': user_id,
-        'shift_id': shift_id,
-        'note': note
-    })
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body,
-    }
-    try {
-        const response = await fetch(url + '/shift/note', data)
-
-        return await response.json();
-
-    } catch (error) {
-         console.error('Error:', error.message);
-        throw error;
-    }
-}
-
-export const deleteShiftFetch = async (shift_id) => {
-
-    const body = JSON.stringify({
-        'shift_id': shift_id,
-    })
-    const data = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body,
-    }
-    try {
-        const response = await fetch(url + '/shift/delete', data)
-
-        return await response.json();
-
-    } catch (error) {
-         console.error('Error:', error.message);
-        throw error;
-    }
-}
-
-export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
-    const body = JSON.stringify({
-        'shift_id': shiftId,
-        'user_id': userId,
-        'start': timeCorrection.start,
-        'stop': timeCorrection.stop,
-    });
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body
-    }
-
-    try {
-        const response = await fetch(url + '/shift/correction', data)
-
-        return await response.json();
-
-    } catch (error) {
-         console.error('Error:', error.message);
-        throw error;
-    }
-}
-
-export const setManualShift = async (shiftTime, note) => {
-    const authStore = useAuthStore();
-
-    const body = JSON.stringify({
-        'user_id': authStore.user.id,
-        'start_time': shiftTime.start,
-        'stop_time': shiftTime.stop,
-        'note': note
-    });
-
-    const data = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body
-    }
-    const response = await fetch(url + '/shift/manual', data)
-
-    if (!response.ok) {
-      throw new Error('Login failed. Please check your credentials.')
-    }
-
-    return await response.json()
-}
-
-// OvHistory
-
-export const getOVHistory = async (userId, year, month) => {
-
-    const data = {
-      method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-    }
-    let url_string = `/ov-history/?user_id=${userId}&year=${year}&month=${month}`
-    const response = await fetch(url + url_string, data)
-
-    if (!response.ok) {
-      throw new Error('Fetch active shift failed.')
-    }
-
-    return await response.json()
-}
-
-export const setOVHistory = async (userId, year, month) => {
-
-    const body = JSON.stringify({
-        'user_id': userId,
-        'year': year,
-        'month': month
-    })
-
-    const data = {
-      method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        },
-        body: body
-    }
-
-    const response = await fetch(url + '/ov-history/set', data)
-
-    if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail)
     }
 
     return await response.json()
 }
-
-// AUTH
 
 export const loginFetch = async (formData) => {
     const body = formData.toString()
@@ -428,6 +170,274 @@ export const saveAvatar = async (user_id, avatar) => {
 
     return await response.json();
 }
+
+// DASH
+
+export const getDashUsers = async () => {
+
+    const data = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const response = await fetch(url + '/dash/users', data)
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+//SHIFT
+
+export const getActiveShifts = async () => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    const response = await fetch(url + '/shift/active', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const startShift = async (userId, note) => {
+
+    const body = JSON.stringify({
+        'user_id': `${userId}`,
+        'note': note
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/start', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const stopShift = async (shiftId, userId) => {
+    const body = JSON.stringify({
+        'shift_id': `${shiftId}`,
+        'user_id': `${userId}`
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/stop', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const getUserShifts = async (user_id, selectedMonth) => {
+
+    const month = format(selectedMonth, 'yyyy-MM')
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+    let url_string = `/shift/user?month=${month}`
+    if (user_id) {
+        url_string += `&user_id=${user_id}`
+    }
+    const response = await fetch(url + url_string, data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const saveShiftNote = async (user_id, shift_id, note) => {
+
+    const body = JSON.stringify({
+        'user_id': user_id,
+        'shift_id': shift_id,
+        'note': note
+    })
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body,
+    }
+
+    const response = await fetch(url + '/shift/note', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+
+}
+
+export const deleteShiftFetch = async (shift_id) => {
+
+    const body = JSON.stringify({
+        'shift_id': shift_id,
+    })
+    const data = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body,
+    }
+    const response = await fetch(url + '/shift/delete', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+}
+
+export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
+    const body = JSON.stringify({
+        'shift_id': shiftId,
+        'user_id': userId,
+        'start': timeCorrection.start,
+        'stop': timeCorrection.stop,
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/shift/correction', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+}
+
+export const setManualShift = async (shiftTime, note) => {
+    const authStore = useAuthStore();
+
+    const body = JSON.stringify({
+        'user_id': authStore.user.id,
+        'start_time': shiftTime.start,
+        'stop_time': shiftTime.stop,
+        'note': note
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/manual', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+// OvHistory
+
+export const getOVHistory = async (userId, year, month) => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+    }
+    let url_string = `/ov-history/?user_id=${userId}&year=${year}&month=${month}`
+    const response = await fetch(url + url_string, data)
+
+    if (!response.ok) {
+      throw new Error('Fetch active shift failed.')
+    }
+
+    return await response.json()
+}
+
+export const setOVHistory = async (userId, year, month) => {
+
+    const body = JSON.stringify({
+        'user_id': userId,
+        'year': year,
+        'month': month
+    })
+
+    const data = {
+      method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+
+    const response = await fetch(url + '/ov-history/set', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 
 // TOIL
 export const setToil = async (userId, toilId, counter, date) => {

@@ -1,8 +1,10 @@
 import { ref, reactive, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { checkIsAuthorized, getMe } from "@/composables/fetchers.js";
+import {useAlertStore} from "@/stores/alertStore.js";
 
 export const useAuthStore = defineStore('auth', () => {
+  const alert = useAlertStore()
   const token = ref(sessionStorage.getItem('authToken') || null);
   const user = reactive({
     id: null,
@@ -75,7 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
           return true;
         }
       } catch (error) {
-        console.error('Authorization error:', error);
+        alert.show("error", error.message)
         return false;
       }
     }

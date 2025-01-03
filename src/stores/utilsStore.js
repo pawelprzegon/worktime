@@ -2,7 +2,6 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
-import {deleteShiftFetch} from "@/composables/fetchers.js";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
@@ -118,7 +117,10 @@ export const useSelectedMonthStore = (id) =>
             prevMonth.setMonth(prevMonth.getMonth() - 1);
 
             const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
-             selected.value.monthlyOvertime += ovHistory[0].overtime_seconds || 0;
+
+             selected.value.monthlyOvertime += (ovHistory && ovHistory.length > 0 && ovHistory[0]?.overtime_seconds)
+                ? ovHistory[0].overtime_seconds
+                : 0;
 
              const isThisMonthClosed = await fetchOvHistory(selectedUser.user.id, currentMonth)
              if (isThisMonthClosed.length > 0) {
@@ -152,9 +154,7 @@ export const useSelectedMonthStore = (id) =>
           const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
 
           groupShiftsByDate(shifts, toils);
-
           await addPrevOvertime()
-
           reduceToil(toils)
 
           selected.value.days = selected.value.days.map((day) => {
