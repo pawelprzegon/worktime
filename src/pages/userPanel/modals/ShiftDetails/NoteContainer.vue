@@ -41,7 +41,7 @@ const addNote = async () => {
 <template>
 
   <div
-      class="grid mt-2"
+      class="grid mt-2 min-h-5"
       :class="props.shift.note ? 'grid-rows-[auto_50px]' : 'grid-rows-1'"
   >
 
@@ -73,7 +73,6 @@ const addNote = async () => {
       />
     </form>
     <div
-        v-show="!monthStore.selected.closed"
         class="place-items-end">
       <CustomTextButton
         v-if="!noteEdit && props.shift.note !== ''"

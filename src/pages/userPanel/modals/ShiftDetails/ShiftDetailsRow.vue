@@ -45,7 +45,7 @@ onMounted(async () => {
 
   <div
       class="inline-grid items-center m-3
-      border rounded-lg
+      border-2 rounded-lg
       overflow-auto
       w-[95%]
       "

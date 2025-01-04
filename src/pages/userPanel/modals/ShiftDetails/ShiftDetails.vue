@@ -1,7 +1,6 @@
 <script setup>
 import CorrectionsContainer from "@/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
 import NoteContainer from "@/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
-import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
 
 
 const props = defineProps({
@@ -28,17 +27,17 @@ const props = defineProps({
       <!-- Sekcja notatki -->
       <div
           class="
-          grid  m-3 rounded-md border border-silver bg-third
+          grid m-3 rounded-md border border-pigeon
 
-          portrait-2xs:grid-rows-[20px_auto]
-          portrait-medium:grid-rows-[30px_auto]
+          portrait-2xs:grid-rows-[15px_auto]
+          portrait-medium:grid-rows-[18px_auto]
           ">
         <h2
             class="
-            text-mute bg-silver font-bold text-left px-2 w-full rounded-t-md
+            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
 
               portrait-2xs:text-sm
-              portrait-medium:text-lg
+              portrait-medium:text-md
               "
         >NOTE</h2>
         <NoteContainer :shift="props.shift"/>
@@ -47,17 +46,17 @@ const props = defineProps({
       <!-- Sekcja poprawek -->
       <div
           class="
-          grid  m-3 rounded-md border border-silver bg-third
+          grid m-3 rounded-md border border-pigeon
 
-          portrait-2xs:grid-rows-[20px_auto]
-          portrait-medium:grid-rows-[30px_auto]
+          portrait-2xs:grid-rows-[15px_auto]
+          portrait-medium:grid-rows-[18px_auto]
           ">
         <h2
             class="
-            text-mute bg-silver font-bold text-left px-2 w-full rounded-t-md
+            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
 
               portrait-2xs:text-sm
-              portrait-medium:text-lg
+              portrait-medium:text-md
               "
         >CORRECTION</h2>
         <CorrectionsContainer :shift="props.shift"/>

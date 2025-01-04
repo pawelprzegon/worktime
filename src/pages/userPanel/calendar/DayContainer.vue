@@ -31,9 +31,10 @@ const props = defineProps({
       :class="[
           {
             'unfinished-shift': props.day.list.length > 0,
-            'finished-shift': (props.day.regular + props.day.overtime + props.day.toil.duration_seconds) >= 28800
+            'finished-shift': (props.day.regular + props.day.overtime + (props.day.toil?.duration_seconds || 0)) >= 28800
           }]"
     >
+
       <span
           class="
           h-1/4 w-full border-b border-silver inline-block

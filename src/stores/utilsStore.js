@@ -136,11 +136,7 @@ export const useSelectedMonthStore = (id) =>
                 : 0;
 
              const isThisMonthClosed = await fetchOvHistory(selectedUser.user.id, currentMonth)
-             if (isThisMonthClosed.length > 0) {
-                 selected.value.closed = true;
-             } else {
-                 selected.value.closed = false;
-             }
+             selected.value.closed = isThisMonthClosed.length > 0;
         }
 
         const reduceToil = (toils) => {
@@ -153,7 +149,6 @@ export const useSelectedMonthStore = (id) =>
                                       new Date(toil.date).toISOString().slice(0, 7);
 
                 if (toilYearMonth === currentYearMonth) {
-
                     selected.value.monthlyOvertime -= toil?.duration_seconds || 0;
                 }
 
@@ -166,11 +161,9 @@ export const useSelectedMonthStore = (id) =>
           updateDaysInMonth();
 
           const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
-
           groupShiftsByDate(shifts, toils);
           await addPrevOvertime()
           reduceToil(toils)
-
           selected.value.days = selected.value.days.map((day) => {
             const formattedDate = format(day.date, "yyyy-MM-dd");
             const shiftData = groupedShifts[formattedDate] || {};
