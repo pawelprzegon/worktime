@@ -1,6 +1,7 @@
 import {clearCache, url} from "@/composables/utils.js";
 import {format} from "date-fns";
 import { useAuthStore } from '@/stores/authStore.js';
+import {useRouter} from "vue-router";
 
 const addAuthorization = () => {
     const authStore = useAuthStore();
@@ -24,6 +25,12 @@ export const checkIsAuthorized = async () => {
     const response = await fetch(url + '/auth/check', data)
 
     if (!response.ok) {
+        if (response.status === 401) {
+            const auth = useAuthStore()
+            auth.clearToken()
+            const router = useRouter()
+            await router.push('/login')
+        }
         const errorData = await response.json();
         throw new Error(errorData.detail)
     }

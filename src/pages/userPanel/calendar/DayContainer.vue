@@ -52,8 +52,9 @@ const props = defineProps({
         </span>
       </span>
 
+<!--      If some regular or toil-->
       <div
-          v-if="props.day.list.length > 0"
+          v-if="props.day.list.length > 0 || props.day.toil.duration_seconds"
           class="h-3/4 w-full
           flex flex-col justify-center place-items-center
 
@@ -68,7 +69,7 @@ const props = defineProps({
       >
 
         <small
-            v-if="props.day.list.length > 0"
+            v-if="props.day.regular"
             class="
             text-platinum text-base
 
@@ -86,7 +87,7 @@ const props = defineProps({
         </small>
 
         <small
-            v-if="props.day.list.length > 0 && props.day.overtime"
+            v-if="props.day.overtime"
             class="
             text-overtime text-base
 
@@ -104,7 +105,7 @@ const props = defineProps({
         </small>
 
         <small
-            v-if="props.day.list.length > 0 && props.day.toil.duration_seconds >  0"
+            v-if="props.day.toil?.duration_seconds"
             class="
             text-turquoise text-base
 
@@ -120,8 +121,9 @@ const props = defineProps({
         >
           {{ formatTime(props.day.toil.duration_seconds) }}
         </small>
-
       </div>
+
+<!--      If any regular or toil-->
       <div
           v-else
           class="h-3/4 w-full flex flex-col justify-center items-center"

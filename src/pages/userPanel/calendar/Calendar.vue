@@ -54,7 +54,6 @@ const closeShiftAdder = () => {
 }
 
 onMounted(async () => {
-  console.log('test')
   await getDataHandler();
   updateScreenSize(screenSize);
   window.addEventListener('resize', updateScreenSize);
@@ -63,7 +62,6 @@ onMounted(async () => {
 </script>
 
 <template>
-
 
     <CalendarNavigation
         :selected-month="monthStore.selected.month"

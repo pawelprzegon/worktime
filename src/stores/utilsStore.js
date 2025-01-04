@@ -5,7 +5,7 @@ import {splitTime} from "@/composables/utils.js";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
-
+// To jest używane tylko i wyłącznie przez previliged
 export const useSelectedDayStore = (id) =>
   defineStore(id, () => {
     const month = ref(new Date());
@@ -67,7 +67,6 @@ export const useSelectedMonthStore = (id) =>
                 regular: 0,
                 overtime: 0,
                 toil: 0,
-                closed: false
             }));
         };
 
@@ -80,35 +79,49 @@ export const useSelectedMonthStore = (id) =>
 
         const groupShiftsByDate = (shifts, toils) => {
 
-          groupedShifts = shifts.reduce((acc, shift) => {
+            groupedShifts = shifts.reduce((acc, shift) => {
 
-            const date = shift.start.split('T')[0]
+                const date = shift.start.split('T')[0]
 
-            if (!acc[date]) {
-              acc[date] = {
-                shifts: { date, list: [] },
-                regular: 0,
-                overtime: 0,
-                toil: 0,
-              };
-            }
+                if (!acc[date]) {
+                  acc[date] = {
+                    shifts: { date, list: [] },
+                    regular: 0,
+                    overtime: 0,
+                    toil: 0,
+                  };
+                }
 
-            acc[date].shifts.list.push(shift);
+                acc[date].shifts.list.push(shift);
 
-            const splitTimeObj = splitTime(shift.work);
+                const splitTimeObj = splitTime(shift.work);
 
-            const matchedToil = toils.find((toil) => toil.date.split('T')[0] === date) || { duration_seconds: 0 };
+                acc[date].regular += splitTimeObj?.regular || 0;
+                acc[date].overtime += splitTimeObj?.overtime || 0;
 
-            acc[date].toil = matchedToil || 0;
+                selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
+                selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
+                return acc;
+            }, {});
 
-            acc[date].regular += splitTimeObj?.regular || 0;
-            acc[date].overtime += splitTimeObj?.overtime || 0;
+            toils.forEach((toil) => {
+                const date = toil.date.split('T')[0];
 
-            selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
-            selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
+                if (!groupedShifts[date]) {
 
-            return acc;
-          }, {});
+                  groupedShifts[date] = {
+                    shifts: { date, list: [] },
+                    regular: 0,
+                    overtime: 0,
+                    toil: toil,
+                  };
+
+                } else {
+                    groupedShifts[date].toil = toil
+                }
+
+              });
+
         };
 
         const addPrevOvertime = async () => {
@@ -142,8 +155,9 @@ export const useSelectedMonthStore = (id) =>
                 if (toilYearMonth === currentYearMonth) {
 
                     selected.value.monthlyOvertime -= toil?.duration_seconds || 0;
-                    selected.value.toils += toil?.duration_seconds || 0;
                 }
+
+                selected.value.toils += toil?.duration_seconds || 0;
             });
         };
 
