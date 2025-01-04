@@ -5,7 +5,7 @@ import Spinner from "@/components/Spinner.vue";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import {useCalendarDays, daysOfWeek, useCalendarNavigation, updateScreenSize} from "@/composables/utils.js";
+import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
 import {useDailyShiftsList} from "@/stores/calendarStore.js";
 import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
@@ -55,8 +55,8 @@ const closeShiftAdder = () => {
 
 onMounted(async () => {
   await getDataHandler();
-  updateScreenSize(screenSize);
-  window.addEventListener('resize', updateScreenSize);
+  screenSize.setSize(window.innerWidth);
+  window.addEventListener('resize', screenSize.setSize(window.innerWidth));
 });
 
 </script>

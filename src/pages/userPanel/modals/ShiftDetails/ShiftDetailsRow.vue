@@ -1,6 +1,6 @@
 <script setup>
 
-import {formatTime, getLastCorrectionUpdate, getTime, updateScreenSize} from "@/composables/utils.js";
+import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
 import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
@@ -36,7 +36,8 @@ const start = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shif
 const stop = props.shift.update.length > 0 ? getLastCorrectionUpdate(props.shift).stop : props.shift.stop
 
 onMounted(async () => {
-  updateScreenSize(screenSize);
+  screenSize.setSize(window.innerWidth);
+  window.addEventListener('resize', screenSize.setSize(window.innerWidth));
 });
 
 </script>

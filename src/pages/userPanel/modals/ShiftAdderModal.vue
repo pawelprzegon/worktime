@@ -1,7 +1,13 @@
 <script setup>
   import { ref } from 'vue';
   import ModalWrapper from "@/components/ModalWrapper.vue";
-  import {combineDateWithTime, formatTime, getDateString} from "@/composables/utils.js";
+  import {
+    combineDateWithTime,
+    formatTime,
+    getDateString,
+    getLastCorrectionUpdate,
+    getTimeString
+  } from "@/composables/utils.js";
   import {setManualShift} from "@/composables/fetchers.js";
   import {useDailyShiftsList} from "@/stores/calendarStore.js";
   import {useSelectedMonthStore} from "@/stores/utilsStore.js";
@@ -15,12 +21,17 @@
   const adder = useAdderShiftStore()
   const alert = useAlertStore()
 
-  const isModalOpen = ref(true);
-
   const props = defineProps({
     closeModal: Function,
   })
 
+  const shiftTime = ref({
+    start: '',
+    stop: ''
+  });
+
+  const note = ref('')
+  const isModalOpen = ref(true);
   const dt = getDateString(dailyShifts.date)
 
   const closeModal = () => {
@@ -30,10 +41,10 @@
 
   const submitShift = async () => {
     const shiftDt = {
-      start: combineDateWithTime(dailyShifts.date, adder.shift.start),
-      stop: combineDateWithTime(dailyShifts.date, adder.shift.stop),
+      start: combineDateWithTime(dailyShifts.date, shiftTime.value.start),
+      stop: combineDateWithTime(dailyShifts.date, shiftTime.value.stop),
     }
-    const response = await setManualShift(shiftDt, adder.shift.note)
+    const response = await setManualShift(shiftDt, note.value)
 
     if (response.status === 'success') {
       await monthStore.refresh()
@@ -50,7 +61,7 @@
     <div
         class="
           bg-soft shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3
-          w-[75vw] max-w-[500px] min-w-[250px]
+          w-[75vw] max-w-[600px] min-w-[250px]
         "
     >
       <div class="p-2 w-full">
@@ -59,7 +70,7 @@
 <!--        ADD TOILS-->
         <div
           class="
-          grid  m-3 rounded-md border border-pigeon
+          grid  m-3 rounded-md border border-pigeon bg-secondary
 
           portrait-2xs:grid-rows-[15px_auto]
           portrait-medium:grid-rows-[18px_auto]
@@ -84,7 +95,7 @@
         <div
             v-show="!monthStore.selected.closed"
             class="rounded-md m-3 border border-silver">
-          <OvertimeContainer/>
+          <OvertimeContainer />
         </div>
       </div>
 
@@ -93,7 +104,7 @@
         <div
           class="
           disabled:
-          grid  m-3 rounded-md border border-pigeon
+          grid  m-3 rounded-md border border-pigeon bg-secondary
 
           portrait-2xs:grid-rows-[15px_auto]
           portrait-medium:grid-rows-[18px_auto]
@@ -103,7 +114,7 @@
               text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
 
                 portrait-2xs:text-sm
-              portrait-medium:text-md
+                portrait-medium:text-md
                 "
           >
             ADD SHIFT
@@ -113,7 +124,7 @@
             <div class="flex flex-row justify-start items-center m-4">
               <label for="startTime" class="block text-base font-thin text-silver text-left mr-4">Start hour</label>
               <input
-                v-model="adder.setStart"
+                v-model="shiftTime.start"
                 type="time"
                 id="startTime"
                 class="block w-[100px] border text-black border-gray-300 rounded-md shadow-sm text-lg"
@@ -124,7 +135,7 @@
             <div class="flex flex-row justify-start items-center m-4">
               <label for="endTime" class="block text-base font-thin text-silver text-left mr-4">Stop hour</label>
               <input
-                v-model="adder.setStop"
+                v-model="shiftTime.stop"
                 type="time"
                 id="endTime"
                 class="block w-[100px] border text-black border-gray-300 rounded-md shadow-sm text-lg"
@@ -135,7 +146,7 @@
             <div class="m-4">
               <label for="note" class="block text-base font-thin text-silver text-left">Note</label>
               <textarea
-                v-model="adder.shift.note"
+                v-model="note"
                 id="note"
                 rows="3"
                 class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm text-lg resize-none placeholder:text-sm"

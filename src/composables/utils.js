@@ -143,8 +143,3 @@ export const splitTime = (shiftTime) => {
   const overtimes_seconds = Math.max(shiftTime - basic_work_time, 0)
   return {regular: regular_seconds, overtime: overtimes_seconds};
 };
-
-export const updateScreenSize = (screenSize) => {
-  const width = window.innerWidth;
-  screenSize.setSize(width)
-}

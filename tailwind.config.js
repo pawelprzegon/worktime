@@ -19,7 +19,7 @@ export default {
         'timber-wolf': '#CFD2CD',
         'light': '#b7b7b7',
         'silver': '#A6A2A2',
-        'pigeon': '#797979',
+        'pigeon': '#b7b7b7',
         'mute': '#282828',
         'soft': '#222222',
         'beb': '#3498db',
