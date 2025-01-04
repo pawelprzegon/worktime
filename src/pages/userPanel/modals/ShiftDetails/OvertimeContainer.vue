@@ -16,7 +16,8 @@ const authStore = useAuthStore()
 
 
 const calculateMaxToTake = () => {
-  return  dailyShifts.selectedDay.overtime > 0 ? 0 : Math.floor((28800 - dailyShifts.selectedDay.regular) / 3600 + 1);
+  let maxToil = dailyShifts.selectedDay.overtime > 0 ? 0 : Math.floor((28800 - dailyShifts.selectedDay.regular) / 3600);
+  return maxToil + ((dailyShifts.selectedDay.regular % 3600) !== 0 ? 1 : 0);
 }
 
 const maxToTake = ref(calculateMaxToTake());
