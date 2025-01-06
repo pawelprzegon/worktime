@@ -41,7 +41,6 @@
     }
 
     if (!checkShiftLessThan28800(shiftDt)){
-      console.log(checkShiftLessThan28800(shiftDt))
       await dayStore.saveToil(0, 0)
       responseMessage.status = 'warning'
       responseMessage.message = 'Shift time with Toil time is higher than 8h. Toil cleared!'
@@ -50,7 +49,7 @@
     try {
       const response = await setManualShift(shiftDt, note.value)
       await monthStore.refresh()
-      dayStore.refresh()
+      await dayStore.refresh()
 
       if (responseMessage.status) {
         responseMessage.message += ` ${response.message}`

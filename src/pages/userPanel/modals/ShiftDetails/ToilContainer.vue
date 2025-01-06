@@ -39,9 +39,6 @@ const handleSaveToil = async() => {
 </script>
 
 <template>
-  <p>{{dayStore.maxToTake}}</p>
-  <p>{{hoursPool}}</p>
-  <p>{{dayStore.overtime}}</p>
 
   <div
       class="

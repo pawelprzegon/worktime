@@ -19,14 +19,13 @@ const props = defineProps({
 
 const selectedUserValue = ref(null);
 
-function handleSelection() {
+const handleSelection = () => {
   selectedUser.setUser(selectedUserValue.value);
 }
 
 watch(() => props.dataList, () => {
 
   if (props.dataList.length > 0 && selectedUser.user !== null) {
-    console.log(selectedUser.user)
     const matchedUser = props.dataList.find(usr => usr.id === selectedUser.user.id);
     if (matchedUser) {
 
@@ -55,11 +54,8 @@ watch(() => props.dataList, () => {
       >
         {{element.first_name}} {{element.last_name}}
       </option>
-
     </select>
-
   </section>
-
 </template>
 
 <style scoped>

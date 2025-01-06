@@ -422,6 +422,32 @@ export const setManualShift = async (shiftTime, note) => {
     return await response.json()
 }
 
+export const setManualShiftOFF = async (offType) => {
+    const authStore = useAuthStore();
+
+    const body = JSON.stringify({
+        'user_id': authStore.user.id,
+        'off_type': offType
+    });
+
+    const data = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: body
+    }
+    const response = await fetch(url + '/shift/off', data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 // OvHistory
 
 export const getOVHistory = async (userId, year, month) => {

@@ -10,6 +10,7 @@ import ToilEditor from "@/pages/userPanel/modals/ShiftDetails/ToilEditor.vue";
 import ShiftAdder from "@/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 import Spinner from "@/components/Spinner.vue";
+import DayOFF from "@/pages/userPanel/modals/ShiftDetails/DayOFF.vue";
 
 const dayStore = usedayStore();
 const isModalOpen = ref(true);
@@ -56,30 +57,36 @@ const dt = getDateString(dayStore.date)
          >
 
             <ShiftDetailContainer
-              :label="'regular time'"
-              :time="formatTime(dayStore.regular)"
-              :orient="'row'"
+                v-show="dayStore.list.length > 0"
+                :label="'regular time'"
+                :time="formatTime(dayStore.regular)"
+                :orient="'row'"
             />
 
             <ShiftDetailContainer
-              :label="'overtime'"
-              :time="formatTime(dayStore.overtime)"
-              :orient="'row'"
-              :text-color="dayStore.overtime > 0 ? 'overtime' : 'stone-700'"
-            />
-
-            <ToilEditor />
-
-            <ShiftEditor
                 v-show="dayStore.list.length > 0"
-                v-for="(shift, index) in dayStore.list"
-                :key=shift.id
-                :shift-id="shift.id"
-                :index="index+1"
-                :closeModal="closeModal"
+                :label="'overtime'"
+                :time="formatTime(dayStore.overtime)"
+                :orient="'row'"
+                :text-color="dayStore.overtime > 0 ? 'overtime' : 'stone-700'"
             />
 
-            <ShiftAdder
+           <ShiftEditor
+               v-show="dayStore.list.length > 0"
+               v-for="(shift, index) in dayStore.list"
+               :key=shift.id
+               :shift-id="shift.id"
+               :index="index+1"
+               :closeModal="closeModal"
+           />
+
+           <DayOFF
+               v-show="dayStore.list.length === 0"
+           />
+
+            <ToilEditor/>
+
+           <ShiftAdder
                 v-show="dayStore.list.length === 0"
                 :closeModal="closeModal"
             />
