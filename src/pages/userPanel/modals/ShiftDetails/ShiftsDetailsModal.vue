@@ -11,6 +11,7 @@ import ShiftAdder from "@/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 import Spinner from "@/components/Spinner.vue";
 import DayOFF from "@/pages/userPanel/modals/ShiftDetails/DayOFF.vue";
+import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
 
 const dayStore = usedayStore();
 const isModalOpen = ref(true);
@@ -20,6 +21,13 @@ const props = defineProps({
   closeModal: Function,
 })
 
+const checkOffDay = () => {
+  return dayStore.list.filter(s => s.off_type !== null).length > 0
+}
+
+const getReason = () => {
+  return dayStore.list.filter(s => s.offType !== null)[0]
+}
 
 const closeModal = () => {
   props.closeModal();
@@ -53,43 +61,46 @@ const dt = getDateString(dayStore.date)
          </div>
 
          <div v-else
-              class="min-h-[15vh]"
+              class="min-h-[15vh] place-items-center"
          >
 
-            <ShiftDetailContainer
-                v-show="dayStore.list.length > 0"
-                :label="'regular time'"
-                :time="formatTime(dayStore.regular)"
-                :orient="'row'"
-            />
+           <div v-if="!checkOffDay()">
 
-            <ShiftDetailContainer
-                v-show="dayStore.list.length > 0"
-                :label="'overtime'"
-                :time="formatTime(dayStore.overtime)"
-                :orient="'row'"
-                :text-color="dayStore.overtime > 0 ? 'overtime' : 'stone-700'"
-            />
+              <ShiftDetailContainer
+                  v-show="dayStore.list.length > 0"
+                  :label="'regular time'"
+                  :time="formatTime(dayStore.regular)"
+                  :orient="'row'"
+              />
 
-           <ShiftEditor
-               v-show="dayStore.list.length > 0"
-               v-for="(shift, index) in dayStore.list"
-               :key=shift.id
-               :shift-id="shift.id"
-               :index="index+1"
-               :closeModal="closeModal"
-           />
+              <ShiftDetailContainer
+                  v-show="dayStore.list.length > 0"
+                  :label="'overtime'"
+                  :time="formatTime(dayStore.overtime)"
+                  :orient="'row'"
+                  :text-color="dayStore.overtime > 0 ? 'overtime' : 'stone-700'"
+              />
 
-           <DayOFF
-               v-show="dayStore.list.length === 0"
-           />
+             <ShiftEditor
+                 v-show="dayStore.list.length > 0"
+                 v-for="(shift, index) in dayStore.list"
+                 :key=shift.id
+                 :shift-id="shift.id"
+                 :index="index+1"
+                 :closeModal="closeModal"
+             />
 
-            <ToilEditor/>
+             <ToilEditor/>
 
-           <ShiftAdder
-                v-show="dayStore.list.length === 0"
-                :closeModal="closeModal"
-            />
+             <ShiftAdder
+                  v-show="dayStore.list.length === 0"
+                  :closeModal="closeModal"
+              />
+
+
+           </div>
+
+           <DayOFF />
 
          </div>
 

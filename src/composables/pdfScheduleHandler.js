@@ -47,7 +47,8 @@ export const generatePDF = (selectedUser) => {
   // Dane tabeli
   const tableBody = monthStore.selected.days.map(day => {
 
-    const calculateWorkTime = () => {
+    if (!day.offType) {
+      const calculateWorkTime = () => {
       if (!day.regular && !day.toil) {
         return ''
       }
@@ -65,29 +66,48 @@ export const generatePDF = (selectedUser) => {
       return day.regular + (day.toil?.duration_seconds || 0)
     }
 
-    let start = '';
-    let stop = '';
-    const dayData = getLast(day);
+      let start = '';
+      let stop = '';
+      const dayData = getLast(day);
 
-    // jeżeli czas pracy z odebranymi nadgodzinami jest dłuższy od 7h 45min to robimy 8-16
+      // jeżeli czas pracy z odebranymi nadgodzinami jest dłuższy od 7h 45min to robimy 8-16
 
-    if ((day.regular + day.overtime + (day.toil?.duration_seconds || 0)) >= baseShiftTime - baseShiftDelta) {
-      start = formatTime(baseShiftTime).slice(0, -3);
-      stop = formatTime(baseShiftTime * 2).slice(0, -3);
+      if ((day.regular + day.overtime + (day.toil?.duration_seconds || 0)) >= baseShiftTime - baseShiftDelta) {
+        start = formatTime(baseShiftTime).slice(0, -3);
+        stop = formatTime(baseShiftTime * 2).slice(0, -3);
 
-    // Jeżeli czas pracy jest mniejszy od 7h 45min to robimy tak jak jest
-    } else if (day.regular + (day.toil?.duration_seconds || 0) < baseShiftTime - baseShiftDelta) {
-      [start, stop] = prepareStartAndStopTimePDF(day, dayData);
+      // Jeżeli czas pracy jest mniejszy od 7h 45min to robimy tak jak jest
+      } else if (day.regular + (day.toil?.duration_seconds || 0) < baseShiftTime - baseShiftDelta) {
+        [start, stop] = prepareStartAndStopTimePDF(day, dayData);
+      }
+
+      let workTime = calculateWorkTime()
+
+      if (typeof(workTime) === "number") {
+        totalHours += workTime
+      }
+
+      workTime = workTime ? formatTime(workTime) : ''
+      return [start, stop, workTime.slice(0, -3)];
+
+    } else {
+      let response = []
+      switch (day.offType) {
+        case 'UW':
+        case 'UŻ':
+        case 'UB':
+          response = ['', '', '', 1, day.offType];
+          break;
+
+        case 'L4':
+          response = ['', '', '', 1, '', day.offType];
+          break;
+      }
+
+      return response;
+
     }
 
-    let workTime = calculateWorkTime()
-
-    if (typeof(workTime) === "number") {
-      totalHours += workTime
-    }
-
-    workTime = workTime ? formatTime(workTime) : ''
-    return [start, stop, workTime.slice(0, -3)];
   });
 
   const summaryRow = ['', '', formatTime(totalHours).slice(0, -3)];

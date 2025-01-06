@@ -80,11 +80,8 @@
       <div
           class="grid grid-cols-[1fr_auto] items-center bg-secondary"
       >
-        <div
-          class="
-            shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3
-          "
-      >
+        <div class="shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3">
+
         <div class="p-2 w-fit">
 
           <div class="grid grid-flow-row">

@@ -17,6 +17,7 @@ const monthStore = useSelectedMonthStore('privileged')
           <th>Regular Work time</th>
           <th>Over time</th>
           <th>Overtime taken</th>
+          <th>Day off</th>
         </tr>
       </thead>
       <tbody>

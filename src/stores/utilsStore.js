@@ -34,6 +34,7 @@ export const useSelectedMonthStore = (id) =>
                 regular: 0,
                 overtime: 0,
                 toil: 0,
+                offType: null,
             }));
         };
 
@@ -41,7 +42,7 @@ export const useSelectedMonthStore = (id) =>
             selected.value.monthlyRegularTime = 0;
             selected.value.monthlyOvertime = 0;
             selected.value.toils = 0;
-            selected.value.days = [];
+            selected.value.days = []
         }
 
         const groupShiftsByDate = (shifts, toils) => {
@@ -56,6 +57,7 @@ export const useSelectedMonthStore = (id) =>
                     regular: 0,
                     overtime: 0,
                     toil: 0,
+                    offType: null
                   };
                 }
 
@@ -65,9 +67,11 @@ export const useSelectedMonthStore = (id) =>
 
                 acc[date].regular += splitTimeObj?.regular || 0;
                 acc[date].overtime += splitTimeObj?.overtime || 0;
+                acc[date].offType = shift.off_type
 
                 selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
                 selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
+
                 return acc;
             }, {});
 
@@ -132,16 +136,18 @@ export const useSelectedMonthStore = (id) =>
           groupShiftsByDate(shifts, toils);
           await addPrevOvertime()
           reduceToil(toils)
+
           selected.value.days = selected.value.days.map((day) => {
             const formattedDate = format(day.date, "yyyy-MM-dd");
             const shiftData = groupedShifts[formattedDate] || {};
 
             return {
-              ...day,
-              list: shiftData.shifts?.list || [],
-              regular: shiftData.regular || 0,
-              overtime: shiftData.overtime || 0,
-              toil: shiftData.toil || 0,
+                ...day,
+                list: shiftData.shifts?.list || [],
+                regular: shiftData.regular || 0,
+                overtime: shiftData.overtime || 0,
+                toil: shiftData.toil || 0,
+                offType: shiftData.offType || null
             };
           });
 

@@ -9,6 +9,7 @@ const monthStore = useSelectedMonthStore('calendar');
 const props = defineProps({
   day: Object,
 })
+
 </script>
 
 <template>
@@ -30,7 +31,8 @@ const props = defineProps({
         "
       :class="[
           {
-            'unfinished-shift': props.day.list.length > 0,
+            'off-shift': props.day.offType,
+            'unfinished-shift': props.day.list.length > 0 && !props.day.offType,
             'finished-shift': (props.day.regular + props.day.overtime + (props.day.toil?.duration_seconds || 0)) >= 28800
           }]"
     >
@@ -53,9 +55,15 @@ const props = defineProps({
         </span>
       </span>
 
+<!--      If some off day-->
+      <div v-if="props.day.offType"
+          class="h-3/4 flex flex-col justify-center items-center">
+        <p>{{props.day.offType}}</p>
+      </div>
+
 <!--      If some regular or toil-->
       <div
-          v-if="props.day.list.length > 0 || props.day.toil.duration_seconds"
+          v-else-if="props.day.list.length > 0 || props.day.toil.duration_seconds"
           class="h-3/4 w-full
           flex flex-col justify-center place-items-center
 
@@ -122,6 +130,7 @@ const props = defineProps({
         >
           {{ formatTime(props.day.toil.duration_seconds) }}
         </small>
+
       </div>
 
 <!--      If any regular or toil-->
@@ -160,5 +169,10 @@ const props = defineProps({
 .started-shift {
   background: var(--idle-color);
 }
+
+.off-shift {
+  background: var(--off-color);
+}
+
 
 </style>

@@ -422,11 +422,12 @@ export const setManualShift = async (shiftTime, note) => {
     return await response.json()
 }
 
-export const setManualShiftOFF = async (offType) => {
+export const setShiftOFF = async (offType, selectedDay) => {
     const authStore = useAuthStore();
 
     const body = JSON.stringify({
         'user_id': authStore.user.id,
+        'date': selectedDay,
         'off_type': offType
     });
 

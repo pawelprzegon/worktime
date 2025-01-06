@@ -67,31 +67,50 @@ const prepareStartAndStopTime = (day, dayData) => {
 export const calculateTime = (day) => {
 
   const formattedDate = format(day.date, 'yyyy-MM-dd');
-  const overtime = day.overtime ? formatTime(day.overtime) : '';
-  const toil = day.toil ? formatTime(day.toil.duration_seconds) : '';
-  const regular = day.regular ? formatTime(day.regular) : "";
 
   let result = `<td>${formattedDate}</td>`
-  const dayData = getLast(day)
 
-  const [start, stop] = prepareStartAndStopTime(day, dayData)
-  result += `
-    <td class="multiple-data">${start ? start : ''}</td>
-    <td class="multiple-data">${stop ? stop : ''}</td>
-  `
-
-  if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
-    result += `<td class="achieved">${regular}</td>`
+  const offType = day.offType ? day.offType : ''
+  if (offType) {
+      result += `
+      <td class="not-achieved">-</td>
+      <td class="not-achieved">-</td>
+      <td class="not-achieved">-</td>
+      <td class="not-achieved">-</td>
+      <td class="not-achieved">-</td>
+    `
   } else {
-    result += `<td class="not-achieved">${regular}</td>`
-  }
-  result += `<td>${overtime}</td>`
 
-  if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
-    result += `<td class="achieved">${toil}</td>`
-  } else {
-    result += `<td class="not-achieved">${toil}</td>`
+    const overtime = day.overtime ? formatTime(day.overtime) : '';
+    const toil = day.toil ? formatTime(day.toil.duration_seconds) : '';
+    const regular = day.regular ? formatTime(day.regular) : "";
+
+
+    const dayData = getLast(day)
+
+    const [start, stop] = prepareStartAndStopTime(day, dayData)
+    result += `
+      <td class="multiple-data">${start ? start : ''}</td>
+      <td class="multiple-data">${stop ? stop : ''}</td>
+    `
+
+    if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
+      result += `<td class="achieved">${regular}</td>`
+    } else {
+      result += `<td class="not-achieved">${regular}</td>`
+    }
+    result += `<td>${overtime}</td>`
+
+    if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
+      result += `<td class="achieved">${toil}</td>`
+    } else {
+      result += `<td class="not-achieved">${toil}</td>`
+    }
+
   }
+
+
+  result += `<td class="not-achieved">${offType}</td>`
 
   return result;
 };
