@@ -11,22 +11,23 @@ const alert = useAlertStore();
 const dayStore = usedayStore();
 const monthStore = useSelectedMonthStore('calendar');
 
-
-const hoursPool = ref(getHoursAsNumber(monthStore.selected.monthlyOvertime));
+const hoursPool = getHoursAsNumber(monthStore.selected.monthlyOvertime);
+const recHoursPool =ref(hoursPool)
 const counter = ref((dayStore.toil?.duration_seconds || 0) / 3600);
 
 const increment = () => {
+
   if (counter.value < dayStore.maxToTake &&
-      counter.value < hoursPool.value){
+      counter.value < hoursPool){
     counter.value += 1
-    hoursPool.value--;
+    recHoursPool.value--;
   }
 };
 
 const decrement = () => {
   if (counter.value > 0) {
     counter.value -= 1
-    hoursPool.value++;
+    recHoursPool.value++;
   }
 };
 
@@ -38,6 +39,9 @@ const handleSaveToil = async() => {
 </script>
 
 <template>
+  <p>{{dayStore.maxToTake}}</p>
+  <p>{{hoursPool}}</p>
+  <p>{{dayStore.overtime}}</p>
 
   <div
       class="
@@ -50,7 +54,7 @@ const handleSaveToil = async() => {
 
     <div class="inline-flex">
       <h3 class="m-auto text-sm">overtimes pool:</h3>
-      <span class="text-2xl text-center font-bold w-10 text-overtime">{{hoursPool}}</span>
+      <span class="text-2xl text-center font-bold w-10 text-overtime">{{recHoursPool}}</span>
     </div>
 
     <div class="grid grid-cols-[50px_30px_50px] items-center justify-items-center">
