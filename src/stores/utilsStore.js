@@ -4,11 +4,13 @@ import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {splitTime} from "@/composables/utils.js";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
+import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 
 export const useSelectedMonthStore = (id) =>
     defineStore(id, () => {
 
-        const selectedUser = useAuthStore()
+        const authUser = useAuthStore()
+        const selectedUser = usePrivilegedSelectedUser();
         let groupedShifts = []
 
         const selected = ref({
@@ -100,13 +102,13 @@ export const useSelectedMonthStore = (id) =>
             let prevMonth = new Date(selected.value.month)
             prevMonth.setMonth(prevMonth.getMonth() - 1);
 
-            const ovHistory = await fetchOvHistory(selectedUser.user.id, prevMonth);
+            const ovHistory = await fetchOvHistory(authUser.user.id, prevMonth);
 
              selected.value.monthlyOvertime += (ovHistory && ovHistory.length > 0 && ovHistory[0]?.overtime_seconds)
                 ? ovHistory[0].overtime_seconds
                 : 0;
 
-             const isThisMonthClosed = await fetchOvHistory(selectedUser.user.id, currentMonth)
+             const isThisMonthClosed = await fetchOvHistory(authUser.user.id, currentMonth)
              selected.value.closed = isThisMonthClosed.length > 0;
         }
 
@@ -127,11 +129,12 @@ export const useSelectedMonthStore = (id) =>
             });
         };
 
-        const processMonthlyShifts = async () => {
+        const processMonthlyShifts = async (userId = null) => {
           clear();
           updateDaysInMonth();
 
-          const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
+          const userID = selectedUser.user?.id || authUser.user.id
+          const { shifts, toils } = await fetchUserShifts(userID, selected.value.month);
 
           groupShiftsByDate(shifts, toils);
           await addPrevOvertime()
