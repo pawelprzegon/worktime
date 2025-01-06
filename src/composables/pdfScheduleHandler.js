@@ -5,14 +5,16 @@ import robotoFont from "@/assets/font/Roboto-Light-normal.js";
 import {formatTime, getLast} from "@/composables/utils.js";
 import {prepareStartAndStopTimePDF} from "@/composables/pdfHandler.js";
 import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
 
 const baseShiftTime = 28800
 const baseShiftDelta = 900
 
 
-export const generatePDF = (selectedUser, selectedMonth) => {
-  const monthYear = `${monthMapper(format(selectedMonth.month, 'MM'))}-${format(selectedMonth.month, 'yyyy')}`
+export const generatePDF = (selectedUser) => {
+  const monthStore = useSelectedMonthStore('privileged')
+  const monthYear = `${monthMapper(format(monthStore.selected.month, 'MM'))}-${format(monthStore.selected.month, 'yyyy')}`
   let totalHours = 0
   const doc = new jsPDF('landscape');
   const pageWidth = doc.internal.pageSize.width;
@@ -43,38 +45,43 @@ export const generatePDF = (selectedUser, selectedMonth) => {
   ];
 
   // Dane tabeli
-  const tableBody = selectedMonth.daysInMonth.map(day => {
+  const tableBody = monthStore.selected.days.map(day => {
 
     const calculateWorkTime = () => {
-      if (!day.shifts.regular) {
+      if (!day.regular && !day.toil) {
         return ''
       }
 
-      if (day.shifts.overtimeTaken) {
-        if ((day.shifts.regular + day.shifts.overtimeTaken.hours * 3600) >= baseShiftTime - baseShiftDelta) {
+      if (day.overtime) {
+        if ((day.regular + day.overtime) >= baseShiftTime - baseShiftDelta) {
           return baseShiftTime
         }
-        return day.shifts.regular + day.shifts.overtimeTaken.hours * 3600
+        return day.regular + day.overtime
       }
 
-      if (day.shifts.regular >= baseShiftTime - baseShiftDelta) {
+      if (day.regular + (day.toil?.duration_seconds || 0) >= baseShiftTime - baseShiftDelta) {
         return baseShiftTime
       }
-      return day.shifts.regular
+      return day.regular + (day.toil?.duration_seconds || 0)
     }
 
     let start = '';
     let stop = '';
     const dayData = getLast(day);
+
     // jeżeli czas pracy z odebranymi nadgodzinami jest dłuższy od 7h 45min to robimy 8-16
-    if (day.shifts.regular + ((day.shifts.overtimeTaken?.hours || 0) * 3600) >= baseShiftTime - baseShiftDelta) {
+
+    if ((day.regular + day.overtime + (day.toil?.duration_seconds || 0)) >= baseShiftTime - baseShiftDelta) {
       start = formatTime(baseShiftTime).slice(0, -3);
       stop = formatTime(baseShiftTime * 2).slice(0, -3);
+
     // Jeżeli czas pracy jest mniejszy od 7h 45min to robimy tak jak jest
-    } else if (day.shifts.regular < baseShiftTime - baseShiftDelta) {
+    } else if (day.regular + (day.toil?.duration_seconds || 0) < baseShiftTime - baseShiftDelta) {
       [start, stop] = prepareStartAndStopTimePDF(day, dayData);
     }
+
     let workTime = calculateWorkTime()
+
     if (typeof(workTime) === "number") {
       totalHours += workTime
     }
@@ -91,7 +98,7 @@ export const generatePDF = (selectedUser, selectedMonth) => {
 
   // Dodanie tabeli
   doc.autoTable({
-    head: [["", ...daysInMonth.value.map(day => format(day.date, 'dd')), "Razem"]],
+    head: [["", ...monthStore.selected.days.map(day => format(day.date, 'dd')), "Razem"]],
     body: transposedTable,
     startY: 30,
     tableWidth: 'auto',

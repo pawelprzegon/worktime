@@ -61,7 +61,7 @@ export const getLastCorrectionUpdate = (shift) => {
 
 export const getLast = (day) => {
   let shifts = []
-  day.shifts.list.forEach(shift => {
+  day.list.forEach(shift => {
     const lastCorrectionUpdate = getLastCorrectionUpdate(shift)
     if (Object.keys(lastCorrectionUpdate).length > 0){
       shifts.push(lastCorrectionUpdate)

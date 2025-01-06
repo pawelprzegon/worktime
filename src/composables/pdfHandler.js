@@ -6,11 +6,11 @@ export const prepareStartAndStopTimePDF = (day, dayData) => {
 
   dayData.forEach(shift => {
 
-    const startTime = day.shifts.list.length > 0
-      ? shift.startTime : '';
+    const startTime = day.list.length > 0
+      ? shift.start : '';
 
-    const stopTime = day.shifts.list.length > 0
-      ? shift.stopTime : '';
+    const stopTime = day.list.length > 0
+      ? shift.stop : '';
 
     start += start ? ', ' + getTime(startTime).slice(0, -3) : getTime(startTime).slice(0, -3)
     stop += stop ? ', ' + getTime(stopTime).slice(0, -3) : getTime(stopTime).slice(0, -3)

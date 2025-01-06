@@ -16,7 +16,6 @@ const dayStore = usedayStore();
 const screenSize = useScreenSizeStore()
 
 const isLoading = ref(true);
-const isShiftAdderOpen = ref(false);
 const isdayStoreOpen = ref(false);
 const modalKey = ref(0)
 
@@ -24,7 +23,6 @@ const getDataHandler = async () => {
   isLoading.value = true;
   const result = await monthStore.processMonthlyShifts()
   isLoading.value = !result;
-  return result;
 }
 
 const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandler);
@@ -32,24 +30,12 @@ const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandle
 const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
-
   dayStore.setDay(day);
   isdayStoreOpen.value = true
-  // if (day?.list.length > 0) {
-  //   isdayStoreOpen.value = true
-  // } else {
-  //   if (!monthStore.selected.closed){
-  //     isShiftAdderOpen.value = true;
-  //   }
-  // }
 }
 
 const closedayStore = () => {
   isdayStoreOpen.value = false;
-}
-
-const closeShiftAdder = () => {
-  isShiftAdderOpen.value = false;
 }
 
 onMounted(async () => {
@@ -61,7 +47,6 @@ onMounted(async () => {
 </script>
 
 <template>
-
     <CalendarNavigation
         :selected-month="monthStore.selected.month"
         @add="nextMonth"

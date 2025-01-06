@@ -1,14 +1,13 @@
 <script setup>
 
 import {calculateTime} from "@/composables/privilegedHandler.js";
-import {useSelectedDayStore} from "@/stores/utilsStore.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
-const selectedMonth = useSelectedDayStore('privilegedSelectedMonth')
+const monthStore = useSelectedMonthStore('privileged')
 
 </script>
 
 <template>
-
   <table>
       <thead>
         <tr>
@@ -22,7 +21,7 @@ const selectedMonth = useSelectedDayStore('privilegedSelectedMonth')
       </thead>
       <tbody>
         <tr
-            v-for="(day, index) in selectedMonth.daysInMonth"
+            v-for="(day, index) in monthStore.selected.days"
             :key="index"
             v-html="calculateTime(day)"
         >

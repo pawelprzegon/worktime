@@ -4,24 +4,25 @@ import {formatTime, getLast, getTime} from "@/composables/utils.js";
 const baseShiftTime = 28800
 
 export const monthMapper = (monthAsNumber) => {
+
   switch (monthAsNumber) {
-    case '1':
+    case '01':
       return 'Styczeń';
-    case '2':
+    case '02':
       return 'Luty';
-    case '3':
+    case '03':
       return 'Marzec';
-    case '4':
+    case '04':
       return 'Kwiecień';
-    case '5':
+    case '05':
       return 'Maj';
-    case '6':
+    case '06':
       return 'Czerwiec';
-    case '7':
+    case '07':
       return 'Lipiec';
-    case '8':
+    case '08':
       return 'Sierpień';
-    case '9':
+    case '09':
       return 'Wrzesień';
     case '10':
       return 'Październik';
@@ -46,10 +47,10 @@ const prepareStartAndStopTime = (day, dayData) => {
   let stop = ''
 
   dayData.forEach(shift => {
-    const startTime = day.shifts.list.length > 0
+    const startTime = day.list.length > 0
       ? shift.start : '-';
 
-    const stopTime = day.shifts.list.length > 0
+    const stopTime = day.list.length > 0
       ? shift.stop : '-';
 
     start += `<p>${getTime(startTime)}</p>`
@@ -57,8 +58,8 @@ const prepareStartAndStopTime = (day, dayData) => {
 
   })
 
-  start = start ? start : '-'
-  stop = stop ? stop : '-'
+  start = start ? start : ''
+  stop = stop ? stop : ''
 
   return [start, stop]
 }
@@ -66,25 +67,31 @@ const prepareStartAndStopTime = (day, dayData) => {
 export const calculateTime = (day) => {
 
   const formattedDate = format(day.date, 'yyyy-MM-dd');
-  const overtime = day.shifts.overtime ? formatTime(day.shifts.overtime) : ''
-  const overtimeHours = day.shifts.overtimeTaken?.hours || 0
-  const regularTime = day.shifts.regular ? formatTime(day.shifts.regular) : ""
+  const overtime = day.overtime ? formatTime(day.overtime) : '';
+  const toil = day.toil ? formatTime(day.toil.duration_seconds) : '';
+  const regular = day.regular ? formatTime(day.regular) : "";
 
   let result = `<td>${formattedDate}</td>`
   const dayData = getLast(day)
 
   const [start, stop] = prepareStartAndStopTime(day, dayData)
   result += `
-    <td class="multiple-data">${start}</td>
-    <td class="multiple-data">${stop}</td>
+    <td class="multiple-data">${start ? start : ''}</td>
+    <td class="multiple-data">${stop ? stop : ''}</td>
   `
 
-  if ((day.shifts.regular) >= baseShiftTime) {
-    result += `<td class="achieved">${regularTime}</td>`
+  if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
+    result += `<td class="achieved">${regular}</td>`
   } else {
-    result += `<td class="not-achieved">${regularTime}</td>`
+    result += `<td class="not-achieved">${regular}</td>`
   }
-  result += `<td>${overtime ? overtime : ''}</td>`
-  result += `<td>${overtimeHours ? overtimeHours : ''}</td>`
+  result += `<td>${overtime}</td>`
+
+  if ((day.regular + (day.toil?.duration_seconds || 0)) >= baseShiftTime) {
+    result += `<td class="achieved">${toil}</td>`
+  } else {
+    result += `<td class="not-achieved">${toil}</td>`
+  }
+
   return result;
 };

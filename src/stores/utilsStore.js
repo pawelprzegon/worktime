@@ -5,39 +5,6 @@ import {splitTime} from "@/composables/utils.js";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
-// To jest używane tylko i wyłącznie przez previliged
-export const useSelectedDayStore = (id) =>
-  defineStore(id, () => {
-    const month = ref(new Date());
-    const toils = ref(0);
-
-    const setMonth = (newMonth) => {
-      month.value = newMonth;
-    };
-
-    const daysInMonth = ref([]);
-
-    const updateDaysInMonth = () => {
-      daysInMonth.value = eachDayOfInterval({
-        start: startOfMonth(month.value),
-        end: endOfMonth(month.value),
-      }).map(date => ({
-        date,
-        hours: 0,
-        note: '',
-        shifts: { list: [], summary: 0 }
-      }));
-    };
-
-    return {
-        month,
-        toils,
-        daysInMonth,
-        updateDaysInMonth,
-        setMonth,
-    };
-  })();
-
 export const useSelectedMonthStore = (id) =>
     defineStore(id, () => {
 
@@ -161,6 +128,7 @@ export const useSelectedMonthStore = (id) =>
           updateDaysInMonth();
 
           const { shifts, toils } = await fetchUserShifts(selectedUser.user.id, selected.value.month);
+
           groupShiftsByDate(shifts, toils);
           await addPrevOvertime()
           reduceToil(toils)

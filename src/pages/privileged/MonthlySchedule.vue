@@ -5,45 +5,46 @@ import Spinner from "@/components/Spinner.vue";
 import {useCalendarNavigation} from "@/composables/utils.js";
 import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
-import {processMonthlyShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
-import {useSelectedMonthStore, useSelectedDayStore} from "@/stores/utilsStore.js";
+import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 
 const selectedUser = usePrivilegedSelectedUser();
-const selectedMonth = useSelectedDayStore('privilegedSelectedMonth')
-const monthTime = useSelectedMonthStore('privilegedMonthTime')
+const screenSize = useScreenSizeStore()
+const monthStore = useSelectedMonthStore('privileged')
 const isLoading = ref(false)
 
 
 const getDataHandler = async () => {
   isLoading.value = true;
-  const result = await processMonthlyShifts(selectedUser, selectedMonth, monthTime);
+  const result = await monthStore.processMonthlyShifts()
   isLoading.value = !result;
 };
 
-const { prevMonth, nextMonth } = useCalendarNavigation(selectedMonth, getDataHandler);
+const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandler);
 
 watch(
-  () => selectedUser.user,  () => {
-      getDataHandler();
+  () => selectedUser.user,  async() => {
+     await getDataHandler();
   },
   { deep: true }
 );
 
-onMounted( () => {
-  if (selectedMonth.month && selectedUser.user) {
-    getDataHandler();
+onMounted( async() => {
+  if (monthStore.selected.month && selectedUser.user) {
+    await getDataHandler();
   }
+  screenSize.setSize(window.innerWidth);
+  window.addEventListener('resize', screenSize.setSize(window.innerWidth));
 });
 
 </script>
 
 <template>
   <div v-if="selectedUser.user" class="schedule-container">
-    <button @click="generatePDF(selectedUser, selectedMonth)">Get Schedule</button>
+    <button @click="generatePDF(selectedUser, monthStore)">Get Schedule</button>
     <CalendarNavigation
-        :selected-month="selectedMonth.month"
+        :selected-month="monthStore.selected.month"
         @add="nextMonth"
         @sub="prevMonth"
     />
