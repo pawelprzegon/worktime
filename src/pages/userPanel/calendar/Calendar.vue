@@ -6,19 +6,18 @@ import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDeta
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
-import ShiftAdderModal from "@/pages/userPanel/modals/ShiftAdderModal.vue";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
 import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
 const monthStore = useSelectedMonthStore('calendar');
-const dailyShifts = useDailyShiftsList();
+const dayStore = usedayStore();
 const screenSize = useScreenSizeStore()
 
 const isLoading = ref(true);
 const isShiftAdderOpen = ref(false);
-const isDailyShiftsOpen = ref(false);
+const isdayStoreOpen = ref(false);
 const modalKey = ref(0)
 
 const getDataHandler = async () => {
@@ -34,19 +33,19 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
 
-  dailyShifts.setDay(day);
-
-  if (day?.list.length > 0) {
-    isDailyShiftsOpen.value = true
-  } else {
-    if (!monthStore.selected.closed){
-      isShiftAdderOpen.value = true;
-    }
-  }
+  dayStore.setDay(day);
+  isdayStoreOpen.value = true
+  // if (day?.list.length > 0) {
+  //   isdayStoreOpen.value = true
+  // } else {
+  //   if (!monthStore.selected.closed){
+  //     isShiftAdderOpen.value = true;
+  //   }
+  // }
 }
 
-const closeDailyShifts = () => {
-  isDailyShiftsOpen.value = false;
+const closedayStore = () => {
+  isdayStoreOpen.value = false;
 }
 
 const closeShiftAdder = () => {
@@ -110,16 +109,10 @@ onMounted(async () => {
       />
     </div>
 
-    <ShiftAdderModal
-        v-if="isShiftAdderOpen"
-        :closeModal="closeShiftAdder"
-        :date="dailyShifts.shiftsList?.date"
-    />
-
     <ShiftsDetailsModal
-        v-if="isDailyShiftsOpen"
+        v-if="isdayStoreOpen"
         :key="modalKey"
-        :closeModal="closeDailyShifts"
+        :closeModal="closedayStore"
     />
 
 </template>

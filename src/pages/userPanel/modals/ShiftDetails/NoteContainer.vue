@@ -5,17 +5,22 @@ import {ref} from "vue";
 import {saveShiftNote} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
 
+const dayStore = usedayStore()
 const monthStore = useSelectedMonthStore('calendar')
 const alert = useAlertStore()
 
 const props = defineProps({
-  shift: {
-    type: Object,
+  shiftId: {
+    type: String,
+    required: true,
   }
 });
 
-const noteContent = ref(props.shift.note)
+const shift = dayStore.getShiftById(props.shiftId)
+
+const noteContent = ref(shift.value.note)
 const noteEdit = ref(false)
 
 const toggleShowNoteEditor = () => {
@@ -25,8 +30,8 @@ const toggleShowNoteEditor = () => {
 const addNote = async () => {
 
   try {
-    const response = await saveShiftNote(props.shift.user_id, props.shift.id, noteContent.value)
-    props.shift.note = noteContent
+    const response = await saveShiftNote(shift.value.user_id, shift.value.id, noteContent.value)
+    shift.value.note = noteContent
     alert.show(response.status, response.message)
     noteEdit.value = false;
     await monthStore.refresh()
@@ -42,22 +47,22 @@ const addNote = async () => {
 
   <div
       class="grid mt-2 min-h-5"
-      :class="props.shift.note ? 'grid-rows-[auto_50px]' : 'grid-rows-1'"
+      :class="shift.note ? 'grid-rows-[auto_50px]' : 'grid-rows-1'"
   >
 
     <div
-        v-if="props.shift.note && !noteEdit"
+        v-show="shift.note && !noteEdit"
         class="
         shift-note text-left px-3 font-thin
 
         portrait-2xs:text-2xs
         portrait-medium:text-base
         ">
-      <small class="break-all">{{props.shift.note}}</small>
+      <small class="break-all">{{shift.note}}</small>
     </div>
 
     <form
-        v-if="noteEdit"
+        v-show="noteEdit"
         @submit.prevent.stop="addNote" ref="noteForm">
       <textarea
         class="
@@ -75,17 +80,17 @@ const addNote = async () => {
     <div
         class="place-items-end">
       <CustomTextButton
-        v-if="!noteEdit && props.shift.note !== ''"
+        v-show="!noteEdit && shift.note !== ''"
         label="edit"
         @click="toggleShowNoteEditor"
       />
       <CustomTextButton
-        v-if="!noteEdit && props.shift.note === ''"
+        v-show="!noteEdit && shift.note === ''"
         label="add note"
         @click="toggleShowNoteEditor"
       />
       <div
-          v-if="noteEdit"
+          v-show="noteEdit"
           class="grid grid-flow-col"
       >
           <CustomTextButton

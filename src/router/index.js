@@ -7,6 +7,7 @@ import Privileged from "@/pages/privileged/PrivilegedView.vue";
 import ResetPasswordView from "@/pages/resetPassword/resetPasswordView.vue";
 import ResetPasswordEmailView from "@/pages/resetPassword/resetPasswordEmailView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
+import ShiftEditor from "@/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 
 const routes = [
     {
@@ -45,6 +46,11 @@ const routes = [
         path: '/reset-password',
         name: 'Reset Password',
         component: ResetPasswordView,
+    },
+    {
+        path: '/edit',
+        name: 'Edit',
+        component: ShiftEditor,
     },
 
 

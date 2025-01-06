@@ -4,8 +4,8 @@ import NoteContainer from "@/pages/userPanel/modals/ShiftDetails/NoteContainer.v
 
 
 const props = defineProps({
-  shift: {
-    type: Object,
+  shiftId: {
+    type: String,
     required: true,
   },
   isOpen: {
@@ -40,7 +40,7 @@ const props = defineProps({
               portrait-medium:text-md
               "
         >NOTE</h2>
-        <NoteContainer :shift="props.shift"/>
+        <NoteContainer :shift-id="shiftId"/>
       </div>
 
       <!-- Sekcja poprawek -->
@@ -59,7 +59,7 @@ const props = defineProps({
               portrait-medium:text-md
               "
         >CORRECTION</h2>
-        <CorrectionsContainer :shift="props.shift"/>
+        <CorrectionsContainer :shift-id="shiftId"/>
       </div>
 
     </div>

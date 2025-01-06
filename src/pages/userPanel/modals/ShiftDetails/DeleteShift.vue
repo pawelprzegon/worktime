@@ -3,10 +3,11 @@
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
+import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 const monthStore = useSelectedMonthStore('calendar')
-const dailyShifts = useDailyShiftsList();
+const dayStore = usedayStore();
 const alert = useAlertStore()
 
 const props = defineProps({
@@ -15,20 +16,44 @@ const props = defineProps({
   closeModal: Function
 })
 
+const removeShift = async () => {
+  const responseMessage = {
+    status: '',
+    message: ''
+  }
+  try {
+    const response = await deleteShiftFetch(props.shiftId);
+
+    if (response.status === 'success') {
+      dayStore.list = dayStore.list.filter(
+        (shift) => shift.id !== props.shiftId
+      );
+      responseMessage.status = response.status
+      responseMessage.message = response.message
+    }
+
+  } catch (error) {
+    responseMessage.status = 'error'
+    responseMessage.message = 'Removing shift failed!'
+  } finally {
+    alert.show(responseMessage.status, responseMessage.message)
+  }
+};
+
 const handleConfirmDelete = async (deleteStatus) => {
   if (!deleteStatus) {
     props.openHandler(false)
     return
   }
-
-  const response = await dailyShifts.removeShift(props.shiftId)
+  await removeShift()
   props.openHandler(false)
-  alert.show(response.status, response.message)
-  if (dailyShifts.selectedDay.shiftsList.length === 0) {
+
+  if (dayStore.list.length === 0 && !dayStore.toil) {
     props.closeModal()
   }
 
   await monthStore.refresh()
+  await dayStore.refresh()
 }
 
 </script>

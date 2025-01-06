@@ -1,32 +1,31 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import {formatTime, getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import ShiftDetailsRow from "@/pages/userPanel/modals/ShiftDetails/ShiftDetailsRow.vue";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import OvertimeContainer from "@/pages/userPanel/modals/ShiftDetails/OvertimeContainer.vue";
-import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+import ShiftEditor from "@/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
+import ToilEditor from "@/pages/userPanel/modals/ShiftDetails/ToilEditor.vue";
+import ShiftAdder from "@/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
+import {useRefreshStore} from "@/stores/refreshStore.js";
+import Spinner from "@/components/Spinner.vue";
 
-const monthStore = useSelectedMonthStore('calendar');
-const dailyShifts = useDailyShiftsList();
+const dayStore = usedayStore();
 const isModalOpen = ref(true);
+const refreshStore = useRefreshStore()
 
 const props = defineProps({
   closeModal: Function,
 })
+
 
 const closeModal = () => {
   props.closeModal();
   isModalOpen.value = false;
 }
 
-const dt = getDateString(dailyShifts.date)
-
-const isToilActive = () => {
-  return dailyShifts.selectedDay.regular + dailyShifts.selectedDay.overtime < 28800;
-}
+const dt = getDateString(dayStore.date)
 
 </script>
 
@@ -36,61 +35,56 @@ const isToilActive = () => {
       <div
           class="
           bg-soft shadow-2xl text-white box-border rounded-md p-3
-          w-[75vw] max-w-[600px] min-w-[250px] max-h-[80vh] overflow-auto
+          w-[75vw] max-w-[600px] max-h-[80vh] overflow-auto
           ">
 
         <div class="shifts-label">
 
-          <h2
-              class="
-              font-bold
+          <h3 class="text-beb font-bold text-xl">{{dt}}</h3>
 
-              portrait-2xs:text-sm
-              portrait-medium:text-base
-              portrait-xl:text-lg
-              "
-          >
-            {{ dt }}
-          </h2>
-
-          <ShiftDetailContainer
-            :label="'regular time'"
-            :time="formatTime(dailyShifts.selectedDay.regular)"
-            :orient="'row'"
-          />
-
-          <ShiftDetailContainer
-            :label="'overtime'"
-            :time="formatTime(dailyShifts.selectedDay.overtime)"
-            :orient="'row'"
-            :text-color="dailyShifts.selectedDay.overtime > 0 ? 'overtime' : 'stone-700'"
-          />
-
-          <ShiftDetailContainer
-            :label="'TOIL taken'"
-            :time="formatTime(dailyShifts.selectedDay.toil?.duration_seconds || 0)"
-            :orient="'row'"
-            :text-color="dailyShifts.selectedDay.toil?.duration_seconds ? 'turquoise' : 'stone-700'"
-          />
-
-          <!-- Sekcja nadgodzin -->
-          <div
-              v-show="isToilActive() && !monthStore.selected.closed"
-              class="rounded-md m-3 border border-third">
-            <OvertimeContainer />
-          </div>
         </div>
 
-<!--         Shifts List-->
-        <p class="text-left text-xl">Shifts:</p>
 
-        <ShiftDetailsRow
-            v-for="(shift, index) in dailyShifts.selectedDay.shiftsList"
-            :key=index
-            :shift="shift"
-            :index="index+1"
-            :closeModal="closeModal"
-        />
+         <div v-if="refreshStore.status"
+              class="flex justify-center items-center inset-0 h-[15vh]"
+         >
+           <Spinner />
+         </div>
+
+         <div v-else
+              class="min-h-[15vh]"
+         >
+
+            <ShiftDetailContainer
+              :label="'regular time'"
+              :time="formatTime(dayStore.regular)"
+              :orient="'row'"
+            />
+
+            <ShiftDetailContainer
+              :label="'overtime'"
+              :time="formatTime(dayStore.overtime)"
+              :orient="'row'"
+              :text-color="dayStore.overtime > 0 ? 'overtime' : 'stone-700'"
+            />
+
+            <ToilEditor />
+
+            <ShiftEditor
+                v-show="dayStore.list.length > 0"
+                v-for="(shift, index) in dayStore.list"
+                :key=shift.id
+                :shift-id="shift.id"
+                :index="index+1"
+                :closeModal="closeModal"
+            />
+
+            <ShiftAdder
+                v-show="dayStore.list.length === 0"
+                :closeModal="closeModal"
+            />
+
+         </div>
 
       </div>
   </ModalWrapper>

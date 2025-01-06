@@ -1,37 +1,22 @@
 <script setup>
 import {ref} from 'vue'
-import { getDateString, getHoursAsNumber} from "@/composables/utils.js";
+import {getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {setToil} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
-import {useAuthStore} from "@/stores/authStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
 
 const alert = useAlertStore();
-const dailyShifts = useDailyShiftsList();
+const dayStore = usedayStore();
 const monthStore = useSelectedMonthStore('calendar');
-const authStore = useAuthStore()
 
-
-const calculateMaxToTake = () => {
-  let maxToil = dailyShifts.selectedDay.overtime > 0 ? 0 : Math.floor((28800 - dailyShifts.selectedDay.regular) / 3600);
-  return maxToil + ((dailyShifts.selectedDay.regular % 3600) !== 0 ? 1 : 0);
-}
-
-const maxToTake = ref(calculateMaxToTake());
-const toil = ref({
-  id: dailyShifts.selectedDay.toil?.id || null,
-  duration_seconds: dailyShifts.selectedDay.toil?.duration_seconds || 0
-});
 
 const hoursPool = ref(getHoursAsNumber(monthStore.selected.monthlyOvertime));
-const counter = ref(toil.value.duration_seconds / 3600);
-
+const counter = ref((dayStore.toil?.duration_seconds || 0) / 3600);
 
 const increment = () => {
-  if (counter.value < maxToTake.value &&
+  if (counter.value < dayStore.maxToTake &&
       counter.value < hoursPool.value){
     counter.value += 1
     hoursPool.value--;
@@ -45,23 +30,9 @@ const decrement = () => {
   }
 };
 
-const saveTakenHours = async () => {
-
-  const recalculatedCounterIntoSeconds = counter.value * 3600
-
-  if (counter.value > maxToTake.value) {
-    alert.show("warning", 'You picked higher amount of hours')
-    return
-  }
-  try {
-    const response = await setToil(authStore.user.id, toil.value.id, recalculatedCounterIntoSeconds, getDateString(dailyShifts.date))
-    alert.show(response.status, response.message)
-    await monthStore.refresh()
-    await dailyShifts.updateDay()
-  } catch (error) {
-    alert.show('error', error.message)
-    return { shifts: [], toils: [] };
-  }
+const handleSaveToil = async() => {
+  const response = await dayStore.saveToil(counter.value)
+  alert.show(response.status, response.message)
 }
 
 </script>
@@ -70,7 +41,7 @@ const saveTakenHours = async () => {
 
   <div
       class="
-        grid w-full gap-1 place-items-center m-1 p-1
+        grid gap-1 place-items-center m-1 p-1
 
         portrait-xs:grid-rows-3
         portrait-small:grid-rows-none portrait-small:grid-cols-3
@@ -102,7 +73,7 @@ const saveTakenHours = async () => {
 
     <CustomTextButton
         label="save"
-        @click="saveTakenHours"
+        @click="handleSaveToil"
     />
 
   </div>

@@ -1,7 +1,9 @@
 <script setup>
 import {ref, watch} from 'vue'
 import {
-  combineDateWithTime, getDateString,
+  checkShiftLessThan28800,
+  combineDateWithTime,
+  getDateString,
   getLastCorrectionUpdate,
   getTime,
   getTimeString
@@ -9,52 +11,78 @@ import {
 import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
-import {shiftCorrection} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import {useDailyShiftsList} from "@/stores/calendarStore.js";
+import {usedayStore} from "@/stores/calendarStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+import {shiftCorrection} from "@/composables/fetchers.js";
 
 
 const alert = useAlertStore()
 const monthStore = useSelectedMonthStore('calendar')
-const dailyShifts = useDailyShiftsList();
-const dt = getDateString(dailyShifts.date)
+const dayStore = usedayStore();
+const dt = getDateString(dayStore.date)
 
 const props = defineProps({
-  shift: Object,
+  shiftId: {
+    type: String,
+    required: true,
+  }
 })
 
-const selectedDayShifts = ref(props.shift)
+const shift = dayStore.getShiftById(props.shiftId)
 
 const shiftTime = ref({
-  start: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).start) : getTimeString(selectedDayShifts.value.start),
-  stop: selectedDayShifts.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(selectedDayShifts.value).stop) : getTimeString(selectedDayShifts.value.stop)
+  start: shift.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(shift.value).start) : getTimeString(shift.value.start),
+  stop: shift.value.update.length > 0 ? getTimeString(getLastCorrectionUpdate(shift.value).stop) : getTimeString(shift.value.stop)
 })
 
-const anyCorrection = ref(props.shift.update?.length > 0)
+const anyCorrection = ref(shift.value.update?.length > 0)
 
 const checkIsLast = (correction) => {
-  const filtered = selectedDayShifts.value.update.filter(c => c.corrected === correction.corrected);
+  const filtered = shift.value.update.filter(c => c.corrected === correction.corrected);
   const lastFiltered = filtered[filtered.length -1]
   return correction === lastFiltered
 };
 
 const saveCorrection = async () => {
-  const shiftDt = {
+
+    const responseMessage = {
+      status: '',
+      message: ''
+    }
+
+    const shiftDt = {
       start: combineDateWithTime(dt, shiftTime.value.start),
       stop: combineDateWithTime(dt, shiftTime.value.stop),
     }
 
-  try {
-    const response = await shiftCorrection(selectedDayShifts.value.user_id, selectedDayShifts.value.id, shiftDt)
-    alert.show(response.status, response.message)
-    await monthStore.refresh()
-    dailyShifts.updateDay()
-    selectedDayShifts.value = dailyShifts.getShift(selectedDayShifts.value.id)
-  } catch (error) {
-    alert.show("error", error.message)
-  }
+    if (!checkShiftLessThan28800(shiftDt)){
+      dayStore.toil.value = {}
+      await dayStore.saveToil(0, 0)
+      responseMessage.status = 'warning'
+      responseMessage.message = 'Shift time with Toil time is higher than 8h. Toil cleared!'
+    }
+
+    try {
+      const response = await shiftCorrection(shift.value.user_id, shift.value.id, shiftDt)
+      await monthStore.refresh()
+      dayStore.refresh()
+
+      if (responseMessage.status) {
+        responseMessage.message += ` ${response.message}`
+      } else {
+        responseMessage.status = response.status
+        responseMessage.message = response.message
+      }
+    } catch (error) {
+      responseMessage.status = 'error'
+      responseMessage.message = error.message
+    }
+
+    alert.show(responseMessage.status, responseMessage.message)
+
 }
+
 
 </script>
 
@@ -80,18 +108,18 @@ const saveCorrection = async () => {
           <td>default</td>
           <td>
             <ShiftDetailContainer
-              :time="getTime(selectedDayShifts.start)"
+              :time="getTime(shift.start)"
               :text-color="anyCorrection ? 'red-500' : null"
             />
           </td>
           <td>
             <ShiftDetailContainer
-              :time="getTime(selectedDayShifts.stop)"
+              :time="getTime(shift.stop)"
               :text-color="anyCorrection ? 'red-500' : null"
             />
           </td>
         </tr>
-        <tr v-for="(correction, index) in selectedDayShifts.update" :key="index">
+        <tr v-for="(correction, index) in shift.update" :key="index">
 
           <td class="correction-index">
             {{`${index + 1}`}}

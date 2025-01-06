@@ -1,4 +1,5 @@
 import {add, addDays, endOfMonth, getDay, startOfMonth, sub} from "date-fns";
+import {usedayStore} from "@/stores/calendarStore.js";
 
 const apiURL = import.meta.env.VITE_APP_API_URL
 export const url = apiURL
@@ -143,3 +144,13 @@ export const splitTime = (shiftTime) => {
   const overtimes_seconds = Math.max(shiftTime - basic_work_time, 0)
   return {regular: regular_seconds, overtime: overtimes_seconds};
 };
+
+
+export const checkShiftLessThan28800 = (shiftDt) => {
+  const dayStore = usedayStore()
+
+  const differenceInMilliseconds = shiftDt.stop.getTime() - shiftDt.start.getTime();
+  const differenceInSeconds = differenceInMilliseconds / 1000;
+  return (dayStore.toil.value?.duration_seconds || 0) + differenceInSeconds <= 28800;
+
+}

@@ -57,6 +57,10 @@ export const useSelectedMonthStore = (id) =>
             await processMonthlyShifts()
         }
 
+        const refreshDay = async () => {
+            await processdayStore()
+        }
+
         const updateDaysInMonth = () => {
             selected.value.days = eachDayOfInterval({
             start: startOfMonth(selected.value.month),
