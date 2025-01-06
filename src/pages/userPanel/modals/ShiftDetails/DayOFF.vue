@@ -125,6 +125,7 @@ const getReason = () => {
 
 
         <CustomTextButton
+            v-show="!monthStore.selected.closed"
             label="remove"
             @click="handleRemoveOFF"
         />
