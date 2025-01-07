@@ -13,6 +13,10 @@ const props = defineProps({
     default: '30'
   }
 })
+
+const icon = new URL(`../assets/img/${props.icon}`, import.meta.url).href;
+
+console.log(icon)
 </script>
 
 <template>
@@ -26,7 +30,9 @@ const props = defineProps({
       portrait-medium:h-[40px] portrait-medium:w-[40px]
 
       "
-       :src="`../../assets/img/${props.icon}`" alt="ico-button" />
+
+      :src=icon alt="ico-button"
+  />
 </template>
 
 <style scoped>
