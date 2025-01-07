@@ -63,11 +63,11 @@ const handleRemoveOFF = async () => {
 }
 
 const checkOffDay = () => {
-  return dayStore.list.filter(s => s.offType !== null).length > 0
+  return dayStore.list?.filter(s => s.off_type !== null).length > 0 || false;
 }
 
 const getReason = () => {
-  return dayStore.list.filter(s => s.offType !== null)[0].off_type
+  return dayStore.list.filter(s => s.off_type !== null)[0].off_type
 }
 
 </script>
@@ -80,7 +80,7 @@ const getReason = () => {
       w-[95%]
       "
   >
-
+     <p>{{!checkOffDay}}</p>
     <div v-if="!checkOffDay()"
         class="grid grid-cols-[1fr_auto] items-center bg-secondary">
 
@@ -105,9 +105,9 @@ const getReason = () => {
       </section>
 
       <CustomTextButton
-            label="save"
-            @click="handleSaveOFF"
-        />
+          label="save"
+          @click="handleSaveOFF"
+      />
     </div>
 
      <div v-else
