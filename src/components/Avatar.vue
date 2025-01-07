@@ -1,9 +1,10 @@
 <script setup>
 
-const apiURL = import.meta.env.VITE_APP_API_URL
+import {useAuthStore} from "@/stores/authStore.js";
 
-defineProps({
-  avatar: String,
+const authStore = useAuthStore();
+
+const props = defineProps({
   activeShift: {
     type: Object,
     default: {}
@@ -13,6 +14,9 @@ defineProps({
     default: false
   }
 })
+
+
+const avatarImg = new URL(`../../public/${authStore.user.avatar}`, import.meta.url).href;
 
 const emit = defineEmits(['toggle'])
 
@@ -35,10 +39,10 @@ const shiftToggle = () => {
       portrait-xl:w-28 portrait-xl:h-28
       "
     :class="[{
-      'grayscale': !activeShift,
-      'cursor-default': static
+      'grayscale': !props.activeShift,
+      'cursor-default': props.static
     }]"
-    :src="`${apiURL}/${avatar}`"
+    :src="avatarImg"
     alt="avatar"
     @click="shiftToggle"
   >
@@ -47,42 +51,5 @@ const shiftToggle = () => {
 
 <style scoped>
 
-
-.off {
-  filter: grayscale(100%);
-}
-
-.no-click {
-  pointer-events: none;
-  filter: grayscale(0%);
-}
-
-@media (max-width: 1300px) {
-  .avatar {
-    width: 90px;
-    height: 90px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .avatar {
-    width: 80px;
-    height: 80px;
-  }
-}
-
-@media (max-width: 800px) {
-  .avatar {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-@media (max-width: 600px) {
-  .avatar {
-    width: 60px;
-    height: 60px;
-  }
-}
 
 </style>
