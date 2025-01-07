@@ -1,10 +1,9 @@
 <script setup>
-import {useAuthStore} from "@/stores/authStore.js";
 
-const authStore = useAuthStore();
 const apiURL = import.meta.env.VITE_APP_API_URL
 
-const props = defineProps({
+defineProps({
+  avatar: String,
   activeShift: {
     type: Object,
     default: {}
@@ -36,10 +35,10 @@ const shiftToggle = () => {
       portrait-xl:w-28 portrait-xl:h-28
       "
     :class="[{
-      'grayscale': !props.activeShift,
-      'cursor-default': props.static
+      'grayscale': !activeShift,
+      'cursor-default': static
     }]"
-    :src="`${apiURL}/${authStore.user.avatar}`"
+    :src="`${apiURL}/${avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >

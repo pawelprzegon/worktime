@@ -83,6 +83,7 @@ const closeMonth = async () => {
         portrait-2xl:block
       ">
       <AvatarChanger
+        :avatar="authStore.user.avatar"
         :is-modal-active="isChangeModalActive"
         @refresh="refreshUserPanel"
       />
