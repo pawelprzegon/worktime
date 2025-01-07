@@ -1,8 +1,8 @@
 <script setup>
-
 import {useAuthStore} from "@/stores/authStore.js";
 
 const authStore = useAuthStore();
+const apiURL = import.meta.env.VITE_APP_API_URL
 
 const props = defineProps({
   activeShift: {
@@ -14,8 +14,6 @@ const props = defineProps({
     default: false
   }
 })
-
-const avatarImg = authStore.user.avatar.replace('public/', '');
 
 const emit = defineEmits(['toggle'])
 
@@ -41,7 +39,7 @@ const shiftToggle = () => {
       'grayscale': !props.activeShift,
       'cursor-default': props.static
     }]"
-    :src="avatarImg"
+    :src="`${apiURL}/${authStore.user.avatar}`"
     alt="avatar"
     @click="shiftToggle"
   >
@@ -50,5 +48,42 @@ const shiftToggle = () => {
 
 <style scoped>
 
+
+.off {
+  filter: grayscale(100%);
+}
+
+.no-click {
+  pointer-events: none;
+  filter: grayscale(0%);
+}
+
+@media (max-width: 1300px) {
+  .avatar {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 800px) {
+  .avatar {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+}
 
 </style>
