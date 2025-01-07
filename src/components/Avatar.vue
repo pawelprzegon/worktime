@@ -15,8 +15,7 @@ const props = defineProps({
   }
 })
 
-
-const avatarImg = new URL(`../../public/${authStore.user.avatar}`, import.meta.url).href;
+const avatarImg = authStore.user.avatar.replace('public/', '');
 
 const emit = defineEmits(['toggle'])
 
