@@ -131,8 +131,8 @@ onMounted(async () => {
 
           <CustomIconButton
               v-show="!monthStore.selected.closed"
-            icon="../../assets/img/delete.png"
-            @click.stop="handleDeleteShiftOpen(true)"
+              icon="delete.png"
+              @click.stop="handleDeleteShiftOpen(true)"
           />
 
         </div>

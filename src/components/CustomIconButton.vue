@@ -26,7 +26,7 @@ const props = defineProps({
       portrait-medium:h-[40px] portrait-medium:w-[40px]
 
       "
-       :src="`src/assets/img/${props.icon}`" alt="ico-button" />
+       :src="`../../assets/img/${props.icon}`" alt="ico-button" />
 </template>
 
 <style scoped>
