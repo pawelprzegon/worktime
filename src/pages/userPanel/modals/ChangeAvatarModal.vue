@@ -5,8 +5,11 @@ import { useAuthStore } from "@/stores/authStore.js";
 import Avatar from "@/components/Avatar.vue";
 import "@/assets/modal.css";
 import ModalWrapper from "@/components/ModalWrapper.vue";
+import {useAlertStore} from "@/stores/alertStore.js";
 
 const authStore = useAuthStore();
+const alert = useAlertStore()
+
 const props = defineProps({
   closeModal: Function,
 })
