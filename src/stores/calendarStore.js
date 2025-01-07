@@ -10,14 +10,15 @@ export const usedayStore = defineStore('dayStore', () => {
 
   const authStore = useAuthStore()
   const monthStore = useSelectedMonthStore('calendar');
-  const date = ref(null)
-  const list = ref([])
-  const regular = ref(0)
-  const overtime = ref(0)
+  const date = ref(null);
+  const list = ref([]);
+  const regular = ref(0);
+  const overtime = ref(0);
   const toil = ref({});
 
 
   const setDay = (newDay) => {
+    console.log(newDay)
     date.value = newDay.date
     list.value = newDay.list
     regular.value = newDay.regular
@@ -29,6 +30,7 @@ export const usedayStore = defineStore('dayStore', () => {
     const day = monthStore.selected.days.find(d => d.date.getTime() === date.value?.getTime());
 
     if (day) {
+      console.log(day)
       list.value = day.list
       regular.value = day.regular
       overtime.value = day.overtime
