@@ -19,6 +19,7 @@ export const fetchUserShifts = async (userId, month) => {
     const toils = await getToil(userId, month);
     return { shifts, toils };
   } catch (error) {
+    console.log(error.message)
     alert.show('error', error.message)
     return { shifts: [], toils: [] };
   }

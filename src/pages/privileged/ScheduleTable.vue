@@ -8,7 +8,10 @@ const monthStore = useSelectedMonthStore('privileged')
 </script>
 
 <template>
-  <table>
+
+  <div class="p-2 m-2">
+
+    <table>
       <thead>
         <tr>
           <th>Data</th>
@@ -29,6 +32,8 @@ const monthStore = useSelectedMonthStore('privileged')
         </tr>
       </tbody>
     </table>
+
+  </div>
 
 </template>
 

@@ -82,9 +82,8 @@ export const calculateTime = (day) => {
   } else {
 
     const overtime = day.overtime ? formatTime(day.overtime) : '';
-    const toil = day.toil ? formatTime(day.toil.duration_seconds) : '';
+    const toil = Object.keys(day.toil).length > 0 ? formatTime(day.toil.duration_seconds) : '';
     const regular = day.regular ? formatTime(day.regular) : "";
-
 
     const dayData = getLast(day)
 

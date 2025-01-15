@@ -12,6 +12,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Quicksand', 'sans-serif'],
+      },
       colors: {
         'floral': '#fbfbf2',
         'lavender-blush': '#EEE5E9',

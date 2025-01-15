@@ -2,6 +2,7 @@
 
 import {formatTime} from "@/composables/utils.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
+import {ref} from "vue";
 
 const screenSize = useScreenSizeStore()
 const monthStore = useSelectedMonthStore('calendar');
@@ -9,6 +10,8 @@ const monthStore = useSelectedMonthStore('calendar');
 const props = defineProps({
   day: Object,
 })
+
+const crossVisible = ref(false)
 
 </script>
 
@@ -137,21 +140,23 @@ const props = defineProps({
       <div
           v-else
           class="h-3/4 w-full flex flex-col justify-center items-center"
+          @mouseover="crossVisible = true"
+          @mouseleave="crossVisible = false"
       >
         <img
-            v-show="!monthStore.selected.closed"
+            v-show="!monthStore.selected.closed && crossVisible"
             class="
-        filter-invert-30
-        group-hover:filter-invert-100
+            filter-invert-30
+            group-hover:filter-invert-60
 
-        portrait-2xs:h-[20px] portrait-2xs:w-[20px]
-        portrait-xs:h-[20px] portrait-xs:w-[20px]
-        portrait-small:h-[20px] portrait-small:w-[20px]
-        portrait-medium:h-[25px] portrait-medium:w-[25px]
-        portrait-large:h-[30px] portrait-large:w-[30px]
-        portrait-xl:h-[35px] portrait-xl:w-[35px]
-        "
-             src="@/assets/img/add.png" alt="add-shift">
+            portrait-2xs:h-[20px] portrait-2xs:w-[20px]
+            portrait-xs:h-[20px] portrait-xs:w-[20px]
+            portrait-small:h-[20px] portrait-small:w-[20px]
+            portrait-medium:h-[25px] portrait-medium:w-[25px]
+            portrait-large:h-[30px] portrait-large:w-[30px]
+            portrait-xl:h-[35px] portrait-xl:w-[35px]
+            "
+             src="@/assets/img/add_cross.png" alt="add-shift">
       </div>
     </div>
 </template>
