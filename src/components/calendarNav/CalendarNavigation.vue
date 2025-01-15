@@ -2,7 +2,6 @@
 
 import {format} from "date-fns";
 import CustomNaviButton from "@/components/CustomNaviButton.vue";
-import '@/assets/calendarNavigation.css';
 
 
 defineProps({selectedMonth: Date})
@@ -27,4 +26,19 @@ const handleAdd = () => {
 
 <style scoped>
 
+.calendar-navigation {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-label {
+  width: 200px;
+  display: block;
+  text-align: center;
+  margin: 5px 10px;
+  font-size: 20px;
+  color:var(--color-text-active)
+}
 </style>

@@ -37,8 +37,8 @@ watch(() => props.dataList, () => {
 </script>
 
 <template>
-  <section class="select-list-container">
-    <label class="select-list-label" for="lista">{{label}}</label>
+  <div class="m-1 w-8/12">
+    <label class="text-base text-white m-1" for="lista">{{label}}</label>
     <select
         class="select-list"
         id="lista"
@@ -55,18 +55,12 @@ watch(() => props.dataList, () => {
         {{element.first_name}} {{element.last_name}}
       </option>
     </select>
-  </section>
+
+    <p v-if="!selectedUser.user" class="text-gray-500">No user selected. Please choose a user to view the schedule.</p>
+  </div>
+
 </template>
 
 <style scoped>
-.select-list-container {
-  margin: 5px;
-}
-
-.select-list-label {
-  margin: 5px;
-  color:  white;
-  font-size: 15px;
-}
 
 </style>

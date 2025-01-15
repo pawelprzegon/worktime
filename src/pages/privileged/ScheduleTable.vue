@@ -9,7 +9,7 @@ const monthStore = useSelectedMonthStore('privileged')
 
 <template>
 
-  <div class="p-2 m-2">
+  <div class="px-2 mx-2">
 
     <table>
       <thead>

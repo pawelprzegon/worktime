@@ -2,8 +2,9 @@
 
 import {ref} from 'vue'
 import {getUsers} from "@/composables/fetchers.js";
-import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
 import SelectList from "@/pages/privileged/SelectList.vue";
+import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
+import UserDetails from "@/pages/privileged/UserDetails.vue";
 
 const users = ref([])
 
@@ -26,7 +27,11 @@ loadUsers()
         :data-list="users"
     />
 
+  <div class="grid grid-cols-[2fr_1fr] justify-items-center">
     <MonthlySchedule/>
+    <UserDetails/>
+  </div>
+
 
 </template>
 

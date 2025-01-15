@@ -1,5 +1,4 @@
 <script setup>
-import '@/assets/calendarNavigation.css';
 import {ref, onMounted, watch} from 'vue';
 import Spinner from "@/components/Spinner.vue";
 import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
@@ -57,7 +56,7 @@ onMounted(async () => {
     </div>
     <div v-else
           class="
-           grid [grid-template-columns:repeat(7,minmax(90px,90px))] max-w-[800px] gap-2 mx-auto justify-items-center items-center
+           grid [grid-template-columns:repeat(7,minmax(90px,90px))] max-w-[800px] gap-2 mx-auto my-3 justify-items-center items-center
 
            below-portrait-2xs:gap-1 below-portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] below-portrait-2xs:w-max-[280px]
            portrait-2xs:gap-1 portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] portrait-2xs:w-max-[280px]

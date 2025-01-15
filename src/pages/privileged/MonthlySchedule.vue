@@ -8,6 +8,7 @@ import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
+import CustomTextButton from "@/components/CustomTextButton.vue";
 
 const selectedUser = usePrivilegedSelectedUser();
 const screenSize = useScreenSizeStore()
@@ -41,31 +42,34 @@ onMounted( async() => {
 </script>
 
 <template>
-  <div v-if="selectedUser.user" class="schedule-container">
-    <button @click="generatePDF(selectedUser, monthStore)">Get Schedule</button>
-    <CalendarNavigation
-        :selected-month="monthStore.selected.month"
-        @add="nextMonth"
-        @sub="prevMonth"
-    />
+  <div v-if="selectedUser.user" class="grid grid-rows-[fit_fit_auto] justify-items-center">
+
     <div v-if="isLoading" class="loading-spinner">
       <Spinner />
     </div>
 
-    <ScheduleTable
-        v-else
-    />
+    <div v-else class="place-items-center">
+
+      <CustomTextButton
+          label="Get Schedule"
+          @click="generatePDF(selectedUser, monthStore)"
+        />
+
+      <CalendarNavigation
+        :selected-month="monthStore.selected.month"
+        @add="nextMonth"
+        @sub="prevMonth"
+      />
+
+      <ScheduleTable/>
+
+    </div>
+
+
   </div>
-  <div v-else class="no-user">
-    <p>No user selected. Please choose a user to view the schedule.</p>
-  </div>
+
 </template>
 
 <style scoped>
-.schedule-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 </style>
