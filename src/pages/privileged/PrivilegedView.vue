@@ -5,6 +5,7 @@ import {getUsers} from "@/composables/fetchers.js";
 import SelectList from "@/pages/privileged/SelectList.vue";
 import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
 import UserDetails from "@/pages/privileged/UserDetails.vue";
+import Alert from "@/components/Alert.vue";
 
 const users = ref([])
 
@@ -21,7 +22,7 @@ loadUsers()
 </script>
 
 <template>
-
+    <Alert/>
     <SelectList
         label="Pick user"
         :data-list="users"

@@ -203,6 +203,26 @@ export const saveAvatar = async (user_id, avatar) => {
     return await response.json();
 }
 
+export const updateUser = async (updateData, user_id, ) => {
+
+    const data = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        },
+        body: updateData
+    }
+
+    const response = await fetch(url + `/user/update?user_id=${user_id}`, data)
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 // DASH
 
 export const getDashUsers = async () => {
