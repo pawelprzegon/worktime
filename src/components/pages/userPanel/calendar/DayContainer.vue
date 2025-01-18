@@ -11,6 +11,13 @@ const props = defineProps({
   day: Object,
 })
 
+const dayData = {
+  dayNumber: props.day.date.getDate(),
+  weekNumber: props.day.date.getDay(),
+  isWeekend: props.day.date.getDay() === 0 || props.day.date.getDay() === 6,
+  dayName: props.day.date.toLocaleDateString('pl-PL', { weekday: 'long' }),
+}
+
 const crossVisible = ref(false)
 
 </script>
@@ -36,7 +43,8 @@ const crossVisible = ref(false)
           {
             'off-shift': props.day.offType,
             'unfinished-shift': props.day.list.length > 0 && !props.day.offType,
-            'finished-shift': (props.day.regular + props.day.overtime + (props.day.toil?.duration_seconds || 0)) >= 28800
+            'finished-shift': (props.day.regular + props.day.overtime + (props.day.toil?.duration_seconds || 0)) >= 28800,
+            'weekend': dayData.isWeekend
           }]"
     >
 
@@ -52,9 +60,9 @@ const crossVisible = ref(false)
           portrait-xl:text-base
           "
       >
-        {{ props.day.date.getDate()}}
+        {{ dayData.dayNumber }}
         <span :class="{ hidden: !screenSize.isPortraitXsOr2Xs }">
-          {{ props.day.date.toLocaleDateString('pl-PL', { weekday: 'long' }) }}
+          {{ dayData.dayName }}
         </span>
       </span>
 
@@ -156,7 +164,7 @@ const crossVisible = ref(false)
             portrait-large:h-[30px] portrait-large:w-[30px]
             portrait-xl:h-[35px] portrait-xl:w-[35px]
             "
-             src="@/assets/img/add_cross.png" alt="add-shift">
+            src="../../../../assets/img/add_cross.png" alt="add-shift">
       </div>
     </div>
 </template>
@@ -177,6 +185,10 @@ const crossVisible = ref(false)
 
 .off-shift {
   background: var(--off-color);
+}
+
+.weekend {
+  background: var(--weekend-color);
 }
 
 

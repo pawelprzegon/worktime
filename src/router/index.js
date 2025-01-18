@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Dash from "@/pages/dash/DashView.vue";
-import Login from "@/pages/login/LoginView.vue";
-import UserPanel from "@/pages/userPanel/UserPanelView.vue";
-import SignUp from "@/pages/signup/SignUpView.vue";
-import Privileged from "@/pages/privileged/PrivilegedView.vue";
-import ResetPasswordView from "@/pages/resetPassword/resetPasswordView.vue";
-import ResetPasswordEmailView from "@/pages/resetPassword/resetPasswordEmailView.vue";
+import Dash from "@/components/pages/dash/DashView.vue";
+import Login from "@/components/pages/login/LoginView.vue";
+import UserPanel from "@/components/pages/userPanel/UserPanelView.vue";
+import SignUp from "@/components/pages/signup/SignUpView.vue";
+import Privileged from "@/components/pages/privileged/PrivilegedView.vue";
+import ResetPasswordView from "@/components/pages/resetPassword/resetPasswordView.vue";
+import ResetPasswordEmailView from "@/components/pages/resetPassword/resetPasswordEmailView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
-import ShiftEditor from "@/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
+import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 
 const routes = [
     {

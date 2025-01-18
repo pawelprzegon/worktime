@@ -1,14 +1,14 @@
 <script setup>
 import {ref, onMounted, watch} from 'vue';
 import Spinner from "@/components/Spinner.vue";
-import ShiftsDetailsModal from "@/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
+import ShiftsDetailsModal from "@/components/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
 import {usedayStore} from "@/stores/calendarStore.js";
-import DayContainer from "@/pages/userPanel/calendar/DayContainer.vue";
-import EmptyDayContainer from "@/pages/userPanel/calendar/EmptyDayContainer.vue";
-import WeekDayNameContainer from "@/pages/userPanel/calendar/WeekDayNameContainer.vue";
+import DayContainer from "@/components/pages/userPanel/calendar/DayContainer.vue";
+import EmptyDayContainer from "@/components/pages/userPanel/calendar/EmptyDayContainer.vue";
+import WeekDayNameContainer from "@/components/pages/userPanel/calendar/WeekDayNameContainer.vue";
 
 const monthStore = useSelectedMonthStore('calendar');
 const dayStore = usedayStore();

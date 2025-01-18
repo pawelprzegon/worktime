@@ -138,13 +138,6 @@ export const combineDateWithTime = (date, timeString) => {
   return resultDate;
 }
 
-export const splitTime = (shiftTime) => {
-  const basic_work_time = 28800
-  const regular_seconds = Math.min(shiftTime, basic_work_time)
-  const overtimes_seconds = Math.max(shiftTime - basic_work_time, 0)
-  return {regular: regular_seconds, overtime: overtimes_seconds};
-};
-
 
 export const checkShiftLessThan28800 = (shiftDt) => {
   const dayStore = usedayStore()

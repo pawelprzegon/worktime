@@ -1,6 +1,6 @@
 <script setup>
-import CorrectionsContainer from "@/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
-import NoteContainer from "@/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
+import CorrectionsContainer from "@/components/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
+import NoteContainer from "@/components/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
 
 
 const props = defineProps({

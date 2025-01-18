@@ -2,9 +2,9 @@
 
 import {ref} from "vue";
 import {formatTime} from "@/composables/utils.js";
-import ToilDetails from "@/pages/userPanel/modals/ShiftDetails/ToilDetails.vue";
-import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
-import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
+import ToilDetails from "@/components/pages/userPanel/modals/ShiftDetails/ToilDetails.vue";
+import DetailsDropdown from "@/components/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
+import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
 import {usedayStore} from "@/stores/calendarStore.js";
 
 const dayStore = usedayStore()

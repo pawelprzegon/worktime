@@ -4,14 +4,14 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import {formatTime, getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import {usedayStore} from "@/stores/calendarStore.js";
-import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import ShiftEditor from "@/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
-import ToilEditor from "@/pages/userPanel/modals/ShiftDetails/ToilEditor.vue";
-import ShiftAdder from "@/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
+import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
+import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
+import ToilEditor from "@/components/pages/userPanel/modals/ShiftDetails/ToilEditor.vue";
+import ShiftAdder from "@/components/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 import Spinner from "@/components/Spinner.vue";
-import DayOFF from "@/pages/userPanel/modals/ShiftDetails/DayOFF.vue";
-import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import DayOFF from "@/components/pages/userPanel/modals/ShiftDetails/DayOFF.vue";
+import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
 
 const dayStore = usedayStore();
 const isModalOpen = ref(true);

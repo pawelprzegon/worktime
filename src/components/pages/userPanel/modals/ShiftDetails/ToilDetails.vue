@@ -1,5 +1,5 @@
 <script setup>
-import ToilContainer from "@/pages/userPanel/modals/ShiftDetails/ToilContainer.vue";
+import ToilContainer from "@/components/pages/userPanel/modals/ShiftDetails/ToilContainer.vue";
 import {usedayStore} from "@/stores/calendarStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 

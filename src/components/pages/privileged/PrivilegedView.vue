@@ -2,9 +2,9 @@
 
 import {ref} from 'vue'
 import {getUsers} from "@/composables/fetchers.js";
-import SelectList from "@/pages/privileged/SelectList.vue";
-import MonthlySchedule from "@/pages/privileged/MonthlySchedule.vue";
-import UserDetails from "@/pages/privileged/UserDetails.vue";
+import SelectList from "@/components/pages/privileged/SelectList.vue";
+import MonthlySchedule from "@/components/pages/privileged/MonthlySchedule.vue";
+import UserDetails from "@/components/pages/privileged/UserDetails.vue";
 import Alert from "@/components/Alert.vue";
 
 const users = ref([])

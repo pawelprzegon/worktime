@@ -7,7 +7,7 @@ import {setShiftOFF, deleteShiftFetch} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {usedayStore} from "@/stores/calendarStore.js";
-import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
 import {leaveTypes, daysOff, other} from "@/data/PDF_leaveType_data.js";
 
 const dataList = ['UW', 'UB', 'UŻ', 'L4', 'CD']

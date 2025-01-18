@@ -1,13 +1,13 @@
 <script setup>
 
 import {formatTime, getLastCorrectionUpdate, getTime} from "@/composables/utils.js";
-import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
-import DetailsDropdown from "@/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
-import ShiftDetails from "@/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
+import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
+import DetailsDropdown from "@/components/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
+import ShiftDetails from "@/components/pages/userPanel/modals/ShiftDetails/ShiftDetails.vue";
 import {ref, onMounted, computed} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
-import DeleteShift from "@/pages/userPanel/modals/ShiftDetails/DeleteShift.vue";
+import DeleteShift from "@/components/pages/userPanel/modals/ShiftDetails/DeleteShift.vue";
 import {usedayStore} from "@/stores/calendarStore.js";
 
 

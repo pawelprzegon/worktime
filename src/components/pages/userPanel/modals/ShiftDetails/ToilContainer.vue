@@ -60,7 +60,7 @@ const handleSaveToil = async() => {
           filter-invert-30 hover:filter-invert-100 hover:cursor-pointer
 
           "
-          src="../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
+          src="../../../../../assets/img/decrease.png" alt="decrease" @click="decrement"/>
       <span
           class="text-2xl text-center font-bold"
           :class="counter > 0 ? 'text-turquoise' : 'text-platinum'">{{ counter }}</span>
@@ -68,7 +68,7 @@ const handleSaveToil = async() => {
           class="
           filter-invert-30 hover:filter-invert-100 hover:cursor-pointer
           "
-          src="../../../../assets/img/increase.png" alt="increase" @click="increment"/>
+          src="../../../../../assets/img/increase.png" alt="increase" @click="increment"/>
     </div>
 
 

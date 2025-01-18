@@ -8,7 +8,7 @@ import {
   getTime,
   getTimeString
 } from "@/composables/utils.js";
-import ShiftDetailContainer from "@/pages/userPanel/ShiftDetailContainer.vue";
+import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {useAlertStore} from "@/stores/alertStore.js";

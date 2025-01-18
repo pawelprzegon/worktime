@@ -2,13 +2,13 @@
 
 import {ref} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
-import Calendar from "@/pages/userPanel/calendar/Calendar.vue";
+import Calendar from "@/components/pages/userPanel/calendar/Calendar.vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import AvatarChanger from "@/pages/userPanel/AvatarChanger.vue";
+import AvatarChanger from "@/components/pages/userPanel/AvatarChanger.vue";
 import Alert from "@/components/Alert.vue";
 import {formatTime} from "@/composables/utils.js";
 import ShadowBox from "@/components/ShadowBox.vue";
-import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {setOVHistory} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";

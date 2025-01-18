@@ -4,7 +4,7 @@ import {onMounted, ref, watch} from "vue";
 import Spinner from "@/components/Spinner.vue";
 import {useCalendarNavigation} from "@/composables/utils.js";
 import {generatePDF} from "@/composables/pdfScheduleHandler.js";
-import ScheduleTable from "@/pages/privileged/ScheduleTable.vue";
+import ScheduleTable from "@/components/pages/privileged/ScheduleTable.vue";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";

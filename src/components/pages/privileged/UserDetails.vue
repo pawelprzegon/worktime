@@ -1,7 +1,7 @@
 <script setup>
 
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
-import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
 import {updateUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 

@@ -1,7 +1,6 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
 import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
-import {splitTime} from "@/composables/utils.js";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
@@ -44,8 +43,15 @@ export const useSelectedMonthStore = (id) =>
             selected.value.monthlyRegularTime = 0;
             selected.value.monthlyOvertime = 0;
             selected.value.toils = [];
-            selected.value.days = []
+            selected.value.days = [];
         }
+
+        const splitTime = (shiftTime) => {
+          const basic_work_time = 28800
+          const regular_seconds = Math.min(shiftTime, basic_work_time)
+          const overtimes_seconds = Math.max(shiftTime - basic_work_time, 0)
+          return {regular: regular_seconds, overtime: overtimes_seconds};
+        };
 
         const groupShiftsByDate = (shifts, toils) => {
 
@@ -55,7 +61,9 @@ export const useSelectedMonthStore = (id) =>
 
                 if (!acc[date]) {
                   acc[date] = {
-                    shifts: { date, list: [] },
+                    date: date,
+                    shifts: [],
+                    work: 0,
                     regular: 0,
                     overtime: 0,
                     toil: {},
@@ -63,27 +71,45 @@ export const useSelectedMonthStore = (id) =>
                   };
                 }
 
-                acc[date].shifts.list.push(shift);
+                acc[date].shifts.push(shift);
 
-                const splitTimeObj = splitTime(shift.work);
+                acc[date].work += shift.work
 
-                acc[date].regular += splitTimeObj?.regular || 0;
-                acc[date].overtime += splitTimeObj?.overtime || 0;
                 acc[date].offType = shift.off_type
-
-                selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
-                selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
 
                 return acc;
             }, {});
 
-            toils.forEach((toil) => {
+            Object.values(groupedShifts).forEach(accDate => {
+                const dtObj = new Date(accDate.date)
+                const weekDay = dtObj.getDay() === 0 || dtObj.getDay() === 6;
+
+                if (weekDay) {
+
+                    accDate.overtime = accDate.work
+
+                    selected.value.monthlyOvertime += accDate.overtime || 0;
+                } else {
+
+                    const splitTimeObj = splitTime(accDate.work);
+
+                    accDate.regular = splitTimeObj?.regular || 0;
+                    accDate.overtime = splitTimeObj?.overtime || 0;
+
+                    selected.value.monthlyRegularTime += splitTimeObj?.regular || 0;
+                    selected.value.monthlyOvertime += splitTimeObj?.overtime || 0;
+                }
+
+              });
+
+            toils.forEach(toil => {
                 const date = toil.date.split('T')[0];
 
                 if (!groupedShifts[date]) {
 
                   groupedShifts[date] = {
-                    shifts: { date, list: [] },
+                    date: date,
+                    shifts: [],
                     regular: 0,
                     overtime: 0,
                     toil: toil,
@@ -129,7 +155,7 @@ export const useSelectedMonthStore = (id) =>
             });
         };
 
-        const processMonthlyShifts = async (userId = null) => {
+        const processMonthlyShifts = async () => {
           clear();
           updateDaysInMonth();
 
@@ -146,7 +172,7 @@ export const useSelectedMonthStore = (id) =>
 
             return {
                 ...day,
-                list: shiftData.shifts?.list || [],
+                list: shiftData.shifts || [],
                 regular: shiftData.regular || 0,
                 overtime: shiftData.overtime || 0,
                 toil: shiftData.toil || 0,

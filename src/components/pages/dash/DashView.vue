@@ -1,7 +1,7 @@
 <script setup>
 import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
 import {onBeforeUnmount, onMounted, ref} from "vue";
-import UserCard from "@/pages/dash/UserCard.vue";
+import UserCard from "@/components/pages/dash/UserCard.vue";
 import {useActiveShifts} from "@/stores/shiftStore.js";
 
 const activeShifts = useActiveShifts()
