@@ -7,8 +7,10 @@ import {setShiftOFF, deleteShiftFetch} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {usedayStore} from "@/stores/calendarStore.js";
+import DetailsContainer from "@/pages/userPanel/DetailsContainer.vue";
+import {leaveTypes, daysOff, other} from "@/data/PDF_leaveType_data.js";
 
-const dataList = ['UW', 'UB', 'UŻ', 'L4']
+const dataList = ['UW', 'UB', 'UŻ', 'L4', 'CD']
 const selectedOFF = ref(null)
 const monthStore = useSelectedMonthStore('calendar')
 const dayStore = usedayStore()
@@ -70,6 +72,11 @@ const getReason = () => {
   return dayStore.list.filter(s => s.off_type !== null)[0].off_type
 }
 
+const mapDescription = (code) => {
+  const allSources = [...leaveTypes, ...daysOff, ...other];
+  return allSources.find(item => item.code === code) || null;
+};
+
 </script>
 
 <template>
@@ -80,11 +87,11 @@ const getReason = () => {
       w-[95%]
       "
   >
-     <p>{{!checkOffDay}}</p>
+
     <div v-if="!checkOffDay()"
         class="grid grid-cols-[1fr_auto] items-center bg-secondary">
 
-      <section class="shadow-2xl text-white flex justify-center items-center box-border rounded-md p-3">
+      <section class="text-white flex justify-center items-center box-border rounded-md p-3">
         <label class="m-3 text-base w-fit" for="lista">Holiday type:</label>
         <select
             class="text-black w-20"
@@ -108,6 +115,12 @@ const getReason = () => {
           label="save"
           @click="handleSaveOFF"
       />
+
+      <div class="grid gap-1 grid-flow-row justify-center align-middle">
+
+       <DetailsContainer v-for="element in dataList" :label=element :data=mapDescription(element)?.description />
+
+     </div>
     </div>
 
      <div v-else
@@ -122,24 +135,19 @@ const getReason = () => {
 
        </section>
 
-
-
         <CustomTextButton
             v-show="!monthStore.selected.closed"
             label="remove"
             @click="handleRemoveOFF"
         />
+
+        <div class="grid gap-1 grid-flow-row justify-center align-middle">
+          <DetailsContainer :label=getReason() :data=mapDescription(getReason())?.description />
+        </div>
     </div>
 
    </div>
 </template>
 
 <style scoped>
-
-.select-list-label {
-  margin: 5px;
-  color:  white;
-  font-size: 15px;
-}
-
 </style>

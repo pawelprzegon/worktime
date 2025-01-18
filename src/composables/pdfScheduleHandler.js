@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 import robotoFont from "@/assets/font/Roboto-Light-normal.js";
 import {formatTime, getLast} from "@/composables/utils.js";
 import {prepareStartAndStopTimePDF} from "@/composables/pdfHandler.js";
-import {daysOff, leaveTypes, other} from "@/data/privileged_data.js";
+import {daysOff, leaveTypes, other} from "@/data/PDF_leaveType_data.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
 
@@ -96,6 +96,7 @@ export const generatePDF = (selectedUser) => {
         case 'UW':
         case 'UŻ':
         case 'UB':
+        case 'CD':
           response = ['', '', '', 1, day.offType];
           break;
 

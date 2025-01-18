@@ -4,8 +4,11 @@
   import {getMe} from "@/composables/fetchers.js";
   import CustomTextButton from "@/components/CustomTextButton.vue";
   import { useAuthStore } from '@/stores/authStore.js';
+  import Alert from "@/components/Alert.vue";
+  import {useAlertStore} from "@/stores/alertStore.js";
 
   const authStore = useAuthStore();
+  const alert = useAlertStore();
   const router = useRouter()
   const userName = ref('');
   const today = ref(new Date)
@@ -46,7 +49,7 @@
       const response =  await getMe()
       userName.value = `${response.first_name} ${response.last_name}`
     } catch (error) {
-      console.log(error)
+      alert.show('error', error)
     }
   }
 
@@ -89,9 +92,22 @@
 </script>
 
 <template>
-  <header id="header">
-    <img alt="Vue logo" class="logo" src="./assets/img/beb.webp" />
-    <div class="nav">
+  <Alert />
+  <header
+      id="header"
+      class="mb-4 inline-flex justify-between border-b border-white w-full"
+  >
+    <img
+        alt="Vue logo"
+        src="./assets/img/beb.webp"
+        class="
+        block
+
+        portrait-2xs:w-[65px] portrait-2xs:h-[55px]
+        portrait-xl:w-[90px] portrait-xl:h-[70px]
+        "
+    />
+    <div class="flex flex-col justify-between place-items-end">
       <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
       <div class="flex justify-end items-end space-x-2">
         <CustomTextButton
@@ -106,16 +122,16 @@
             @click="gotoLogin"
         ></CustomTextButton>
         <CustomTextButton
-            v-if="authStore.isAuthenticated && authStore.isAdmin"
-            label="Privileged"
-            :isSelected="isPrivilegedActive"
-            @click="gotoPrivileged"
-        ></CustomTextButton>
-        <CustomTextButton
             v-if="authStore.isAuthenticated"
             label="User Panel"
             :isSelected="isUserPanelActive"
             @click="gotoUserPanel"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="authStore.isAuthenticated && authStore.isAdmin"
+            label="Privileged"
+            :isSelected="isPrivilegedActive"
+            @click="gotoPrivileged"
         ></CustomTextButton>
         <CustomTextButton
             v-if="authStore.isAuthenticated"
@@ -135,116 +151,19 @@
   </header>
 
 
-  <main id="main">
+  <main id="main" class="h-auto overflow-x-hidden overflow-y-auto">
     <RouterView />
   </main>
 
 
-  <footer id="footer">{{today}}</footer>
+  <footer
+      id="footer"
+      class="w-full border-t border-white text-right"
+  >
+    {{today}}
+  </footer>
 </template>
 
 <style scoped>
-
-.logo {
-  display: block;
-  width:90px;
-  height:70px
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
-.nav-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-
-#header {
-  margin-bottom: 1rem;
-  display: inline-flex;
-  justify-content: space-between;
-  border-bottom: 1px solid white;
-  width: 100%;
-}
-
-#main {
-  height: auto;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-#footer {
-  width: 100%;
-  border-top: 1px solid white;
-  text-align: right;
-}
-
-
-@media (orientation: portrait) {
-  @media (max-width: 1300px) {
-
-    .logo {
-      width:65px;
-      height:50px
-    }
-    #header {
-      height: 60px;
-    }
-    #footer {
-      height: 50px;
-    }
-  }
-
-  @media (max-width: 800px) {
-
-    .logo {
-      width: 65px;
-      height: 50px
-    }
-    #header {
-      height: 60px;
-    }
-    #footer {
-      height: 50px;
-    }
-  }
-}
-
-@media (orientation: landscape) {
-
-  @media (max-width: 1300px) {
-    .logo {
-      width:65px;
-      height:50px
-    }
-    #header {
-      height: 60px;
-    }
-    #footer {
-      height: 50px;
-    }
-  }
-
-  @media (max-width: 800px) {
-
-    .logo {
-      width:65px;
-      height:50px
-    }
-    #header {
-      height: 50px;
-    }
-    #footer {
-      height: 50px;
-    }
-
-  }
-}
 
 </style>
