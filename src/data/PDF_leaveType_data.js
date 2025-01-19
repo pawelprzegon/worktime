@@ -34,5 +34,6 @@ export const other = [
   { code: "SW", description: "służba wojskowa" },
   { code: "SB", description: "szkolenie BHP" },
   { code: "CD", description: "chorobowe [opieka nad chorym dzieckiem]" },
-  { code: "ZB", description: "zwolnienie kobiety w ciąży w celu przeprowadzenia badań" }
+  { code: "ZB", description: "zwolnienie kobiety w ciąży w celu przeprowadzenia badań" },
+  { code: "L4", description: "zwolnienie lekarskie" }
 ];

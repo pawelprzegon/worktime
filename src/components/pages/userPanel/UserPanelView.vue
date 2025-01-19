@@ -48,9 +48,8 @@ const closeMonth = async () => {
   } finally {
     closeCloseMonthModal()
   }
-
-
 }
+
 
 </script>
 

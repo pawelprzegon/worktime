@@ -64,7 +64,7 @@ const dt = getDateString(dayStore.date)
               class="min-h-[15vh] place-items-center"
          >
 
-           <div v-if="!checkOffDay()">
+           <div v-if="!checkOffDay()" class="w-full">
 
               <ShiftDetailContainer
                   v-show="dayStore.list.length > 0"
@@ -90,13 +90,14 @@ const dt = getDateString(dayStore.date)
                  :closeModal="closeModal"
              />
 
-             <ToilEditor/>
+
 
              <ShiftAdder
                   v-show="dayStore.list.length === 0"
                   :closeModal="closeModal"
               />
 
+            <ToilEditor/>
 
            </div>
 

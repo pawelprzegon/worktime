@@ -14,7 +14,7 @@ export const useSelectedMonthStore = (id) =>
 
         const selected = ref({
             month: new Date(),
-            toils: [],
+            toils: 0,
             monthlyRegularTime: 0,
             monthlyOvertime: 0,
             days: [],
@@ -42,7 +42,7 @@ export const useSelectedMonthStore = (id) =>
         const clear = () => {
             selected.value.monthlyRegularTime = 0;
             selected.value.monthlyOvertime = 0;
-            selected.value.toils = [];
+            selected.value.toils = 0;
             selected.value.days = [];
         }
 

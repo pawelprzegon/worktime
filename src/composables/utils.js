@@ -34,17 +34,6 @@ export function getTime(timestamp) {
   });
 }
 
-export function getDate(timestamp) {
-  const date = new Date(timestamp);
-
-  return  date.toLocaleDateString("pl-PL", {
-    timeZone: "Europe/Warsaw",
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit"
-  });
-}
-
 export const range = (start, end) => Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
 export const clearCache = () => {
