@@ -2,35 +2,31 @@
 
 import {watch, ref} from "vue";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
+import {usePrivilegedAllUsers} from "@/stores/privilegedStore.js";
+
+const usersList = usePrivilegedAllUsers();
 const selectedUser = usePrivilegedSelectedUser()
+
+usersList.loadUsers()
 
 const props = defineProps({
   label: {
     type: String,
     default: "",
     required: true,
-  },
-  dataList: {
-    type: Array,
-    default: () => [],
-    required: false
-  },
+  }
 });
 
 const selectedUserValue = ref(null);
 
 const handleSelection = () => {
-  selectedUser.setUser(selectedUserValue.value);
+  selectedUser.setUser(selectedUserValue.value.id);
 }
 
-watch(() => props.dataList, () => {
+watch(() => usersList.users, () => {
 
-  if (props.dataList.length > 0 && selectedUser.user !== null) {
-    const matchedUser = props.dataList.find(usr => usr.id === selectedUser.user.id);
-    if (matchedUser) {
-
-      selectedUserValue.value = matchedUser;
-    }
+  if (usersList.users.length > 0 && selectedUser.user !== null) {
+    selectedUserValue.value = selectedUser.user
   }
 }, { immediate: true });
 
@@ -48,7 +44,7 @@ watch(() => props.dataList, () => {
 
     >
       <option
-          v-for="(element, index) in dataList"
+          v-for="(element, index) in usersList.users"
           :key="index"
           :value="element"
       >

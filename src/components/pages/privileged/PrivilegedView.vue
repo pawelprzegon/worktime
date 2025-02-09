@@ -1,23 +1,9 @@
 <script setup>
 
-import {ref} from 'vue'
-import {getUsers} from "@/composables/fetchers.js";
 import SelectList from "@/components/pages/privileged/SelectList.vue";
 import MonthlySchedule from "@/components/pages/privileged/MonthlySchedule.vue";
 import UserDetails from "@/components/pages/privileged/UserDetails.vue";
 import Alert from "@/components/Alert.vue";
-
-const users = ref([])
-
-const loadUsers = async () => {
-  try {
-    users.value = await getUsers()
-  } catch (error) {
-    console.error('Loading users error:', error)
-  }
-}
-
-loadUsers()
 
 </script>
 
@@ -25,7 +11,6 @@ loadUsers()
     <Alert/>
     <SelectList
         label="Pick user"
-        :data-list="users"
     />
 
   <div class="grid grid-cols-[2fr_1fr] justify-items-center">
