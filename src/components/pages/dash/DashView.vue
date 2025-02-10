@@ -3,6 +3,7 @@ import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
 import {onBeforeUnmount, onMounted, ref} from "vue";
 import UserCard from "@/components/pages/dash/UserCard.vue";
 import {useActiveShifts} from "@/stores/shiftStore.js";
+import Alert from "@/components/Alert.vue";
 
 const activeShifts = useActiveShifts()
 
@@ -39,6 +40,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <Alert/>
 
   <div class="grid [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))] gap-4">
 

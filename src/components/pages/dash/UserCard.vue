@@ -11,6 +11,7 @@ import Spinner from "@/components/Spinner.vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import Alert from "@/components/Alert.vue";
 
+
 const alert = useAlertStore()
 const activeShifts = useActiveShifts()
 
@@ -57,10 +58,12 @@ const toggleShift = async () => {
 
     if (activeShift.value) {
       const shiftId = activeShift.value.id
-      await stopShift(shiftId, userId)
+      const response = await stopShift(shiftId, userId)
+      alert.show(response.status, response.message)
       activeShift.value = null
     } else {
-      await startShift(userId, note)
+      const response =  startShift(userId, note)
+      alert.show(response.status, response.message)
       await props.checkActiveShift()
     }
 
