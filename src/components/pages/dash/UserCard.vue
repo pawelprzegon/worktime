@@ -58,12 +58,10 @@ const toggleShift = async () => {
 
     if (activeShift.value) {
       const shiftId = activeShift.value.id
-      const response = await stopShift(shiftId, userId)
-      alert.show(response.status, response.message)
+      await stopShift(shiftId, userId)
       activeShift.value = null
     } else {
-      const response =  startShift(userId, note)
-      alert.show(response.status, response.message)
+      await startShift(userId, note)
       await props.checkActiveShift()
     }
 
