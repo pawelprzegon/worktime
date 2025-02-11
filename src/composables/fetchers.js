@@ -49,7 +49,7 @@ export const loginFetch = async (formData) => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error)
+        throw new Error(errorData.detail)
     }
 
     return await response.json()
