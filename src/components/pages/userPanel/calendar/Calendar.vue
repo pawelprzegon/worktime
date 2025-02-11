@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted} from 'vue';
 import Spinner from "@/components/Spinner.vue";
 import ShiftsDetailsModal from "@/components/pages/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
@@ -9,10 +9,12 @@ import {usedayStore} from "@/stores/calendarStore.js";
 import DayContainer from "@/components/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/components/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/components/pages/userPanel/calendar/WeekDayNameContainer.vue";
+import {useAuthStore} from "@/stores/authStore.js";
 
 const monthStore = useSelectedMonthStore('calendar');
 const dayStore = usedayStore();
 const screenSize = useScreenSizeStore()
+const authStore = useAuthStore();
 
 const isLoading = ref(true);
 const isdayStoreOpen = ref(false);
@@ -83,7 +85,7 @@ onMounted(async () => {
         v-for="(day, index) in monthStore.selected.days"
         :key="index"
         :day="day"
-        @click="dayOpenerHandler(day)"
+        v-bind="!authStore.user.disabled ? { onClick: () => dayOpenerHandler(day) } : {}"
       />
 
       <EmptyDayContainer

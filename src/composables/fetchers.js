@@ -45,11 +45,11 @@ export const loginFetch = async (formData) => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body,
     }
-   const response = await fetch(url + '/auth/login', data)
+    const response = await fetch(url + '/auth/login', data)
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail)
+        throw new Error(errorData.error)
     }
 
     return await response.json()
