@@ -223,6 +223,22 @@ export const updateUser = async (updateData, user_id, ) => {
     return await response.json()
 }
 
+export const rfidUserWaiting = async (user_id) => {
+
+    const data = {
+        method: 'POST',
+    }
+
+    const response = await fetch(url + `/user/set-wait-rfid-user/${user_id}`, data)
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json();
+}
+
 // DASH
 
 export const getDashUsers = async () => {

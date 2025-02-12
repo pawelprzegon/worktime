@@ -2,7 +2,7 @@
 
 import {usePrivilegedAllUsers, usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
-import {updateUser} from "@/composables/fetchers.js";
+import {rfidUserWaiting, updateUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {reactive, ref} from "vue";
@@ -20,6 +20,18 @@ const user = reactive({
   role: null,
   rfid: null
 });
+
+const AddChangeRFID = async () => {
+  try{
+    const result = await rfidUserWaiting(selectedUser.user.id)
+    console.log(result.status)
+    console.log(result.message)
+    alert.show('success', result.message)
+  }
+  catch (error) {
+    alert.show(error.status, error.message)
+  }
+}
 
 const editVisible = () => {
   user.email = selectedUser.user.email
@@ -60,6 +72,12 @@ const saveChanges = async () => {
     <DetailsContainer :label="'role'" :data="selectedUser.user.role"/>
     <DetailsContainer :label="'RFID'" :data="selectedUser.user.rfid"/>
     <DetailsContainer :label="'account disabled'" :data="selectedUser.user.disabled? 'Yes' : 'No' "/>
+
+    <CustomTextButton
+        label="add / change RFID"
+        :fontSize="12"
+        @click="AddChangeRFID"
+    />
 
     <CustomTextButton
         label="edit"
