@@ -41,10 +41,5 @@ const props = defineProps({
     >
       {{ props.data }}
     </span>
-    <CustomTextButton
-      v-else
-      label="add note"
-      :fontSize="12"
-    />
   </div>
 </template>

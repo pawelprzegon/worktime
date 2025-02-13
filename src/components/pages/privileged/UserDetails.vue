@@ -90,16 +90,16 @@ const saveChanges = async () => {
       <label class="block mb-2">Email:</label>
       <input v-model="user.email" type="email" class="input" placeholder="Email" />
 
-      <label class="block mt-3 mb-2">Nazwa użytkownika:</label>
-      <input v-model="user.username" type="text" class="input" placeholder="Nazwa użytkownika" />
+      <label class="block mt-3 mb-2">User name:</label>
+      <input v-model="user.username" type="text" class="input" placeholder="User name" />
 
       <label class="block mt-3 mb-2">Status:</label>
       <select v-model="user.disabled" class="input">
-        <option :value="true">Nieaktywny</option>
-        <option :value="false">Aktywny</option>
+        <option :value="true">Disabled</option>
+        <option :value="false">Enabled</option>
       </select>
 
-      <label class="block mt-3 mb-2">Rola:</label>
+      <label class="block mt-3 mb-2">Role:</label>
       <select v-model="user.role" class="input">
         <option value="user">User</option>
         <option value="admin">Admin</option>
