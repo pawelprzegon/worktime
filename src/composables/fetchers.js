@@ -239,6 +239,44 @@ export const rfidUserWaiting = async (user_id) => {
     return await response.json();
 }
 
+export const getWaitRFIDUser = async () => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + '/user/wait-rfid-user', data)
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
+export const deleteWaitRFIDUser = async () => {
+
+    const data = {
+      method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': addAuthorization()
+        }
+    }
+
+    const response = await fetch(url + '/user/wait-rfid-user', data)
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 // DASH
 
 export const getDashUsers = async () => {
