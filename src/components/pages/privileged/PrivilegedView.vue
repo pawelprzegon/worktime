@@ -10,12 +10,13 @@ import Alert from "@/components/Alert.vue";
 
 <template>
     <Alert/>
+    <ShowUserAwaitingRFID/>
     <SelectList
         label="Pick user"
     />
 
   <div class="grid grid-cols-[2fr_1fr] justify-items-center">
-    <ShowUserAwaitingRFID/>
+
     <MonthlySchedule/>
     <UserDetails/>
   </div>

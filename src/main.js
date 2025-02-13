@@ -3,6 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 import { createPinia } from 'pinia';
+import {breakEmail} from "@/composables/directives.js";
 
 const app = createApp(App);
 
@@ -10,5 +11,6 @@ const pinia = createPinia();
 
 app.use(router);
 app.use(pinia);
+app.directive('break-email', breakEmail)
 
 app.mount('#app');
