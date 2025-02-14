@@ -223,7 +223,7 @@ export const updateUser = async (updateData, user_id, ) => {
     return await response.json()
 }
 
-export const rfidUserWaiting = async (user_id) => {
+export const setWaitRFIDUser = async (user_id) => {
 
     const data = {
         method: 'POST',

@@ -2,7 +2,7 @@
 
 import {usePrivilegedAllUsers, usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
-import {rfidUserWaiting, updateUser} from "@/composables/fetchers.js";
+import {setWaitRFIDUser, updateUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {reactive, ref, watch} from "vue";
@@ -23,7 +23,7 @@ const user = reactive({
 
 const AddChangeRFID = async () => {
   try{
-    const result = await rfidUserWaiting(selectedUser.user.id)
+    const result = await setWaitRFIDUser(selectedUser.user.id)
     alert.show('success', result.message)
   }
   catch (error) {
