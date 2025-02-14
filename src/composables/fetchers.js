@@ -251,11 +251,11 @@ export const getWaitRFIDUser = async () => {
 
     const response = await fetch(url + '/user/wait-rfid-user', data)
 
-    if (!response.ok && response.status !== 404) {
+    if (response.status === 204) {
+        return null
+    } else if (!response.ok && response.status !== 204) {
         const errorData = await response.json();
         throw new Error(errorData.detail)
-    } else if (response.status === 404) {
-        return null
     }
 
     return await response.json()

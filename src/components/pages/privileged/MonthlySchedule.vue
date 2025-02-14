@@ -42,7 +42,7 @@ onMounted( async() => {
 </script>
 
 <template>
-  <div v-if="selectedUser.user" class="grid grid-rows-[fit_fit_auto] justify-items-center">
+  <div v-if="selectedUser.user" class="grid grid-rows-[fit_fit_auto] justify-items-center overflow-auto">
 
     <div v-if="isLoading" class="loading-spinner">
       <Spinner />

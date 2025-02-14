@@ -27,9 +27,9 @@ onMounted(async () => {
     const response = await getWaitRFIDUser()
     waitingUser.value = response?.message
   } catch (error){
+    console.log(error)
     alert.show('error', error.details)
   }
-
 })
 </script>
 
