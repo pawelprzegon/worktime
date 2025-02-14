@@ -1,21 +1,19 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
-import {deleteWaitRFIDUser, getWaitRFIDUser} from "@/composables/fetchers.js";
+import {onMounted} from "vue";
 import {useAlertStore} from "@/stores/alertStore.js";
-import CustomTextButton from "@/components/CustomTextButton.vue";
+import {useWaitRFIDUserStore} from "@/stores/rfidUserStore.js";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 
 const alert = useAlertStore()
-
-const waitingUser = ref(null)
+const waitRFIDUser = useWaitRFIDUserStore()
 
 const clearWaitingRFIDUser = async () => {
 
   try {
-    const response = await deleteWaitRFIDUser()
+    const response =  await waitRFIDUser.deleteWaitRfidUser();
     alert.show('success', response.message)
-    waitingUser.value = null
+    waitRFIDUser.setActiveRFIDUser(null)
   } catch (error){
     console.log(error)
     alert.show('error', error.details)
@@ -24,8 +22,7 @@ const clearWaitingRFIDUser = async () => {
 
 onMounted(async () => {
   try {
-    const response = await getWaitRFIDUser()
-    waitingUser.value = response?.message
+    await waitRFIDUser.getWaitRfidUser()
   } catch (error){
     console.log(error)
     alert.show('error', error.details)
@@ -36,12 +33,12 @@ onMounted(async () => {
 <template>
 
   <div
-      v-if="waitingUser"
+      v-if="waitRFIDUser.activeRFIDUser"
       class="flex flex-row justify-end align-middle bg-pink-900 rounded-md m-3"
   >
 
     <p class="text-base text-white m-1 place-content-center">
-     {{waitingUser}}
+     {{waitRFIDUser.activeRFIDUser}}
    </p>
 
     <CustomIconButton

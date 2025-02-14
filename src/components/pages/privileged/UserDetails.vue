@@ -2,14 +2,16 @@
 
 import {usePrivilegedAllUsers, usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
-import {setWaitRFIDUser, updateUser} from "@/composables/fetchers.js";
+import {getWaitRFIDUser, setWaitRFIDUser, updateUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {reactive, ref, watch} from "vue";
+import {useWaitRFIDUserStore} from "@/stores/rfidUserStore.js";
 
 const selectedUser = usePrivilegedSelectedUser();
 const usersList = usePrivilegedAllUsers();
 const alert = useAlertStore()
+const waitRFIDUser = useWaitRFIDUserStore()
 
 const isEditVisible = ref(false)
 
@@ -21,9 +23,10 @@ const user = reactive({
   rfid: null
 });
 
-const AddChangeRFID = async () => {
+const AddRFID = async () => {
+  console.log(selectedUser.user.id)
   try{
-    const result = await setWaitRFIDUser(selectedUser.user.id)
+    const result = await waitRFIDUser.setWaitRfidUser(selectedUser.user.id)
     alert.show('success', result.message)
   }
   catch (error) {
@@ -143,7 +146,7 @@ const cancelChanges = () => {
       <CustomTextButton
           label="add RFID"
           :fontSize="12"
-          @click="AddChangeRFID"
+          @click="AddRFID"
       />
     </div>
 
