@@ -12,9 +12,7 @@ export const useWaitRFIDUserStore = defineStore('rfidUser', () => {
 
   const setWaitRfidUser = async (selectedUser) => {
     try{
-      const response = await setWaitRFIDUser(selectedUser)
-      await getWaitRfidUser()
-      return response
+      return await setWaitRFIDUser(selectedUser)
     }
     catch (error) {
       console.log(error)

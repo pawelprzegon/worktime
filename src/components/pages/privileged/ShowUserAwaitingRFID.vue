@@ -20,14 +20,17 @@ const clearWaitingRFIDUser = async () => {
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   try {
-    await waitRFIDUser.getWaitRfidUser()
+    setInterval(async () => {
+      await waitRFIDUser.getWaitRfidUser()
+    }, 5000)
   } catch (error){
     console.log(error)
     alert.show('error', error.details)
   }
 })
+
 </script>
 
 <template>
