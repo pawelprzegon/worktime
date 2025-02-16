@@ -130,12 +130,13 @@ export const useSelectedMonthStore = (id) =>
 
             const ovHistory = await fetchOvHistory(authUser.user.id, prevMonth);
 
-             selected.value.monthlyOvertime += (ovHistory && ovHistory.length > 0 && ovHistory[0]?.overtime_seconds)
+            selected.value.monthlyOvertime += (ovHistory && ovHistory?.length > 0 && ovHistory[0]?.overtime_seconds)
                 ? ovHistory[0].overtime_seconds
                 : 0;
 
-             const isThisMonthClosed = await fetchOvHistory(authUser.user.id, currentMonth)
-             selected.value.closed = isThisMonthClosed.length > 0;
+            const isThisMonthClosed = await fetchOvHistory(authUser.user.id, currentMonth)
+
+            selected.value.closed = isThisMonthClosed?.length > 0;
         }
 
         const reduceToil = (toils) => {
