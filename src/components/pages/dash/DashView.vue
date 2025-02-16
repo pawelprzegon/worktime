@@ -14,8 +14,11 @@ const activeUsers = computed(() => users.value.filter(user => !user.disabled));
 const checkActiveShift = async () => {
   try {
     const activeShiftsList = await getActiveShifts();
+
     if (activeShiftsList) {
       activeShifts.setActiveShifts(activeShiftsList);
+    } else {
+      activeShifts.setActiveShifts([])
     }
   } catch (error) {
     console.error("Error fetching getActiveShifts:", error);

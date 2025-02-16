@@ -81,13 +81,13 @@ onMounted(async () => {
 });
 
 watch(() => activeShifts.activeShifts, (update) => {
-    if (update) {
-      const foundShift = activeShifts.activeShifts.find(shift => shift.user_id === props.user.id);
-      if (foundShift){
-        activeShift.value = foundShift
-      }
-    }
-  });
+  if (update && update.length > 0) {
+    const foundShift = update.find(shift => shift.user_id === props.user.id);
+    activeShift.value = foundShift || null;
+  } else {
+    activeShift.value = null;
+  }
+}, { deep: true });
 
 const closeModal = () => {
   modalVisibility.value = false;
