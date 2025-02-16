@@ -253,7 +253,7 @@ export const getWaitRFIDUser = async () => {
 
     if (response.status === 204) {
         return null
-    } else if (!response.ok && response.status !== 204) {
+    } else if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail)
     }
@@ -292,6 +292,10 @@ export const getDashUsers = async () => {
     }
 
     const response = await fetch(url + '/dash/users', data)
+
+    if (response.status === 204) {
+        return null;
+    }
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail)
@@ -312,6 +316,10 @@ export const getActiveShifts = async () => {
     }
 
     const response = await fetch(url + '/shift/active', data)
+
+    if (response.status === 204) {
+        return null;
+    }
 
     if (!response.ok) {
         const errorData = await response.json();
@@ -539,6 +547,10 @@ export const getOVHistory = async (userId, year, month) => {
     }
     let url_string = `/ov-history/?user_id=${userId}&year=${year}&month=${month}`
     const response = await fetch(url + url_string, data)
+
+    if (response.status === 204) {
+        return null;
+    }
 
     if (!response.ok) {
       throw new Error('Fetch active shift failed.')

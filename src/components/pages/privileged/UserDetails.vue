@@ -24,7 +24,6 @@ const user = reactive({
 });
 
 const AddRFID = async () => {
-  console.log(selectedUser.user.id)
   try{
     const result = await waitRFIDUser.setWaitRfidUser(selectedUser.user.id)
     alert.show('success', result.message)
