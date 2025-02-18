@@ -1,12 +1,14 @@
 <script setup>
 
-import {onMounted} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useWaitRFIDUserStore} from "@/stores/rfidUserStore.js";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 
-const alert = useAlertStore()
-const waitRFIDUser = useWaitRFIDUserStore()
+const alert = useAlertStore();
+const waitRFIDUser = useWaitRFIDUserStore();
+
+const intervalId = ref(null);
 
 const clearWaitingRFIDUser = async () => {
 
@@ -22,14 +24,20 @@ const clearWaitingRFIDUser = async () => {
 
 onMounted(() => {
   try {
-    setInterval(async () => {
-      await waitRFIDUser.getWaitRfidUser()
-    }, 5000)
-  } catch (error){
-    console.log(error)
-    alert.show('error', error.details)
+    intervalId.value = setInterval(async () => {
+      await waitRFIDUser.getWaitRfidUser();
+    }, 5000);
+  } catch (error) {
+    console.log(error);
+    alert.show("error", error.details);
   }
-})
+});
+
+onUnmounted(() => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+  }
+});
 
 </script>
 
