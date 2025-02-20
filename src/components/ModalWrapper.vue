@@ -16,7 +16,7 @@ defineProps({
       flex items-center justify-center
       "
        @click="closeModal">
-    <div class="place-items-center rounded-lg text-center w-fit min-w-[500px] mt-12" @click.stop>
+    <div class="place-items-center rounded-lg text-center w-4/5 max-w-[500px] mt-12" @click.stop>
       <slot></slot>
     </div>
   </div>

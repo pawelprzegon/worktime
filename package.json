@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@savvywombat/tailwindcss-grid-areas": "^4.0.0",
     "@vuepic/vue-datepicker": "^10.0.0",
     "date-fns": "^4.1.0",
