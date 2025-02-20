@@ -4,6 +4,7 @@ import Avatar from "@/components/Avatar.vue";
 import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
 import ModalWrapper from "@/components/ModalWrapper.vue";
+import Location from "@/components/Location.vue";
 
 const props = defineProps({
   user: {
@@ -66,6 +67,7 @@ onMounted(() => {
       </div>
 
     </div>
+    <Location />
   </ModalWrapper>
 
 </template>
