@@ -10,6 +10,7 @@ const accuracy = ref(null);
 const errorMessage = ref('');
 const mapContainer = ref(null);
 const map = ref(null);
+let watchId = null;
 
 async function getCurrentLocation() {
   if (!('geolocation' in navigator)) {
@@ -74,36 +75,6 @@ const initMap = async (lat, lng) => {
   map.value.setCenter({ lat: lat, lng: lng });
 };
 
-let watchId = null;
-function startWatchingPosition() {
-  if (!('geolocation' in navigator)) return;
-
-  watchId = navigator.geolocation.watchPosition(
-    (position) => {
-      latitude.value = position.coords.latitude;
-      longitude.value = position.coords.longitude;
-      accuracy.value = position.coords.accuracy;
-
-      if (map.value) {
-        map.value.setCenter({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        });
-      }
-    },
-    (error) => {
-      console.error('Błąd podczas monitorowania pozycji:', error);
-      errorMessage.value = 'Getting localization error';
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-      distanceFilter: 10
-    }
-  );
-}
-
 onUnmounted(() => {
   if (watchId) {
     navigator.geolocation.clearWatch(watchId);
@@ -117,7 +88,6 @@ onMounted(async () => {
 watch([latitude, longitude], async ([lat, lng]) => {
   if (lat !== null && lng !== null) {
     await initMap(lat, lng);
-    startWatchingPosition();
   }
 });
 </script>
