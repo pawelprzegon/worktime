@@ -30,15 +30,6 @@ async function getCurrentLocation() {
     longitude.value = position.coords.longitude;
     accuracy.value = position.coords.accuracy;
 
-    console.log('Szczegóły pozycji:', {
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-      accuracy: position.coords.accuracy,
-      altitude: position.coords.altitude,
-      heading: position.coords.heading,
-      speed: position.coords.speed,
-      timestamp: position.timestamp
-    });
   } catch (error) {
     switch (error.code || error.message) {
       case 'PERMISSION_DENIED':
@@ -104,7 +95,7 @@ function startWatchingPosition() {
     },
     (error) => {
       console.error('Błąd podczas monitorowania pozycji:', error);
-      errorMessage.value = 'Wystąpił błąd podczas śledzenia lokalizacji.';
+      errorMessage.value = 'Getting localization error';
     },
     {
       enableHighAccuracy: true,
@@ -136,9 +127,9 @@ watch([latitude, longitude], async ([lat, lng]) => {
 <template>
   <div v-if="latitude && longitude" class="h-[100%]">
     <div ref="mapContainer" class="map rounded-s-xl"></div>
-    <small v-if="accuracy > 500" class="text-white p-1 bg-red-600 absolute left-2 bottom-2"> Your location isn't precise </small>
+    <small v-if="accuracy > 500" class="text-white p-1 bg-red-600 absolute left-1 bottom-1"> Your location isn't precise. <br>Accuracy: ~{{accuracy.toFixed(0)}}m</small>
   </div>
-  <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+  <p v-if="errorMessage" class="error absolute left-1 top-1">{{ errorMessage }}</p>
 </template>
 
 <style scoped>
