@@ -22,7 +22,6 @@ async function getCurrentLocation() {
         enableHighAccuracy: true,
         timeout: 5000,
         maximumAge: 0,
-        frequency: 3000
       });
     });
 
