@@ -1,6 +1,7 @@
 <script setup>
 import {ref, onMounted, watch} from 'vue';
 import { Loader } from "@googlemaps/js-api-loader";
+import mapStyle from "@/assets/mapStyle.json";
 
 const latitude = ref(null);
 const longitude = ref(null);
@@ -54,7 +55,9 @@ const initMap = async (lat, lng) => {
   await loader.load();
   map.value = new google.maps.Map(mapContainer.value, {
     center: {lat: lat, lng: lng},
-    zoom: 12,
+    zoom: 16,
+    styles: mapStyle,
+    disableDefaultUI: true,
   });
 
   new google.maps.Marker({
@@ -66,12 +69,8 @@ const initMap = async (lat, lng) => {
 </script>
 
 <template>
-  <div v-if="latitude && longitude" >
-    <p>Szerokość: {{ latitude }}, Długość: {{ longitude }}</p>
-    <a :href="`https://www.google.com/maps?q=${latitude},${longitude}`" target="_blank">
-      Zobacz na Google Maps
-    </a>
-    <div ref="mapContainer" class="map"></div>
+  <div v-if="latitude && longitude" class="h-[100%]">
+    <div ref="mapContainer" class="map rounded-s-xl"></div>
   </div>
   <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 </template>
@@ -82,7 +81,8 @@ const initMap = async (lat, lng) => {
 }
 
 .map {
-  width: 500px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
 }
+
 </style>

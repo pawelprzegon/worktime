@@ -3,7 +3,6 @@
 import {onMounted, ref} from "vue";
 import {deleteWaitRFIDUser, getWaitRFIDUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import CustomTextButton from "@/components/CustomTextButton.vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 
 const alert = useAlertStore()

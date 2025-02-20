@@ -4,7 +4,7 @@ import Avatar from "@/components/Avatar.vue";
 import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import Location from "@/components/Location.vue";
+import Location from "@/components/pages/dash/Location.vue";
 
 const props = defineProps({
   user: {
@@ -35,41 +35,54 @@ onMounted(() => {
 </script>
 
 <template>
-
   <ModalWrapper :close-modal="props.closeModal">
+    <div
+      class="bg-mute shadow-xl text-center rounded-lg m-auto border-2 p-4 relative"
+      :class="props.activeShift ? 'border-red-700' : 'border-emerald-700'"
+    >
+      <div class="grid grid-cols-2 gap-4">
+        <!-- Lewa kolumna: Lokalizacja -->
+        <div class="relative">
+          <Location />
+        </div>
 
-    <div class="bg-mute shadow-xl text-center p-8 rounded-lg m-auto">
+        <!-- Prawa kolumna: Dane użytkownika -->
+        <div class="flex flex-col items-center">
+          <Avatar
+            :avatar="props.user.avatar"
+            :active-shift="props.user.activeShift"
+            :static="true"
+          />
+          <UserName
+            :first-name="props.user.first_name"
+            :last-name="props.user.last_name"
+          />
 
-      <Avatar
-          :avatar="props.user.avatar"
-          :active-shift="props.user.activeShift"
-          :static="true"
-      />
-      <UserName
-          :first-name="props.user.first_name"
-          :last-name="props.user.last_name"
-      />
+          <h2
+            class="mt-4 font-extrabold text-2xl"
+            :class="props.activeShift ? 'text-red-500' : 'text-emerald-700'"
+          >
+            {{ label.data }}
+          </h2>
 
-      <h2
-        class="mt-4 font-extrabold text-2xl"
-        :class="props.activeShift ? 'text-red-500' : 'text-emerald-700'"
-      >
-        {{ label.data }}
-      </h2>
-
-      <div class="flex flex-row justify-center items-center p-2 my-2">
-
-        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
-           @click="emit('toggleShift')">Yes</p>
-        <p class="bg-secondary text-xl w-28 rounded-md mx-4 p-4 border-2 border-third font-medium hover:bg-silver hover:text-white hover:border-silver hover:cursor-pointer"
-           @click="props.closeModal()">No</p>
-
+          <div class="p-2 my-2 w-full">
+            <p
+              class="bg-secondary text-xl w-full rounded-md p-2 m-1 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
+              @click="emit('toggleShift')"
+            >
+              Yes
+            </p>
+            <p
+              class="bg-secondary text-xl w-full rounded-md  p-2 m-1 border-2 border-third font-medium hover:bg-silver hover:text-white hover:border-silver hover:cursor-pointer"
+              @click="props.closeModal()"
+            >
+              No
+            </p>
+          </div>
+        </div>
       </div>
-
     </div>
-    <Location />
   </ModalWrapper>
-
 </template>
 
 <style scoped>
