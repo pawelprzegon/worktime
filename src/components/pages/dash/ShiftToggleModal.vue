@@ -41,12 +41,12 @@ onMounted(() => {
       :class="props.activeShift ? 'border-red-700' : 'border-emerald-700'"
     >
       <div class="grid grid-cols-2 gap-4">
-        <!-- Lewa kolumna: Lokalizacja -->
-        <div class="relative">
-          <Location />
+        <div class="relative flex flex-col justify-center items-center">
+          <div class="w-full h-[100%]">
+            <Location />
+          </div>
         </div>
 
-        <!-- Prawa kolumna: Dane użytkownika -->
         <div class="flex flex-col items-center">
           <Avatar
             :avatar="props.user.avatar"

@@ -2,6 +2,7 @@
 import {ref, onMounted, watch, onUnmounted} from 'vue';
 import { Loader } from "@googlemaps/js-api-loader";
 import mapStyle from "@/assets/mapStyle.json";
+import Spinner from "@/components/Spinner.vue";
 
 const latitude = ref(null);
 const longitude = ref(null);
@@ -20,7 +21,7 @@ async function getCurrentLocation() {
     const position = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject, {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 2000,
         maximumAge: 0,
       });
     });
@@ -127,8 +128,15 @@ watch([latitude, longitude], async ([lat, lng]) => {
   <div v-if="latitude && longitude" class="h-[100%]">
     <div ref="mapContainer" class="map rounded-s-xl"></div>
     <small v-if="accuracy > 500" class="text-white p-1 bg-red-600 absolute left-1 bottom-1"> Your location isn't precise. <br>Accuracy: ~{{accuracy.toFixed(0)}}m</small>
+    <p v-if="errorMessage" class="error absolute left-1 top-1">{{ errorMessage }}</p>
   </div>
-  <p v-if="errorMessage" class="error absolute left-1 top-1">{{ errorMessage }}</p>
+  <div v-else class="loading-spinner">
+    <Spinner
+        :height=30
+        :width=30
+    />
+  </div>
+
 </template>
 
 <style scoped>
