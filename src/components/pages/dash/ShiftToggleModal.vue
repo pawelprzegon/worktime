@@ -41,7 +41,7 @@ onMounted(() => {
       :class="props.activeShift ? 'border-red-700' : 'border-emerald-700'"
     >
       <div class="grid grid-cols-2 gap-4">
-        <div class="relative flex flex-col justify-center items-center">
+        <div class="relative">
           <div class="w-full h-[100%]">
             <Location />
           </div>
