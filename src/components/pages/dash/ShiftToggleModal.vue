@@ -5,6 +5,9 @@ import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import Location from "@/components/pages/dash/Location.vue";
+import {useLocationStore} from "@/stores/utilsStore.js";
+
+const location = useLocationStore()
 
 const props = defineProps({
   user: {
@@ -43,7 +46,9 @@ onMounted(() => {
       <div class="grid grid-cols-2 gap-4">
         <div class="relative">
           <div class="w-full h-[100%]">
-            <Location />
+            <Location
+                :activeShift="props.activeShift"
+            />
           </div>
         </div>
 
@@ -65,7 +70,8 @@ onMounted(() => {
             {{ label.data }}
           </h2>
 
-          <div class="p-2 my-2 w-full">
+          <div
+              class="p-2 my-2 w-full">
             <p
               class="bg-secondary text-xl w-full rounded-md p-2 m-1 border-2 border-third font-medium hover:bg-beb hover:text-white hover:border-beb hover:cursor-pointer"
               @click="emit('toggleShift')"

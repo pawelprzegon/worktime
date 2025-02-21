@@ -4,8 +4,17 @@ import { Loader } from "@googlemaps/js-api-loader";
 import mapStyle from "@/assets/mapStyle.json";
 import Spinner from "@/components/Spinner.vue";
 import {useLocationStore} from "@/stores/utilsStore.js";
+import startMarker from '@/assets/img/start-pin.png';
+import stopMarker from '@/assets/img/stop-pin.png'
 
 const location = useLocationStore()
+
+const props = defineProps({
+  activeShift: {
+    type: Object,
+    default: {}
+  }
+})
 
 const errorMessage = ref('');
 const mapContainer = ref(null);
@@ -64,13 +73,14 @@ const initMap = async (lat, lng) => {
     zoomControl: false,
   });
 
-  const marker = new google.maps.Marker({
+  new google.maps.Marker({
     position: { lat: lat, lng: lng },
     map: map.value,
     title: "Your localization",
+    icon: props.activeShift ? stopMarker : startMarker,
     animation: google.maps.Animation.DROP
   });
-  console.log("Lat:", lat, "Lng:", lng);
+
   map.value.setCenter({ lat: lat, lng: lng });
 };
 
