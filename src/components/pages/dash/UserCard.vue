@@ -10,10 +10,11 @@ import {useActiveShifts} from "@/stores/shiftStore.js";
 import Spinner from "@/components/Spinner.vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import Alert from "@/components/Alert.vue";
-
+import {useLocationStore} from "@/stores/utilsStore.js";
 
 const alert = useAlertStore()
 const activeShifts = useActiveShifts()
+const location = useLocationStore()
 
 const props = defineProps({
   user: Object,
@@ -58,10 +59,10 @@ const toggleShift = async () => {
 
     if (activeShift.value) {
       const shiftId = activeShift.value.id
-      await stopShift(shiftId, userId)
+      await stopShift(shiftId, userId, location.getLocation())
       activeShift.value = null
     } else {
-      await startShift(userId, note)
+      await startShift(userId, note, location.getLocation())
       await props.checkActiveShift()
     }
 

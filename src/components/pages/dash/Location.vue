@@ -3,10 +3,10 @@ import {ref, onMounted, watch, onUnmounted} from 'vue';
 import { Loader } from "@googlemaps/js-api-loader";
 import mapStyle from "@/assets/mapStyle.json";
 import Spinner from "@/components/Spinner.vue";
+import {useLocationStore} from "@/stores/utilsStore.js";
 
-const latitude = ref(null);
-const longitude = ref(null);
-const accuracy = ref(null);
+const location = useLocationStore()
+
 const errorMessage = ref('');
 const mapContainer = ref(null);
 const map = ref(null);
@@ -14,7 +14,7 @@ let watchId = null;
 
 async function getCurrentLocation() {
   if (!('geolocation' in navigator)) {
-    errorMessage.value = 'Geolokalizacja nie jest wspierana przez tę przeglądarkę.';
+    errorMessage.value = 'Geolocation is not supported by this browser.';
     return;
   }
 
@@ -25,31 +25,30 @@ async function getCurrentLocation() {
       });
     });
 
-    latitude.value = position.coords.latitude;
-    longitude.value = position.coords.longitude;
-    accuracy.value = position.coords.accuracy;
+    location.setLocation(position)
 
   } catch (error) {
     switch (error.code || error.message) {
       case 'PERMISSION_DENIED':
-        errorMessage.value = 'Użytkownik odmówił dostępu do lokalizacji.';
+        errorMessage.value = 'User denied access to location.';
         break;
-      case 'POSITION_UNAVAILABLE':
-        errorMessage.value = 'Informacje o lokalizacji są niedostępne.';
+    case 'POSITION_UNAVAILABLE':
+        errorMessage.value = 'Location information is unavailable.';
         break;
-      case 'TIMEOUT':
-        errorMessage.value = 'Przekroczono czas oczekiwania na określenie lokalizacji.';
+    case 'TIMEOUT':
+        errorMessage.value = 'Location request timed out.';
         break;
-      case 'UNKNOWN_ERROR':
-        errorMessage.value = 'Wystąpił nieznany błąd podczas określania lokalizacji.';
+    case 'UNKNOWN_ERROR':
+        errorMessage.value = 'An unknown error occurred while determining the location.';
         break;
-      default:
-        errorMessage.value = `Błąd: ${error.message}`;
+    default:
+        errorMessage.value = `Error: ${error.message}`;
     }
   }
 }
 
 const initMap = async (lat, lng) => {
+
   const loader = new Loader({
     apiKey: "AIzaSyDNGIcQN-8_fVZnEDk6URTk11PlZTS6dPY",
     version: "weekly",
@@ -71,7 +70,7 @@ const initMap = async (lat, lng) => {
     title: "Your localization",
     animation: google.maps.Animation.DROP
   });
-
+  console.log("Lat:", lat, "Lng:", lng);
   map.value.setCenter({ lat: lat, lng: lng });
 };
 
@@ -85,17 +84,22 @@ onMounted(async () => {
   await getCurrentLocation();
 });
 
-watch([latitude, longitude], async ([lat, lng]) => {
-  if (lat !== null && lng !== null) {
-    await initMap(lat, lng);
-  }
-});
+watch(
+  () => [location.latitude, location.longitude],
+  async ([lat, lng]) => {
+    if (lat !== null && lng !== null) {
+      await initMap(lat, lng);
+    }
+  },
+  { immediate: true }
+);
+
 </script>
 
 <template>
-  <div v-if="latitude && longitude" class="h-[100%]">
+  <div v-if="location.latitude && location.longitude" class="h-[100%]">
     <div ref="mapContainer" class="map rounded-s-xl"></div>
-    <small v-if="accuracy > 500" class="text-white p-1 bg-red-600 absolute left-1 bottom-1"> Your location isn't precise. <br>Accuracy: ~{{accuracy.toFixed(0)}}m</small>
+    <small v-if="location.accuracy > 500" class="text-white p-1 bg-red-600 absolute left-1 bottom-1"> Your location isn't precise. <br>Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
     <p v-if="errorMessage" class="error absolute left-1 top-1">{{ errorMessage }}</p>
   </div>
   <div v-else class="loading-spinner flex flex-col justify-center items-center h-full">

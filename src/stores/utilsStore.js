@@ -202,8 +202,36 @@ export const useScreenSizeStore = defineStore('screenSizeStore', () => {
     };
 
     return {
-    isPortraitXsOr2Xs,
-    isPortraitSmall,
-    setSize,
+        isPortraitXsOr2Xs,
+        isPortraitSmall,
+        setSize,
+    };
+});
+
+export const useLocationStore = defineStore('screenLocationStore', () => {
+    const latitude = ref(null)
+    const longitude = ref(null)
+    const accuracy = ref(null)
+
+    const setLocation = (position) => {
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
+        accuracy.value = position.coords.accuracy;
+    };
+
+    const getLocation = () => {
+        return {
+            'latitude': latitude.value,
+            'longitude': longitude.value,
+            'accuracy': accuracy.value
+        }
+    }
+
+    return {
+        latitude,
+        longitude,
+        accuracy,
+        setLocation,
+        getLocation
     };
 });

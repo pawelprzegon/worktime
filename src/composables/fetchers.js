@@ -329,13 +329,14 @@ export const getActiveShifts = async () => {
     return await response.json()
 }
 
-export const startShift = async (userId, note) => {
+export const startShift = async (userId, note, location) => {
 
     const body = JSON.stringify({
         'user_id': `${userId}`,
+        'location': JSON.stringify(location),
         'note': note
     });
-
+    console.log(body)
     const data = {
         method: 'POST',
         headers: {
@@ -353,12 +354,14 @@ export const startShift = async (userId, note) => {
     return await response.json()
 }
 
-export const stopShift = async (shiftId, userId) => {
+export const stopShift = async (shiftId, userId, location) => {
+    console.log(location)
     const body = JSON.stringify({
         'shift_id': `${shiftId}`,
-        'user_id': `${userId}`
+        'user_id': `${userId}`,
+        'location': location,
     });
-
+    console.log(body)
     const data = {
         method: 'POST',
         headers: {
