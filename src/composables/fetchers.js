@@ -333,10 +333,10 @@ export const startShift = async (userId, note, location) => {
 
     const body = JSON.stringify({
         'user_id': `${userId}`,
-        'location': JSON.stringify(location),
+        'location': location,
         'note': note
     });
-    console.log(body)
+
     const data = {
         method: 'POST',
         headers: {
@@ -361,7 +361,6 @@ export const stopShift = async (shiftId, userId, location) => {
         'user_id': `${userId}`,
         'location': location,
     });
-    console.log(body)
     const data = {
         method: 'POST',
         headers: {
