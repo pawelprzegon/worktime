@@ -212,6 +212,7 @@ export const useLocationStore = defineStore('screenLocationStore', () => {
     const latitude = ref(null)
     const longitude = ref(null)
     const accuracy = ref(null)
+    const errorMessage = ref('');
 
     const setLocation = (position) => {
         latitude.value = position.coords.latitude;
@@ -227,11 +228,47 @@ export const useLocationStore = defineStore('screenLocationStore', () => {
         }
     }
 
+    const getCurrentLocation = async () => {
+      if (!('geolocation' in navigator)) {
+        errorMessage.value = 'Geolocation is not supported by this browser.';
+        return;
+      }
+
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+          });
+        });
+
+        setLocation(position)
+
+      } catch (error) {
+        switch (error.code || error.message) {
+          case 'PERMISSION_DENIED':
+            errorMessage.value = 'User denied access to location.';
+            break;
+        case 'POSITION_UNAVAILABLE':
+            errorMessage.value = 'Location information is unavailable.';
+            break;
+        case 'TIMEOUT':
+            errorMessage.value = 'Location request timed out.';
+            break;
+        case 'UNKNOWN_ERROR':
+            errorMessage.value = 'An unknown error occurred while determining the location.';
+            break;
+        default:
+            errorMessage.value = `Error: ${error.message}`;
+        }
+      }
+    }
+
     return {
         latitude,
         longitude,
         accuracy,
         setLocation,
-        getLocation
+        getLocation,
+        getCurrentLocation
     };
 });

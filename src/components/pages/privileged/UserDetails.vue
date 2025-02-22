@@ -2,7 +2,7 @@
 
 import {usePrivilegedAllUsers, usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
-import {getWaitRFIDUser, setWaitRFIDUser, updateUser} from "@/composables/fetchers.js";
+import {updateUser} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {reactive, ref, watch} from "vue";

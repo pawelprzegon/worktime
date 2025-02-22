@@ -90,8 +90,6 @@ const dt = getDateString(dayStore.date)
                  :closeModal="closeModal"
              />
 
-
-
              <ShiftAdder
                   v-show="dayStore.list.length === 0"
                   :closeModal="closeModal"

@@ -1,6 +1,8 @@
 <script setup>
 import CorrectionsContainer from "@/components/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
 import NoteContainer from "@/components/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
+import ShiftLocations from "@/components/pages/userPanel/modals/ShiftDetails/ShiftLocations.vue";
+
 
 
 const props = defineProps({
@@ -24,6 +26,33 @@ const props = defineProps({
     ]"
   >
     <div class="grid grid-flow-row auto-rows-min">
+
+      <!-- Sekcja poprawek -->
+      <div
+          class="
+          grid m-3 rounded-md border border-pigeon
+
+          portrait-2xs:grid-rows-[15px_auto]
+          portrait-medium:grid-rows-[18px_auto]
+          ">
+        <h2
+            class="
+            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
+
+              portrait-2xs:text-sm
+              portrait-medium:text-md
+              "
+        >CORRECTIONS</h2>
+        <CorrectionsContainer :shift-id="shiftId"/>
+      </div>
+
+      <!-- Sekcja lokalizacji -->
+      <div class="w-full h-[200px]">
+        <ShiftLocations
+            :shift-id=shiftId
+        />
+      </div>
+
       <!-- Sekcja notatki -->
       <div
           class="
@@ -41,25 +70,6 @@ const props = defineProps({
               "
         >NOTE</h2>
         <NoteContainer :shift-id="shiftId"/>
-      </div>
-
-      <!-- Sekcja poprawek -->
-      <div
-          class="
-          grid m-3 rounded-md border border-pigeon
-
-          portrait-2xs:grid-rows-[15px_auto]
-          portrait-medium:grid-rows-[18px_auto]
-          ">
-        <h2
-            class="
-            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
-
-              portrait-2xs:text-sm
-              portrait-medium:text-md
-              "
-        >CORRECTION</h2>
-        <CorrectionsContainer :shift-id="shiftId"/>
       </div>
 
     </div>

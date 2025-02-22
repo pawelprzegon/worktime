@@ -7,7 +7,7 @@ import ShiftDetails from "@/components/pages/userPanel/modals/ShiftDetails/Shift
 import {ref, onMounted, computed} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
-import DeleteShift from "@/components/pages/userPanel/modals/ShiftDetails/DeleteShift.vue";
+import DeleteShiftConfirm from "@/components/pages/userPanel/modals/ShiftDetails/DeleteShiftConfirm.vue";
 import {usedayStore} from "@/stores/calendarStore.js";
 
 
@@ -64,8 +64,6 @@ onMounted(async () => {
 
 <template>
 
-  <!--Shifts List-->
-
   <div
       class="inline-grid items-center m-3
       border-2 rounded-lg
@@ -80,7 +78,7 @@ onMounted(async () => {
         :class="!isShiftsDropdownOpen ? 'hover:bg-secondary' : 'hover:bg-none'"
     >
 
-      <DeleteShift
+      <DeleteShiftConfirm
         v-show="isDeleteOpen"
         :shift-id=shift.id
         :open-handler="handleDeleteShiftOpen"
