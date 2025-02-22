@@ -47,7 +47,7 @@ const props = defineProps({
       </div>
 
       <!-- Sekcja lokalizacji -->
-      <div class="w-full h-[200px]">
+      <div class="w-full">
         <ShiftLocations
             :shift-id=shiftId
         />

@@ -14,19 +14,34 @@ const props = defineProps({
 
 const mapContainer = ref(null);
 const map = ref(null);
+const warning = ref(null);
 
 onMounted(async () => {
-  console.log('test')
+
   const shift = dayStore.getShiftById(props.shiftId)
 
-  const startCoordinates = {
-    lat: shift.value.location.start.latitude,
-    lng: shift.value.location.start.longitude
+  let startCoordinates = null
+  let stopCoordinates = null
+
+  if (shift){
+    startCoordinates = {
+      lat: shift.value.location.start?.latitude ?? null,
+      lng: shift.value.location.start?.longitude ?? null
+    }
+    stopCoordinates = {
+      lat: (shift.value.location.stop?.latitude - 0.0001) ?? null,
+      lng: (shift.value.location.stop?.longitude - 0.0001) ?? null
+    }
   }
-  const stopCoordinates = {
-    lat: shift.value.location.stop.latitude - 0.001,
-    lng: shift.value.location.stop.longitude - 0.001
+
+  const hasNull = Object.values(startCoordinates).includes(null) ||
+                Object.values(stopCoordinates).includes(null);
+
+  if (hasNull) {
+      warning.value = "There is some localization data missing";
+      return
   }
+
   map.value = await initMap([startCoordinates, stopCoordinates], mapContainer, map);
 
 });
@@ -34,9 +49,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-row justify-center align-middle  h-[200px]">
+  <div v-if="!warning" class="flex flex-row justify-center align-middle  h-[200px]">
     <div ref="mapContainer" class="map rounded-xl"></div>
   </div>
+  <p v-else class="text-red-500 font-bold">
+    {{warning}}
+  </p>
 
 </template>
 
