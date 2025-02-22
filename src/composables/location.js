@@ -15,7 +15,6 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
   }
 
   const icons = getIconStyle()
-  console.log(icons)
 
   const loader = new Loader({
     apiKey: "AIzaSyDNGIcQN-8_fVZnEDk6URTk11PlZTS6dPY",
@@ -26,7 +25,7 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
 
   mapRef.value = new google.maps.Map(mapContainerRef.value, {
     center: coordinates[0],
-    zoom: 18,
+    zoom: 12,
     styles: mapStyle,
     disableDefaultUI: true,
     zoomControl: false,
@@ -35,7 +34,7 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
   const bounds = new google.maps.LatLngBounds();
   coordinates.forEach(coord => bounds.extend(coord));
 
-  mapRef.value.fitBounds(bounds, 50); // 50 to padding w pikselach
+  mapRef.value.fitBounds(bounds, 50);
 
   coordinates.forEach((coord, index) => {
     new google.maps.Marker({
