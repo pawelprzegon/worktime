@@ -28,7 +28,7 @@ const checkOffDay = () => {
 </script>
 
 <template>
-  <aside class="flex flex-col fixed top-0 px-4 py-4 h-screen transition-transform duration-300 ease-in-out dark:bg-secondary dark:border-third z-40
+  <aside class="flex flex-col fixed top-0 px-4 py-4 h-screen transition-transform duration-300 ease-in-out bg-secondary border-third z-40
 
                 portrait-2xs:-right-[300px] portrait-2xs:w-[300px]
                 portrait-xs:-right-[350px] portrait-xs:w-[350px]
