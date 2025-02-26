@@ -116,7 +116,8 @@ const saveCorrection = async () => {
 
       portrait-2xs:grid-rows-2 portrait-2xs:grid-cols-none
       portrait-medium:grid-rows-none portrait-medium:grid-cols-[40%_auto]
-      ">
+      "
+    >
 
       <div v-if="shift.update.length > 0" class="grid grid-flow-row">
 
@@ -168,6 +169,7 @@ const saveCorrection = async () => {
 
       </div>
 
+      <div v-else></div>
 
       <form
           v-show="!monthStore.selected.closed"
