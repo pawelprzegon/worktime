@@ -118,7 +118,7 @@ const saveCorrection = async () => {
       portrait-medium:grid-rows-none portrait-medium:grid-cols-[40%_auto]
       ">
 
-      <div v-if="shift.update" class="grid grid-flow-row">
+      <div v-if="shift.update.length > 0" class="grid grid-flow-row">
 
         <div class="grid
 
