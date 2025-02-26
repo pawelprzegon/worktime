@@ -1,4 +1,5 @@
 <script setup>
+
 const props = defineProps({
   icon: {
     type: String,
@@ -16,7 +17,7 @@ const props = defineProps({
 
 const icon = new URL(`../assets/img/${props.icon}`, import.meta.url).href;
 
-console.log(icon)
+
 </script>
 
 <template>
@@ -25,11 +26,9 @@ console.log(icon)
       p-1 m-1
       grayscale
       hover:grayscale-0 hover:cursor-pointer
-
-      portrait-2xs:h-[30px] portrait-2xs:w-[30px]
-      portrait-medium:h-[40px] portrait-medium:w-[40px]
-
       "
+      :class="`portrait-2xs:h-[${props.height}px] portrait-2xs:w-[${props.width}px]
+      portrait-medium:h-[${props.height}px] portrait-medium:w-[${props.width}px]`"
 
       :src=icon alt="ico-button"
   />

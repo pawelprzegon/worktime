@@ -31,7 +31,7 @@ const toggleDayOffDropdown = (buttonStatus) => {
          @open="toggleDayOffDropdown"
        >
          <div class="flex flex-grow justify-left items-center w-full">
-            <p class="text-left text-xl text-beb font-bold m-2">Day off</p>
+            <p class="text-left text-xl text-silver font-bold m-2">Day off</p>
 
           </div>
        </DetailsDropdown>

@@ -37,7 +37,7 @@ const toggleToilDropdown = (buttonStatus) => {
       >
 
         <div class="flex flex-grow justify-left items-center w-full">
-          <p class="text-left text-xl text-beb font-bold m-2">Toil</p>
+          <p class="text-left text-xl text-silver font-bold m-2">Toil</p>
 
           <ShiftDetailContainer
             v-if="dayStore.toil.hasOwnProperty('duration_seconds')"

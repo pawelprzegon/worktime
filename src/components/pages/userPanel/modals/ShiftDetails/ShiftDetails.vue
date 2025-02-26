@@ -21,56 +21,15 @@ const props = defineProps({
 <template>
   <div
     :class="[
-      'transition-all duration-500 ease-in-out w-full overflow-auto',
+      'transition-all duration-500 ease-in-out w-full overflow-auto px-3',
       props.isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0',
     ]"
   >
     <div class="grid grid-flow-row auto-rows-min">
 
-      <!-- Sekcja poprawek -->
-      <div
-          class="
-          grid m-3 rounded-md border border-pigeon
-
-          portrait-2xs:grid-rows-[15px_auto]
-          portrait-medium:grid-rows-[18px_auto]
-          ">
-        <h2
-            class="
-            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
-
-              portrait-2xs:text-sm
-              portrait-medium:text-md
-              "
-        >CORRECTIONS</h2>
-        <CorrectionsContainer :shift-id="shiftId"/>
-      </div>
-
-      <!-- Sekcja lokalizacji -->
-      <div class="w-full">
-        <ShiftLocations
-            :shift-id=shiftId
-        />
-      </div>
-
-      <!-- Sekcja notatki -->
-      <div
-          class="
-          grid m-3 rounded-md border border-pigeon
-
-          portrait-2xs:grid-rows-[15px_auto]
-          portrait-medium:grid-rows-[18px_auto]
-          ">
-        <h2
-            class="
-            text-mute bg-pigeon font-bold text-left px-2 w-full rounded-t-md
-
-              portrait-2xs:text-sm
-              portrait-medium:text-md
-              "
-        >NOTE</h2>
-        <NoteContainer :shift-id="shiftId"/>
-      </div>
+      <ShiftLocations :shift-id="shiftId" />
+      <CorrectionsContainer :shift-id="shiftId"/>
+      <NoteContainer :shift-id="shiftId"/>
 
     </div>
   </div>

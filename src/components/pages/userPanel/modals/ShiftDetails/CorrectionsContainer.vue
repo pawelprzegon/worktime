@@ -2,7 +2,7 @@
 import {ref, watch} from 'vue'
 import {
   checkShiftLessThan28800,
-  combineDateWithTime,
+  combineDateWithTime, formatTime,
   getDateString,
   getLastCorrectionUpdate,
   getTime,
@@ -15,6 +15,7 @@ import {useAlertStore} from "@/stores/alertStore.js";
 import {usedayStore} from "@/stores/calendarStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {shiftCorrection} from "@/composables/fetchers.js";
+import Default from "@vuepic/vue-datepicker";
 
 
 const alert = useAlertStore()
@@ -87,98 +88,121 @@ const saveCorrection = async () => {
 </script>
 
 <template>
-  <div
+  <div class="grid grid-cols-[40px_auto] my-5
+
+              portrait-2xs:grid-cols-[24px_auto]
+              portrait-xs:grid-cols-[28px_auto]
+              portrait-small:grid-cols-[32px_auto]
+              portrait-medium:grid-cols-[36px_auto]
+              portrait-large:grid-cols-[40px_auto]
+  "
+  >
+
+    <img
+        src="@/assets/img/exchange.png"
+        alt="location"
+        class="filter-invert-100
+              portrait-2xs:w-[16px]
+              portrait-xs:w-[20px]
+              portrait-small:w-[24px]
+              portrait-medium:w-[28px]
+              portrait-large:w-[32px]
+              "
+
+    />
+    <div
       class="
-      grid grid-cols-2
+      grid grid-cols-[40%_auto]
 
       portrait-2xs:grid-rows-2 portrait-2xs:grid-cols-none
-      portrait-medium:grid-rows-none portrait-medium:grid-cols-2
+      portrait-medium:grid-rows-none portrait-medium:grid-cols-[40%_auto]
       ">
 
-    <table class="corrections-table m-3">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>start</th>
-          <th>stop</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>default</td>
-          <td>
-            <ShiftDetailContainer
+      <div v-if="shift.update" class="grid grid-flow-row">
+
+        <div class="grid
+
+        portrait-2xs:grid-cols-[30%_20%_20%]
+        portrait-medium:grid-cols-[60px_auto_auto]
+        ">
+
+           <p class="text-sm m-auto">default</p>
+
+           <ShiftDetailContainer
               :time="getTime(shift.start)"
-              :text-color="anyCorrection ? 'red-500' : null"
+              :text="Object({color: 'emerald-500', weight: ''})"
+              :justify="'center'"
             />
-          </td>
-          <td>
+
             <ShiftDetailContainer
               :time="getTime(shift.stop)"
-              :text-color="anyCorrection ? 'red-500' : null"
+              :text="Object({color: 'red-500', weight: ''})"
+              :justify="'center'"
             />
-          </td>
-        </tr>
-        <tr v-for="(correction, index) in shift.update" :key="index">
 
-          <td class="correction-index">
-            {{`${index + 1}`}}
-          </td>
-          <td>
-            <ShiftDetailContainer
+        </div>
+
+        <div v-for="(correction, index) in shift.update" :key="index"
+             class="grid
+
+             portrait-2xs:grid-cols-[30%_20%_20%]
+             portrait-medium:grid-cols-[60px_auto_auto]
+             "
+        >
+
+          <p class="text-sm m-auto">{{index + 1}}</p>
+
+           <ShiftDetailContainer
               :time="getTime(correction.start)"
-              :text-color="!checkIsLast(correction) ? 'red-500' : null"
+              :text="Object({color: 'emerald-500', weight: ''})"
+              :justify="'center'"
             />
-          </td>
-          <td>
+
             <ShiftDetailContainer
               :time="getTime(correction.stop)"
-              :text-color="!checkIsLast(correction) ? 'red-500' : null"
+              :text="Object({color: 'red-500', weight: ''})"
+              :justify="'center'"
             />
-          </td>
-        </tr>
-      </tbody>
-    </table>
 
-    <div class="grid grid-flow-row justify-stretch align-middle h-full">
+        </div>
+
+      </div>
+
 
       <form
           v-show="!monthStore.selected.closed"
           @submit.prevent.stop="saveCorrection"
-          class="grid grid-flow-col w-full mb-3"
+          class="grid grid-flow-col m-1"
       >
         <div class="grid grid-flow-row justify-center items-center">
-          <label for="startTime" class="text-medium font-medium text-gray-400">Start hour</label>
+          <label for="startTime" class="text-xs font-normal text-gray-400">Start hour</label>
           <input
             v-model="shiftTime.start"
             type="time"
             id="startTime"
-            class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm text-lg"
+            class="block w-full border text-black border-gray-300 rounded-md shadow-sm text-base m-1"
             required
           />
         </div>
 
         <div class="grid grid-flow-row justify-center items-center">
-          <label for="endTime" class="text-medium font-medium text-gray-400">Stop hour</label>
+          <label for="endTime" class="text-xs font-normal text-gray-400">Stop hour</label>
           <input
             v-model="shiftTime.stop"
             type="time"
             id="endTime"
-            class="mt-1 block w-full border text-black border-gray-300 rounded-md shadow-sm text-lg"
+            class="block w-full border text-black border-gray-300 rounded-md shadow-sm text-base m-1"
             required
           />
         </div>
-      </form>
-
-      <div class="place-items-end place-content-end">
-
+        <div class="place-items-end place-content-end">
          <CustomTextButton
            v-show="!monthStore.selected.closed"
-          :label="'add'"
+          :label="'correct'"
           @click="saveCorrection"
         />
-
       </div>
+      </form>
 
 
     </div>

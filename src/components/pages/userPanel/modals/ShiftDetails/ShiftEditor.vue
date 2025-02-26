@@ -65,12 +65,13 @@ onMounted(async () => {
 <template>
 
   <div
-      class="inline-grid items-center m-3
+      class="inline-grid items-center
       border-2 rounded-lg
       overflow-auto
       w-[95%]
+      m-1
       "
-      :class="isShiftsDropdownOpen ? 'border-silver bg-secondary' : 'border-third'"
+      :class="isShiftsDropdownOpen ? 'border-silver bg-primary' : 'border-pigeon'"
   >
 
     <div
@@ -82,7 +83,6 @@ onMounted(async () => {
         v-show="isDeleteOpen"
         :shift-id=shift.id
         :open-handler="handleDeleteShiftOpen"
-        :close-modal="closeModal"
       />
 
       <DetailsDropdown
@@ -93,44 +93,53 @@ onMounted(async () => {
 
           <p
               class="
-              text-2xl m-2 text-beb font-bold p-1 w-[30px]
+              text-2xl m-2 text-silver font-bold p-1 w-[30px]
 
               portrait-2xs:m-0 portrait-2xs:p-0
-              portrait-medium:m-1 portrait-medium:p-1
+              portrait-medium:m-1
               "
           >{{props.index}}</p>
 
           <div
               class="
-              flex
+              flex gap-5
 
               portrait-2xs:text-xs portrait-2xs:flex-cols
               portrait-medium:text-base portrait-medium:flex-row
               "
           >
-            <ShiftDetailContainer
-              :label="'start'"
-              :time="getTime(start)"
-              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
-            />
 
-            <ShiftDetailContainer
-              :label="'stop'"
-              :time="getTime(stop)"
-              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
-            />
+              <ShiftDetailContainer
+                :time="getTime(start)"
+                :text="Object({color: 'emerald-500', weight: 'bold'})"
+                :justify="'center'"
+                :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+              />
 
-            <ShiftDetailContainer
-              :label="'range'"
-              :time="formatTime(shift.work)"
-              :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
-            />
+
+              <ShiftDetailContainer
+                :time="getTime(stop)"
+                :text="Object({color: 'red-500', weight: 'bold'})"
+                :justify="'center'"
+                :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+              />
+
+
+              <ShiftDetailContainer
+                :time="formatTime(shift.work)"
+                :text="Object({color: 'silver', weight: 'bold'})"
+                :justify="'center'"
+                :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
+              />
+
           </div>
 
           <CustomIconButton
               v-show="!monthStore.selected.closed"
-              icon="delete.png"
+              icon="trash-bin.png"
               @click.stop="handleDeleteShiftOpen(true)"
+              height="15"
+              width="15"
           />
 
         </div>

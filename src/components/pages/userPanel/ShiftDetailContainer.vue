@@ -4,14 +4,21 @@ const props = defineProps({
   label: String,
   time: String,
   background: String,
-  textColor: {
-    type: String,
+  text: {
+    type: Object,
     required: false,
-    default: 'platinum'
+    default: () => ({
+      color: 'platinum',
+      weight: 'normal'
+    })
   },
   orient: {
     type: String,
     default: "col"
+  },
+  justify: {
+    type: String,
+    default: 'start'
   }
 })
 
@@ -21,11 +28,11 @@ const props = defineProps({
 
   <div
       class="flex m-[2px]"
-      :class="[`flex-${props.orient}`, props.background ? `bg-${props.background}` : ``]"
+      :class="[`flex-${props.orient} justify-${props.justify}`, props.background ? `bg-${props.background}` : ``]"
   >
     <p
         class="
-        text-silver font-thin m-1
+        text-silver font-thin m-1 text-
 
         portrait-2xs:text-3xs
         portrait-xs:text-2xs
@@ -49,7 +56,7 @@ const props = defineProps({
         portrait-large:text-lg
         portrait-xl:text-xl
         "
-        :class="[props.textColor ? `text-${props.textColor}` : 'text-platinum']">
+        :class="[`text-${props.text.color} font-${props.text.weight}`]">
       {{ time }}
     </h3>
 

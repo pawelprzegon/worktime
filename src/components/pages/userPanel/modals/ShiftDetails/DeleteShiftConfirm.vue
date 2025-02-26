@@ -13,7 +13,6 @@ const alert = useAlertStore()
 const props = defineProps({
   shiftId: String,
   openHandler: Function,
-  closeModal: Function
 })
 
 const removeShift = async () => {
@@ -48,10 +47,6 @@ const handleConfirmDelete = async (deleteStatus) => {
   await removeShift()
   props.openHandler(false)
 
-  if (dayStore.list.length === 0 && !dayStore.toil) {
-    props.closeModal()
-  }
-
   await monthStore.refresh()
   await dayStore.refresh()
 }
@@ -60,7 +55,8 @@ const handleConfirmDelete = async (deleteStatus) => {
 
 <template>
   <div class="flex flex-grow justify-between items-center w-full bg-red-500">
-    <p class="mx-2">Delete Shift?</p>
+
+    <p class="mx-2 text-white font-bold">Delete Shift?</p>
 
     <div class="w-[30%] inline-flex justify-between">
       <CustomTextButton

@@ -22,12 +22,12 @@ const props = defineProps({
       flex items-center justify-center cursor-pointer box-border transition-all duration-200 rounded-md
       border border-third
 
-      portrait-2xs:w-12 portrait-2xs:h-8 portrait-2xs:text-3xs portrait-2xs:p-[3px] portrait-2xs:m-[1px]
-      portrait-xs:w-16 portrait-xs:h-8 portrait-xs:text-2xs portrait-xs:p-[2px] portrait-xs:m-[1px]
-      portrait-small:w-20 portrait-small:h-8 portrait-small:text-xs portrait-small:p-2 portrait-small:m-2
-      portrait-medium:w-32 portrait-medium:h-8 portrait-medium:text-sm portrait-medium:p-2 portrait-medium:m-2
-      portrait-large:w-36 portrait-large:h-8 portrait-large:text-sm portrait-large:p-2 portrait-large:m-2
-      portrait-xl:w-40 portrait-xl:h-10 portrait-xl:text-base portrait-xl:p-2 portrait-xl:m-2
+      portrait-2xs:w-12 portrait-2xs:h-10 portrait-2xs:text-3xs portrait-2xs:p-[1px] portrait-2xs:m-[1px]
+      portrait-xs:w-16 portrait-xs:h-10 portrait-xs:text-2xs portrait-xs:p-[2px] portrait-xs:m-[1px]
+      portrait-small:w-20 portrait-small:h-8 portrait-small:text-xs portrait-small:p-1 portrait-small:m-1
+      portrait-medium:w-32 portrait-medium:h-8 portrait-medium:text-sm portrait-medium:p-1 portrait-medium:m-1
+      portrait-large:w-36 portrait-large:h-6 portrait-large:text-sm portrait-large:p-1 portrait-large:m-1
+      portrait-xl:w-40 portrait-xl:h-8 portrait-xl:text-base portrait-xl:p-1 portrait-xl:m-1
       "
     :class="[
       { 'bg-beb text-black': props.isSelected, 'bg-mute': !props.isSelected },

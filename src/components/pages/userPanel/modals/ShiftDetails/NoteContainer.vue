@@ -44,21 +44,42 @@ const addNote = async () => {
 </script>
 
 <template>
+  <div class="grid grid-cols-[40px_auto] my-5
 
-  <div
-      class="grid mt-2 min-h-5"
+              portrait-2xs:grid-cols-[24px_auto]
+              portrait-xs:grid-cols-[28px_auto]
+              portrait-small:grid-cols-[32px_auto]
+              portrait-medium:grid-cols-[36px_auto]
+              portrait-large:grid-cols-[40px_auto]
+  "
+  >
+
+    <img
+        src="@/assets/img/write.png"
+        alt="location"
+        class="filter-invert-100
+              portrait-2xs:w-[16px]
+              portrait-xs:w-[20px]
+              portrait-small:w-[24px]
+              portrait-medium:w-[28px]
+              portrait-large:w-[32px]
+              "
+
+    />
+    <div
+      class="grid min-h-5"
       :class="shift.note ? 'grid-rows-[auto_50px]' : 'grid-rows-1'"
   >
 
     <div
         v-show="shift.note && !noteEdit"
         class="
-        shift-note text-left px-3 font-thin
+        shift-note text-left font-thin
 
         portrait-2xs:text-2xs
         portrait-medium:text-base
         ">
-      <small class="break-all">{{shift.note}}</small>
+      <p class="break-all px-3 text-white">{{shift.note}}</p>
     </div>
 
     <form
@@ -81,7 +102,7 @@ const addNote = async () => {
         class="place-items-end">
       <CustomTextButton
         v-show="!noteEdit && shift.note !== ''"
-        label="edit"
+        label="edit note"
         @click="toggleShowNoteEditor"
       />
       <CustomTextButton
@@ -105,6 +126,7 @@ const addNote = async () => {
     </div>
 
 
+  </div>
   </div>
 
 </template>

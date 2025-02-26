@@ -6,12 +6,13 @@
   import { useAuthStore } from '@/stores/authStore.js';
   import Alert from "@/components/Alert.vue";
   import {useAlertStore} from "@/stores/alertStore.js";
+  import FadeInDetails from "@/components/pages/userPanel/modals/FadeInDetails.vue";
 
   const authStore = useAuthStore();
   const alert = useAlertStore();
-  const router = useRouter()
+  const router = useRouter();
   const userName = ref('');
-  const today = ref(new Date)
+  const today = ref(new Date);
 
   const isDashActive = computed(() => router.currentRoute.value.path === '/');
   const isLoginActive = computed(() => router.currentRoute.value.path === '/login');
@@ -93,6 +94,7 @@
 
 <template>
   <Alert />
+  <FadeInDetails />
   <header
       id="header"
       class="mb-4 inline-flex justify-between border-b border-white w-full"
@@ -109,7 +111,7 @@
     />
     <div class="flex flex-col justify-between place-items-end">
       <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
-      <div class="flex justify-end items-end space-x-2">
+      <div class="flex justify-end items-end">
         <CustomTextButton
             label="Dashboard"
             :isSelected="isDashActive"

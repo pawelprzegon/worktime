@@ -10,11 +10,13 @@ import DayContainer from "@/components/pages/userPanel/calendar/DayContainer.vue
 import EmptyDayContainer from "@/components/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/components/pages/userPanel/calendar/WeekDayNameContainer.vue";
 import {useAuthStore} from "@/stores/authStore.js";
+import {useSidebarStore} from "@/stores/sidebarStore.js";
 
 const monthStore = useSelectedMonthStore('calendar');
 const dayStore = usedayStore();
 const screenSize = useScreenSizeStore()
 const authStore = useAuthStore();
+const sidebar = useSidebarStore()
 
 const isLoading = ref(true);
 const isdayStoreOpen = ref(false);
@@ -32,7 +34,8 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
   dayStore.setDay(day);
-  isdayStoreOpen.value = true
+  // isdayStoreOpen.value = true
+  sidebar.isOpen = true;
 }
 
 const closedayStore = () => {
@@ -95,11 +98,11 @@ onMounted(async () => {
       />
     </div>
 
-    <ShiftsDetailsModal
-        v-if="isdayStoreOpen"
-        :key="modalKey"
-        :closeModal="closedayStore"
-    />
+<!--    <ShiftsDetailsModal-->
+<!--        v-if="isdayStoreOpen"-->
+<!--        :key="modalKey"-->
+<!--        :closeModal="closedayStore"-->
+<!--    />-->
 
 </template>
 
