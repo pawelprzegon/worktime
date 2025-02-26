@@ -24,7 +24,7 @@ const icon = new URL(`../assets/img/${props.icon}`, import.meta.url).href;
   <img
       class="
       p-1 m-1
-      grayscale
+      filter-invert-30
       hover:grayscale-0 hover:cursor-pointer
       "
       :class="`portrait-2xs:h-[${props.height}px] portrait-2xs:w-[${props.width}px]

@@ -9,6 +9,8 @@ export default {
     {
       pattern: /^text-(platinum|beb|silver|turquoise|overtime)$/,
     },
+      'text-red-500',
+      'text-emerald-500'
   ],
   theme: {
     extend: {

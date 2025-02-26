@@ -111,7 +111,7 @@ onMounted(async () => {
 
               <ShiftDetailContainer
                 :time="getTime(start)"
-                :text="Object({color: 'emerald-500', weight: 'bold'})"
+                :text="{color: 'emerald-500', weight: 'bold'}"
                 :justify="'center'"
                 :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
               />
@@ -119,7 +119,7 @@ onMounted(async () => {
 
               <ShiftDetailContainer
                 :time="getTime(stop)"
-                :text="Object({color: 'red-500', weight: 'bold'})"
+                :text="{color: 'red-500', weight: 'bold'}"
                 :justify="'center'"
                 :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
               />
@@ -127,7 +127,7 @@ onMounted(async () => {
 
               <ShiftDetailContainer
                 :time="formatTime(shift.work)"
-                :text="Object({color: 'silver', weight: 'bold'})"
+                :text="{color: 'silver', weight: 'bold'}"
                 :justify="'center'"
                 :orient="!screenSize.isPortraitSmall ? 'row' : 'col'"
               />

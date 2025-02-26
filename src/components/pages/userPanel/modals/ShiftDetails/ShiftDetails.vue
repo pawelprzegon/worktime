@@ -21,7 +21,7 @@ const props = defineProps({
 <template>
   <div
     :class="[
-      'transition-all duration-500 ease-in-out w-full overflow-auto px-3',
+      'transition-all duration-500 ease-in-out w-full overflow-hidden px-3',
       props.isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0',
     ]"
   >
