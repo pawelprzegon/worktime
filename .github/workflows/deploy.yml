@@ -51,11 +51,14 @@ jobs:
             cd /home/ubuntu/bebTimerFront
             cat <<EOL > .env
             VITE_APP_API_URL=${{ secrets.VITE_APP_API_URL }}
+            VITE_WEB_DEV_0=${{ secrets.VITE_WEB_DEV_0 }}
+            
           EOF
 
       - name: Check environment variable
         run: |
           echo "API URL: ${{ secrets.VITE_APP_API_URL }}"
+          echo "WEB DEV: ${{ secret.VITE_WEB_DEV_0 }}"
 
       - name: Install dependencies on EC2
         run: |

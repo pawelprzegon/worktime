@@ -1,13 +1,17 @@
-import {clearCache, url} from "@/composables/utils.js";
+import {clearCache, url, webDev0} from "@/composables/utils.js";
 import {format} from "date-fns";
 import { useAuthStore } from '@/stores/authStore.js';
 import {useRouter} from "vue-router";
 
-const addAuthorization = () => {
+const addAuthorizationBearer = () => {
     const authStore = useAuthStore();
     return `Bearer ${authStore.$state.token}`
-
 }
+
+const headers = {
+            'Content-Type': 'application/json',
+            'Device': webDev0
+        }
 
 
 // AUTH
@@ -17,8 +21,8 @@ export const checkIsAuthorized = async () => {
     const data = {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         }
     }
 
@@ -42,9 +46,13 @@ export const loginFetch = async (formData) => {
     const body = formData.toString()
     const data = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Device': webDev0
+      },
       body: body,
     }
+
     const response = await fetch(url + '/auth/login', data)
 
     if (!response.ok) {
@@ -60,7 +68,7 @@ export const validateResetPasswordURL = async (token) => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            ...headers
         },
     }
 
@@ -84,8 +92,8 @@ export const resetPassword = async (token, password) => {
     const data = {
       method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -109,8 +117,8 @@ export const resetPasswordURL = async (email) => {
     const data = {
       method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -132,7 +140,9 @@ export const registerUser = async (formData) => {
     const body = JSON.stringify(formData)
     const data = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            ...headers
+        },
         body: body,
     }
 
@@ -150,9 +160,9 @@ export const getMe = async () => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
 
     const response = await fetch(url + `/user/me`, data)
@@ -171,9 +181,9 @@ export const getUsers = async () => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
 
     const response = await fetch(url + '/user/', data)
@@ -190,6 +200,9 @@ export const saveAvatar = async (user_id, avatar) => {
     formData.append('avatar', avatar);
     const data = {
         method: 'POST',
+        headers: {
+            ...headers,
+        },
         body: formData,
     }
 
@@ -208,8 +221,8 @@ export const updateUser = async (updateData, user_id, ) => {
     const data = {
         method: 'PATCH',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: updateData
     }
@@ -227,6 +240,9 @@ export const setWaitRFIDUser = async (user_id) => {
 
     const data = {
         method: 'POST',
+        headers: {
+            ...headers
+        },
     }
 
     const response = await fetch(url + `/user/set-wait-rfid-user/${user_id}`, data)
@@ -244,9 +260,9 @@ export const getWaitRFIDUser = async () => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
 
     const response = await fetch(url + '/user/wait-rfid-user', data)
@@ -266,9 +282,9 @@ export const deleteWaitRFIDUser = async () => {
     const data = {
       method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
 
     const response = await fetch(url + '/user/wait-rfid-user', data)
@@ -287,7 +303,7 @@ export const getDashUsers = async () => {
     const data = {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json'
+            ...headers
         }
     }
 
@@ -311,7 +327,7 @@ export const getActiveShifts = async () => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            ...headers
         }
     }
 
@@ -340,10 +356,11 @@ export const startShift = async (userId, note, location) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            ...headers
         },
         body: body
     }
+    console.log(data)
     const response = await fetch(url + '/shift/start', data)
 
     if (!response.ok) {
@@ -355,7 +372,7 @@ export const startShift = async (userId, note, location) => {
 }
 
 export const stopShift = async (shiftId, userId, location) => {
-    console.log(location)
+
     const body = JSON.stringify({
         'shift_id': `${shiftId}`,
         'user_id': `${userId}`,
@@ -364,7 +381,7 @@ export const stopShift = async (shiftId, userId, location) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            ...headers
         },
         body: body
     }
@@ -385,9 +402,9 @@ export const getUserShifts = async (user_id, selectedMonth) => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
     let url_string = `/shift/user?month=${month}`
     if (user_id) {
@@ -414,8 +431,8 @@ export const saveShiftNote = async (user_id, shift_id, note) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body,
     }
@@ -439,8 +456,8 @@ export const deleteShiftFetch = async (shift_id) => {
     const data = {
         method: 'DELETE',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body,
     }
@@ -465,8 +482,8 @@ export const shiftCorrection = async (userId, shiftId, timeCorrection) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -494,8 +511,8 @@ export const setManualShift = async (shiftTime, note) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -521,8 +538,8 @@ export const setShiftOFF = async (offType, selectedDay) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -543,8 +560,8 @@ export const getOVHistory = async (userId, year, month) => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
     }
     let url_string = `/ov-history/?user_id=${userId}&year=${year}&month=${month}`
@@ -572,8 +589,8 @@ export const setOVHistory = async (userId, year, month) => {
     const data = {
       method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -602,8 +619,8 @@ export const setToil = async (userId, toilId, counter, date) => {
     const data = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         },
         body: body
     }
@@ -627,9 +644,9 @@ export const getToil = async (user_id, selectedMonth) => {
     const data = {
       method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': addAuthorization()
-        }
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
     }
 
     let url_string = `/toil/?year=${year}&month=${month}`

@@ -1,8 +1,8 @@
 import {add, addDays, endOfMonth, getDay, startOfMonth, sub} from "date-fns";
 import {usedayStore} from "@/stores/calendarStore.js";
 
-const apiURL = import.meta.env.VITE_APP_API_URL
-export const url = apiURL
+export const url = import.meta.env.VITE_APP_API_URL
+export const webDev0 = import.meta.env.VITE_WEB_DEV_0
 
 export const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
