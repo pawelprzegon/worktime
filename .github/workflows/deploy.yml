@@ -58,7 +58,7 @@ jobs:
       - name: Check environment variable
         run: |
           echo "API URL: ${{ secrets.VITE_APP_API_URL }}"
-          echo "WEB DEV: ${{ secret.VITE_APP_WEB_DEV_0 }}"
+          echo "WEB DEV: ${{ secrets.VITE_APP_WEB_DEV_0 }}"
 
       - name: Install dependencies on EC2
         run: |
