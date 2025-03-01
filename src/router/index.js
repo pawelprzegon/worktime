@@ -68,6 +68,8 @@ router.beforeEach(async (to, from, next) => {
     const aut = await authStore.authorizationCheck()
     if (aut) {
         await authStore.getUserMetadata()
+    } else {
+        next('/logout')
     }
     if (protectedRoutes.includes(to.path)) {
         if (!aut || !authStore.hasAccess(to.path)) {

@@ -76,9 +76,8 @@ export const useAuthStore = defineStore('auth', () => {
     if (token.value) {
       try {
         const authorized = await checkIsAuthorized();
-        if (authorized) {
-          return true;
-        }
+        return !!authorized;
+
       } catch (error) {
         alert.show("error", error.message)
         return false;

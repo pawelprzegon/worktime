@@ -33,7 +33,8 @@ export const checkIsAuthorized = async () => {
             const auth = useAuthStore()
             auth.clearToken()
             const router = useRouter()
-            await router.push('/login')
+            await router.push('/logout')
+            return
         }
         const errorData = await response.json();
         throw new Error(errorData.detail)
