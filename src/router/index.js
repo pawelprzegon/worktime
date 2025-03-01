@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Kiosk from "@/components/pages/kiosk/Kiosk.vue";
 import Dash from "@/components/pages/dash/DashView.vue";
 import Login from "@/components/pages/login/LoginView.vue";
-import UserPanel from "@/components/pages/userPanel/UserPanelView.vue";
 import SignUp from "@/components/pages/signup/SignUpView.vue";
+import UserPanel from "@/components/pages/userPanel/UserPanelView.vue";
 import Privileged from "@/components/pages/privileged/PrivilegedView.vue";
 import ResetPasswordView from "@/components/pages/resetPassword/resetPasswordView.vue";
+import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 import ResetPasswordEmailView from "@/components/pages/resetPassword/resetPasswordEmailView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
-import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 
 const routes = [
     {
@@ -52,7 +53,11 @@ const routes = [
         name: 'Edit',
         component: ShiftEditor,
     },
-
+    {
+        path: '/kiosk',
+        name: 'Kiosk',
+        component: Kiosk,
+    },
 
 ];
 
@@ -68,8 +73,6 @@ router.beforeEach(async (to, from, next) => {
     const aut = await authStore.authorizationCheck()
     if (aut) {
         await authStore.getUserMetadata()
-    } else {
-        next('/logout')
     }
     if (protectedRoutes.includes(to.path)) {
         if (!aut || !authStore.hasAccess(to.path)) {
