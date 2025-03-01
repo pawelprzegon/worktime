@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Kiosk from "@/components/pages/kiosk/Kiosk.vue";
 import Dash from "@/components/pages/dash/DashView.vue";
 import Login from "@/components/pages/login/LoginView.vue";
 import SignUp from "@/components/pages/signup/SignUpView.vue";
@@ -52,11 +51,6 @@ const routes = [
         path: '/edit',
         name: 'Edit',
         component: ShiftEditor,
-    },
-    {
-        path: '/kiosk',
-        name: 'Kiosk',
-        component: Kiosk,
     },
 
 ];
