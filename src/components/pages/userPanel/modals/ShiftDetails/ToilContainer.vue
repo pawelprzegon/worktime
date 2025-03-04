@@ -13,7 +13,7 @@ const monthStore = useSelectedMonthStore('calendar');
 
 const hoursPool = ref(null)
 const recHoursPool =ref(null)
-const counter = ref((dayStore.toil?.duration_seconds || 0) / 3600);
+const counter = ref(null);
 
 const increment = () => {
 
@@ -39,6 +39,7 @@ const handleSaveToil = async() => {
 watch(()=> dayStore.date, () => {
   hoursPool.value = getHoursAsNumber(monthStore.selected.monthlyOvertime);
   recHoursPool.value = getHoursAsNumber(monthStore.selected.monthlyOvertime);
+  counter.value = (dayStore.toil?.duration_seconds || 0) / 3600;
 })
 
 </script>
