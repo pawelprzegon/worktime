@@ -43,8 +43,8 @@ const dt = getDateString(dayStore.date)
 
       <div
           class="
-          bg-soft shadow-2xl text-white box-border rounded-md p-3
-          w-[75vw] max-w-[600px] max-h-[80vh] overflow-auto
+            bg-soft shadow-2xl text-white box-border rounded-md p-3
+            w-[75vw] max-w-[600px] max-h-[80vh] overflow-auto
           ">
 
         <div class="shifts-label">

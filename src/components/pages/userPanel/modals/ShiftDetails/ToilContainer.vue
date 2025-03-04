@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import {getHoursAsNumber} from "@/composables/utils.js";
 import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
@@ -11,14 +11,14 @@ const alert = useAlertStore();
 const dayStore = usedayStore();
 const monthStore = useSelectedMonthStore('calendar');
 
-const hoursPool = getHoursAsNumber(monthStore.selected.monthlyOvertime);
-const recHoursPool =ref(hoursPool)
+const hoursPool = ref(null)
+const recHoursPool =ref(null)
 const counter = ref((dayStore.toil?.duration_seconds || 0) / 3600);
 
 const increment = () => {
 
   if (counter.value < dayStore.maxToTake &&
-      counter.value < hoursPool){
+      counter.value < hoursPool.value){
     counter.value += 1
     recHoursPool.value--;
   }
@@ -35,6 +35,11 @@ const handleSaveToil = async() => {
   const response = await dayStore.saveToil(counter.value)
   alert.show(response.status, response.message)
 }
+
+watch(()=> dayStore.date, () => {
+  hoursPool.value = getHoursAsNumber(monthStore.selected.monthlyOvertime);
+  recHoursPool.value = getHoursAsNumber(monthStore.selected.monthlyOvertime);
+})
 
 </script>
 

@@ -6,7 +6,6 @@
   import { useAuthStore } from '@/stores/authStore.js';
   import Alert from "@/components/Alert.vue";
   import {useAlertStore} from "@/stores/alertStore.js";
-  import FadeInDetails from "@/components/pages/userPanel/modals/FadeInDetails.vue";
 
   const authStore = useAuthStore();
   const alert = useAlertStore();
@@ -94,7 +93,6 @@
 
 <template>
   <Alert />
-  <FadeInDetails />
   <header
       id="header"
       class="mb-4 inline-flex justify-between border-b border-white w-full"

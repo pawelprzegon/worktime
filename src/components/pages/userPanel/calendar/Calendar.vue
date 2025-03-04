@@ -11,6 +11,7 @@ import EmptyDayContainer from "@/components/pages/userPanel/calendar/EmptyDayCon
 import WeekDayNameContainer from "@/components/pages/userPanel/calendar/WeekDayNameContainer.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import {useSidebarStore} from "@/stores/sidebarStore.js";
+import FadeInDetails from "@/components/pages/userPanel/modals/FadeInDetails.vue";
 
 const monthStore = useSelectedMonthStore('calendar');
 const dayStore = usedayStore();
@@ -34,12 +35,7 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
   dayStore.setDay(day);
-  // isdayStoreOpen.value = true
   sidebar.isOpen = true;
-}
-
-const closedayStore = () => {
-  isdayStoreOpen.value = false;
 }
 
 onMounted(async () => {
@@ -97,12 +93,7 @@ onMounted(async () => {
           v-if="!screenSize.isPortraitXsOr2Xs"
       />
     </div>
-
-<!--    <ShiftsDetailsModal-->
-<!--        v-if="isdayStoreOpen"-->
-<!--        :key="modalKey"-->
-<!--        :closeModal="closedayStore"-->
-<!--    />-->
+  <FadeInDetails />
 
 </template>
 
