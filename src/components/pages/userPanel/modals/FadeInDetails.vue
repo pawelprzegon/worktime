@@ -11,6 +11,7 @@ import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftE
 import {usedayStore} from "@/stores/calendarStore.js";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 import {onMounted, ref} from "vue";
+import ShiftAdder from "@/components/pages/userPanel/modals/ShiftDetails/ShiftAdder.vue";
 
 const sidebar = useSidebarStore()
 const dayStore = usedayStore();
@@ -94,6 +95,9 @@ const checkOffDay = () => {
                :key=shift.id
                :shift-id="shift.id"
                :index="index+1"
+              />
+              <ShiftAdder
+                  v-show="dayStore.list.length === 0"
               />
 
               <ToilEditor/>
