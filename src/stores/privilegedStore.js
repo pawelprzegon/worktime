@@ -4,6 +4,7 @@ import {getUsers} from "@/composables/fetchers.js";
 
 export const usePrivilegedSelectedUser = defineStore('usePrivilegedSelectedUser', () => {
   const user = ref(null);
+  const shift = ref(null)
 
   const setUser = (id) => {
     const usersList = usePrivilegedAllUsers();
@@ -13,9 +14,18 @@ export const usePrivilegedSelectedUser = defineStore('usePrivilegedSelectedUser'
     }
   };
 
+  const setShift = (id) => {
+    shift.value = id
+  }
+
+  const clearShift = () => shift.value = null
+
   return {
     user,
-    setUser
+    shift,
+    setUser,
+    setShift,
+    clearShift
   };
 });
 

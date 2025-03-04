@@ -4,7 +4,7 @@ import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue"
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {ref} from "vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {deleteShiftFetch, setShiftOFF} from "@/composables/fetchers.js";
 import {daysOff, leaveTypes, other} from "@/data/PDF_leaveType_data.js";
@@ -12,7 +12,7 @@ import {daysOff, leaveTypes, other} from "@/data/PDF_leaveType_data.js";
 const dataList = ['UW', 'UB', 'UŻ', 'L4', 'CD']
 const selectedOFF = ref(null)
 const monthStore = useSelectedMonthStore('calendar')
-const dayStore = usedayStore()
+const dayStore = useDayStore()
 const alert = useAlertStore()
 
 

@@ -1,5 +1,5 @@
 import {add, addDays, endOfMonth, getDay, startOfMonth, sub} from "date-fns";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 
 export const url = import.meta.env.VITE_APP_API_URL
 export const webDev0 = import.meta.env.VITE_APP_WEB_DEV_0
@@ -129,7 +129,7 @@ export const combineDateWithTime = (date, timeString) => {
 
 
 export const checkShiftLessThan28800 = (shiftDt) => {
-  const dayStore = usedayStore()
+  const dayStore = useDayStore()
 
   const differenceInMilliseconds = shiftDt.stop.getTime() - shiftDt.start.getTime();
   const differenceInSeconds = differenceInMilliseconds / 1000;

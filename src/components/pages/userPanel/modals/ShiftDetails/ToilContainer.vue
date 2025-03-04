@@ -5,10 +5,10 @@ import '@/assets/modal.css'
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 
 const alert = useAlertStore();
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const monthStore = useSelectedMonthStore('calendar');
 
 const hoursPool = getHoursAsNumber(monthStore.selected.monthlyOvertime);

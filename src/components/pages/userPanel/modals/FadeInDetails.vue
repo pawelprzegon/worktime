@@ -8,12 +8,12 @@ import DayOFF from "@/components/pages/userPanel/modals/ShiftDetails/DayOFF.vue"
 import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
 import Spinner from "@/components/Spinner.vue";
 import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 import {onMounted, ref} from "vue";
 
 const sidebar = useSidebarStore()
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const refreshStore = useRefreshStore()
 
 const isDayOff = ref(true)
@@ -73,19 +73,19 @@ const checkOffDay = () => {
             <div v-if="!checkOffDay()" class="w-full">
 
               <ShiftDetailContainer
-              v-show="dayStore.list.length > 0"
-              :label="'Total regular time'"
-              :time="formatTime(dayStore.regular)"
-              :orient="'row'"
-              :text="{color: 'platinum', weight: 'bold'}"
+                v-show="dayStore.list.length > 0"
+                :label="'Total regular time'"
+                :time="formatTime(dayStore.regular)"
+                :orient="'row'"
+                :text="{color: 'platinum', weight: 'bold'}"
               />
 
               <ShiftDetailContainer
-              v-show="dayStore.list.length > 0"
-              :label="'Total overtime'"
-              :time="formatTime(dayStore.overtime)"
-              :orient="'row'"
-              :text="dayStore.overtime > 0 ? {color: 'overtime', weight: 'bold'} : {color: 'stone-500', weight: ''}"
+                v-show="dayStore.list.length > 0"
+                :label="'Total overtime'"
+                :time="formatTime(dayStore.overtime)"
+                :orient="'row'"
+                :text="dayStore.overtime > 0 ? {color: 'overtime', weight: 'bold'} : {color: 'stone-500', weight: ''}"
               />
 
               <ShiftEditor

@@ -1,10 +1,10 @@
 <script setup>
 import ToilContainer from "@/components/pages/userPanel/modals/ShiftDetails/ToilContainer.vue";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
 const monthStore = useSelectedMonthStore('calendar');
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 
 const props = defineProps({
   isOpen: {

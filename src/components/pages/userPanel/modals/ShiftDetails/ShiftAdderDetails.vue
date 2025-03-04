@@ -5,13 +5,13 @@ import {checkShiftLessThan28800, combineDateWithTime} from "@/composables/utils.
 import {setManualShift} from "@/composables/fetchers.js";
 import {ref} from "vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useRefreshStore} from "@/stores/refreshStore.js";
 
 
 const monthStore = useSelectedMonthStore('calendar')
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const alert = useAlertStore();
 const refreshStore = useRefreshStore()
 

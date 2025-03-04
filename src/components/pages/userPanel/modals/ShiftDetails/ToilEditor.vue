@@ -5,9 +5,9 @@ import {formatTime} from "@/composables/utils.js";
 import ToilDetails from "@/components/pages/userPanel/modals/ShiftDetails/ToilDetails.vue";
 import DetailsDropdown from "@/components/pages/userPanel/modals/ShiftDetails/DetailsDropdown.vue";
 import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 
-const dayStore = usedayStore()
+const dayStore = useDayStore()
 const isToilDropdownOpen = ref(false)
 
 const toggleToilDropdown = (buttonStatus) => {

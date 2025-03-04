@@ -5,6 +5,8 @@ import MonthlySchedule from "@/components/pages/privileged/MonthlySchedule.vue";
 import UserDetails from "@/components/pages/privileged/UserDetails.vue";
 import ShowUserAwaitingRFID from "@/components/pages/privileged/ShowUserAwaitingRFID.vue";
 import Alert from "@/components/Alert.vue";
+import EditUser from "@/components/pages/privileged/EditUser.vue";
+
 
 </script>
 
@@ -18,7 +20,12 @@ import Alert from "@/components/Alert.vue";
   <div class="grid grid-cols-[2fr_1fr] justify-items-center">
 
     <MonthlySchedule/>
-    <UserDetails/>
+    <div>
+      <UserDetails/>
+      <EditUser/>
+    </div>
+
+
   </div>
 
 

@@ -1,5 +1,5 @@
 <script setup>
-import CorrectionsContainer from "@/components/pages/userPanel/modals/ShiftDetails/CorrectionsContainer.vue";
+import CorrectionsContainer from "@/components/pages/userPanel/modals/ShiftDetails/corrections/CorrectionsContainer.vue";
 import NoteContainer from "@/components/pages/userPanel/modals/ShiftDetails/NoteContainer.vue";
 import ShiftLocations from "@/components/pages/userPanel/modals/ShiftDetails/ShiftLocations.vue";
 

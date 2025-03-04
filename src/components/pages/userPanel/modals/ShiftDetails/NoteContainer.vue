@@ -5,9 +5,9 @@ import {ref} from "vue";
 import {saveShiftNote} from "@/composables/fetchers.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 
-const dayStore = usedayStore()
+const dayStore = useDayStore()
 const monthStore = useSelectedMonthStore('calendar')
 const alert = useAlertStore()
 

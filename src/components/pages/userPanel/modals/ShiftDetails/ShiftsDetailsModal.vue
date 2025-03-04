@@ -3,7 +3,7 @@ import {computed, ref} from 'vue';
 import '@vuepic/vue-datepicker/dist/main.css'
 import {formatTime, getDateString} from "@/composables/utils.js";
 import ModalWrapper from "@/components/ModalWrapper.vue";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import ShiftDetailContainer from "@/components/pages/userPanel/ShiftDetailContainer.vue";
 import ShiftEditor from "@/components/pages/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 import ToilEditor from "@/components/pages/userPanel/modals/ShiftDetails/ToilEditor.vue";
@@ -13,7 +13,7 @@ import Spinner from "@/components/Spinner.vue";
 import DayOFF from "@/components/pages/userPanel/modals/ShiftDetails/DayOFF.vue";
 import DetailsContainer from "@/components/pages/userPanel/DetailsContainer.vue";
 
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const isModalOpen = ref(true);
 const refreshStore = useRefreshStore()
 

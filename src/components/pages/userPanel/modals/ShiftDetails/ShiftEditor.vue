@@ -8,13 +8,13 @@ import {ref, onMounted, computed} from "vue";
 import CustomIconButton from "@/components/CustomIconButton.vue";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import DeleteShiftConfirm from "@/components/pages/userPanel/modals/ShiftDetails/DeleteShiftConfirm.vue";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 
 
 
 const screenSize = useScreenSizeStore()
 const monthStore = useSelectedMonthStore('calendar');
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 
 const props = defineProps({
   shiftId: {

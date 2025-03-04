@@ -1,10 +1,10 @@
 <script setup>
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {onMounted, ref} from "vue";
 import {initMap} from "@/composables/location.js";
 
 
-const dayStore = usedayStore()
+const dayStore = useDayStore()
 const props = defineProps({
   shiftId: {
     type: String,

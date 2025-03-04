@@ -3,11 +3,11 @@
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import {deleteShiftFetch} from "@/composables/fetchers.js";
 
 const monthStore = useSelectedMonthStore('calendar')
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const alert = useAlertStore()
 
 const props = defineProps({

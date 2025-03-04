@@ -1,7 +1,7 @@
 <script setup>
 
-import {calculateTime} from "@/composables/privilegedHandler.js";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
+import TableRow from "@/components/pages/privileged/TableRow.vue";
 
 const monthStore = useSelectedMonthStore('privileged')
 
@@ -24,12 +24,11 @@ const monthStore = useSelectedMonthStore('privileged')
         </tr>
       </thead>
       <tbody>
-        <tr
-            v-for="(day, index) in monthStore.selected.days"
-            :key="index"
-            v-html="calculateTime(day)"
-        >
-        </tr>
+        <TableRow
+          v-for="(day, index) in monthStore.selected.days"
+          :key="index"
+          :day="day"
+        />
       </tbody>
     </table>
 

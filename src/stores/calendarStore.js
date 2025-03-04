@@ -6,7 +6,7 @@ import {getDateString} from "@/composables/utils.js";
 import {useAuthStore} from "@/stores/authStore.js";
 
 
-export const usedayStore = defineStore('dayStore', () => {
+export const useDayStore = defineStore('dayStore', () => {
 
   const authStore = useAuthStore()
   const monthStore = useSelectedMonthStore('calendar');

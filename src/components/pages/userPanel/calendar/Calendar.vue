@@ -5,7 +5,7 @@ import ShiftsDetailsModal from "@/components/pages/userPanel/modals/ShiftDetails
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
 import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
-import {usedayStore} from "@/stores/calendarStore.js";
+import {useDayStore} from "@/stores/calendarStore.js";
 import DayContainer from "@/components/pages/userPanel/calendar/DayContainer.vue";
 import EmptyDayContainer from "@/components/pages/userPanel/calendar/EmptyDayContainer.vue";
 import WeekDayNameContainer from "@/components/pages/userPanel/calendar/WeekDayNameContainer.vue";
@@ -13,7 +13,7 @@ import {useAuthStore} from "@/stores/authStore.js";
 import {useSidebarStore} from "@/stores/sidebarStore.js";
 
 const monthStore = useSelectedMonthStore('calendar');
-const dayStore = usedayStore();
+const dayStore = useDayStore();
 const screenSize = useScreenSizeStore()
 const authStore = useAuthStore();
 const sidebar = useSidebarStore()
@@ -97,12 +97,6 @@ onMounted(async () => {
           v-if="!screenSize.isPortraitXsOr2Xs"
       />
     </div>
-
-<!--    <ShiftsDetailsModal-->
-<!--        v-if="isdayStoreOpen"-->
-<!--        :key="modalKey"-->
-<!--        :closeModal="closedayStore"-->
-<!--    />-->
 
 </template>
 
