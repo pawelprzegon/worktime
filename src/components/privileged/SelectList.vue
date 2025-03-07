@@ -33,6 +33,7 @@ watch(() => usersList.users, () => {
 </script>
 
 <template>
+
   <div class="m-1 w-8/12">
     <label class="text-base text-white m-1" for="lista">{{label}}</label>
     <select
@@ -47,6 +48,7 @@ watch(() => usersList.users, () => {
           v-for="(element, index) in usersList.users"
           :key="index"
           :value="element"
+          :class="element.disabled ? 'bg-red-200' : ''"
       >
         {{element.first_name}} {{element.last_name}}
       </option>

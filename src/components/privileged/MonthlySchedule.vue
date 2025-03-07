@@ -3,12 +3,10 @@ import "jspdf-autotable";
 import {onMounted, ref, watch} from "vue";
 import Spinner from "@/components/Spinner.vue";
 import {useCalendarNavigation} from "@/composables/utils.js";
-import {generatePDF} from "@/composables/pdfScheduleHandler.js";
 import ScheduleTable from "@/components/privileged/ScheduleTable.vue";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
 import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
 import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
-import CustomTextButton from "@/components/CustomTextButton.vue";
 
 const selectedUser = usePrivilegedSelectedUser();
 const screenSize = useScreenSizeStore()
@@ -49,11 +47,6 @@ onMounted( async() => {
     </div>
 
     <div v-else class="place-items-center">
-
-      <CustomTextButton
-          label="Get Schedule"
-          @click="generatePDF(selectedUser, monthStore)"
-        />
 
       <CalendarNavigation
         :selected-month="monthStore.selected.month"

@@ -7,7 +7,10 @@ import {useAlertStore} from "@/stores/alertStore.js";
 import CustomTextButton from "@/components/CustomTextButton.vue";
 import {reactive, ref, watch} from "vue";
 import {useWaitRFIDUserStore} from "@/stores/rfidUserStore.js";
+import {generatePDF} from "@/composables/pdfScheduleHandler.js";
+import {useSelectedMonthStore} from "@/stores/utilsStore.js";
 
+const monthStore = useSelectedMonthStore('privileged')
 const selectedUser = usePrivilegedSelectedUser();
 const usersList = usePrivilegedAllUsers();
 const alert = useAlertStore()
@@ -146,6 +149,11 @@ const cancelChanges = () => {
           label="add RFID"
           :fontSize="12"
           @click="AddRFID"
+      />
+
+      <CustomTextButton
+        label="Get Schedule"
+        @click="generatePDF(selectedUser, monthStore)"
       />
     </div>
 

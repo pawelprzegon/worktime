@@ -5,6 +5,7 @@ import MonthlySchedule from "@/components/privileged/MonthlySchedule.vue";
 import UserDetails from "@/components/privileged/UserDetails.vue";
 import ShowUserAwaitingRFID from "@/components/privileged/ShowUserAwaitingRFID.vue";
 import Alert from "@/components/Alert.vue";
+import Banner from "@/components/Banner.vue";
 
 </script>
 
@@ -14,8 +15,11 @@ import Alert from "@/components/Alert.vue";
     <SelectList
         label="Pick user"
     />
+    <Banner
+        :main-text="'Account Disabled'"
+    />
 
-  <div class="grid grid-cols-[2fr_1fr] justify-items-center">
+  <div class="grid grid-cols-[2fr_1fr] justify-items-center py-4">
 
     <MonthlySchedule/>
     <UserDetails/>
