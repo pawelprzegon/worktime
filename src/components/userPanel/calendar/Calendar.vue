@@ -1,0 +1,109 @@
+<script setup>
+import {ref, onMounted} from 'vue';
+import Spinner from "@/components/Spinner.vue";
+import ShiftsDetailsModal from "@/components/userPanel/modals/ShiftDetails/ShiftsDetailsModal.vue";
+import {useScreenSizeStore, useSelectedMonthStore} from "@/stores/utilsStore.js";
+import CalendarNavigation from "@/components/calendarNav/CalendarNavigation.vue";
+import {useCalendarDays, daysOfWeek, useCalendarNavigation} from "@/composables/utils.js";
+import {usedayStore} from "@/stores/calendarStore.js";
+import DayContainer from "@/components/userPanel/calendar/DayContainer.vue";
+import EmptyDayContainer from "@/components/userPanel/calendar/EmptyDayContainer.vue";
+import WeekDayNameContainer from "@/components/userPanel/calendar/WeekDayNameContainer.vue";
+import {useAuthStore} from "@/stores/authStore.js";
+import {useSidebarStore} from "@/stores/sidebarStore.js";
+import FadeInDetails from "@/components/userPanel/modals/FadeInDetails.vue";
+
+const monthStore = useSelectedMonthStore('calendar');
+const dayStore = usedayStore();
+const screenSize = useScreenSizeStore()
+const authStore = useAuthStore();
+const sidebar = useSidebarStore()
+
+const isLoading = ref(true);
+const isdayStoreOpen = ref(false);
+const modalKey = ref(0)
+
+const getDataHandler = async () => {
+  isLoading.value = true;
+  const result = await monthStore.processMonthlyShifts()
+  isLoading.value = !result;
+}
+
+const { prevMonth, nextMonth } = useCalendarNavigation(monthStore, getDataHandler);
+
+const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
+
+const dayOpenerHandler = (day) => {
+  dayStore.setDay(day);
+  sidebar.isOpen = true;
+}
+
+onMounted(async () => {
+  await getDataHandler();
+  screenSize.setSize(window.innerWidth);
+  window.addEventListener('resize', screenSize.setSize(window.innerWidth));
+});
+
+</script>
+
+<template>
+    <div
+        class="max-w-[800px]"
+        :class="isLoading ? 'h-1/2' : 'h-[800px]'">
+      <CalendarNavigation
+          :selected-month="monthStore.selected.month"
+          @add="nextMonth"
+          @sub="prevMonth"
+      />
+      <div v-if="isLoading" class="loading-spinner w-full h-full flex flex-row justify-center items-center">
+        <Spinner />
+      </div>
+      <div v-else
+            class="
+             grid [grid-template-columns:repeat(7,minmax(90px,90px))] w-full gap-2 mx-auto my-3 justify-center items-center
+
+             below-portrait-2xs:gap-1 below-portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] below-portrait-2xs:w-max-[280px]
+             portrait-2xs:gap-1 portrait-2xs:[grid-template-columns:repeat(1,minmax(200px,1fr))] portrait-2xs:w-max-[280px]
+             portrait-xs:gap-1 portrait-xs:[grid-template-columns:repeat(1,minmax(300px,1fr))] portrait-xs:w-max-[380px]
+             portrait-small:gap-[5px] portrait-small:[grid-template-columns:repeat(7,minmax(55px,55px))] portrait-small:w-max-[440px]
+             portrait-medium:gap-2 portrait-medium:[grid-template-columns:repeat(7,minmax(70px,70px))] portrait-medium:w-max-[600px]
+             portrait-large:gap-2 portrait-large:[grid-template-columns:repeat(7,minmax(80px,80px))] portrait-large:w-max-[700px]
+             portrait-xl:gap-4 portrait-xl:[grid-template-columns:repeat(7,minmax(90px,90px))] portrait-xl:w-max-[800px]
+             ">
+        <WeekDayNameContainer
+          v-for="(day, index) in daysOfWeek"
+          :key="index"
+          :day="day"
+          v-if="!screenSize.isPortraitXsOr2Xs"
+        />
+
+        <EmptyDayContainer
+            v-for="(index) in getDaysBefore()"
+            :key="index"
+            v-if="!screenSize.isPortraitXsOr2Xs"
+        />
+
+        <DayContainer
+          v-for="(day, index) in monthStore.selected.days"
+          :key="index"
+          :day="day"
+          v-bind="!authStore.user.disabled ? { onClick: () => dayOpenerHandler(day) } : {}"
+        />
+
+        <EmptyDayContainer
+            v-for="(index) in getDaysAfter()"
+            :key="index"
+            v-if="!screenSize.isPortraitXsOr2Xs"
+        />
+      </div>
+
+    </div>
+
+  <FadeInDetails />
+
+</template>
+
+<style scoped>
+
+
+</style>
