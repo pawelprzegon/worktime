@@ -4,10 +4,12 @@ import {eachDayOfInterval, endOfMonth, format, startOfMonth} from "date-fns";
 import {fetchOvHistory, fetchUserShifts} from "@/composables/monthlyShiftsAggregator.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
+import {useRoute} from "vue-router";
 
 export const useSelectedMonthStore = (id) =>
     defineStore(id, () => {
 
+        const route = useRoute();
         const authUser = useAuthStore()
         const selectedUser = usePrivilegedSelectedUser();
         let groupedShifts = []
@@ -160,7 +162,8 @@ export const useSelectedMonthStore = (id) =>
           clear();
           updateDaysInMonth();
 
-          const userID = selectedUser.user?.id || authUser.user.id
+          const userID = route.name === 'Privileged' ? selectedUser.user?.id : authUser.user.id;
+
           const { shifts, toils } = await fetchUserShifts(userID, selected.value.month);
 
           groupShiftsByDate(shifts, toils);
