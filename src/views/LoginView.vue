@@ -78,7 +78,7 @@ const redirectGenerateChangePasswordURL = () => {
       </div>
 
       <small
-          class="text-right hover:cursor-pointer hover:text-platinum"
+          class="py-2 text-right hover:cursor-pointer hover:text-platinum"
           @click="redirectGenerateChangePasswordURL"
       >Forgot Password?</small>
 

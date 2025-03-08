@@ -5,7 +5,10 @@ import MonthlySchedule from "@/components/privileged/MonthlySchedule.vue";
 import UserDetails from "@/components/privileged/UserDetails.vue";
 import ShowUserAwaitingRFID from "@/components/privileged/ShowUserAwaitingRFID.vue";
 import Alert from "@/components/Alert.vue";
-import Banner from "@/components/Banner.vue";
+import Banner from "@/components/Banner.vue"
+import {usePrivilegedSelectedUser} from "@/stores/privilegedStore.js";
+
+const selectedUser = usePrivilegedSelectedUser()
 
 </script>
 
@@ -16,6 +19,7 @@ import Banner from "@/components/Banner.vue";
         label="Pick user"
     />
     <Banner
+        v-if="selectedUser.user?.disabled"
         :main-text="'Account Disabled'"
     />
 
