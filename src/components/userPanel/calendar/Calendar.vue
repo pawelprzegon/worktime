@@ -48,7 +48,11 @@ onMounted(async () => {
 
 <template>
     <div
-        class="max-w-[800px]"
+        class="
+          max-w-[800px]
+          below-portrait-2xs:max-w-full
+          portrait-2xs:max-w-auto
+        "
         :class="isLoading ? 'h-1/2' : 'h-[800px]'">
       <CalendarNavigation
           :selected-month="monthStore.selected.month"

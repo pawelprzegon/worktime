@@ -19,7 +19,14 @@ const handleAdd = () => {
 <template>
   <div class="calendar-navigation">
     <CustomNaviButton direction="preview" size="20" @click="handleSub"/>
-      <span class="nav-label">{{ format(selectedMonth, 'MMMM yyyy') }}</span>
+      <span
+          class="
+            nav-label
+            below-portrait-2xs:max-w-[130px]
+            portrait-2xs:max-w-[150px]
+          "
+      >
+        {{ format(selectedMonth, 'MMMM yyyy') }}</span>
     <CustomNaviButton direction="next" size="20" @click="handleAdd"/>
   </div>
 </template>

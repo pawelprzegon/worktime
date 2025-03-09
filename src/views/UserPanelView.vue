@@ -67,7 +67,8 @@ const closeMonth = async () => {
     class="
     grid justify-items-center
     grid-areas-grid-column
-    grid-rows-[200px_1fr]
+    grid-rows-[auto_1fr]
+    grid-cols-none
     portrait-large:grid-areas-grid-row
     portrait-large:grid-cols-[2fr_1fr]
     portrait-large:grid-rows-none
@@ -89,8 +90,8 @@ const closeMonth = async () => {
           portrait-large:block
           portrait-xl:block
           portrait-2xl:block
-
-        ">
+        "
+    >
         <AvatarChanger
           :avatar="authStore.user.avatar"
           :is-modal-active="isChangeModalActive"
