@@ -109,6 +109,7 @@
     />
     <div class="flex flex-col justify-between place-items-end">
       <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
+      <small v-if="authStore.isAuthenticated"> {{authStore.tokenExp}} </small>
       <div class="flex justify-end items-end">
         <CustomTextButton
             label="Dashboard"

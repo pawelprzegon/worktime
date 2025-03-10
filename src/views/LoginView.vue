@@ -42,7 +42,7 @@ const redirectGenerateChangePasswordURL = () => {
 </script>
 
 <template>
-  <section class="flex justify-center items-center h-full">
+  <section class="flex justify-center items-start my-36">
     <form
       @submit.prevent="handleLogin"
       class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
@@ -59,7 +59,7 @@ const redirectGenerateChangePasswordURL = () => {
           w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-secondary
+          placeholder-font-third
           outline-none"
         />
 
@@ -72,15 +72,16 @@ const redirectGenerateChangePasswordURL = () => {
           class="w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-secondary
+          placeholder-font-third
           outline-none"
         />
       </div>
 
       <small
-          class="py-2 text-right hover:cursor-pointer hover:text-platinum"
+          class="text-beb my-4 text-right hover:cursor-pointer hover:text-platinum"
           @click="redirectGenerateChangePasswordURL"
       >Forgot Password?</small>
+
 
       <button
         type="submit"

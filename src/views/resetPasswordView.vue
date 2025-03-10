@@ -69,9 +69,7 @@ const handleResetPassword = async () => {
 
 <template>
   <Alert/>
-  <section
-      class="flex justify-center items-center h-full"
-  >
+  <section class="flex justify-center items-start my-36">
 
      <div
          v-if="loading"
@@ -107,7 +105,7 @@ const handleResetPassword = async () => {
           class="w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-secondary
+          placeholder-font-third
           outline-none"
         />
         <input
@@ -120,7 +118,7 @@ const handleResetPassword = async () => {
           w-3/4 py-2 px-1
           bg-third text-gray-300
           border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-secondary
+          placeholder-font-third
           outline-none"
         />
 

@@ -3,6 +3,8 @@ import {format} from "date-fns";
 import { useAuthStore } from '@/stores/authStore.js';
 import {useRouter} from "vue-router";
 
+
+const router = useRouter()
 const addAuthorizationBearer = () => {
     const authStore = useAuthStore();
     return `Bearer ${authStore.$state.token}`
@@ -32,7 +34,7 @@ export const checkIsAuthorized = async () => {
         if (response.status === 401) {
             const auth = useAuthStore()
             auth.clearToken()
-            const router = useRouter()
+
             await router.push('/logout')
             return
         }

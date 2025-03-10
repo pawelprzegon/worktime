@@ -37,7 +37,7 @@ const handleSubmit = async () => {
 
 <template>
 
-  <section class="flex justify-center items-center h-full">
+  <section class="flex justify-center items-start my-36">
 
     <form
         @submit.prevent="handleSubmit"
@@ -49,8 +49,8 @@ const handleSubmit = async () => {
           v-model="form.first_name"
           class="
             w-3/4 py-2 px-1 my-1
-            placeholder-font-secondary
-            bg-third text-gray-300 placeholder-font-third
+            placeholder-font-third
+            bg-third text-gray-100
             border-solid border border-zinc-600 rounded-lg
             focus:border-beb
             outline-none
@@ -64,8 +64,8 @@ const handleSubmit = async () => {
           v-model="form.last_name"
           class="
             w-3/4 py-2 px-1 my-1
-            placeholder-font-secondary
-            bg-third text-gray-300 placeholder-font-third
+            placeholder-font-third
+            bg-third text-gray-100
             border-solid border border-zinc-600 rounded-lg
             focus:border-beb
             outline-none
@@ -79,8 +79,8 @@ const handleSubmit = async () => {
           v-model="form.email"
           class="
             w-3/4 py-2 px-1 my-1
-            placeholder-font-secondary
-            bg-third text-gray-300 placeholder-font-third
+            placeholder-font-third
+            bg-third text-gray-100
             border-solid border border-zinc-600 rounded-lg
             focus:border-beb
             outline-none
@@ -94,8 +94,8 @@ const handleSubmit = async () => {
           v-model="form.username"
           class="
             w-3/4 py-2 px-1 my-1
-            placeholder-font-secondary
-            bg-third text-gray-300 placeholder-font-third
+            placeholder-font-third
+            bg-third text-gray-100
             border-solid border border-zinc-600 rounded-lg
             focus:border-beb
             outline-none
@@ -110,8 +110,8 @@ const handleSubmit = async () => {
           v-model="form.password"
           class="
             w-3/4 py-2 px-1 my-1
-            placeholder-font-secondary
-            bg-third text-gray-300 placeholder-font-third
+            placeholder-font-third
+            bg-third text-gray-100
             border-solid border border-zinc-600 rounded-lg
             focus:border-beb
             outline-none
@@ -125,7 +125,7 @@ const handleSubmit = async () => {
         <label
           class="
             mt-10
-            text-font-secondary
+            text-font-third
           "
           for="avatar"
         >
@@ -134,7 +134,7 @@ const handleSubmit = async () => {
         <input
           class="
             w-3/4 mt-2
-            text-font-secondary
+            text-font-third
             hover:cursor-pointer
             flex flex-col m-0
           "
