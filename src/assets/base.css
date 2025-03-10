@@ -28,9 +28,10 @@
   --finished-color: #2f4336;
   --emergency-color: #330c0c;
   --idle-color: rgba(255, 255, 128, .5);
-  --off-color: rgba(55, 35, 89, 0.5);
+  --off-color: #2c3e50;
   --weekend-color: rgb(59, 59, 59);
   --overtime-color: #B97B28FF;
+  --unfinished-color: #644343;
 }
 
 :root {

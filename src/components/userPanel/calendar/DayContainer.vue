@@ -26,18 +26,18 @@ const crossVisible = ref(false)
     <div
         class="
         group
-        rounded-lg bg-mute shadow-lg border border-third w-24 h-24
+        rounded-md bg-mute shadow-lg border border-third w-24 h-24
         hover:cursor-pointer hover:scale-102
 
         leading-none m-0 p-0
-        below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-md below-portrait-2xs:m-1
-        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-md portrait-2xs:m-1
-        portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-md portrait-xs:m-1
+        below-portrait-2xs:w-full below-portrait-2xs:h-[70px] below-portrait-2xs:p-2 below-portrait-2xs:rounded-sm below-portrait-2xs:m-1
+        portrait-2xs:w-full portrait-2xs:h-[70px] portrait-2xs:p-2 portrait-2xs:rounded-sm portrait-2xs:m-1
+        portrait-xs:w-full portrait-xs:h-[80px] portrait-xs:p-2 portrait-xs:rounded-sm portrait-xs:m-1
 
         portrait-small:w-[55px] portrait-small:h-[55px] portrait-small:p-1 portrait-small:rounded-s portrait-small:m-0
-        portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-md portrait-medium:m-0
-        portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-lg portrait-large:m-0
-        portrait-xl:w-[90px] portrait-xl:h-[90px] portrait-xl:rounded-lg portrait-xl:m-0
+        portrait-medium:w-[70px] portrait-medium:h-[70px] portrait-medium:rounded-sm portrait-medium:m-0
+        portrait-large:w-[80px] portrait-large:h-[80px] portrait-large:rounded-md portrait-large:m-0
+        portrait-xl:w-[90px] portrait-xl:h-[90px] portrait-xl:rounded-md portrait-xl:m-0
         "
       :class="[
           {
@@ -50,7 +50,7 @@ const crossVisible = ref(false)
 
       <span
           class="
-          h-1/4 w-full border-b border-silver inline-block
+          h-1/4 w-full text-neutral-400
 
           portrait-2xs:text-xs
           portrait-xs:text-xs
@@ -68,7 +68,7 @@ const crossVisible = ref(false)
 
 <!--      If some off day-->
       <div v-if="props.day.offType"
-          class="h-3/4 flex flex-col justify-center items-center">
+          class="h-3/4 flex flex-col justify-center items-center text-white font-bold text-xl">
         <p>{{props.day.offType}}</p>
       </div>
 
@@ -154,8 +154,7 @@ const crossVisible = ref(false)
         <img
             v-show="!monthStore.selected.closed && crossVisible"
             class="
-            filter-invert-30
-            group-hover:filter-invert-60
+            group-hover:filter-invert-100
 
             portrait-2xs:h-[20px] portrait-2xs:w-[20px]
             portrait-xs:h-[20px] portrait-xs:w-[20px]
@@ -172,7 +171,7 @@ const crossVisible = ref(false)
 <style scoped>
 
 .unfinished-shift {
-  background: var(--vt-c-indigo);
+  background: var(--unfinished-color);
 }
 
 .finished-shift {
