@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Dash from "@/views/DashView.vue";
+import DashLayout from "@/layout/DashLayout.vue";
 import Login from "@/views/LoginView.vue";
 import SignUp from "@/views/SignUpView.vue";
 import UserPanel from "@/views/UserPanelView.vue";
@@ -23,7 +24,7 @@ const routes = [
     {
         path: '/',
         name: 'Dash',
-        component: Dash
+        component: DashLayout
     },
     {
         path: '/user-panel',
@@ -51,8 +52,7 @@ const routes = [
         path: '/edit',
         name: 'Edit',
         component: ShiftEditor,
-    },
-
+    }
 ];
 
 const router = createRouter({

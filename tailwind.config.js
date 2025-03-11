@@ -68,6 +68,12 @@ export default {
       'portrait-large': '1024px',
       'portrait-xl': '1300px',
       'portrait-2xl': '1500px',
+
+      sm: '640px',  // Tablet (≥ 640px)
+      md: '768px',  // Mały desktop (≥ 768px)
+      lg: '1024px', // Standardowy desktop (≥ 1024px)
+      xl: '1280px', // Duży ekran (≥ 1280px)
+      '2xl': '1536px' // Bardzo duży ekran (≥ 1536px)
     },
     scale: {
       '102': '1.02',

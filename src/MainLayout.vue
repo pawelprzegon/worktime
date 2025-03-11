@@ -96,8 +96,8 @@ setInterval(() => {
 </script>
 
 <template>
-  <Alert/>
-  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-neutral-800 dark:border-none">
+
+  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
@@ -119,50 +119,50 @@ setInterval(() => {
           />
         </div>
         <div class="flex flex-col justify-between place-items-end">
-          <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
-          <small v-if="authStore.isAuthenticated"> {{authStore.tokenExp}} </small>
-          <div class="flex justify-end items-end">
-            <CustomTextButton
-                label="Dashboard"
-                :isSelected="isDashActive"
-                @click="gotoDash"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="!authStore.isAuthenticated"
-                label="Login"
-                :isSelected="isLoginActive"
-                @click="gotoLogin"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated"
-                label="User Panel"
-                :isSelected="isUserPanelActive"
-                @click="gotoUserPanel"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated && authStore.isAdmin"
-                label="Privileged"
-                :isSelected="isPrivilegedActive"
-                @click="gotoPrivileged"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated"
-                label="Logout"
-                @click="gotoLogout"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="!authStore.isAuthenticated"
-                label="SignUp"
-                :isSelected="isSignUpActive"
-                @click="gotoSignUp"
-            >SignUp</CustomTextButton>
-          </div>
+      <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
+      <small v-if="authStore.isAuthenticated"> {{authStore.tokenExp}} </small>
+      <div class="flex justify-end items-end">
+        <CustomTextButton
+            label="Dashboard"
+            :isSelected="isDashActive"
+            @click="gotoDash"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="!authStore.isAuthenticated"
+            label="Login"
+            :isSelected="isLoginActive"
+            @click="gotoLogin"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="authStore.isAuthenticated"
+            label="User Panel"
+            :isSelected="isUserPanelActive"
+            @click="gotoUserPanel"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="authStore.isAuthenticated && authStore.isAdmin"
+            label="Privileged"
+            :isSelected="isPrivilegedActive"
+            @click="gotoPrivileged"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="authStore.isAuthenticated"
+            label="Logout"
+            @click="gotoLogout"
+        ></CustomTextButton>
+        <CustomTextButton
+            v-if="!authStore.isAuthenticated"
+            label="SignUp"
+            :isSelected="isSignUpActive"
+            @click="gotoSignUp"
+        >SignUp</CustomTextButton>
+      </div>
 
-        </div>
+    </div>
         <div class="flex items-center">
             <div class="flex items-center ms-3">
               <div>
-                <button type="button" class="flex text-sm bg-neutral-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                   <span class="sr-only">Open user menu</span>
                   <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
                 </button>
@@ -199,10 +199,10 @@ setInterval(() => {
 
   <aside id="logo-sidebar"
          :class="{ 'translate-x-0': isMenuOpen }"
-         class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0 dark:bg-neutral-800 dark:border-none"
+         class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 lg:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
          aria-label="Sidebar"
   >
-     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-neutral-800">
+     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
            <li>
               <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -219,7 +219,7 @@ setInterval(() => {
                     <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
                  </svg>
                  <span class="flex-1 ms-3 whitespace-nowrap">Kanban</span>
-                 <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-neutral-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
+                 <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
               </a>
            </li>
            <li>
@@ -269,21 +269,18 @@ setInterval(() => {
      </div>
   </aside>
 
-  <div class="p-4 mt-20 lg:ml-64">
-    <main id="main" class="h-auto overflow-x-hidden overflow-y-auto">
+  <div class="p-4 mt-24 lg:ml-64">
+    <main class="h-auto overflow-x-hidden overflow-y-auto">
       <RouterView />
     </main>
   </div>
 
-
-
-<footer
+  <footer
       id="footer"
-      class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow-sm text-right
-      dark:bg-primary dark:border-none">
+      class="w-full border-t border-white text-right"
+  >
     {{today}}
   </footer>
-
 
 </template>
 
