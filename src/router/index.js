@@ -8,8 +8,9 @@ import Privileged from "@/views/PrivilegedView.vue";
 import ResetPasswordView from "@/views/resetPasswordView.vue";
 import ShiftEditor from "@/components/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 import ResetPasswordEmailView from "@/views/resetPasswordEmailView.vue";
-import { useAuthStore } from '@/stores/authStore.js';
 import HomeView from "@/views/HomeView.vue";
+import NotFoundView from "@/views/NotFoundView.vue";
+import { useAuthStore } from '@/stores/authStore.js';
 
 const routes = [
     {
@@ -58,7 +59,12 @@ const routes = [
         path: '/edit',
         name: 'Edit',
         component: ShiftEditor,
-    }
+    },
+    {
+        path: '/:catchAll(.*)',
+        name: 'not-found',
+        component: NotFoundView,
+    },
 ];
 
 const router = createRouter({
