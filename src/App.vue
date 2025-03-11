@@ -5,7 +5,9 @@ import {useAuthStore} from "@/stores/authStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useRouter} from "vue-router";
 import {getMe} from "@/composables/fetchers.js";
-import CustomTextButton from "@/components/CustomTextButton.vue";
+import Alert from "@/components/Alert.vue";
+
+const apiURL = import.meta.env.VITE_APP_API_URL
 
 const isMenuOpen = ref(false)
 const authStore = useAuthStore();
@@ -14,8 +16,11 @@ const router = useRouter();
 const userName = ref('');
 const today = ref(new Date);
 
-const isDashActive = computed(() => router.currentRoute.value.path === '/');
+
+const isHomeActive = computed(() => router.currentRoute.value.path === '/');
+const isDashActive = computed(() => router.currentRoute.value.path === '/dash');
 const isLoginActive = computed(() => router.currentRoute.value.path === '/login');
+const isLogoutActive = computed(() => router.currentRoute.value.path === '/logout');
 const isPrivilegedActive = computed(() => router.currentRoute.value.path === '/privileged');
 const isUserPanelActive = computed(() => router.currentRoute.value.path === '/user-panel');
 const isSignUpActive = computed(() => router.currentRoute.value.path === '/signup');
@@ -37,8 +42,12 @@ const gotoLogout = () => {
   router.push('/')
 }
 
-const gotoDash = () => {
+const gotoHome = () => {
   router.push('/')
+}
+
+const gotoDash = () => {
+  router.push('/dash')
 }
 
 const gotoPrivileged = () => {
@@ -108,7 +117,7 @@ setInterval(() => {
               </svg>
            </button>
           <img
-            alt="Vue logo"
+            alt="Beb logo"
             src="./assets/img/beb.webp"
             class="
             block
@@ -118,53 +127,65 @@ setInterval(() => {
             "
           />
         </div>
-        <div class="flex flex-col justify-between place-items-end">
-          <small class="nav-user" v-if="authStore.isAuthenticated">logged: {{userName}}</small>
-          <small v-if="authStore.isAuthenticated"> {{authStore.tokenExp}} </small>
-          <div class="flex justify-end items-end">
-            <CustomTextButton
-                label="Dashboard"
-                :isSelected="isDashActive"
+<!--        Navigation buttons-->
+        <div class="inline-flex">
+          <div class="w-full md:w-auto" id="navbar-dropdown">
+          <ul class="flex flex-row justify-end font-medium p-4">
+            <li>
+              <a
+                @click="gotoHome"
+                :aria-current="isHomeActive ? 'page' : undefined"
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isHomeActive}">
+                Home
+              </a>
+            </li>
+            <li v-if="authStore.isAuthenticated">
+              <a
                 @click="gotoDash"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="!authStore.isAuthenticated"
-                label="Login"
-                :isSelected="isLoginActive"
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isDashActive}">
+                Dash
+              </a>
+            </li>
+            <li v-if="!authStore.isAuthenticated">
+              <a
                 @click="gotoLogin"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated"
-                label="User Panel"
-                :isSelected="isUserPanelActive"
-                @click="gotoUserPanel"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated && authStore.isAdmin"
-                label="Privileged"
-                :isSelected="isPrivilegedActive"
-                @click="gotoPrivileged"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="authStore.isAuthenticated"
-                label="Logout"
-                @click="gotoLogout"
-            ></CustomTextButton>
-            <CustomTextButton
-                v-if="!authStore.isAuthenticated"
-                label="SignUp"
-                :isSelected="isSignUpActive"
-                @click="gotoSignUp"
-            >SignUp</CustomTextButton>
-          </div>
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isLoginActive}">
+                Login</a>
+            </li>
 
+
+            <li v-if="authStore.isAuthenticated">
+              <a
+                @click="gotoUserPanel"
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isUserPanelActive}">
+                User</a>
+            </li>
+            <li v-if="authStore.isAuthenticated && authStore.user.role === 'admin'">
+              <a
+                @click="gotoPrivileged"
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isPrivilegedActive}">
+                Privileged</a>
+            </li>
+            <li v-if="authStore.isAuthenticated">
+              <a
+                @click="gotoLogout"
+                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                :class="{'bg-blue-500 text-white hover:text-black': isLogoutActive}">
+                Logout</a>
+            </li>
+          </ul>
         </div>
-        <div class="flex items-center">
+          <div v-if="authStore.isAuthenticated" class="flex items-center">
             <div class="flex items-center ms-3">
               <div>
                 <button type="button" class="flex text-sm bg-neutral-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                   <span class="sr-only">Open user menu</span>
-                  <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                  <img class="w-8 h-8 rounded-full" :src="`${apiURL}/${authStore.user.avatar}`" alt="user photo">
                 </button>
               </div>
               <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
@@ -193,6 +214,9 @@ setInterval(() => {
               </div>
             </div>
           </div>
+        </div>
+
+
       </div>
     </div>
   </nav>

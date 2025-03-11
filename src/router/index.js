@@ -9,6 +9,7 @@ import ResetPasswordView from "@/views/resetPasswordView.vue";
 import ShiftEditor from "@/components/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 import ResetPasswordEmailView from "@/views/resetPasswordEmailView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
+import HomeView from "@/views/HomeView.vue";
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
     },
     {
         path: '/',
+        name: 'Home',
+        component: HomeView
+    },
+    {
+        path: '/dash',
         name: 'Dash',
         component: DashLayout
     },
