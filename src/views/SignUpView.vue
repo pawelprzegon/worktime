@@ -10,8 +10,8 @@ const form = ref({
   first_name: '',
   last_name: '',
   email: '',
-  username: '',
   password: '',
+  confirmedPassword: '',
   avatar: 'default.png'
 });
 
@@ -36,125 +36,57 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-
-  <section class="flex justify-center items-start my-36">
-
-    <form
-        @submit.prevent="handleSubmit"
-        class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
-    >
-      <h1 class="text-beb text-center text-2xl mb-10">Sign up</h1>
-      <div class="flex flex-col justify-center items-center">
-        <input
-          v-model="form.first_name"
-          class="
-            w-3/4 py-2 px-1 my-1
-            placeholder-font-third
-            bg-third text-gray-100
-            border-solid border border-zinc-600 rounded-lg
-            focus:border-beb
-            outline-none
-          "
-          type="text"
-          placeholder="first name"
-          id="first_name"
-          required
-        />
-        <input
-          v-model="form.last_name"
-          class="
-            w-3/4 py-2 px-1 my-1
-            placeholder-font-third
-            bg-third text-gray-100
-            border-solid border border-zinc-600 rounded-lg
-            focus:border-beb
-            outline-none
-          "
-          type="text"
-          placeholder="last name"
-          id="last_name"
-          required
-        />
-        <input
-          v-model="form.email"
-          class="
-            w-3/4 py-2 px-1 my-1
-            placeholder-font-third
-            bg-third text-gray-100
-            border-solid border border-zinc-600 rounded-lg
-            focus:border-beb
-            outline-none
-          "
-          type="email"
-          placeholder="email"
-          id="email"
-          required
-        />
-        <input
-          v-model="form.username"
-          class="
-            w-3/4 py-2 px-1 my-1
-            placeholder-font-third
-            bg-third text-gray-100
-            border-solid border border-zinc-600 rounded-lg
-            focus:border-beb
-            outline-none
-          "
-          type="text"
-          placeholder="username"
-          id="username"
-          autocomplete="current-username"
-          required
-        />
-        <input
-          v-model="form.password"
-          class="
-            w-3/4 py-2 px-1 my-1
-            placeholder-font-third
-            bg-third text-gray-100
-            border-solid border border-zinc-600 rounded-lg
-            focus:border-beb
-            outline-none
-          "
-          type="password"
-          placeholder="password"
-          autocomplete="current-password"
-          id="password"
-          required
-        />
-        <label
-          class="
-            mt-10
-            text-font-third
-          "
-          for="avatar"
-        >
-          Upload avatar:
-        </label>
-        <input
-          class="
-            w-3/4 mt-2
-            text-font-third
-            hover:cursor-pointer
-            flex flex-col m-0
-          "
-          type="file"
-          id="avatar"
-          @change="handleFileChange"
-          accept=".png, .jpg, .jpeg, .gif, .svg"
-        />
-      </div>
-
-      <button
-          type="submit"
-          class="bg-third mt-auto py-2 px-4 m-2
-          text-black
-          border border-third rounded-md
-          hover:bg-beb hover:text-white"
-      >SIGN UP</button>
-    </form>
-
-  </section>
+<section class="bg-gray-50 dark:bg-transparent">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
+        <div class="flex flex-col justify-center">
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">We invest in the world’s potential</h1>
+            <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Here at Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Read more about our app
+                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
+            </a>
+        </div>
+        <div>
+            <div class="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-neutral-900">
+                <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">
+                    Sign up to TimeLog
+                </h2>
+                <!-- #TODO: Handle validate form -->
+                <form @submit.prevent="handleSubmit" class="max-w-md mx-auto">
+                  <div class="relative z-0 w-full mb-5 group">
+                      <input v-model="form.email" type="email" name="floating_email" id="floating_email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
+                  </div>
+                  <div class="relative z-0 w-full mb-5 group">
+                      <input v-model="form.password" type="password" name="floating_password" id="floating_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      <label for="floating_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+                  </div>
+                  <div class="relative z-0 w-full mb-5 group">
+                      <input v-model="form.confirmedPassword" type="password" name="repeat_password" id="floating_repeat_password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                      <label for="floating_repeat_password" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Confirm password</label>
+                  </div>
+                  <div class="grid md:grid-cols-2 md:gap-6">
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input v-model="form.first_name"  type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name</label>
+                    </div>
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input v-model="form.last_name"  type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                        <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>
+                    </div>
+                  </div>
+                  <div class="relative z-0 w-full mb-5 group">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="user_avatar">Upload avatar file</label>
+                    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-neutral-100 dark:text-neutral-100 focus:outline-none dark:bg-neutral-800 dark:border-neutral-600 dark:placeholder-neutral-400" aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                    <div class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="user_avatar_help">A profile picture is useful to confirm your are logged into your account</div>
+                  </div>
+                  <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
 </template>
 
