@@ -77,7 +77,6 @@ const protectedRoutes = ['/user-panel', '/privileged'];
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
     const aut = await authStore.authorizationCheck()
-    console.log(aut)
     if (aut) {
         await authStore.getUserMetadata()
     }
