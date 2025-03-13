@@ -49,7 +49,7 @@ onClickOutside(userMenuRef, () => {
     <img class="w-10 h-10 rounded-full" :src="`${apiURL}/${authStore.user.avatar}`" alt="user photo">
   </button>
 
-  <div v-if="isUserMenuOpen" class="z-50 my-4 text-base list-none bg-white divide-y divide-neutral-100 rounded shadow-xl dark:bg-blue-500 dark:divide-blue-200 fixed top-20 end-14 group" id="dropdown-user">
+  <div v-if="isUserMenuOpen" class="z-50 my-4 text-base list-none bg-white divide-y divide-neutral-100 rounded shadow-xl dark:bg-blue-500 dark:divide-blue-200 fixed top-20 end-32 group" id="dropdown-user">
     <div class="px-4 py-3" role="none">
       <p class="text-sm text-neutral-900 dark:text-white" role="none">
         {{authStore.user.firstName}} {{authStore.user.lastName}}

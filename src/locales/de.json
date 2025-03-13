@@ -1,10 +1,20 @@
 {
-  "nav": {
+  "nav" : {
     "home": "Startseite",
-    "login": "Anmelden",
-    "dash": "Übersicht",
-    "user": "Benutzer",
-    "privileged": "Privilegiert",
-    "logout": "Abmelden"
+    "login": "Anmelden"
+  },
+  "sidebar": {
+    "inbox": "Posteingang",
+    "day": "Tag",
+    "record": "Aufzeichnung",
+    "holiday": "Urlaub",
+    "overtime": "Überstunden"
+  },
+  "ressetPasswordView": {
+    "header": "Passwort ändern",
+    "emailLabel": "Deine E-Mail",
+    "passwordLabel": "Neues Passwort",
+    "confirmPasswordLabel": "Passwort bestätigen",
+    "confirmButtonLabel": "Passwort zurücksetzen"
   }
 }

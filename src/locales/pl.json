@@ -1,10 +1,20 @@
 {
   "nav": {
     "home": "Główna",
-    "login": "Logowanie",
-    "dash": "Tablica",
-    "user": "Użytkownik",
-    "privileged": "Zarządzaj",
-    "logout": "Wyloguj"
+    "login": "Logowanie"
+  },
+  "sidebar": {
+    "inbox": "Skrzynka",
+    "day": "Dzień",
+    "record": "Ewidencja",
+    "holiday": "Urlop",
+    "overtime": "Nadgodziny"
+  },
+  "ressetPasswordView": {
+    "header": "Zmień hasło",
+    "emailLabel": "Twój email",
+    "passwordLabel": "Nowe hasło",
+    "confirmPasswordLabel": "Powtórz hasło",
+    "confirmButtonLabel": "Zresetuj hasło"
   }
 }

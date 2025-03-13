@@ -71,7 +71,6 @@ watch([() => form.value.password, () => form.value.confirmedPassword], () => {
                 <h2 class="text-2xl font-bold text-neutral-900 dark:text-white">
                     Sign up to TimeLog
                 </h2>
-                <!-- #TODO: Handle validate form -->
                 <form @submit.prevent="handleSubmit" class="max-w-md mx-auto">
                   <div class="relative z-0 w-full mb-5 group">
                       <input

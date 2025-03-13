@@ -14,10 +14,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const isHomeActive = computed(() => router.currentRoute.value.path === '/');
-const isDashActive = computed(() => router.currentRoute.value.path === '/dash');
 const isLoginActive = computed(() => router.currentRoute.value.path === '/login');
-const isPrivilegedActive = computed(() => router.currentRoute.value.path === '/privileged');
-const isUserPanelActive = computed(() => router.currentRoute.value.path === '/user-panel');
 
 
 const menuToggle = () => {
@@ -28,21 +25,8 @@ const gotoLogin = () => {
   router.push('/login')
 }
 
-
 const gotoHome = () => {
   router.push('/')
-}
-
-const gotoDash = () => {
-  router.push('/dash')
-}
-
-const gotoPrivileged = () => {
-  router.push('/privileged')
-}
-
-const gotoUserPanel = () => {
-  router.push('/user-panel')
 }
 
 
@@ -80,6 +64,7 @@ const gotoUserPanel = () => {
 <!--          Nav buttons-->
           <div class="w-full md:w-auto" id="navbar-dropdown">
             <ul class="flex flex-row justify-end font-medium p-4">
+
               <li v-if="!authStore.isAuthenticated">
                 <a
                   @click="gotoHome"
@@ -89,14 +74,7 @@ const gotoUserPanel = () => {
                   {{ t('nav.home') }}
                 </a>
               </li>
-              <li v-if="authStore.isAuthenticated">
-                <a
-                  @click="gotoDash"
-                  class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                  :class="{'bg-blue-500 text-white hover:text-neutral-900': isDashActive}">
-                  {{ t('nav.dash') }}
-                </a>
-              </li>
+
               <li v-if="!authStore.isAuthenticated">
                 <a
                   @click="gotoLogin"
@@ -106,22 +84,6 @@ const gotoUserPanel = () => {
                 </a>
               </li>
 
-              <li v-if="authStore.isAuthenticated">
-                <a
-                  @click="gotoUserPanel"
-                  class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                  :class="{'bg-blue-500 text-white hover:text-neutral-900': isUserPanelActive}">
-                  {{ t('nav.user') }}
-                </a>
-              </li>
-              <li v-if="authStore.isAuthenticated && authStore.user.role === 'admin'">
-                <a
-                  @click="gotoPrivileged"
-                  class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                  :class="{'bg-blue-500 text-white hover:text-neutral-900': isPrivilegedActive}">
-                  {{ t('nav.privileged') }}
-                </a>
-              </li>
             </ul>
           </div>
 

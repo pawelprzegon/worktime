@@ -1,15 +1,22 @@
 <script setup>
-import {ref, onMounted, computed} from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import {ref, onMounted, watch} from 'vue';
+import { useRoute } from 'vue-router';
 import {resetPassword, validateResetPasswordURL} from '@/composables/fetchers.js';
-import Spinner from "@/components/Spinner.vue";
 import {useAlertStore} from "@/stores/alertStore.js";
 import Alert from "@/components/Alert.vue";
+import {useI18n} from "vue-i18n";
 
-const alert = useAlertStore()
+const { t } = useI18n();
+
+const alert = useAlertStore();
+const email = ref('');
 const password = ref('');
-const confirm = ref('');
+const confirmedPassword = ref('');
 const loading = ref(true);
+
+const emailValid = ref(true);
+const passwordValid = ref(true);
+const passwordsMatch = ref(true);
 
 const tokenValid = ref({
   token: null,
@@ -43,10 +50,6 @@ const checkTokenValidation = async () => {
   }
 };
 
-const passwordsMatch = computed(() => {
-  return password.value === confirm.value;
-});
-
 onMounted(async () => {
   await checkTokenValidation();
 });
@@ -65,84 +68,104 @@ const handleResetPassword = async () => {
   }
 
 };
+
+watch(() => email.value, (newValue) => {
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  emailValid.value = emailPattern.test(newValue);
+});
+
+watch(() => password.value, (newValue) => {
+  passwordValid.value = newValue.length >= 6;
+});
+
+watch([() => password.value, () => confirmedPassword.value], () => {
+  passwordsMatch.value = password.value === confirmedPassword.value;
+});
 </script>
 
 <template>
   <Alert/>
-  <section class="flex justify-center items-start my-36">
 
-     <div
-         v-if="loading"
-         class="place-items-center"
-     >
-       <h1 class="block mb-10">{{tokenValid.message}}</h1>
-       <div class="loading-spinner">
-         <Spinner />
-       </div>
+  <section class="bg-gray-50 dark:bg-primary">
+    <div class="flex flex-col items-center justify-start px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div class="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md dark:bg-neutral-900 sm:p-8">
+            <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                {{ t('ressetPasswordView.header') }}
+            </h2>
+            <form
+                @submit.prevent="handleResetPassword"
+                class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.emailLabel') }}</label>
+                    <input
+                        v-model="email"
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{
+                            'focus:border-red-600 dark:border-red-500  dark:focus:border-red-500 ' : !emailValid
+                          }"
+                        placeholder="name@company.com"
+                        required=""
+                    >
+                    <p v-show="!emailValid" class="text-sm font-medium text-red-500">Wrong email format</p>
+                </div>
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.passwordLabel') }}</label>
+                    <input
+                        v-model="password"
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{
+                            'dark:border-red-500 focus:border-red-600 dark:focus:border-red-500 ' : !passwordsMatch || !passwordValid,
+                          }"
+                        required=""
+                    >
+                  <p v-show="!passwordValid" class="text-sm font-medium text-red-500">Password is too short, at least 6 characters required.</p>
+                  <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">Passwords do not match.</p>
+                </div>
+                <div>
+                    <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.confirmPasswordLabel') }}</label>
+                    <input
+                        v-model="confirmedPassword"
+                        type="password"
+                        name="confirm-password"
+                        id="confirm-password"
+                        placeholder="••••••••"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{
+                            'dark:border-red-500 focus:border-red-600 dark:focus:border-red-500 ' : !passwordsMatch
+                          }"
+                        required=""
+                    >
+                    <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">Passwords do not match.</p>
+                </div>
+
+                <button
+                    type="submit"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  {{ t('ressetPasswordView.confirmButtonLabel') }}
+                </button>
+            </form>
+        </div>
     </div>
-
-    <div
-        v-if="!loading && !tokenValid.status"
-    >
-      <h1>{{tokenValid.message}}</h1>
-    </div>
-
-
-    <form
-        v-if="!loading && tokenValid.status"
-        @submit.prevent="handleResetPassword"
-        class="flex flex-col w-[300px] min-h-[500px] p-4 bg-secondary shadow-xl rounded-xl"
-    >
-      <h1 class="text-beb text-center text-2xl mb-10">Password Reset</h1>
-      <div class="flex flex-col justify-center items-center space-y-4">
-
-        <input
-          v-model="password"
-          type="password"
-          id="password"
-          placeholder="new password"
-          required
-          class="w-3/4 py-2 px-1
-          bg-third text-gray-300
-          border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-third
-          outline-none"
-        />
-        <input
-          v-model="confirm"
-          type="password"
-          id="confirm"
-          placeholder="confirm new password"
-          required
-          class="
-          w-3/4 py-2 px-1
-          bg-third text-gray-300
-          border-solid border border-zinc-600 rounded-lg focus:border-beb
-          placeholder-font-third
-          outline-none"
-        />
-
-        <p v-if="!passwordsMatch" class="text-red-500 text-sm">
-          Passwords do not match.
-        </p>
-      </div>
-
-      <button
-        type="submit"
-        :disabled="loading"
-        class="bg-third mt-auto py-2 px-4
-        text-black
-        border border-third rounded-md
-        hover:bg-beb hover:text-white"
-      >
-        {{ loading ? 'RESETTING...' : 'RESET' }}
-      </button>
-
-    </form>
   </section>
 
 </template>
 
 <style scoped>
+
+input:focus {
+  outline: none;
+}
+
+input:active {
+  outline: none;
+}
 
 </style>

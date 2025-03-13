@@ -1,10 +1,20 @@
 {
   "nav": {
     "home": "Home",
-    "login": "Login",
-    "dash": "Dash",
-    "user": "User",
-    "privileged": "Privileged",
-    "logout": "Logout"
+    "login": "Login"
+  },
+  "sidebar": {
+    "inbox": "Inbox",
+    "day": "Day",
+    "record": "Work record",
+    "holiday": "Holiday",
+    "overtime": "Overtime"
+  },
+  "ressetPasswordView": {
+    "header": "Change Password",
+    "emailLabel": "Your email",
+    "passwordLabel": "New password",
+    "confirmPasswordLabel": "Confirm password",
+    "confirmButtonLabel": "Reset password"
   }
 }
