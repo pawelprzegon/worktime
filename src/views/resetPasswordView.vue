@@ -106,10 +106,10 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                         :class="{
                             'focus:border-red-600 dark:border-red-500  dark:focus:border-red-500 ' : !emailValid
                           }"
-                        placeholder="name@company.com"
+                        :placeholder="t('common.emailPlaceholder')"
                         required=""
                     >
-                    <p v-show="!emailValid" class="text-sm font-medium text-red-500">Wrong email format</p>
+                    <p v-show="!emailValid" class="text-sm font-medium text-red-500">{{ t('common.invalid.emailFormat') }}</p>
                 </div>
                 <div>
                     <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.passwordLabel') }}</label>
@@ -125,8 +125,8 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                           }"
                         required=""
                     >
-                  <p v-show="!passwordValid" class="text-sm font-medium text-red-500">Password is too short, at least 6 characters required.</p>
-                  <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">Passwords do not match.</p>
+                  <p v-show="!passwordValid" class="text-sm font-medium text-red-500">{{ t('common.invalid.passwordToShort') }}</p>
+                  <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">{{ t('common.invalid.passwordDontMatch') }}</p>
                 </div>
                 <div>
                     <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.confirmPasswordLabel') }}</label>
@@ -142,7 +142,7 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                           }"
                         required=""
                     >
-                    <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">Passwords do not match.</p>
+                    <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">{{ t('common.invalid.passwordDontMatch') }}</p>
                 </div>
 
                 <button

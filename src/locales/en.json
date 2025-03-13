@@ -1,4 +1,11 @@
 {
+  "common": {
+    "emailPlaceholder": "Email address",
+    "submitButton": "Submit",
+    "invalid": {
+      "emailFormat": "Invalid email format"
+    }
+  },
   "nav": {
     "home": "Home",
     "login": "Login"
@@ -16,5 +23,11 @@
     "passwordLabel": "New password",
     "confirmPasswordLabel": "Confirm password",
     "confirmButtonLabel": "Reset password"
+  },
+  "ressetPasswordEmailView": {
+    "textHeader": "Reset Your Password",
+    "textInfo": "Enter your email address, and we will send you a link to reset your password. If you don’t receive an email within a few minutes, please check your spam folder or try again.",
+    "textMore": "Read more about our app",
+    "header": "Send Reset Link"
   }
 }
