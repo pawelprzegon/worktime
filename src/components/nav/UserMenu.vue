@@ -37,12 +37,19 @@ onClickOutside(userMenuRef, () => {
 <template>
 <div v-if="authStore.isAuthenticated" ref="userMenuRef" class="flex items-center">
 
-  <button @click="toggleUserMenuOpen" type="button" class="flex items-center justify-center rounded-full w-12 h-12 text-sm bg-neutral-900 focus:ring-4 focus:ring-neutral-300 dark:focus:ring-blue-500" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+  <button
+      @click="toggleUserMenuOpen"
+      type="button"
+      aria-expanded="false"
+      data-dropdown-toggle="dropdown-user"
+      class="flex items-center justify-center rounded-full w-12 h-12 text-sm bg-neutral-900"
+      :class="{'focus:ring-4 focus:ring-neutral-300 dark:focus:ring-blue-500' : isUserMenuOpen}"
+  >
     <span class="sr-only">Open user menu</span>
-    <img class="w-8 h-8 rounded-full" :src="`${apiURL}/${authStore.user.avatar}`" alt="user photo">
+    <img class="w-10 h-10 rounded-full" :src="`${apiURL}/${authStore.user.avatar}`" alt="user photo">
   </button>
 
-  <div v-if="isUserMenuOpen" class="z-50 my-4 text-base list-none bg-white divide-y divide-neutral-100 rounded shadow-xl dark:bg-blue-500 dark:divide-blue-200 fixed top-20 end-28 group" id="dropdown-user">
+  <div v-if="isUserMenuOpen" class="z-50 my-4 text-base list-none bg-white divide-y divide-neutral-100 rounded shadow-xl dark:bg-blue-500 dark:divide-blue-200 fixed top-20 end-14 group" id="dropdown-user">
     <div class="px-4 py-3" role="none">
       <p class="text-sm text-neutral-900 dark:text-white" role="none">
         {{authStore.user.firstName}} {{authStore.user.lastName}}

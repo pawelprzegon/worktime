@@ -11,9 +11,9 @@ const addAuthorizationBearer = () => {
 }
 
 const headers = {
-            'Content-Type': 'application/json',
-            'Device': webDev0
-        }
+    'Content-Type': 'application/json',
+    'Device': webDev0
+}
 
 
 // AUTH
@@ -204,11 +204,10 @@ export const saveAvatar = async (user_id, avatar) => {
     const data = {
         method: 'POST',
         headers: {
-            ...headers,
+            'Device': webDev0
         },
         body: formData,
     }
-    console.log(formData)
     const response = await fetch(url + `/user/${user_id}/avatar`, data)
 
     if (!response.ok) {
