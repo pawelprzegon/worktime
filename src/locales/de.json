@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "login": "Anmelden",
+    "dash": "Übersicht",
+    "user": "Benutzer",
+    "privileged": "Privilegiert",
+    "logout": "Abmelden"
+  }
+}

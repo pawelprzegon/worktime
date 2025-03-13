@@ -208,7 +208,7 @@ export const saveAvatar = async (user_id, avatar) => {
         },
         body: formData,
     }
-
+    console.log(formData)
     const response = await fetch(url + `/user/${user_id}/avatar`, data)
 
     if (!response.ok) {

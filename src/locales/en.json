@@ -1,0 +1,10 @@
+{
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "dash": "Dash",
+    "user": "User",
+    "privileged": "Privileged",
+    "logout": "Logout"
+  }
+}

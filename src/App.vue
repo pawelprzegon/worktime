@@ -1,62 +1,19 @@
 <script setup>
 
-import {computed, onMounted, ref, watch} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {useAuthStore} from "@/stores/authStore.js";
 import {useAlertStore} from "@/stores/alertStore.js";
-import {useRouter} from "vue-router";
 import {getMe} from "@/composables/fetchers.js";
 import Alert from "@/components/Alert.vue";
+import NavBar from "@/components/nav/NavBar.vue";
+import {useMenuSidebarStore} from "@/stores/sidebarStore.js";
 
-const apiURL = import.meta.env.VITE_APP_API_URL
-
-const isMenuOpen = ref(false)
+const sideBarStore = useMenuSidebarStore()
 const authStore = useAuthStore();
 const alert = useAlertStore();
-const router = useRouter();
 const userName = ref('');
 const today = ref(new Date);
 
-
-const isHomeActive = computed(() => router.currentRoute.value.path === '/');
-const isDashActive = computed(() => router.currentRoute.value.path === '/dash');
-const isLoginActive = computed(() => router.currentRoute.value.path === '/login');
-const isLogoutActive = computed(() => router.currentRoute.value.path === '/logout');
-const isPrivilegedActive = computed(() => router.currentRoute.value.path === '/privileged');
-const isUserPanelActive = computed(() => router.currentRoute.value.path === '/user-panel');
-const isSignUpActive = computed(() => router.currentRoute.value.path === '/signup');
-
-const menuToggle = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
-
-const gotoSignUp = () => {
-  router.push('/signup')
-}
-
-const gotoLogin = () => {
-  router.push('/login')
-}
-
-const gotoLogout = () => {
-  logout()
-  router.push('/')
-}
-
-const gotoHome = () => {
-  router.push('/')
-}
-
-const gotoDash = () => {
-  router.push('/dash')
-}
-
-const gotoPrivileged = () => {
-  router.push('/privileged')
-}
-
-const gotoUserPanel = () => {
-  router.push('/user-panel')
-}
 
 const getMeData = async () => {
   try{
@@ -67,14 +24,6 @@ const getMeData = async () => {
   }
 }
 
-const logout = () => {
-  if (authStore.isAuthenticated) {
-    authStore.clearToken()
-
-  } else {
-    console.error('isAuthenticated is not available');
-  }
-};
 
 watch(() => authStore.isAuthenticated, (newStatus) => {
   if (newStatus) {
@@ -107,129 +56,13 @@ setInterval(() => {
 <template>
   <Alert/>
   <nav class="fixed top-0 z-50 w-full bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-none shadow-xl">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-start rtl:justify-end">
-<!--          SideBar open button-->
-          <button
-              @click="menuToggle"
-              data-drawer-target="logo-sidebar"
-              data-drawer-toggle="logo-sidebar"
-              aria-controls="logo-sidebar"
-              type="button"
-              class="inline-flex items-center p-2 text-sm text-neutral-500 rounded-lg lg:hidden hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:ring-neutral-600"
-              :class="{'hidden' : !authStore.isAuthenticated}"
-          >
-              <span class="sr-only">Open sidebar</span>
-              <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                 <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-              </svg>
-           </button>
-          <img
-            alt="Beb logo"
-            src="./assets/img/timeLogB.svg"
-            class="block w-20 md:w-24
-            "
-          />
-        </div>
-<!--        Navigation buttons-->
-        <div class="inline-flex">
-          <div class="w-full md:w-auto" id="navbar-dropdown">
-          <ul class="flex flex-row justify-end font-medium p-4">
-            <li v-if="!authStore.isAuthenticated">
-              <a
-                @click="gotoHome"
-                :aria-current="isHomeActive ? 'page' : undefined"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isHomeActive}">
-                Home
-              </a>
-            </li>
-            <li v-if="authStore.isAuthenticated">
-              <a
-                @click="gotoDash"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isDashActive}">
-                Dash
-              </a>
-            </li>
-            <li v-if="!authStore.isAuthenticated">
-              <a
-                @click="gotoLogin"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isLoginActive}">
-                Login
-              </a>
-            </li>
-
-            <li v-if="authStore.isAuthenticated">
-              <a
-                @click="gotoUserPanel"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isUserPanelActive}">
-                User</a>
-            </li>
-            <li v-if="authStore.isAuthenticated && authStore.user.role === 'admin'">
-              <a
-                @click="gotoPrivileged"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isPrivilegedActive}">
-                Privileged</a>
-            </li>
-            <li v-if="authStore.isAuthenticated">
-              <a
-                @click="gotoLogout"
-                class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
-                :class="{'bg-blue-500 text-white hover:text-neutral-900': isLogoutActive}">
-                Logout</a>
-            </li>
-          </ul>
-        </div>
-          <div v-if="authStore.isAuthenticated" class="flex items-center">
-            <div class="flex items-center ms-3">
-              <div>
-                <button type="button" class="flex text-sm bg-neutral-900 rounded-full focus:ring-4 focus:ring-neutral-300 dark:focus:ring-neutral-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                  <span class="sr-only">Open user menu</span>
-                  <img class="w-8 h-8 rounded-full" :src="`${apiURL}/${authStore.user.avatar}`" alt="user photo">
-                </button>
-              </div>
-              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-neutral-100 rounded-sm shadow-sm dark:bg-neutral-700 dark:divide-neutral-600" id="dropdown-user">
-                <div class="px-4 py-3" role="none">
-                  <p class="text-sm text-neutral-900 dark:text-white" role="none">
-                    Neil Sims
-                  </p>
-                  <p class="text-sm font-medium text-neutral-900 truncate dark:text-neutral-300" role="none">
-                    neil.sims@flowbite.com
-                  </p>
-                </div>
-                <ul class="py-1" role="none">
-                  <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-600 dark:hover:text-white" role="menuitem">Dashboard</a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-600 dark:hover:text-white" role="menuitem">Settings</a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-600 dark:hover:text-white" role="menuitem">Earnings</a>
-                  </li>
-                  <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-600 dark:hover:text-white" role="menuitem">Sign out</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-      </div>
-    </div>
+    <NavBar />
   </nav>
 
   <aside
       v-if="authStore.isAuthenticated"
       id="logo-sidebar"
-      :class="{ 'translate-x-0': isMenuOpen }"
+      :class="{ 'translate-x-0': sideBarStore.isOpen }"
       class="fixed top-0 left-0 z-40 w-64 h-screen pt-28 transition-transform -translate-x-full bg-white border-r border-neutral-200 lg:translate-x-0 dark:bg-neutral-900 dark:border-none shadow-xl"
       aria-label="Sidebar"
   >

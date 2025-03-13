@@ -13,3 +13,16 @@ export const useSidebarStore = defineStore('sidebarStore', () => {
     toggleSidebar
   };
 });
+
+export const useMenuSidebarStore = defineStore('menuSideBarStore', () => {
+
+    const isOpen = ref(false)
+    const toggleSidebar = () => {
+        isOpen.value = !isOpen.value
+    }
+
+  return {
+    isOpen,
+    toggleSidebar
+  };
+});
