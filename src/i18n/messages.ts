@@ -13,6 +13,12 @@ import resetPasswordDe from './de/resetPassword'
 import loginEn from './en/login'
 import loginPl from './pl/login'
 import loginDe from './de/login'
+import signupEn from './en/singup'
+import signupPl from './pl/signup'
+import signupDe from './de/signup'
+import homeEn from './en/home'
+import homePl from './pl/home'
+import homeDe from './de/home'
 
 export const messages = {
   en: {
@@ -20,20 +26,26 @@ export const messages = {
     nav: navEn,
     sidebar: sidebarEn,
     resetPassword: resetPasswordEn,
-    login: loginEn
+    login: loginEn,
+    signup: signupEn,
+    home: homeEn
   },
   pl: {
     common: commonPl,
     nav: navPl,
     sidebar: sidebarPl,
     resetPassword: resetPasswordPl,
-    login: loginPl
+    login: loginPl,
+    signup: signupPl,
+    home: homePl
   },
   de: {
     common: commonDe,
     nav: navDe,
     sidebar: sidebarDe,
     resetPassword: resetPasswordDe,
-    login: loginDe
+    login: loginDe,
+    signup: signupDe,
+    home: homeDe
   }
 };
