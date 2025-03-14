@@ -90,13 +90,13 @@ watch([() => password.value, () => confirmedPassword.value], () => {
     <div class="flex flex-col items-center justify-start px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div class="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md dark:bg-neutral-900 sm:p-8">
             <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                {{ t('ressetPasswordView.header') }}
+                {{ t('resetPassword.view.header') }}
             </h2>
             <form
                 @submit.prevent="handleResetPassword"
                 class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
                 <div>
-                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.emailLabel') }}</label>
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('resetPassword.view.emailLabel') }}</label>
                     <input
                         v-model="email"
                         type="email"
@@ -112,7 +112,7 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                     <p v-show="!emailValid" class="text-sm font-medium text-red-500">{{ t('common.invalid.emailFormat') }}</p>
                 </div>
                 <div>
-                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.passwordLabel') }}</label>
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('resetPassword.view.passwordLabel') }}</label>
                     <input
                         v-model="password"
                         type="password"
@@ -129,7 +129,7 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                   <p v-show="!passwordsMatch" class="text-sm font-medium text-red-500">{{ t('common.invalid.passwordDontMatch') }}</p>
                 </div>
                 <div>
-                    <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('ressetPasswordView.confirmPasswordLabel') }}</label>
+                    <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('resetPassword.view.confirmPasswordLabel') }}</label>
                     <input
                         v-model="confirmedPassword"
                         type="password"
@@ -149,7 +149,7 @@ watch([() => password.value, () => confirmedPassword.value], () => {
                     type="submit"
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
-                  {{ t('ressetPasswordView.confirmButtonLabel') }}
+                  {{ t('resetPassword.view.confirmButtonLabel') }}
                 </button>
             </form>
         </div>
