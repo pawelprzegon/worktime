@@ -1,8 +1,7 @@
 <script setup>
-import {ref, inject, watch} from 'vue';
+import {ref} from 'vue';
 import {registerUser, saveAvatar} from "@/composables/fetchers.js";
 import { useRouter } from "vue-router";
-import {useAlertStore} from "@/stores/alertStore.js";
 import {useI18n} from "vue-i18n";
 import UserDataForm from "@/components/forms/UserDataForm.vue";
 
@@ -37,7 +36,7 @@ const handleSubmit = async () => {
         <div class="flex flex-col justify-center">
             <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{{ t('signup.text.header') }}</h1>
             <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">{{ t('signup.text.info') }}</p>
-            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">{{ t('signup.text.more') }}
+            <a class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">{{ t('signup.text.more') }}
                 <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
                 </svg>
@@ -52,6 +51,7 @@ const handleSubmit = async () => {
                     :handle-submit="handleSubmit"
                     :form="form"
                 />
+
             </div>
         </div>
     </div>

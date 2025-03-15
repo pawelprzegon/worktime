@@ -149,7 +149,7 @@ const handleFileChange = (event) => {
         {{ t('userForm.fields.uploadAvatar') }}
         <input @change="handleFileChange" type="file" hidden />
         <div class="grid grid-flow-col">
-          <div class="flex w-28 h-9 px-2 flex-col bg-blue-600 rounded-md shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">{{ t('userForm.fields.chooseFile') }}</div>
+          <div class="flex w-fit h-9 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ t('userForm.fields.chooseFile') }}</div>
           <p class="mt-auto">{{ t('userForm.fields.selectedFileName') }}: {{props.form.avatar.name}}</p>
         </div>
 

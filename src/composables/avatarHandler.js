@@ -26,7 +26,7 @@ export const validateAvatarFile = (file, options = { acceptedFormats: ".png, .jp
     return { type: "error", message: `File size exceeds the limit of ${maxSize} KB.` };
   }
 
-  return null; // Walidacja pomyślna
+  return file;
 };
 
 /**
@@ -49,6 +49,3 @@ export const uploadAvatar = async (userId, file) => {
  * @param {string} status - Status operacji
  * @param {string} message - Komunikat operacji
  */
-export const handleSuccess = (alert, status, message) => {
-  alert.show(status, message);
-};

@@ -62,7 +62,7 @@ setInterval(() => {
   <Sidebar />
 
   <div
-      class="p-6 mt-24"
+      class="p-6 mt-24 overflow-auto"
       :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
   >
     <main id="main" class="h-auto overflow-x-hidden overflow-y-auto">

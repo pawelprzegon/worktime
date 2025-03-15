@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { validateAvatarFile, uploadAvatar, handleSuccess } from "@/composables/avatarHandler.js";
+import { validateAvatarFile, uploadAvatar } from "@/composables/avatarHandler.js";
 import { useAuthStore } from "@/stores/authStore.js";
 import Avatar from "@/components/Avatar.vue";
 import "@/assets/modal.css";
@@ -26,7 +26,7 @@ const handleFileChange = async (event) => {
 
   try {
     const response = await uploadAvatar(authStore.user.id, file);
-    handleSuccess(alert, response.status, response.message);
+    alert.show(response.status, response.message);
     closeModal()
   } catch (error) {
     alert.show("error", error.detail || "An unexpected error occurred.");

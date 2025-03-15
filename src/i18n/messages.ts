@@ -22,6 +22,9 @@ import homeDe from './de/home'
 import userFormEn from './en/userForm'
 import userFormPl from './pl/userForm'
 import userFormDe from './de/userForm'
+import userAccountEn from './en/userAccount'
+import userAccountPl from './pl/userAccount'
+import userAccountDe from './de/userAccount'
 
 export const messages = {
   en: {
@@ -32,7 +35,8 @@ export const messages = {
     login: loginEn,
     signup: signupEn,
     home: homeEn,
-    userForm: userFormEn
+    userForm: userFormEn,
+    userAccount: userAccountEn
   },
   pl: {
     common: commonPl,
@@ -42,7 +46,8 @@ export const messages = {
     login: loginPl,
     signup: signupPl,
     home: homePl,
-    userForm: userFormPl
+    userForm: userFormPl,
+    userAccount: userAccountPl
   },
   de: {
     common: commonDe,
@@ -52,6 +57,7 @@ export const messages = {
     login: loginDe,
     signup: signupDe,
     home: homeDe,
-    userForm: userFormDe
+    userForm: userFormDe,
+    userAccount: userAccountDe
   }
 };
