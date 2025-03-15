@@ -17,7 +17,9 @@ export const useAuthStore = defineStore('auth', () => {
     email: null,
     role: null,
     avatar: null,
-    disabled: null
+    disabled: null,
+    username: null,
+    rfid: null
   });
 
   const isAuthenticated = computed(() => !!token.value);
@@ -71,7 +73,9 @@ export const useAuthStore = defineStore('auth', () => {
         email: response.email,
         role: response.role,
         avatar: response.avatar,
-        disabled: response.disabled
+        disabled: response.disabled,
+        username: response.username,
+        rfid: null
       });
 
       sessionStorage.setItem('user', JSON.stringify(response));
@@ -94,7 +98,9 @@ export const useAuthStore = defineStore('auth', () => {
       email: null,
       role: null,
       avatar: null,
-      disabled: null
+      disabled: null,
+      username: null,
+      rfid: null
     });
   };
 

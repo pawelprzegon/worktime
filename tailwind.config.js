@@ -15,7 +15,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Quicksand', 'sans-serif'],
+        sans : ['Montserrat', 'sans-serif'],
+        'big-shoulders': ['Big Shoulders', 'sans-serif'],
+        'quicksand': ['Quicksand', 'sans-serif'],
       },
       colors: {
         'floral': '#fbfbf2',
@@ -91,5 +93,6 @@ export default {
   plugins: [
     require('tailwindcss-filters'),
     require('@savvywombat/tailwindcss-grid-areas'),
+    require('flowbite/plugin'),
   ],
 }

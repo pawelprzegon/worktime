@@ -5,7 +5,6 @@ import {useAuthStore} from "@/stores/authStore.js";
 import {useMenuSidebarStore, useSidebarStore} from "@/stores/sidebarStore.js";
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
-import {onMounted} from "vue";
 
 const authStore = useAuthStore();
 const menuSideBarStore = useMenuSidebarStore()
@@ -14,24 +13,14 @@ const { t } = useI18n();
 const router = useRouter()
 
 
-const goToInbox = () => {
-
-}
 const goToDay = () => {
-
-}
-const goToWorkRecord = () => {
-
-}
-const goToOvertime = () => {
-
-}
-const goToHoliday = () => {
-
+  console.log('day')
+  router.push('/day')
 }
 
 const selectCard = (newSelect) => {
   sideBarStore.setSelectedCard(newSelect)
+
 }
 
 </script>
@@ -43,7 +32,7 @@ const selectCard = (newSelect) => {
       v-if="authStore.isAuthenticated"
       id="logo-sidebar"
       :class="{ 'translate-x-0': menuSideBarStore.isOpen }"
-      class="fixed top-0 left-0 z-40 w-64 h-screen pt-28 transition-transform -translate-x-full bg-white border-r border-neutral-200 lg:translate-x-0 dark:bg-neutral-900 dark:border-none shadow-xl"
+      class="fixed top-0 left-0 z-30 w-64 h-screen pt-28 transition-transform -translate-x-full bg-white border-r border-neutral-200 lg:translate-x-0 dark:bg-neutral-900 dark:border-none shadow-xl"
       aria-label="Sidebar"
   >
      <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-neutral-900 shadow-2xl">
@@ -63,7 +52,7 @@ const selectCard = (newSelect) => {
               </a>
            </li>
            <li>
-              <a @click="selectCard('day')"
+              <a @click="selectCard('day'); goToDay()"
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                   :class="sideBarStore.selectedCard === 'day'
                     ? 'bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
@@ -106,6 +95,18 @@ const selectCard = (newSelect) => {
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.holiday') }}</span>
               </a>
            </li>
+
+            <li>
+                <a @click="selectCard('settings')"
+                   class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
+                   :class="sideBarStore.selectedCard === 'settings'
+                      ? 'bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
+                      : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                >
+                   <img src="@/assets/img/sidebar/settings.png" alt="holiday" class="filter-invert-100"/>
+                   <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.settings') }}</span>
+                </a>
+             </li>
 
         </ul>
      </div>

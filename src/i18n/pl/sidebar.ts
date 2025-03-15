@@ -3,5 +3,6 @@ export default {
     "day": "Dzień",
     "record": "Ewidencja",
     "holiday": "Urlop",
-    "overtime": "Nadgodziny"
+    "overtime": "Nadgodziny",
+    "settings": "Ustawienia"
 }

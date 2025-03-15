@@ -11,6 +11,8 @@ import ResetPasswordEmailView from "@/views/resetPasswordEmailView.vue";
 import HomeView from "@/views/HomeView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
+import DayView from "@/views/DayView.vue";
+import UserView from "@/views/UserView.vue";
 
 const routes = [
     {
@@ -61,10 +63,21 @@ const routes = [
         component: ShiftEditor,
     },
     {
+        path: '/day',
+        name: 'Day',
+        component: DayView,
+    },
+    {
+        path: '/user',
+        name: 'User',
+        component: UserView,
+    },
+    {
         path: '/:catchAll(.*)',
         name: 'not-found',
         component: NotFoundView,
     },
+
 ];
 
 const router = createRouter({

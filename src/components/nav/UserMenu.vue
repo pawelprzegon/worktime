@@ -12,12 +12,12 @@ const isUserMenuOpen = ref(false);
 const userMenuRef = ref(null);
 
 const toggleUserMenuOpen = () => {
-  isUserMenuOpen.value = !isUserMenuOpen.value
+  isUserMenuOpen.value = !isUserMenuOpen.value;
 };
 
 const logout = () => {
   if (authStore.isAuthenticated) {
-    authStore.clearToken()
+    authStore.clearToken();
 
   } else {
     console.error('isAuthenticated is not available');
@@ -25,13 +25,20 @@ const logout = () => {
 };
 
 const gotoLogout = () => {
-  logout()
-  router.push('/')
+  toggleUserMenuOpen();
+  logout();
+  router.push('/');
+}
+
+const goToEditUser = () => {
+  toggleUserMenuOpen();
+  router.push('/user');
 }
 
 onClickOutside(userMenuRef, () => {
   isUserMenuOpen.value = false;
 });
+
 </script>
 
 <template>
@@ -60,7 +67,7 @@ onClickOutside(userMenuRef, () => {
     </div>
     <ul class="py-1" role="none">
       <li>
-        <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-100 hover:cursor-pointer dark:hover:bg-neutral-100 dark:hover:text-blue-800" role="menuitem">Settings</a>
+        <a @click="goToEditUser" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-100 hover:cursor-pointer dark:hover:bg-neutral-100 dark:hover:text-blue-800" role="menuitem">Edit</a>
       </li>
       <li>
         <a href="#" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-100 hover:cursor-pointer dark:hover:bg-neutral-100 dark:hover:text-blue-800" role="menuitem">Earnings</a>

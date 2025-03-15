@@ -55,7 +55,7 @@ setInterval(() => {
 
 <template>
   <Alert/>
-  <nav class="fixed top-0 z-50 w-full bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-none shadow-xl">
+  <nav class="fixed top-0 z-40 w-full bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-none shadow-xl">
     <NavBar />
   </nav>
 

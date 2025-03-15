@@ -3,5 +3,6 @@ export default {
     "day": "Tag",
     "record": "Aufzeichnung",
     "holiday": "Urlaub",
-    "overtime": "Überstunden"
+    "overtime": "Überstunden",
+    "settings": "Einstellungen"
 }

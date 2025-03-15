@@ -3,5 +3,6 @@ export default {
     "day": "Day",
     "record": "Work record",
     "holiday": "Holiday",
-    "overtime": "Overtime"
+    "overtime": "Overtime",
+    "settings": "Settings"
 }
