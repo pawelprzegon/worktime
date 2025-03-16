@@ -51,7 +51,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 <template>
 
   <div
-      class="relative w-full bg-gray-200 rounded-lg p-8 ">
+      class="relative w-full bg-gray-200 dark:bg-neutral-700 rounded-lg p-8 ">
     <!-- Oś czasu -->
     <div class="relative h-10 flex items-center">
       <!-- Podziałka godzinowa -->
@@ -61,13 +61,13 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
         class="absolute top-0 text-xs text-gray-900 rotate-90"
         :style="{ left: `${(index / 24) * 100}%`, transform: 'translateX(-50%)' }"
       >
-        <div class="text-black rotate-90 mb-3">{{ hour }}</div>
+        <div class="text-black dark:text-white text-xs mb-3">{{ hour }}</div>
         <div class="w-[1px] h-4 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
       </div>
 
       <!-- Pasek pracy -->
       <div
-        class="absolute top-1/2 h-3 bg-blue-500 rounded-lg"
+        class="absolute top-1/2 h-3 animate-color-change rounded-lg"
         :style="{ left: `${shiftStart}%`, width: `${shiftWidth}%`, transform: 'translateY(50%) translateY(50%)' }"
       ></div>
 
@@ -92,5 +92,23 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 </template>
 
 <style scoped>
+
+/* CSS */
+@keyframes colorChange {
+    0% {
+        background-color: #1e3a8a;
+    }
+    50% {
+        background-color: #3b82f6;
+    }
+    100% {
+        background-color: #1e3a8a;
+
+    }
+}
+
+.animate-color-change {
+    animation: colorChange 2s infinite;
+}
 
 </style>

@@ -20,6 +20,16 @@ export default {
         'big-shoulders': ['Big Shoulders', 'sans-serif'],
         'quicksand': ['Quicksand', 'sans-serif'],
       },
+      animation: {
+        'color-change': 'colorChange 1s infinite',
+      },
+      keyframes: {
+        colorChange: {
+          '0%': {backgroundColor: 'blue-800', color: 'black'},
+          '50%': {backgroundColor: 'blue-500', color: 'white'},
+          '100%': {backgroundColor: 'blue-800', color: 'black'},
+        }
+      },
       colors: {
         'floral': '#fbfbf2',
         'lavender-blush': '#EEE5E9',
