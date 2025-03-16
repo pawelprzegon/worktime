@@ -19,7 +19,6 @@ const headers = {
 // AUTH
 
 export const checkIsAuthorized = async () => {
-
     const data = {
         method: 'GET',
         headers: {

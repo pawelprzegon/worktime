@@ -1,13 +1,11 @@
 <script setup>
-import {usedayStore} from "@/stores/calendarStore.js";
 import {onMounted, ref} from "vue";
 import {initMap} from "@/composables/location.js";
 
 
-const dayStore = usedayStore()
 const props = defineProps({
-  shiftId: {
-    type: String,
+  shift: {
+    type: Object,
     required: true,
   }
 })
@@ -18,38 +16,34 @@ const warning = ref(null);
 
 onMounted(async () => {
 
-  const shift = dayStore.getShiftById(props.shiftId)
-
+  const coord = []
   let startCoordinates = null
   let stopCoordinates = null
 
-  if (shift){
+  if (props.shift.location?.start?.latitude) {
     startCoordinates = {
-      lat: shift.value.location.start?.latitude ?? null,
-      lng: shift.value.location.start?.longitude ?? null
+      lat: props.shift.location.start?.latitude ?? null,
+      lng: props.shift.location.start?.longitude ?? null
     }
+    coord.push(startCoordinates)
+  }
+
+  if (props.shift.location?.stop?.latitude) {
     stopCoordinates = {
-      lat: (shift.value.location.stop?.latitude - 0.0001) ?? null,
-      lng: (shift.value.location.stop?.longitude - 0.0001) ?? null
+      lat: (props.shift.location.stop?.latitude - 0.0001) ?? null,
+      lng: (props.shift.location.stop?.longitude - 0.0001) ?? null
     }
+    coord.push(stopCoordinates)
   }
 
-  const hasNull = Object.values(startCoordinates).includes(null) ||
-                Object.values(stopCoordinates).includes(null);
-
-  if (hasNull) {
-      warning.value = "There is some localization data missing";
-      return
-  }
-
-  map.value = await initMap([startCoordinates, stopCoordinates], mapContainer, map);
+  map.value = await initMap(coord, mapContainer, map);
 
 });
 
 </script>
 
 <template>
-  <div class="grid grid-cols-[40px_auto] my-5
+  <div class="my-5
 
               portrait-2xs:grid-cols-[24px_auto]
               portrait-xs:grid-cols-[28px_auto]
@@ -59,18 +53,6 @@ onMounted(async () => {
   "
   >
 
-    <img
-        src="../../../../assets/img/location.png"
-        alt="location"
-        class="filter-invert-100
-              portrait-2xs:w-[16px]
-              portrait-xs:w-[20px]
-              portrait-small:w-[24px]
-              portrait-medium:w-[28px]
-              portrait-large:w-[32px]
-              "
-
-    />
     <div class="my-auto">
 
       <div v-if="!warning" class="flex flex-row justify-center align-middle h-[200px]">

@@ -19,7 +19,6 @@ const router = useRouter()
 const handleLogin = async () => {
   errorMessage.value = ''
   loading.value = true
-  console.log('test')
 
   const formData = new URLSearchParams();
   formData.append('username', username.value);
@@ -29,7 +28,7 @@ const handleLogin = async () => {
     authStore.setToken(data.access_token)
     await authStore.getUserMetadata()
 
-    await router.push('/user-panel')
+    await router.push('/day')
 
   } catch (error) {
     errorMessage.value = error.message

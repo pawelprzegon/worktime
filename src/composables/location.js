@@ -25,16 +25,11 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
 
   mapRef.value = new google.maps.Map(mapContainerRef.value, {
     center: coordinates[0],
-    zoom: 12,
+    zoom: 16,
     styles: mapStyle,
     disableDefaultUI: true,
     zoomControl: false,
   });
-
-  const bounds = new google.maps.LatLngBounds();
-  coordinates.forEach(coord => bounds.extend(coord));
-
-  mapRef.value.fitBounds(bounds, 50);
 
   coordinates.forEach((coord, index) => {
     new google.maps.Marker({
@@ -45,6 +40,12 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
       animation: google.maps.Animation.DROP
     });
   });
+
+  if (coordinates.length === 2) {
+    const bounds = new google.maps.LatLngBounds();
+    coordinates.forEach(coord => bounds.extend(coord));
+    mapRef.value.fitBounds(bounds, 50);
+  }
 
   mapRef.value.setCenter(coordinates[0]);
 

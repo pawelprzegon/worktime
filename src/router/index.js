@@ -58,11 +58,6 @@ const routes = [
         component: ResetPasswordView,
     },
     {
-        path: '/edit',
-        name: 'Edit',
-        component: ShiftEditor,
-    },
-    {
         path: '/day',
         name: 'Day',
         component: DayView,
@@ -85,23 +80,24 @@ const router = createRouter({
     routes,
 });
 
-const protectedRoutes = ['/user-panel', '/privileged'];
+const protectedRoutes = ['/user-panel', '/privileged', '/day', '/user', '/dash'];
+const publicRoutes = ['/', '/login', '/signup', 'request-password-reset', '/reset-password'];
 
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
-    const aut = await authStore.authorizationCheck()
-    if (aut) {
-        await authStore.getUserMetadata()
+    const auth = await authStore.authorizationCheck();
+
+    if (!auth && protectedRoutes.includes(to.path)) {
+        next('/login');
+        return;
     }
-    if (protectedRoutes.includes(to.path)) {
-        if (!aut || !authStore.hasAccess(to.path)) {
-            next('/login');
-            return
-        }
+
+    if (!auth && publicRoutes.includes(to.path)) {
+        next();
+        return;
     }
 
     next();
 });
-
 
 export default router;

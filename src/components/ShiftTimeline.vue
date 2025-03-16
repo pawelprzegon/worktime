@@ -1,6 +1,6 @@
 <script setup>
 
-import {computed, ref, watch} from "vue";
+import {computed} from "vue";
 import {now} from "@vueuse/core";
 
 const props = defineProps({
@@ -51,7 +51,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 <template>
 
   <div
-      class="relative w-full bg-gray-200 dark:bg-neutral-700 rounded-lg p-8 ">
+      class="relative max-w-2xl bg-gray-200 dark:bg-neutral-700 rounded-lg p-8 ">
     <!-- Oś czasu -->
     <div class="relative h-10 flex items-center">
       <!-- Podziałka godzinowa -->
@@ -61,20 +61,20 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
         class="absolute top-0 text-xs text-gray-900 rotate-90"
         :style="{ left: `${(index / 24) * 100}%`, transform: 'translateX(-50%)' }"
       >
-        <div class="text-black dark:text-white text-xs mb-3">{{ hour }}</div>
+        <div class="text-black dark:text-white text-2xs mb-3 font-thin -rotate-90">{{ hour }}</div>
         <div class="w-[1px] h-4 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
       </div>
 
       <!-- Pasek pracy -->
       <div
-        class="absolute top-1/2 h-3 animate-color-change rounded-lg"
+        class="absolute top-1/2 h-3 animate-color-change rounded-lg shadow-xl"
         :style="{ left: `${shiftStart}%`, width: `${shiftWidth}%`, transform: 'translateY(50%) translateY(50%)' }"
       ></div>
 
       <!-- Punkt startu -->
       <div
-        class="absolute top-6 text-xs bg-white px-1 py-0.5 rounded shadow-md"
-        :style="{ left: `${shiftStart}%`, transform: 'translateX(-50%) translateY(80%)' }"
+        class="absolute top-6 text-xs bg-white px-1 py-0.5 rounded shadow-md rotate-90"
+        :style="{ left: `${shiftStart}%`, transform: 'translateX(-50%) translateY(100%)' }"
       >
         {{ workShift.startTime }}
       </div>
@@ -96,13 +96,13 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 /* CSS */
 @keyframes colorChange {
     0% {
-        background-color: #1e3a8a;
+        background-color: #27408a;
     }
     50% {
         background-color: #3b82f6;
     }
     100% {
-        background-color: #1e3a8a;
+        background-color: #27408a;
 
     }
 }

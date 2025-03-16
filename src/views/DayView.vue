@@ -1,20 +1,20 @@
 <script setup>
 
-import {computed, onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import {getActiveShifts} from "@/composables/fetchers.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftTimeline from "@/components/ShiftTimeline.vue";
+import ShiftLocations from "@/components/userPanel/modals/ShiftDetails/ShiftLocations.vue";
 
 
 const intervalId = ref(null);
 const authStore = useAuthStore()
 const activeShift = ref(null)
 
-
 const checkActiveShift = async () => {
   try {
-    activeShift.value = await getActiveShifts();
-
+      const shift = await getActiveShifts();
+      activeShift.value = shift || {};
   } catch (error) {
     console.error("Error fetching getActiveShifts:", error);
   }
@@ -23,7 +23,6 @@ const checkActiveShift = async () => {
 onMounted(async () => {
   try {
     await checkActiveShift();
-
     intervalId.value = setInterval(async () => {
       await checkActiveShift();
     }, 5000);
@@ -39,16 +38,31 @@ onBeforeUnmount(() => {
 });
 
 
-
 </script>
 
 <template>
 
-  <p>{{activeShift}}</p>
   <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{{authStore.user.firstName}} {{authStore.user.lastName}}</h1>
 
+  <div v-if="activeShift">
+    <p>Shift ID: {{ activeShift.id }}</p>
+  </div>
+  <p v-else>Brak aktywnej zmiany</p>
 
-<div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 v-if="!activeShift" class="text-4xl font-bold dark:text-white">Start Shift</h2>
+  <h2 v-else class="text-4xl font-bold dark:text-white">Shift status</h2>
+
+  <ShiftTimeline
+    v-if="activeShift"
+    :active-shift="activeShift"
+  />
+
+  <ShiftLocations
+    v-if="activeShift"
+    :shift="activeShift"
+  />
+
+  <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
   <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Standard plan</h5>
   <div class="flex items-baseline text-gray-900 dark:text-white">
     <span class="text-3xl font-semibold">$</span>
@@ -101,13 +115,6 @@ onBeforeUnmount(() => {
     </ul>
   <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">Choose plan</button>
 </div>
-
-  <ShiftTimeline
-      v-if="activeShift"
-    :active-shift="activeShift"
-  />
-
-
 </template>
 
 <style scoped>
