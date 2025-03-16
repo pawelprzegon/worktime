@@ -43,27 +43,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="my-5
 
-              portrait-2xs:grid-cols-[24px_auto]
-              portrait-xs:grid-cols-[28px_auto]
-              portrait-small:grid-cols-[32px_auto]
-              portrait-medium:grid-cols-[36px_auto]
-              portrait-large:grid-cols-[40px_auto]
-  "
-  >
-
-    <div class="my-auto">
-
-      <div v-if="!warning" class="flex flex-row justify-center align-middle h-[200px]">
-        <div ref="mapContainer" class="map rounded-xl"></div>
-      </div>
-      <p v-else class="text-red-500 text-xs">
-        {{warning}}
-      </p>
-    </div>
-
+  <div v-if="!warning" class="h-[250px] max-w-2xl">
+    <div ref="mapContainer" class="map rounded-xl "></div>
   </div>
+  <p v-else class="text-red-500 text-xs">
+    {{warning}}
+  </p>
+
 
 
 </template>
@@ -71,8 +58,7 @@ onMounted(async () => {
 <style scoped>
 
 .map {
-  width: 90%;
-  height: 90%;
+  height: 100%;
 }
 
 </style>

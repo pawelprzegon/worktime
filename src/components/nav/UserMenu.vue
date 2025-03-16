@@ -18,7 +18,6 @@ const toggleUserMenuOpen = () => {
 const logout = () => {
   if (authStore.isAuthenticated) {
     authStore.clearToken();
-
   } else {
     console.error('isAuthenticated is not available');
   }

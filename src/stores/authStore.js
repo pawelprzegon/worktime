@@ -3,12 +3,14 @@ import { defineStore } from 'pinia';
 import { checkIsAuthorized, getMe } from "@/composables/fetchers.js";
 import { useAlertStore } from "@/stores/alertStore.js";
 import { jwtDecode } from "jwt-decode";
+import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
   const alert = useAlertStore();
   const token = ref(sessionStorage.getItem('authToken') || null);
   const tokenExp = ref(null);
   const interval = ref(null);
+  const router = useRouter();
 
   const user = reactive({
     id: null,
@@ -53,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
         clearInterval(interval.value);
         tokenExp.value = null;
         clearToken();
+        router.push('/');
       } else {
         const hours = Math.floor(timeLeft / 3600);
         const minutes = Math.floor((timeLeft % 3600) / 60);

@@ -88,6 +88,7 @@ router.beforeEach(async (to, from, next) => {
     const auth = await authStore.authorizationCheck();
 
     if (!auth && protectedRoutes.includes(to.path)) {
+
         next('/login');
         return;
     }

@@ -5,26 +5,41 @@ import {getActiveShifts} from "@/composables/fetchers.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftTimeline from "@/components/ShiftTimeline.vue";
 import ShiftLocations from "@/components/userPanel/modals/ShiftDetails/ShiftLocations.vue";
+import {getTimeString} from "../composables/utils.js";
+import {now} from "@vueuse/core";
 
 
 const intervalId = ref(null);
-const authStore = useAuthStore()
-const activeShift = ref(null)
+const authStore = useAuthStore();
+const activeShift = ref(null);
+const shiftTime = ref(null);
 
 const checkActiveShift = async () => {
   try {
-      const shift = await getActiveShifts();
-      activeShift.value = shift || {};
+    activeShift.value = await getActiveShifts();
   } catch (error) {
+
     console.error("Error fetching getActiveShifts:", error);
   }
 };
+
+const calculateTime = () => {
+  const startTime = new Date(activeShift.value.start)
+  const currentTime = new Date(now())
+  const diff = currentTime - startTime
+
+  const diffDate = new Date(diff);
+  shiftTime.value = getTimeString(diffDate)
+}
 
 onMounted(async () => {
   try {
     await checkActiveShift();
     intervalId.value = setInterval(async () => {
       await checkActiveShift();
+      if (activeShift) {
+        calculateTime()
+      }
     }, 5000);
   } catch (error) {
     console.error("Error fetching users and active shifts:", error);
@@ -41,26 +56,44 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-
   <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{{authStore.user.firstName}} {{authStore.user.lastName}}</h1>
 
   <div v-if="activeShift">
-    <p>Shift ID: {{ activeShift.id }}</p>
+
+    <div class="grid grid-cols-2">
+    <div>
+      <h2 class="text-4xl font-bold dark:text-white">Shift status</h2>
+      <h1 class="text-3xl font-extrabold dark:text-white">started:<small class="ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
+      <h1 class="text-3xl font-extrabold dark:text-white">ended:<small v-if="activeShift.stop" class=" ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
+      <h1 class="text-3xl font-extrabold dark:text-white">time:<small class="ms-2 font-semibold text-blue-500">{{shiftTime}}</small></h1>
+
+    </div>
+
+
+    <div>
+      <ShiftLocations
+        v-if="activeShift"
+        :shift="activeShift"
+      />
+      <ShiftTimeline
+        v-if="activeShift"
+        :active-shift="activeShift"
+      />
+    </div>
+
+  </div>
+
   </div>
   <p v-else>Brak aktywnej zmiany</p>
 
   <h2 v-if="!activeShift" class="text-4xl font-bold dark:text-white">Start Shift</h2>
-  <h2 v-else class="text-4xl font-bold dark:text-white">Shift status</h2>
 
-  <ShiftTimeline
-    v-if="activeShift"
-    :active-shift="activeShift"
-  />
 
-  <ShiftLocations
-    v-if="activeShift"
-    :shift="activeShift"
-  />
+
+
+
+
+
 
   <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-8 dark:bg-gray-800 dark:border-gray-700">
   <h5 class="mb-4 text-xl font-medium text-gray-500 dark:text-gray-400">Standard plan</h5>
