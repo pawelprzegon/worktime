@@ -4,6 +4,18 @@ import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 import {getActiveShifts, getDashUsers} from "@/composables/fetchers.js";
 import {useActiveShifts} from "@/stores/shiftStore.js";
 import {useAuthStore} from "@/stores/authStore.js";
+import {now} from "@vueuse/core";
+
+const statuses = ref([
+  { name: "Idle", percent: 24, color: "#888888" },
+  { name: "Completed", percent: 46, color: "#287ba7" },
+]);
+const pipes = 96
+let today = new Date()
+    today.setHours(0, 0, 0, 0);
+const shift = {
+  start: new Date()
+}
 
 const activeShifts = useActiveShifts();
 const users = ref([]);
@@ -112,9 +124,19 @@ onBeforeUnmount(() => {
   <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">Choose plan</button>
 </div>
 
+<div class="grid grid-flow-col gap-2 w-1/2">
+  <div
+    v-for="pipe in pipes"
+    :key="pipe"
+    class="h-6"
+    :class="shift.start > today ? 'bg-blue-500' : 'bg-neutral-500'"
+  ></div>
+</div>
 
 </template>
 
 <style scoped>
+
+
 
 </style>

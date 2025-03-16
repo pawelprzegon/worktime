@@ -75,6 +75,14 @@ const updateUserData = async () => {
           />
         </div>
 
+<!--        #TODO-->
+        <p>Historia logowań</p>
+        <p>Język i region - ustawienie strefy czasowej</p>
+        <p>Integracje (kalendarz)</p>
+
+        <p>export danych (csv?)</p>
+
+
       </div>
     </div>
 

@@ -7,6 +7,8 @@ import {useAuthStore} from "@/stores/authStore.js";
 import UserMenu from "@/components/nav/UserMenu.vue";
 import {useMenuSidebarStore} from "@/stores/sidebarStore.js";
 import LocalesDropdown from "@/components/nav/LocalesDropdown.vue";
+import InboxMenu from "@/components/nav/InboxMenu.vue";
+import Modes from "@/components/nav/Modes.vue";
 
 const sideBarStore = useMenuSidebarStore()
 const { t } = useI18n();
@@ -69,7 +71,7 @@ const gotoHome = () => {
                 <a
                   @click="gotoHome"
                   :aria-current="isHomeActive ? 'page' : undefined"
-                  class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                  class="block py-2 px-3 mx-1 text-primary dark:text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
                   :class="{'bg-blue-500 text-white hover:text-neutral-900': isHomeActive}">
                   {{ t('nav.home') }}
                 </a>
@@ -78,7 +80,7 @@ const gotoHome = () => {
               <li v-if="!authStore.isAuthenticated">
                 <a
                   @click="gotoLogin"
-                  class="block py-2 px-3 mx-1 text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
+                  class="block py-2 px-3 mx-1 text-primary dark:text-white font-bold text-sm rounded-md hover:text-blue-500 hover:cursor-pointer md:text-xl"
                   :class="{'bg-blue-500 text-white hover:text-neutral-900': isLoginActive}">
                   {{ t('nav.login') }}
                 </a>
@@ -88,7 +90,9 @@ const gotoHome = () => {
           </div>
 
           <UserMenu />
+          <InboxMenu />
           <LocalesDropdown />
+          <Modes/>
 
         </div>
 

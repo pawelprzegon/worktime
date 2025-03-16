@@ -12,6 +12,7 @@ export default {
       'text-red-500',
       'text-emerald-500'
   ],
+  darkMode: "class",
   theme: {
     extend: {
       fontFamily: {
@@ -81,6 +82,7 @@ export default {
       '102': '1.02',
     },
     filter: {
+      'invert-0': 'invert(0%)',
       'invert-30': 'invert(30%)',
       'invert-100': 'invert(100%)',
     },

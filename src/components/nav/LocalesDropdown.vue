@@ -29,10 +29,6 @@ onMounted(() => {
   }
 })
 
-const getLocaleImage = () => {
-  return `src/assets/locales/${actualLocale.value}.png`
-}
-
 onClickOutside(langMenuRef, () => {
   isLangMenuOpen.value = false;
 });
@@ -48,13 +44,14 @@ onClickOutside(langMenuRef, () => {
         data-dial-toggle="speed-dial-menu-top-right"
         aria-controls="speed-dial-menu-top-right"
         aria-expanded="false"
-        class="flex items-center justify-center rounded-full w-12 h-12"
-        :class="{'focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-500' : isLangMenuOpen}"
+        class="flex items-center justify-center text-black dark:text-white rounded-full w-12 h-12"
+        :class="{'focus:ring-2 focus:ring-blue-500 focus:outline-none' : isLangMenuOpen}"
     >
-        <img :src="getLocaleImage()"  alt="actualLocale" class="rounded-2xl cursor-pointer hover:scale-105 h-10" title="pl"/>
-        <span class="sr-only">Locales Menu</span>
+        <div>
+          <p class="">{{ actualLocale === 'en' ? "EN" : actualLocale === 'pl' ? 'PL' : 'DE' }}</p>
+        </div>
     </button>
-    <div class="fixed top-20 end-7">
+    <div class="fixed top-20 end-21">
       <div v-if="isLangMenuOpen" id="speed-dial-menu-top-right" class="flex flex-col items-center mt-4 space-y-2 gap-2 bg-blue-500 p-2 rounded">
           <img src="@/assets/locales/pl.png" alt="pl" class="rounded-2xl cursor-pointer hover:scale-105 hover:ring-2 hover:ring-white h-8" @click="changeLocale('pl')" title="pl"/>
           <img src="@/assets/locales/en.png" alt="en" class="rounded-2xl cursor-pointer hover:scale-105 hover:ring-2 hover:ring-white h-8" @click="changeLocale('en')" title="en"/>

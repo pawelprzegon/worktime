@@ -1,6 +1,5 @@
 <script setup>
 
-
 import {useAuthStore} from "@/stores/authStore.js";
 import {useMenuSidebarStore, useSidebarStore} from "@/stores/sidebarStore.js";
 import {useI18n} from "vue-i18n";
@@ -14,7 +13,6 @@ const router = useRouter()
 
 
 const goToDay = () => {
-  console.log('day')
   router.push('/day')
 }
 
@@ -37,20 +35,6 @@ const selectCard = (newSelect) => {
   >
      <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-neutral-900 shadow-2xl">
         <ul class="space-y-2 font-medium">
-           <li>
-              <a
-                  @click="selectCard('inbox')"
-                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
-                  :class="sideBarStore.selectedCard === 'inbox'
-                    ? 'bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
-              >
-
-                 <img src="@/assets/img/sidebar/mail-inbox-app.png" alt="imbox" class="filter-invert-100"/>
-                 <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.inbox') }}</span>
-                 <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
-              </a>
-           </li>
            <li>
               <a @click="selectCard('day'); goToDay()"
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
