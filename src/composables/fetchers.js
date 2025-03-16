@@ -329,7 +329,8 @@ export const getActiveShifts = async () => {
     const data = {
       method: 'GET',
         headers: {
-            ...headers
+            ...headers,
+            'Authorization': addAuthorizationBearer()
         }
     }
 
