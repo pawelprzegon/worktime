@@ -16,6 +16,7 @@ const warning = ref(null);
 
 onMounted(async () => {
 
+  await location.getCurrentLocation();
   const coord = []
   let startCoordinates = null
   let stopCoordinates = null
