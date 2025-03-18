@@ -63,7 +63,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
         :style="{ left: `${(index / 24) * 100}%`, transform: 'translateX(-50%)' }"
       >
         <div class="text-black dark:text-white text-2xs mb-3 -rotate-90">{{ hour }}</div>
-        <div class="w-[1px] h-4 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
+        <div class="w-[1px] h-6 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
       </div>
 
       <!-- Pasek pracy -->
@@ -100,7 +100,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
         background-color: #2367d7;
     }
     50% {
-        background-color: #3b82f6;
+        background-color: #7bacf8;
     }
     100% {
         background-color: #2367d7;

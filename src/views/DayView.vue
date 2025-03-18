@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
 <template>
   <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{{authStore.user.firstName}} {{authStore.user.lastName}}</h1>
 
-  <div v-if="activeShift" class="grid grid-cols-2">
+  <div v-if="activeShift" class="grid grid-rows-2 lg:grid-cols-2">
     <div>
       <h2 class="text-4xl font-bold dark:text-white">Shift status</h2>
       <h1 class="text-3xl font-extrabold dark:text-white">start:<small class="ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
