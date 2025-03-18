@@ -37,7 +37,7 @@ const gotoHome = () => {
 
 <template>
 
-  <div class="px-3 py-3">
+  <div class="px-1 py-1 md:px-3 md:py-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
 <!--          SideBar open button-->

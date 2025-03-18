@@ -51,7 +51,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 <template>
 
   <div
-      class="relative max-w-2xl bg-transparent dark:bg-transparent rounded-lg p-4 h-24">
+      class="relative bg-transparent dark:bg-transparent rounded-lg p-4 h-24">
 
     <!-- Oś czasu -->
     <div class="relative h-10 flex items-center">
@@ -68,7 +68,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 
       <!-- Pasek pracy -->
       <div
-        class="absolute top-1/2 h-3 animate-color-change rounded-lg shadow-xl"
+        class="absolute top-1/2 h-3 bg-blue-500 rounded-lg shadow-xl"
         :style="{ left: `${shiftStart}%`, width: `${shiftWidth}%`, transform: 'translateY(50%) translateY(50%)' }"
       ></div>
 

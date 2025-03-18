@@ -41,14 +41,14 @@ onMounted(() => {
 
   <Sidebar />
 
-  <div
-      class="p-6 mt-24 overflow-auto"
+  <main
+      id="main"
+      class="min-h-screen p-10 mt-24 overflow-auto  overflow-x-hidden overflow-y-auto"
       :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
   >
-    <main id="main" class="h-auto overflow-x-hidden overflow-y-auto">
-      <RouterView />
-    </main>
-  </div>
+    <RouterView />
+  </main>
+
 
   <footer
       id="footer"

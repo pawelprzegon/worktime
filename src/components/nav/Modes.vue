@@ -6,7 +6,7 @@ import nightImage from "@/assets/img/navbar/night.png";
 const isDark = ref(localStorage.getItem("theme") === "dark");
 
 const toggleDarkMode = () => {
-  localStorage.setItem("theme", isDark.value ? "dark" : "light");
+  localStorage.setItem("theme", isDark.value ? "light": "dark");
   isDark.value = !isDark.value;
 
   if (isDark.value) {
