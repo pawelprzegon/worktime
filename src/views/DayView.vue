@@ -4,11 +4,10 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 import {getActiveShifts, startShift, stopShift} from "@/composables/fetchers.js";
 import {useAuthStore} from "@/stores/authStore.js";
 import ShiftTimeline from "@/components/ShiftTimeline.vue";
-import ShiftLocations from "@/components/userPanel/modals/ShiftDetails/ShiftLocations.vue";
 import {getTimeString} from "../composables/utils.js";
-import {now} from "@vueuse/core";
 import {useAlertStore} from "@/stores/alertStore.js";
 import {useLocationStore} from "@/stores/utilsStore.js";
+import Location from "@/components/dash/Location.vue";
 
 const alert = useAlertStore()
 const location = useLocationStore()
@@ -29,7 +28,6 @@ const toggleShift = async () => {
       activeShift.value = null
     } else {
       await startShift(userId, note, location.getLocation())
-      await props.checkActiveShift()
     }
 
   } catch (error) {
@@ -47,23 +45,30 @@ const checkActiveShift = async () => {
 };
 
 const calculateTime = () => {
-  const startTime = new Date(activeShift.value.start)
-  const currentTime = new Date(now())
-  const diff = currentTime - startTime
+  const startTime = new Date(activeShift.value.start);
+  const currentTime = new Date();
 
-  const diffDate = new Date(diff);
-  shiftTime.value = getTimeString(diffDate)
-}
+  const diff = currentTime - startTime;
+
+  const hours = Math.floor(diff / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+
+  shiftTime.value = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+};
 
 onMounted(async () => {
   try {
     await checkActiveShift();
-    intervalId.value = setInterval(async () => {
-      await checkActiveShift();
-      if (activeShift) {
-        calculateTime()
-      }
-    }, 5000);
+    if (activeShift.value) {
+      calculateTime()
+      intervalId.value = setInterval(async () => {
+        await checkActiveShift();
+        if (activeShift.value) {
+          calculateTime()
+        }
+      }, 5000);
+    }
+
   } catch (error) {
     console.error("Error fetching users and active shifts:", error);
   }
@@ -84,20 +89,15 @@ onBeforeUnmount(() => {
   <div v-if="activeShift" class="grid grid-cols-2">
     <div>
       <h2 class="text-4xl font-bold dark:text-white">Shift status</h2>
-      <h1 class="text-3xl font-extrabold dark:text-white">started:<small class="ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
-      <h1 class="text-3xl font-extrabold dark:text-white">ended:<small v-if="activeShift.stop" class=" ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
+      <h1 class="text-3xl font-extrabold dark:text-white">start:<small class="ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.start)}}</small></h1>
+      <h1 class="text-3xl font-extrabold dark:text-white">end:<small v-if="activeShift.stop" class=" ms-2 font-semibold text-blue-500">{{getTimeString(activeShift.stop)}}</small></h1>
       <h1 class="text-3xl font-extrabold dark:text-white">time:<small class="ms-2 font-semibold text-blue-500">{{shiftTime}}</small></h1>
-
+      <button @click="toggleShift" type="button" class="px-6 py-3.5 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Stop shift</button>
     </div>
 
-
     <div>
-      <ShiftLocations
-        v-if="activeShift"
-        :shift="activeShift"
-      />
+      <Location/>
       <ShiftTimeline
-        v-if="activeShift"
         :active-shift="activeShift"
       />
     </div>
@@ -106,11 +106,12 @@ onBeforeUnmount(() => {
 
   <div v-else class="grid grid-cols-2">
 
-    <a @click="toggleShift" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-
+     <a @click="toggleShift" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h2 class="mb-2 text-5xl font-bold tracking-tight text-gray-900 dark:text-white">Start Shift</h2>
       <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
     </a>
+
+    <Location/>
 
   </div>
 

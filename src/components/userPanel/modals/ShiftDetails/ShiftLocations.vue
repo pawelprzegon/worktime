@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {initMap} from "@/composables/location.js";
 
 
@@ -16,7 +16,6 @@ const warning = ref(null);
 
 onMounted(async () => {
 
-  await location.getCurrentLocation();
   const coord = []
   let startCoordinates = null
   let stopCoordinates = null
@@ -40,6 +39,8 @@ onMounted(async () => {
   map.value = await initMap(coord, mapContainer, map);
 
 });
+
+
 
 </script>
 

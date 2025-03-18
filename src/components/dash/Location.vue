@@ -11,7 +11,7 @@ const location = useLocationStore()
 const props = defineProps({
   activeShift: {
     type: Object,
-    default: {}
+    default: null
   }
 })
 
@@ -41,8 +41,8 @@ watch(
 </script>
 
 <template>
-  <div v-if="location.latitude && location.longitude" class="h-[100%]">
-    <div ref="mapContainer" class="map rounded-s-xl"></div>
+  <div v-if="location.latitude && location.longitude" class="h-[250px] max-w-2xl">
+    <div ref="mapContainer" class="map rounded-xl"></div>
     <small v-if="location.accuracy > 500" class="text-white p-1 bg-red-600 absolute left-1 bottom-1"> Your location isn't precise. <br>Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
     <p v-if="location.errorMessage" class="error absolute left-1 top-1">{{ location.errorMessage }}</p>
   </div>
@@ -61,7 +61,6 @@ watch(
 }
 
 .map {
-  width: 100%;
   height: 100%;
 }
 

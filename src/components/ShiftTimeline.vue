@@ -51,7 +51,7 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 <template>
 
   <div
-      class="relative max-w-2xl bg-transparent dark:bg-transparent rounded-lg p-4 h-20">
+      class="relative max-w-2xl bg-transparent dark:bg-transparent rounded-lg p-4 h-24">
 
     <!-- Oś czasu -->
     <div class="relative h-10 flex items-center">
@@ -74,19 +74,19 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 
       <!-- Punkt startu -->
       <div
-        class="absolute top-6 text-xs bg-white px-1 py-0.5 rounded shadow-md rotate-90"
-        :style="{ left: `${shiftStart}%`, transform: 'translateX(-50%) translateY(100%)' }"
+        class="absolute top-6 text-white text-xs bg-blue-500 px-1 py-0.5 rounded shadow-md rotate-90"
+        :style="{ left: `${shiftStart}%`, transform: 'translateX(-50%) translateY(120%)' }"
       >
         {{ workShift.startTime }}
       </div>
 
-      <!-- Punkt końca -->
-      <div
-        class="absolute top-6 text-xs bg-white px-1 py-0.5 rounded shadow-md rotate-90"
-        :style="{ left: `${shiftEnd}%`, transform: 'translateX(-50%) translateY(80%)' }"
-      >
-        {{ workShift.endTime }}
-      </div>
+<!--      &lt;!&ndash; Punkt końca &ndash;&gt;-->
+<!--      <div-->
+<!--        class="absolute top-6 text-xs bg-white px-1 py-0.5 rounded shadow-md rotate-90"-->
+<!--        :style="{ left: `${shiftEnd}%`, transform: 'translateX(-50%) translateY(80%)' }"-->
+<!--      >-->
+<!--        {{ workShift.endTime }}-->
+<!--      </div>-->
     </div>
   </div>
 

@@ -10,45 +10,25 @@ import Sidebar from "@/components/sidebar/Sidebar.vue";
 
 
 const authStore = useAuthStore();
-const alert = useAlertStore();
-const userName = ref('');
 const today = ref(new Date);
 
-
-const getMeData = async () => {
-  try{
-    const response =  await getMe()
-    userName.value = `${response.first_name} ${response.last_name}`
-  } catch (error) {
-    alert.show('error', error)
-  }
-}
-
-
-watch(() => authStore.isAuthenticated, (newStatus) => {
-  if (newStatus) {
-    getMeData();
-  }
-});
-
 onMounted(() => {
-if (authStore.isAuthenticated) {
-  getMeData();
-}
 
-setInterval(() => {
-  let now = new Date()
-  today.value = now.toLocaleTimeString("en-GB", {
-  timeZone: "Europe/Warsaw",
-  day: 'numeric',
-  month: 'numeric',
-  year: 'numeric',
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  weekday: 'long'
-})
-}, 1000)
+
+
+  setInterval(() => {
+    let now = new Date()
+    today.value = now.toLocaleTimeString("en-GB", {
+    timeZone: "Europe/Warsaw",
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    weekday: 'long'
+  })
+  }, 1000)
 });
 
 </script>

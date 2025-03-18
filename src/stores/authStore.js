@@ -11,17 +11,18 @@ export const useAuthStore = defineStore('auth', () => {
   const tokenExp = ref(null);
   const interval = ref(null);
   const router = useRouter();
+  const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   const user = reactive({
-    id: null,
-    firstName: null,
-    lastName: null,
-    email: null,
-    role: null,
-    avatar: null,
-    disabled: null,
-    username: null,
-    rfid: null
+    id: ref(storedUser.id || null),
+    firstName: ref(storedUser.first_name || null),
+    lastName: ref(storedUser.last_name || null),
+    email: ref(storedUser.email || null),
+    role: ref(storedUser.role || null),
+    avatar: ref(storedUser.avatar || null),
+    disabled: ref(storedUser.disabled || null),
+    username: ref(storedUser.username || null),
+    rfid: ref(storedUser.rfid || null)
   });
 
   const isAuthenticated = computed(() => !!token.value);
@@ -88,6 +89,7 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const clearToken = () => {
+
     token.value = null;
     tokenExp.value = null;
     clearInterval(interval.value);
