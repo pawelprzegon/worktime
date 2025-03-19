@@ -93,7 +93,7 @@ watch(() => theme.isDark, async () => {
     <div ref="mapContainer" class="map"></div>
     <div
         class="absolute w-[300px] inset-0 bg-gradient-to-r"
-        :class="theme.isDark ? 'from-primary via-primary/90 to-transparent' : 'from-white via-white/90 to-transparent'"
+        :class="theme.isDark ? 'from-[#212a37] via-[#212a37]/90 to-transparent' : 'from-white via-white/90 to-transparent'"
     ></div>
     <small v-if="location.accuracy > 500 && accuracyInfo" class="text-white p-1 shadow-md bg-red-600 absolute left-3 top-3"> Your location isn't precise. <br>Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
     <p v-if="location.errorMessage" class="error absolute left-3 top-10">{{ location.errorMessage }}</p>

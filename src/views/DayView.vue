@@ -100,7 +100,7 @@ onBeforeUnmount(() => {
 
   <div class="max-w-[1000px]">
 
-    <div v-if="activeShift.shift" class="relative w-full">
+    <div v-if="activeShift.shift" class="relative  w-full">
       <Location>
         <div class="absolute top-1 left-1 p-1">
           <h1 class="text-black text-3xl font-semibold dark:text-white ">start:<small class="ms-2 font-extrabold text-blue-500">{{getTimeString(activeShift.shift.start)}}</small></h1>

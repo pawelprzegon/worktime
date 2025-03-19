@@ -1,9 +1,7 @@
 <script setup>
 
-import {onMounted, ref, watch} from 'vue'
+import {onMounted, ref} from 'vue'
 import {useAuthStore} from "@/stores/authStore.js";
-import {useAlertStore} from "@/stores/alertStore.js";
-import {getMe} from "@/composables/fetchers.js";
 import Alert from "@/components/Alert.vue";
 import NavBar from "@/components/nav/NavBar.vue";
 import Sidebar from "@/components/sidebar/Sidebar.vue";
@@ -43,7 +41,7 @@ onMounted(() => {
 
   <main
       id="main"
-      class="min-h-screen p-10 mt-24 overflow-auto  overflow-x-hidden overflow-y-auto"
+      class="min-h-screen p-10 mt-24 overflow-auto overflow-x-hidden overflow-y-auto bg-stone-100 dark:bg-primary"
       :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
   >
     <RouterView />
@@ -52,8 +50,7 @@ onMounted(() => {
 
   <footer
       id="footer"
-      class="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-neutral-200 shadow-sm text-right
-      dark:bg-primary dark:border-none">
+      class="fixed bottom-0 left-0 z-20 w-full p-4 bg-stone-100 border-t border-neutral-200 text-right dark:bg-primary dark:border-neutral-950">
     {{today}}
   </footer>
 
