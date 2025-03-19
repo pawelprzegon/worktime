@@ -1,10 +1,9 @@
 import startMarker from "@/assets/img/start-pin.png";
 import stopMarker from "@/assets/img/stop-pin.png";
 import {Loader} from "@googlemaps/js-api-loader";
-import mapStyle from "@/assets/mapStyle.json";
 
 
-export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = null) => {
+export const initMap = async (coordinates, mapContainerRef, mapRef, mapStyle,  iconStyle = null) => {
 
   const getIconStyle = () => {
     if (!iconStyle) {
@@ -22,7 +21,7 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, iconStyle = 
   });
 
   await loader.load();
-
+  console.log(mapContainerRef.value)
   mapRef.value = new google.maps.Map(mapContainerRef.value, {
     center: coordinates[0],
     zoom: 16,

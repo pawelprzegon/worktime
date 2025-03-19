@@ -1,7 +1,11 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 import {initMap} from "@/composables/location.js";
+import {useThemeStore} from "@/stores/styleTheme.ts";
+import dayMapStyle from "@/assets/maps/dayMapStyle.json"
+import nightMapStyle from "@/assets/maps/nightMapStyle.json"
 
+const theme = useThemeStore()
 
 const props = defineProps({
   shift: {
@@ -36,7 +40,8 @@ onMounted(async () => {
     coord.push(stopCoordinates)
   }
 
-  map.value = await initMap(coord, mapContainer, map);
+  const mapStyle = theme.isDark ? nightMapStyle : dayMapStyle
+  map.value = await initMap(coord, mapContainer, map, mapStyle);
 
 });
 

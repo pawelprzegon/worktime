@@ -2,33 +2,25 @@
 import {computed, onMounted, ref} from 'vue'
 import dayImage from "@/assets/img/navbar/day.png";
 import nightImage from "@/assets/img/navbar/night.png";
+import {useThemeStore} from "@/stores/styleTheme.ts";
 
-const isDark = ref(localStorage.getItem("theme") === "dark");
+const theme = useThemeStore()
 
-const toggleDarkMode = () => {
-  localStorage.setItem("theme", isDark.value ? "light": "dark");
-  isDark.value = !isDark.value;
 
-  if (isDark.value) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
-};
 
 onMounted(() => {
   if (!localStorage.getItem("theme")) {
-    isDark.value = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    theme.isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   }
 
-  if (isDark.value) {
+  if (theme.isDark) {
     document.documentElement.classList.add("dark");
   } else {
     document.documentElement.classList.remove("dark");
   }
 });
 
-const imageSrc = computed(() => (isDark.value ? dayImage : nightImage));
+const imageSrc = computed(() => (theme.isDark ? dayImage : nightImage));
 
 </script>
 
@@ -36,7 +28,7 @@ const imageSrc = computed(() => (isDark.value ? dayImage : nightImage));
 
 <div data-dial-init ref="langMenuRef" class="flex items-center">
     <button
-        @click="toggleDarkMode"
+        @click="theme.toggleDarkMode()"
         type="button"
         data-dial-toggle="speed-dial-menu-top-right"
         aria-controls="speed-dial-menu-top-right"

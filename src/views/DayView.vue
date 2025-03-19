@@ -99,40 +99,36 @@ onBeforeUnmount(() => {
   </h1>
 
   <div class="max-w-[1000px]">
-    <div
-        v-if="activeShift.shift"
-        class="relative w-full"
-    >
 
-    <div class="p-1">
+    <div v-if="activeShift.shift" class="relative w-full">
       <Location>
-
-          <div class="absolute top-1 left-1 p-1">
-            <h1 class="text-black text-3xl font-semibold dark:text-white ">start:<small class="ms-2 font-extrabold text-blue-500">{{getTimeString(activeShift.shift.start)}}</small></h1>
-            <h1 class="text-black text-3xl font-semibold dark:text-white ">end:<small v-if="activeShift.stop" class=" ms-2 font-extrabold text-blue-500">{{getTimeString(activeShift.shift.stop)}}</small></h1>
-            <h1 class="text-black text-3xl font-semibold dark:text-white ">time:<small class="ms-2 font-extrabold text-blue-500">{{shiftTime}}</small></h1>
-          </div>
-          <button @click="toggleShift" type="button" class="absolute bottom-3 left-3 w-56 h-16 px-6 py-3.5 m-1 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Stop shift
-          </button>
+        <div class="absolute top-1 left-1 p-1">
+          <h1 class="text-black text-3xl font-semibold dark:text-white ">start:<small class="ms-2 font-extrabold text-blue-500">{{getTimeString(activeShift.shift.start)}}</small></h1>
+          <h1 class="text-black text-3xl font-semibold dark:text-white ">end:<small v-if="activeShift.stop" class=" ms-2 font-extrabold text-blue-500">{{getTimeString(activeShift.shift.stop)}}</small></h1>
+          <h1 class="text-black text-3xl font-semibold dark:text-white ">time:<small class="ms-2 font-extrabold text-blue-500">{{shiftTime}}</small></h1>
+        </div>
+        <button @click="toggleShift" type="button" class="absolute bottom-3 left-3 w-56 h-16 px-6 py-3.5 m-1 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Stop shift
+        </button>
       </Location>
       <ShiftTimeline :active-shift="activeShift.shift"/>
-    </div>
-  </div>
-    <div v-else class="relative w-full">
-    <Location
-        :accuracyInfo=true
-    >
 
-      <button
-        @click="toggleShift"
-        type="button"
-        class="absolute bottom-3 left-3 w-56 h-16 px-6 py-3.5 text-xl font-medium shadow-md text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    </div>
+
+    <div v-else class="relative w-full">
+      <Location
+          :accuracyInfo=true
       >
-        Start Shift
-      </button>
-    </Location>
-  </div>
+
+        <button
+          @click="toggleShift"
+          type="button"
+          class="absolute bottom-3 left-3 w-56 h-16 px-6 py-3.5 text-xl font-medium shadow-md text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Start Shift
+        </button>
+      </Location>
+    </div>
   </div>
 
   <div>

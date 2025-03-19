@@ -94,7 +94,6 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 
 <style scoped>
 
-/* CSS */
 @keyframes colorChange {
     0% {
         background-color: #2367d7;

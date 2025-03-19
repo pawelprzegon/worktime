@@ -1,11 +1,16 @@
 <script setup>
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted, watch, nextTick} from 'vue';
 import {initMap} from "@/composables/location.js";
 import Spinner from "@/components/Spinner.vue";
 import {useLocationStore} from "@/stores/utilsStore.js";
 import {useActiveShift} from "@/stores/shiftStore.js";
 import startMarker from '@/assets/img/start-pin.png';
 import stopMarker from '@/assets/img/stop-pin.png'
+import {useThemeStore} from "@/stores/styleTheme.ts";
+import dayMapStyle from "@/assets/maps/dayMapStyle.json"
+import nightMapStyle from "@/assets/maps/nightMapStyle.json"
+
+const theme = useThemeStore()
 
 const location = useLocationStore()
 const activeShift = useActiveShift()
@@ -22,26 +27,42 @@ const props = defineProps({
 })
 
 const mapContainer = ref(null);
+const mapLoaded = ref(false);
 const map = ref(null);
+const coordinates = ref ({
+    lat: 0,
+    lng: 0
+  });
 
 
 onMounted(async () => {
-  const coordinates = {
-    lat: 0,
-    lng: 0
-  }
+  await nextTick();
+
   if (activeShift.shift) {
-    coordinates.lat = activeShift.shift.location.start.latitude
-    coordinates.lng = activeShift.shift.location.start.longitude
+    coordinates.value.lat = activeShift.shift.location.start.latitude
+    coordinates.value.lng = activeShift.shift.location.start.longitude
   } else {
     await location.getCurrentLocation();
-    coordinates.lat = location.latitude
-    coordinates.lng = location.longitude
+    coordinates.value.lat = location.latitude
+    coordinates.value.lng = location.longitude
   }
 
   const iconStyle = props.activeShift ? stopMarker : startMarker
-  map.value = await initMap([coordinates], mapContainer, map, iconStyle);
+  const mapStyle = theme.isDark ? nightMapStyle : dayMapStyle
+
+  if (mapContainer.value) {
+    map.value = await initMap([coordinates.value], mapContainer, map, mapStyle, iconStyle);
+    mapLoaded.value = true;
+  } else {
+    console.error("mapContainer is null");
+  }
 });
+
+watch(() => theme.isDark, async () => {
+  const iconStyle = props.activeShift ? stopMarker : startMarker
+  const mapStyle = theme.isDark ? nightMapStyle : dayMapStyle
+  map.value = await initMap([coordinates.value], mapContainer, map, mapStyle, iconStyle);
+})
 
 // watch(
 //   () => [location.latitude, location.longitude],
@@ -69,8 +90,11 @@ onMounted(async () => {
         activeShift.shift ? 'animate-color-change' : ''
       ]"
   >
-    <div ref="mapContainer" class="map "></div>
-    <div class="absolute max-w-[500px] inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+    <div ref="mapContainer" class="map"></div>
+    <div
+        class="absolute w-[300px] inset-0 bg-gradient-to-r"
+        :class="theme.isDark ? 'from-primary via-primary/90 to-transparent' : 'from-white via-white/90 to-transparent'"
+    ></div>
     <small v-if="location.accuracy > 500 && accuracyInfo" class="text-white p-1 shadow-md bg-red-600 absolute left-3 top-3"> Your location isn't precise. <br>Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
     <p v-if="location.errorMessage" class="error absolute left-3 top-10">{{ location.errorMessage }}</p>
     <slot />
