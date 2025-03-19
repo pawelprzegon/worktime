@@ -21,7 +21,7 @@ export const initMap = async (coordinates, mapContainerRef, mapRef, mapStyle,  i
   });
 
   await loader.load();
-  console.log(mapContainerRef.value)
+
   mapRef.value = new google.maps.Map(mapContainerRef.value, {
     center: coordinates[0],
     zoom: 16,

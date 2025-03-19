@@ -45,9 +45,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/day.png"
                      alt="day"
-                     :class="sideBarStore.selectedCard === 'day'
-                      ? 'filter-invert-100'
-                      : 'filter-invert-0'"
+                     class="filter-invert-100"
                  />
                  <span class="ms-3">{{ t('sidebar.day') }}</span>
               </a>
@@ -62,9 +60,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/record.png"
                      alt="record"
-                     :class="sideBarStore.selectedCard === 'record'
-                      ? 'filter-invert-100'
-                      : 'filter-invert-0'"
+                     class="filter-invert-100"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.record') }}</span>
               </a>
@@ -79,9 +75,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/overtime.png"
                      alt="overtime"
-                     :class="sideBarStore.selectedCard === 'overtime'
-                      ? 'filter-invert-100'
-                      : 'filter-invert-0'"
+                     class="filter-invert-100"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.overtime') }}</span>
               </a>
@@ -96,9 +90,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/holidays.png"
                      alt="holiday"
-                     :class="sideBarStore.selectedCard === 'holiday'
-                      ? 'filter-invert-100'
-                      : 'filter-invert-0'"
+                     class="filter-invert-100"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.holiday') }}</span>
               </a>
@@ -114,9 +106,7 @@ const selectCard = (newSelect) => {
                    <img
                        src="@/assets/img/sidebar/settings.png"
                        alt="holiday"
-                       :class="sideBarStore.selectedCard === 'settings'
-                        ? 'filter-invert-100'
-                        : 'filter-invert-0'"
+                       class="filter-invert-100"
                    />
                    <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.settings') }}</span>
                 </a>
