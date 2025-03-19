@@ -6,8 +6,9 @@ import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
 
 const authStore = useAuthStore();
-const menuSideBarStore = useMenuSidebarStore()
-const sideBarStore = useSidebarStore()
+const menuSideBarStore = useMenuSidebarStore();
+const sideBarStore = useSidebarStore();
+
 const { t } = useI18n();
 const router = useRouter()
 
@@ -45,7 +46,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/day.png"
                      alt="day"
-                     class="filter-invert-100"
+                     :class="sideBarStore.selectedCard === 'day' ? 'filter-invert-100 dark:filter-invert-100' : 'filter-invert-0 dark:filter-invert-100'"
                  />
                  <span class="ms-3">{{ t('sidebar.day') }}</span>
               </a>
@@ -60,7 +61,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/record.png"
                      alt="record"
-                     class="filter-invert-100"
+                     :class="sideBarStore.selectedCard === 'record' ? 'filter-invert-100 dark:filter-invert-100' : 'filter-invert-0 dark:filter-invert-100'"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.record') }}</span>
               </a>
@@ -75,7 +76,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/overtime.png"
                      alt="overtime"
-                     class="filter-invert-100"
+                    :class="sideBarStore.selectedCard === 'overtime' ? 'filter-invert-100 dark:filter-invert-100' : 'filter-invert-0 dark:filter-invert-100'"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.overtime') }}</span>
               </a>
@@ -90,7 +91,7 @@ const selectCard = (newSelect) => {
                  <img
                      src="@/assets/img/sidebar/holidays.png"
                      alt="holiday"
-                     class="filter-invert-100"
+                     :class="sideBarStore.selectedCard === 'holiday' ? 'filter-invert-100 dark:filter-invert-100' : 'filter-invert-0 dark:filter-invert-100'"
                  />
                  <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.holiday') }}</span>
               </a>
@@ -106,7 +107,7 @@ const selectCard = (newSelect) => {
                    <img
                        src="@/assets/img/sidebar/settings.png"
                        alt="holiday"
-                       class="filter-invert-100"
+                       :class="sideBarStore.selectedCard === 'settings' ? 'filter-invert-100 dark:filter-invert-100' : 'filter-invert-0 dark:filter-invert-100'"
                    />
                    <span class="flex-1 ms-3 whitespace-nowrap">{{ t('sidebar.settings') }}</span>
                 </a>
