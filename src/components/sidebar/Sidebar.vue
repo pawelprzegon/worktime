@@ -17,6 +17,10 @@ const goToDay = () => {
   router.push('/day')
 }
 
+const goToRecord = () => {
+  router.push('/record')
+}
+
 const selectCard = (newSelect) => {
   sideBarStore.setSelectedCard(newSelect)
 
@@ -52,7 +56,7 @@ const selectCard = (newSelect) => {
               </a>
            </li>
            <li>
-              <a @click="selectCard('record')"
+              <a @click="selectCard('record'); goToRecord()"
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                  :class="sideBarStore.selectedCard === 'record'
                     ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'

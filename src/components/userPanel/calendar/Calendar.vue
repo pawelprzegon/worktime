@@ -20,8 +20,6 @@ const authStore = useAuthStore();
 const sidebar = useSidebarStore()
 
 const isLoading = ref(true);
-const isdayStoreOpen = ref(false);
-const modalKey = ref(0)
 
 const getDataHandler = async () => {
   isLoading.value = true;
@@ -35,7 +33,7 @@ const { getDaysBefore, getDaysAfter } = useCalendarDays(monthStore);
 
 const dayOpenerHandler = (day) => {
   dayStore.setDay(day);
-  sidebar.isOpen = true;
+  console.log ("Jak pokazać dzień")
 }
 
 onMounted(async () => {
@@ -102,8 +100,6 @@ onMounted(async () => {
       </div>
 
     </div>
-
-  <FadeInDetails />
 
 </template>
 
