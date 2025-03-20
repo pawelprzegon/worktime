@@ -74,20 +74,23 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
 
       <!-- Punkt startu -->
       <div
-        class="absolute top-6 text-white text-xs bg-blue-500 px-1 py-0.5 rounded shadow-md rotate-90"
-        :style="{ left: `${shiftStart}%`, transform: 'translateX(0%) translateY(120%)' }"
+        class="absolute top-6 text-white text-xs bg-blue-500 px-1 py-0.5 rounded shadow-md"
+        :class="shiftWidth < 12 ? 'translate-x-[-100%] translate-y-[120%]' : 'translate-x-0 translate-y-[120%]'"
+        :style="{ left: `${shiftStart}%`}"
       >
         {{ workShift.startTime }}
       </div>
 
       <!-- Punkt końca -->
       <div
-        class="absolute top-6 text-xs text-white bg-blue-500 px-1 py-0.5 rounded shadow-md rotate-90"
-        :style="{ left: `${shiftEnd}%`, transform: 'translateX(-100%) translateY(120%)' }"
+        class="absolute top-6 text-xs text-white bg-blue-500 px-1 py-0.5 rounded shadow-md transform "
+        :class="shiftWidth < 12 ? 'translate-x-0 translate-y-[120%]' : 'translate-x-[-100%] translate-y-[120%]'"
+        :style="{  left: `${shiftEnd}%`}"
       >
         {{ workShift.endTime }}
       </div>
     </div>
+    <p>{{shiftWidth}}</p>
   </div>
 
 </template>

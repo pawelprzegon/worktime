@@ -5,9 +5,7 @@ import UserName from "@/components/UserName.vue";
 import '@/assets/modal.css';
 import ModalWrapper from "@/components/ModalWrapper.vue";
 import Location from "@/components/dash/Location.vue";
-import {useLocationStore} from "@/stores/utilsStore.js";
 
-const location = useLocationStore()
 
 const props = defineProps({
   user: {

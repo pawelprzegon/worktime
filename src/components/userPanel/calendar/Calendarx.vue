@@ -138,7 +138,7 @@ const selectDate = (day) => {
 <template>
 
     <!-- Główna zawartość -->
-    <div class="w-full py-24 rounded-2xl relative z-10 backdrop-blur-3xl bg-">
+    <div class="w-fullrounded-2xl relative z-10 backdrop-blur-3xl bg-">
       <div class="w-full max-w-7xl mx-auto px-2 lg:px-8">
         <div class="grid grid-cols-12 gap-8 max-w-4xl mx-auto xl:max-w-full">
           <!-- Lista wydarzeń -->
@@ -230,15 +230,15 @@ const selectDate = (day) => {
                      @click="selectDate(day.date)"
                 >
                   <span class="text-xs font-semibold text-gray-900 dark:text-gray-50 dark:font-normal">{{ day.date }}</span>
-                  <div v-if="hasEvent(day.date)" class="absolute top-9 bottom-1 left-3.5 p-1.5 xl:px-2.5 h-max rounded bg-purple-50 dark:bg-neutral-700">
-                    <p class="hidden xl:block text-xs font-medium text-violet-600 mb-px whitespace-nowrap">
-                      {{ getEventTitle(day.date) }}
-                    </p>
-                    <span class="hidden xl:block text-xs font-normal text-purple-600 whitespace-nowrap">
-                      {{ getEventTime(day.date) }}
-                    </span>
-                    <p class="xl:hidden w-2 h-2 rounded-full bg-purple-600"></p>
-                  </div>
+<!--                  <div v-if="hasEvent(day.date)" class="absolute top-9 bottom-1 left-3.5 p-1.5 xl:px-2.5 h-max rounded bg-purple-50 dark:bg-neutral-700">-->
+<!--                    <p class="hidden xl:block text-xs font-medium text-violet-600 mb-px whitespace-nowrap">-->
+<!--                      {{ getEventTitle(day.date) }}-->
+<!--                    </p>-->
+<!--                    <span class="hidden xl:block text-xs font-normal text-purple-600 whitespace-nowrap">-->
+<!--                      {{ getEventTime(day.date) }}-->
+<!--                    </span>-->
+<!--                    <p class="xl:hidden w-2 h-2 rounded-full bg-purple-600"></p>-->
+<!--                  </div>-->
                 </div>
               </div>
             </div>
