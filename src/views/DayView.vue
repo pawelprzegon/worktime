@@ -46,6 +46,8 @@ const checkActiveShift = async () => {
     const actvShift = await getActiveShifts();
     if (actvShift) {
       activeShift.setShift(actvShift)
+    } else {
+      activeShift.setShift(null)
     }
   } catch (error) {
 
