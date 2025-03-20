@@ -2,13 +2,11 @@
 
 import {computed} from "vue";
 import {now} from "@vueuse/core";
+import {useActiveShift, useDateShifts} from "@/stores/shiftStore.js";
 
-const props = defineProps({
-  activeShift: {
-    type: Object,
-    required: true
-  }
-})
+
+const activeShift = useActiveShift();
+const dateShifts = useDateShifts();
 
 const getTime = (dt) => {
   const date = new Date(dt);
@@ -19,19 +17,24 @@ const getTime = (dt) => {
   return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`
 }
 
-const workShift = computed(() => {
-  if (props.activeShift && props.activeShift.stop) {
-    return {
-      startTime: getTime(props.activeShift.start),
-      endTime: getTime(props.activeShift.stop)
-    };
+const workShifts = computed(() => {
+  const shiftsData = dateShifts.shifts.map((shift) => ({
+    startTime: getTime(shift.start),
+    endTime: getTime(shift.stop),
+  }));
+
+  if (activeShift.shift) {
+    shiftsData.push({
+      startTime: getTime(activeShift.shift.start),
+      endTime: activeShift.shift.stop ? getTime(activeShift.shift.stop) : getTime(now()),
+    });
+
   }
 
-  return {
-    startTime: getTime(props.activeShift.start),
-    endTime: getTime(now())
-  };
+  return shiftsData;
 });
+
+
 // Generowanie podziałki godzinowej od 00:00 do 23:00
 const hours = Array.from({ length: 25 }, (_, i) => `${i.toString().padStart(2, "0")}:00`);
 
@@ -40,18 +43,13 @@ const timeToPercent = (time) => {
   const [hours, minutes] = time.split(":").map(Number);
   return ((hours * 60 + minutes) / 1440) * 100; // 1440 min w 24h
 };
-
-const shiftStart = computed(() => (workShift.value.startTime ? timeToPercent(workShift.value.startTime) : 0));
-const shiftEnd = computed(() => (workShift.value.endTime ? timeToPercent(workShift.value.endTime) : 0));
-const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
-
-
+const colors = ["bg-blue-500", "bg-blue-400", "bg-blue-600", "bg-blue-700"];
 </script>
 
 <template>
 
   <div
-      class="relative bg-transparent dark:bg-transparent rounded-lg p-4 h-24">
+      class="p-4 h-24">
 
     <!-- Oś czasu -->
     <div class="relative h-10 flex items-center">
@@ -66,31 +64,50 @@ const shiftWidth = computed(() => shiftEnd.value - shiftStart.value);
         <div class="w-[1px] h-6 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
       </div>
 
-      <!-- Pasek pracy -->
-      <div
-        class="absolute top-1/2 h-3 bg-blue-500 rounded-lg shadow-xl"
-        :style="{ left: `${shiftStart}%`, width: `${shiftWidth}%`, transform: 'translateY(50%) translateY(50%)' }"
-      ></div>
+      <div v-for="(shift, index) in workShifts" :key="index">
 
-      <!-- Punkt startu -->
-      <div
-        class="absolute top-6 text-white text-xs bg-blue-500 px-1 py-0.5 rounded shadow-md"
-        :class="shiftWidth < 12 ? 'translate-x-[-100%] translate-y-[120%]' : 'translate-x-0 translate-y-[120%]'"
-        :style="{ left: `${shiftStart}%`}"
-      >
-        {{ workShift.startTime }}
+        <!-- Paseki pracy -->
+        <div
+          class="absolute top-1/2 h-3 rounded-lg shadow-xl translate-y-[120%]"
+          :class="colors[index % colors.length]"
+          :style="{
+            left: `${timeToPercent(shift.startTime)}%`,
+            width: `${timeToPercent(shift.endTime) - timeToPercent(shift.startTime)}%`
+          }"
+        ></div>
+
+        <!-- Punkt startu -->
+        <div
+          class="absolute top-6 text-white text-xs px-1 py-0.5 rounded shadow-md"
+          :class="[
+            colors[index % colors.length],
+            (timeToPercent(shift.endTime) - timeToPercent(shift.startTime)) < 11
+              ? 'translate-x-[-100%] translate-y-[120%]'
+              : 'translate-x-0 translate-y-[130%]'
+          ]"
+          :style="{ left: `${timeToPercent(shift.startTime)}%`}"
+        >
+          {{ shift.startTime }}
+        </div>
+
+        <!-- Punkt końca -->
+        <div
+          class="absolute top-6 text-xs text-white px-1 py-0.5 rounded shadow-md transform "
+          :class="[
+            colors[index % colors.length],
+            (timeToPercent(shift.endTime) - timeToPercent(shift.startTime)) < 11
+              ? 'translate-x-0 translate-y-[120%]'
+              : 'translate-x-[-100%] translate-y-[130%]'
+          ]"
+          :style="{  left: `${timeToPercent(shift.endTime)}%`}"
+        >
+          {{ shift.endTime }}
+        </div>
+
       </div>
 
-      <!-- Punkt końca -->
-      <div
-        class="absolute top-6 text-xs text-white bg-blue-500 px-1 py-0.5 rounded shadow-md transform "
-        :class="shiftWidth < 12 ? 'translate-x-0 translate-y-[120%]' : 'translate-x-[-100%] translate-y-[120%]'"
-        :style="{  left: `${shiftEnd}%`}"
-      >
-        {{ workShift.endTime }}
-      </div>
     </div>
-    <p>{{shiftWidth}}</p>
+
   </div>
 
 </template>

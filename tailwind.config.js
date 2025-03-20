@@ -44,6 +44,7 @@ export default {
         'overtime': '#b97b28',
         'turquoise': '#00c9ae',
 
+        'pre-primary': '#1e1e1e',
         'primary': '#222222',
         'secondary': '#2e2e31',
         'third': '#3a3a3d',

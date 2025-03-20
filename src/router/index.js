@@ -1,18 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Dash from "@/views/DashView.vue";
 import DashLayout from "@/layout/DashLayout.vue";
 import Login from "@/views/LoginView.vue";
 import SignUp from "@/views/SignUpView.vue";
 import RecordView from "@/views/RecordView.vue";
 import Privileged from "@/views/PrivilegedView.vue";
 import ResetPasswordView from "@/views/resetPasswordView.vue";
-import ShiftEditor from "@/components/userPanel/modals/ShiftDetails/ShiftEditor.vue";
 import ResetPasswordEmailView from "@/views/resetPasswordEmailView.vue";
 import HomeView from "@/views/HomeView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
 import DayView from "@/views/DayView.vue";
 import UserView from "@/views/UserView.vue";
+import test from "@/views/test.vue"
 
 const routes = [
     {
@@ -36,12 +35,6 @@ const routes = [
         component: DashLayout
     },
     {
-        path: '/record',
-        name: 'record',
-        component: RecordView,
-        meta: { requiresAuth: true },
-    },
-    {
         path: '/privileged',
         name: 'Privileged',
         component: Privileged,
@@ -61,6 +54,18 @@ const routes = [
         path: '/day',
         name: 'Day',
         component: DayView,
+    },
+    {
+        path: '/record',
+        name: 'record',
+        component: RecordView,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/overtime',
+        name: 'overtime',
+        component: test,
+        meta: { requiresAuth: true },
     },
     {
         path: '/user',

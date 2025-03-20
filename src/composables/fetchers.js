@@ -347,6 +347,30 @@ export const getActiveShifts = async () => {
     return await response.json()
 }
 
+export const getDateShifts = async (day) => {
+
+    const data = {
+      method: 'GET',
+        headers: {
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        }
+    }
+
+    const response = await fetch(url + `/shift/date?day=${day}`, data)
+
+    if (response.status === 204) {
+        return null;
+    }
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail)
+    }
+
+    return await response.json()
+}
+
 export const startShift = async (userId, note, location) => {
 
     const body = JSON.stringify({
@@ -362,7 +386,7 @@ export const startShift = async (userId, note, location) => {
         },
         body: body
     }
-    console.log(data)
+
     const response = await fetch(url + '/shift/start', data)
 
     if (!response.ok) {

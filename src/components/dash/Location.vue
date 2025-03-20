@@ -84,7 +84,7 @@ watch(() => theme.isDark, async () => {
 <template>
   <div
       v-if="location.latitude && location.longitude"
-      class="relative h-[250px] w-full shadow-xl rounded-xl overflow-hidden"
+      class="relative h-64 w-full shadow-xl rounded-xl overflow-hidden"
       :class="[
         `w-${props.width}`,
         activeShift.shift ? 'animate-color-change' : ''

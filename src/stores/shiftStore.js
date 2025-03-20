@@ -26,3 +26,16 @@ export const useActiveShift = defineStore('activeShift', () => {
     setShift
   };
 });
+
+export const useDateShifts = defineStore('dateShifts', () => {
+  const shifts = ref([]);
+
+  const setShifts = (newShifts) => {
+    shifts.value = newShifts;
+  };
+
+  return {
+    shifts,
+    setShifts
+  };
+});
