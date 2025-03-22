@@ -32,29 +32,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <Alert/>
-  <nav class="fixed top-0 z-40 w-full bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-none shadow-xl">
-    <NavBar />
-  </nav>
+  <div class="flex flex-col h-screen">
+    <!-- Nagłówek -->
+    <nav class="fixed top-0 z-40 w-full bg-white border-b border-neutral-200 dark:bg-neutral-900 dark:border-none shadow-xl">
+      <NavBar />
+    </nav>
 
-  <Sidebar />
+    <!-- Główna zawartość -->
+    <div class="flex flex-1">
+      <Sidebar />
 
-  <main
-      id="main"
-      class="min-h-screen p-10 mt-24 overflow-auto overflow-x-hidden overflow-y-auto bg-stone-100 dark:bg-primary"
-      :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
-  >
-    <RouterView />
-  </main>
+      <main
+        id="main"
+        class="px-2 sm:px-4 md:px-6 lg:px-10 lg:pb-0 mt-24 pt-10 overflow-auto bg-stone-100 dark:bg-primary flex-1"
+        :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
+      >
+        <RouterView />
+      </main>
+    </div>
 
-
-  <footer
+    <!-- Stopka -->
+    <footer
       id="footer"
-      class="fixed bottom-0 left-0 z-20 w-full p-4 bg-stone-100 border-t border-neutral-200 text-right dark:bg-primary dark:border-neutral-950">
-    {{today}}
-  </footer>
-
-
+      class="w-full p-4 bg-stone-100 border-t border-neutral-200 text-right dark:bg-primary dark:border-neutral-950 h-12"
+    >
+      {{ today }}
+    </footer>
+  </div>
 </template>
 
 <style scoped>

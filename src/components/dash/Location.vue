@@ -87,7 +87,7 @@ watch(() => theme.isDark, async () => {
       class="relative h-64 w-full shadow-xl rounded-xl overflow-hidden"
       :class="[
         `w-${props.width}`,
-        activeShift.shift ? 'animate-color-change' : ''
+        // activeShift.shift ? 'animate-color-change' : ''
       ]"
   >
     <div ref="mapContainer" class="map"></div>
