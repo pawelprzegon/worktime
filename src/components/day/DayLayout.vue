@@ -1,5 +1,7 @@
 <script setup>
+import {useActiveShift} from "@/stores/shiftStore.js";
 
+const activeShift = useActiveShift();
 </script>
 
 <template>
@@ -12,17 +14,25 @@
       </h1>
     </div>
 
-    <div>
+    <div class="grid grid-cols-1 gap-3">
 
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 overflow-auto p-2">
 <!--    Map-->
-        <div class="h-64 mb-4">
-            <slot name="left"/>
-            <slot name="right"/>
+        <div class="relative h-64 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-md shadow-md">
+            <slot name="map"/>
+        </div>
+         <div class="h-64 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-md shadow-md">
+            <slot name="activeShift"/>
          </div>
+        <div class="h-64 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-md shadow-md">
+            <slot name="tasks"/>
+        </div>
+        <div class="h-64 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-md shadow-md">
+            <slot name="holidays"/>
+        </div>
       </div>
 
-      <div class="h-96 mb-4 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-xl">
+      <div class="h-96 mb-4 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-xl shadow-md">
 
       </div>
 
@@ -33,10 +43,13 @@
     </div>
 
 <!--    TimeLine-->
-    <div class="h-16 mb-2 p-2 bg-white dark:bg-pre-primary rounded-tl-xl rounded-tr-xl md:mb-0 md:p-4 md:pb-0 md:h-18">
+    <div
+        v-if="activeShift.shift"
+        class="h-16 mb-2 p-2 bg-white dark:bg-pre-primary rounded-tl-xl rounded-tr-xl md:mb-0 md:p-4 md:pb-0 md:h-18">
       <slot name="timeline"/>
-    </div>
 
+    </div>
+    <p v-else>Coś tutaj trzeba wrzucić kiedy nie będzie aktywnej zmiany</p>
   </div>
 
 </template>

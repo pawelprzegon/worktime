@@ -84,21 +84,15 @@ watch(() => theme.isDark, async () => {
 <template>
   <div
       v-if="location.latitude && location.longitude"
-      class="relative h-64 w-full shadow-xl rounded-xl overflow-hidden"
+      class="h-64 w-full shadow-md rounded-xl overflow-hidden"
       :class="[
         `w-${props.width}`,
         // activeShift.shift ? 'animate-color-change' : ''
       ]"
   >
     <div ref="mapContainer" class="map"></div>
-    <div
-        class="absolute w-[300px] inset-0 bg-gradient-to-r"
-        :class="theme.isDark ? 'from-[#212a37] via-[#212a37]/90 to-transparent' : 'from-white via-white/90 to-transparent'"
-    ></div>
-    <small v-if="location.accuracy > 500 && accuracyInfo" class="text-white p-1 shadow-md bg-red-600 absolute left-3 top-3"> Your location isn't precise. <br>Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
+    <small v-if="location.accuracy > 500 && accuracyInfo" class="text-white text-[8px] p-1 shadow-md bg-red-600 absolute left-3 top-3">Accuracy: ~{{location.accuracy.toFixed(0)}}m</small>
     <p v-if="location.errorMessage" class="error absolute left-3 top-10">{{ location.errorMessage }}</p>
-    <slot />
-    <slot />
   </div>
   <div v-else class="loading-spinner flex flex-col justify-center items-center h-full">
     <Spinner
