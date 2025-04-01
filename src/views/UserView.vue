@@ -43,7 +43,7 @@ const updateUserData = async () => {
 
   <div class="grid grid-rows-[repeat(auto-fit,minmax(0,1fr))] gap-8">
 
-    <div class="flex flex-col bg-white rounded-lg shadow-sm md:flex-row md:max-w-xl dark:bg-primary">
+    <div class="flex flex-col rounded-lg md:flex-row md:max-w-xl dark:bg-primary">
       <img class="object-cover w-full rounded-t-lg h-96 w-96 md:h-48 md:w-48 md:rounded-none md:rounded-s-lg" :src="`${apiURL}/${authStore.user.avatar}`" alt="userAvatar">
       <div class="flex flex-col gap-1 px-4 leading-normal">
         <h2 class="mb-2 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{{authStore.user.firstName}} {{authStore.user.lastName}}</h2>
