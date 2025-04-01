@@ -115,13 +115,13 @@ const toggleShift = async () => {
 <template>
 
   <CardLayout
-      title="Info"
+      title="Shift Info"
   >
     <div v-if="shift">
 
       <div class="p-1">
         <LabelData :data="getTimeString(activeShift.shift.start)" label="start"/>
-        <LabelData v-if="activeShift.stop" :data="getTimeString(activeShift.shift.stop)" label="end"/>
+        <LabelData :data="activeShift.shift.stop ? getTimeString(activeShift.shift.stop) : '--:--'" label="end"/>
         <LabelData :data="shiftTime" label="time"/>
       </div>
       <button @click="toggleShift" type="button" class="w-56 h-16 px-6 py-3.5 m-1 text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

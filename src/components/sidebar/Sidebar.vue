@@ -49,7 +49,7 @@ const selectCard = (newSelect) => {
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                   :class="sideBarStore.selectedCard === 'day'
                     ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                    : 'hover:bg-blue-100 dark:hover:bg-neutral-700'"
                  >
                  <img
                      src="@/assets/img/sidebar/day.png"
@@ -64,7 +64,7 @@ const selectCard = (newSelect) => {
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                  :class="sideBarStore.selectedCard === 'record'
                     ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                    : 'hover:bg-blue-100 dark:hover:bg-neutral-700'"
               >
                  <img
                      src="@/assets/img/sidebar/record.png"
@@ -79,7 +79,7 @@ const selectCard = (newSelect) => {
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                  :class="sideBarStore.selectedCard === 'overtime'
                     ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                    : 'hover:bg-blue-100 dark:hover:bg-neutral-700'"
               >
                  <img
                      src="@/assets/img/sidebar/overtime.png"
@@ -94,7 +94,7 @@ const selectCard = (newSelect) => {
                  class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                  :class="sideBarStore.selectedCard === 'holiday'
                     ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                    : 'hover:bg-blue-100 dark:hover:bg-neutral-700'"
               >
                  <img
                      src="@/assets/img/sidebar/holidays.png"
@@ -110,7 +110,7 @@ const selectCard = (newSelect) => {
                    class="flex items-center p-2 text-neutral-900 rounded-lg dark:text-white group hover:cursor-pointer"
                    :class="sideBarStore.selectedCard === 'settings'
                       ? 'text-white bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-700'
-                      : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'"
+                      : 'hover:bg-blue-100 dark:hover:bg-neutral-700'"
                 >
                    <img
                        src="@/assets/img/sidebar/settings.png"

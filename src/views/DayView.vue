@@ -1,10 +1,11 @@
 <script setup>
 
 import ShiftTimeline from "@/components/ShiftTimeline.vue";
-import Location from "@/components/dash/Location.vue";
+import GoogleMap from "@/components/GoogleMap.vue";
 import DayLayout from "@/components/day/DayLayout.vue";
 import ActiveShiftData from "@/components/day/ActiveShiftData.vue";
 import HolidaysData from "@/components/day/HolidaysData.vue";
+import TasksData from "@/components/day/TasksData.vue";
 
 
 const currentDate = new Date().toISOString().split('T')[0];
@@ -20,7 +21,7 @@ const currentDate = new Date().toISOString().split('T')[0];
     </template>
 
     <template #map>
-      <Location />
+      <GoogleMap />
     </template>
 
     <template #activeShift>
@@ -28,7 +29,7 @@ const currentDate = new Date().toISOString().split('T')[0];
     </template>
 
     <template #tasks>
-      <HolidaysData />
+      <TasksData />
     </template>
 
     <template #holidays>

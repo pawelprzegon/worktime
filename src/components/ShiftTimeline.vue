@@ -41,7 +41,7 @@ const hours = Array.from({ length: 25 }, (_, i) => `${i.toString().padStart(2, "
 // Funkcja do konwersji czasu na procentowe przesunięcie
 const timeToPercent = (time) => {
   const [hours, minutes] = time.split(":").map(Number);
-  return ((hours * 60 + minutes) / 1440) * 100; // 1440 min w 24h
+  return ((hours * 60 + minutes) / 1440) * 100;
 };
 const colors = ["bg-blue-500", "bg-blue-400", "bg-blue-600", "bg-blue-700"];
 </script>
@@ -54,11 +54,11 @@ const colors = ["bg-blue-500", "bg-blue-400", "bg-blue-600", "bg-blue-700"];
     <div
       v-for="(hour, index) in hours"
       :key="index"
-      class="absolute top-0 text-xs text-gray-900 rotate-90"
+      class="absolute top-0 rotate-90"
       :style="{ left: `${(index / 24) * 100}%`, transform: 'translateX(-50%)' }"
     >
-      <div class="text-black dark:text-white text-[8px] mb-2 -rotate-90">{{ hour }}</div>
-      <div class="w-[1px] h-4 bg-gray-400 mx-auto"></div> <!-- Mała kreska -->
+      <div class="text-black dark:text-white text-[7px] mb-2 -rotate-90">{{ hour }}</div>
+      <div class="w-[1px] h-4 bg-gray-400 dark:bg-white  mx-auto"></div> <!-- Mała kreska -->
     </div>
 
     <div v-for="(shift, index) in workShifts" :key="index">

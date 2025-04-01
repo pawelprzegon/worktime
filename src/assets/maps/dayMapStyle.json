@@ -8,15 +8,15 @@
     ]
   },
   {
-    "elementType": "labels.icon",
+    "elementType": "labels.text.fill",
     "stylers": [
       {
-        "visibility": "off"
+        "color": "#746855"
       }
     ]
   },
   {
-    "elementType": "labels.text.fill",
+    "elementType": "labels.text.stroke",
     "stylers": [
       {
         "color": "#616161"
@@ -51,27 +51,10 @@
   },
   {
     "featureType": "poi",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
     "elementType": "labels.text.fill",
     "stylers": [
       {
         "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.business",
-    "stylers": [
-      {
-        "visibility": "off"
       }
     ]
   },

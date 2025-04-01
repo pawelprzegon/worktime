@@ -45,7 +45,7 @@ const activeShift = useActiveShift();
 <!--    TimeLine-->
     <div
         v-if="activeShift.shift"
-        class="h-16 mb-2 p-2 bg-white dark:bg-pre-primary rounded-tl-xl rounded-tr-xl md:mb-0 md:p-4 md:pb-0 md:h-18">
+        class="h-16 mb-2 p-2 shadow-[0_-2px_6px_-2px] bg-blue-100 dark:bg-neutral-700 dark:shadow-neutral-900 rounded-tl-xl rounded-tr-xl md:mb-0 md:p-4 md:pb-0 md:h-18">
       <slot name="timeline"/>
 
     </div>

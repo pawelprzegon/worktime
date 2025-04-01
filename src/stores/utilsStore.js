@@ -241,30 +241,30 @@ export const useLocationStore = defineStore('screenLocationStore', () => {
         const position = await new Promise((resolve, reject) => {
           navigator.geolocation.getCurrentPosition(resolve, reject, {
             enableHighAccuracy: true,
+            timeout: 3000,
+            maximumAge: 0,
           });
         });
 
-        setLocation(position)
-
+        setLocation(position);
       } catch (error) {
-        switch (error.code || error.message) {
-          case 'PERMISSION_DENIED':
+        console.error("Geolocation error:", error);
+
+        switch (error.code) {
+          case 1:
             errorMessage.value = 'User denied access to location.';
             break;
-        case 'POSITION_UNAVAILABLE':
+          case 2:
             errorMessage.value = 'Location information is unavailable.';
             break;
-        case 'TIMEOUT':
+          case 3:
             errorMessage.value = 'Location request timed out.';
             break;
-        case 'UNKNOWN_ERROR':
-            errorMessage.value = 'An unknown error occurred while determining the location.';
-            break;
-        default:
+          default:
             errorMessage.value = `Error: ${error.message}`;
         }
       }
-    }
+    };
 
     return {
         latitude,

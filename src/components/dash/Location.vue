@@ -64,20 +64,6 @@ watch(() => theme.isDark, async () => {
   map.value = await initMap([coordinates.value], mapContainer, map, mapStyle, iconStyle);
 })
 
-// watch(
-//   () => [location.latitude, location.longitude],
-//   async ([lat, lng]) => {
-//     if (lat !== null && lng !== null) {
-//       const coordinates = {
-//         lat: lat,
-//         lng: lng
-//       }
-//       const iconStyle = props.activeShift ? stopMarker : startMarker
-//       map.value = await initMap([coordinates], mapContainer, map, iconStyle);
-//     }
-//   },
-//   { immediate: true }
-// );
 
 </script>
 

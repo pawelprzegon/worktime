@@ -2,7 +2,6 @@
 
 import {onMounted, ref} from 'vue'
 import {useAuthStore} from "@/stores/authStore.js";
-import Alert from "@/components/Alert.vue";
 import NavBar from "@/components/nav/NavBar.vue";
 import Sidebar from "@/components/sidebar/Sidebar.vue";
 

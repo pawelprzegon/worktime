@@ -4,8 +4,8 @@ import CardLayout from "@/components/day/CardLayout.vue";
 </script>
 
 <template>
-  <CardLayout title="Holidays">
-    <p>jakies dane na temat urlopów</p>
+  <CardLayout title="Tasks">
+    <p>jakies dane na temat tasków</p>
   </CardLayout>
 
 </template>

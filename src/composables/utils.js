@@ -3,6 +3,7 @@ import {usedayStore} from "@/stores/calendarStore.js";
 
 export const url = import.meta.env.VITE_APP_API_URL
 export const webDev0 = import.meta.env.VITE_APP_WEB_DEV_0
+export const googleApi = import.meta.env.VITE_APP_GOOGLE_API
 
 export const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
