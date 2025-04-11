@@ -9,12 +9,12 @@ const activeShift = useActiveShift();
   <div class="flex flex-col place-content-between h-full">
 
     <div class="h-14 w-full mb-4">
-      <h1 class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+      <h1 class="text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white">
         <slot name="title"/>
       </h1>
     </div>
 
-    <div class="grid grid-cols-1 gap-3">
+    <div class="h-full gap-3">
 
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 overflow-auto p-2">
 <!--    Map-->
@@ -32,12 +32,8 @@ const activeShift = useActiveShift();
         </div>
       </div>
 
-      <div class="h-96 mb-4 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-xl shadow-md">
-
-      </div>
-
-      <div>
-        Holidays
+      <div class="p-2 bg-white dark:bg-transparent dark:border-2 dark:border-dashed dark:border-neutral-900 rounded-xl shadow-md">
+          <slot name="data"/>
       </div>
 
     </div>
@@ -49,7 +45,6 @@ const activeShift = useActiveShift();
       <slot name="timeline"/>
 
     </div>
-    <p v-else>Coś tutaj trzeba wrzucić kiedy nie będzie aktywnej zmiany</p>
   </div>
 
 </template>

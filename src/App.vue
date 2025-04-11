@@ -43,7 +43,7 @@ onMounted(() => {
 
       <main
         id="main"
-        class="px-2 sm:px-4 md:px-6 lg:px-10 lg:pb-0 mt-24 pt-10 overflow-auto bg-stone-100 dark:bg-primary flex-1"
+        class="px-2 sm:px-4 md:px-6 lg:px-10 lg:pb-0 mt-24 pt-10 overflow-none bg-stone-100 dark:bg-primary flex-1"
         :class="authStore.isAuthenticated ? 'lg:ml-64' : 'lg:ml-0'"
       >
         <RouterView />

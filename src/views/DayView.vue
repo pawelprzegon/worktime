@@ -36,6 +36,10 @@ const currentDate = new Date().toISOString().split('T')[0];
       <HolidaysData />
     </template>
 
+    <template #data>
+      <p>Test</p>
+    </template>
+
     <template #timeline>
       <ShiftTimeline/>
     </template>

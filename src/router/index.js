@@ -11,7 +11,7 @@ import NotFoundView from "@/views/NotFoundView.vue";
 import { useAuthStore } from '@/stores/authStore.js';
 import DayView from "@/views/DayView.vue";
 import UserView from "@/views/UserView.vue";
-import test from "@/views/test.vue"
+import OvertimeView from "@/views/OvertimeView.vue"
 
 const routes = [
     {
@@ -64,7 +64,7 @@ const routes = [
     {
         path: '/overtime',
         name: 'overtime',
-        component: test,
+        component: OvertimeView,
         meta: { requiresAuth: true },
     },
     {
