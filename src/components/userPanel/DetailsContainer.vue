@@ -1,9 +1,8 @@
 <script setup>
-import { breakEmail } from "@/composables/directives.js";
 
 const props = defineProps({
   label: String,
-  data: String,
+  data: [String, Number],
   background: String,
   color: {
     type: String,
@@ -37,9 +36,9 @@ const props = defineProps({
     <span v-if="props.data !== ''"
           class="inline-block text-right"
           :class="`text-${props.color}`"
-          v-break-email="props.data"
+          v-break-email="String(props.data)"
     >
-      {{ props.data }}
+      {{ String(props.data) }}
     </span>
   </div>
 </template>

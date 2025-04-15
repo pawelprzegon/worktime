@@ -23,7 +23,8 @@ const user = reactive({
   username: null,
   disabled: null,
   role: null,
-  rfid: null
+  rfid: null,
+  pin: null,
 });
 
 const AddRFID = async () => {
@@ -42,6 +43,7 @@ const editVisible = () => {
   user.role = selectedUser.user.role
   user.disabled = selectedUser.user.disabled
   user.rfid = selectedUser.user.rfid
+  user.pin = selectedUser.user.pin
 
   isEditVisible.value = true
 }
@@ -62,6 +64,8 @@ const saveChanges = async () => {
 const cancelChanges = () => {
   isEditVisible.value = false
 }
+
+console.log(selectedUser.user.pin)
 
 </script>
 
@@ -84,8 +88,8 @@ const cancelChanges = () => {
         <DetailsContainer :label="'username'" :data="selectedUser.user.username"/>
         <DetailsContainer :label="'role'" :data="selectedUser.user.role"/>
         <DetailsContainer :label="'RFID'" :data="selectedUser.user.rfid"/>
+        <DetailsContainer :label="'PIN'" :data="selectedUser.user.pin"/>
         <DetailsContainer :label="'account disabled'" :data="selectedUser.user.disabled? 'Yes' : 'No' "/>
-
         <CustomTextButton
           label="edit"
           :fontSize="12"
@@ -119,6 +123,9 @@ const cancelChanges = () => {
 
         <label class="block mt-3 mb-2">RFID:</label>
         <input v-model="user.rfid" type="text" class="input p-1" placeholder="Kod RFID" />
+
+        <label class="block mt-3 mb-2">PIN:</label>
+        <input v-model="user.pin" type="number" maxlength="4" class="input p-1" placeholder="Kod PIN" />
 
         <div class="grid grid-rows-2 justify-items-center p-1 w-full">
 
