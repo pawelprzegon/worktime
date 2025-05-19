@@ -2,7 +2,8 @@
 
 const props = defineProps({
   label: String,
-  data: [String, Number],
+  data: [String, Number, Object],
+  extraObject: Object,
   background: String,
   color: {
     type: String,
@@ -33,12 +34,19 @@ const props = defineProps({
       {{ props.label }}:
     </label>
 
-    <span v-if="props.data !== ''"
-          class="inline-block text-right"
-          :class="`text-${props.color}`"
-          v-break-email="String(props.data)"
+    <component v-if="typeof data === 'object'" :is="data" />
+    <div v-else-if="props.data !== ''"
+         class="inline-flex items-center justify-end gap-1 text-right"
     >
-      {{ String(props.data) }}
-    </span>
+       <span
+            class="inline-block text-right"
+            :class="`text-${props.color}`"
+            v-break-email="String(props.data)">
+        {{ String(props.data) }}
+      </span>
+
+      <slot name="suffix" />
+    </div>
+
   </div>
 </template>

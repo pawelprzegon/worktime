@@ -38,6 +38,7 @@ const closeAvatarChanger = () => {
       src="../../assets/img/refresh.png"
       alt="overlay"
       @click="openAvatarChanger()"
+      title="Change Avatar Picture"
     />
     <ChangeAvatarModal
       v-if="isAvatarChangerOpen"

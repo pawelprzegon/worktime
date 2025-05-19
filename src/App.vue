@@ -99,7 +99,7 @@
   >
     <img
         alt="Vue logo"
-        src="./assets/img/beb.webp"
+        src="./assets/img/timeLogLogo.svg"
         class="
         block
 

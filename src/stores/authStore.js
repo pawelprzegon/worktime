@@ -1,6 +1,6 @@
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue';
 import { defineStore } from 'pinia';
-import { checkIsAuthorized, getMe } from "@/composables/fetchers.js";
+import { checkIsAuthorized, getMe , getPin} from "@/composables/fetchers.js";
 import { useAlertStore } from "@/stores/alertStore.js";
 import { jwtDecode } from "jwt-decode";
 
@@ -17,7 +17,8 @@ export const useAuthStore = defineStore('auth', () => {
     email: null,
     role: null,
     avatar: null,
-    disabled: null
+    disabled: null,
+    pin: null,
   });
 
   const isAuthenticated = computed(() => !!token.value);
@@ -61,6 +62,18 @@ export const useAuthStore = defineStore('auth', () => {
     }, 1000);
   };
 
+  const generateNewPin = async () => {
+    try {
+      const response = await getPin();
+      Object.assign(user, {
+        pin: response.pin,
+      });
+      return response.pin;
+    } catch (error) {
+      console.error('Error generating new pin:', error);
+    }
+  }
+
   const getUserMetadata = async () => {
     try {
       const response = await getMe();
@@ -71,7 +84,8 @@ export const useAuthStore = defineStore('auth', () => {
         email: response.email,
         role: response.role,
         avatar: response.avatar,
-        disabled: response.disabled
+        disabled: response.disabled,
+        pin: response.pin,
       });
 
       sessionStorage.setItem('user', JSON.stringify(response));
@@ -94,7 +108,8 @@ export const useAuthStore = defineStore('auth', () => {
       email: null,
       role: null,
       avatar: null,
-      disabled: null
+      disabled: null,
+      pin: null,
     });
   };
 
@@ -142,6 +157,7 @@ export const useAuthStore = defineStore('auth', () => {
     isUser,
     tokenExp,
     setToken,
+    generateNewPin,
     getUserMetadata,
     clearToken,
     hasAccess,

@@ -1,6 +1,6 @@
 <script setup>
 
-import {ref} from "vue";
+import {ref, h} from "vue";
 import { useAuthStore } from '@/stores/authStore.js';
 import Calendar from "@/components/userPanel/calendar/Calendar.vue";
 import {useSelectedMonthStore} from "@/stores/utilsStore.js";
@@ -18,6 +18,7 @@ import Banner from "@/components/Banner.vue";
 
 const alert = useAlertStore()
 const authStore = useAuthStore();
+
 const monthStore = ref(useSelectedMonthStore('calendar'))
 
 const isChangeModalActive = ref(false);
@@ -51,6 +52,11 @@ const closeMonth = async () => {
   }
 }
 
+const genNewPin = async () => {
+  await authStore.generateNewPin()
+}
+
+const buttonVNode = h(CustomTextButton, {label: 'Generate pin', onClick: genNewPin}, {})
 
 </script>
 
@@ -102,6 +108,20 @@ const closeMonth = async () => {
           <DetailsContainer :label="'lastname'" :data="authStore.user.lastName" :background="'#282828'" :color="'#CCCCCCFF'"/>
           <DetailsContainer :label="'email'" :data="authStore.user.email" :background="'#282828'" :color="'#CCCCCCFF'"/>
           <DetailsContainer :label="'role'" :data="authStore.user.role" :background="'#282828'" :color="'#CCCCCCFF'"/>
+          <DetailsContainer v-if="authStore.user.pin" :label="'PIN'" :data="authStore.user.pin" :background="'#282828'" :color="'#CCCCCCFF'">
+            <template #suffix>
+              <img
+                class="bottom-0 right-0 w-6 h-6 filter invert-[50%] hover:invert-100 hover:animate-spin cursor-pointer"
+                src="../assets/img/refresh.png"
+                alt="overlay"
+                @click="genNewPin"
+                title="Generate new PIN"
+              />
+            </template>
+          </DetailsContainer>
+
+          <DetailsContainer v-else :label="'pin'" :data="buttonVNode" :background="'#282828'" :color="'#CCCCCCFF'"/>
+
         </ShadowBox>
 
         <ShadowBox>

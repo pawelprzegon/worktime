@@ -159,6 +159,22 @@ export const registerUser = async (formData) => {
     return await response.json()
 }
 
+
+export const getPin = async () => {
+    const data = {
+      method: 'GET',
+        headers: {
+            ...headers,
+            'Authorization': addAuthorizationBearer()
+        },
+    }
+
+    const response = await fetch(url + `/user/new-pin`, data)
+
+    return await response.json()
+
+}
+
 export const getMe = async () => {
     const data = {
       method: 'GET',
