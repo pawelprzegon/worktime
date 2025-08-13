@@ -65,8 +65,6 @@ const cancelChanges = () => {
   isEditVisible.value = false
 }
 
-console.log(selectedUser.user.pin)
-
 </script>
 
 <template>
